@@ -1,34 +1,97 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TIL_WEB
 
-## Getting Started
+Kick off your project with this boilerplate.
 
-First, run the development server:
+# 🚀 Quick Start
 
 ```bash
+git clone
+cd
+npm install
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+your site is now running at `http://localhost:3000`
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+# 📁 Folder Structure
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+A quick look at the directories you'll see in this project.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Root driectory layout
 
-## Learn More
+    .
+    ├── assets              #
+      ├── fonts
+      ├── images
+      └── svgs
+    ├── components          #
+      └── common
+    ├── constants           #
+    ├── hooks               # Custom hooks/queries
+    ├── pages               #
+    ├── stores              # (alternatively `store`)
+    ├── styles              
+    ├── utils               #
+    ├── types               #
+    ├── README.md           #
+    └── ...
 
-To learn more about Next.js, take a look at the following resources:
+### 🐪 Others
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Always use camelCase for others.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- scripts
+- folders
+- variables
+- functions
 
-## Deploy on Vercel
+# 📕 Rules
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Git-flow
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- main - release - develop branch // feature branch
+- main : 형상 유지만을 위한 브랜치
+- release : 실제 배포를 위한 브랜치
+- develop : 개발 테스트 및 QA 작업 진행용 브랜치
+- release 에서 브랜치 따서 작업 후 develop 브랜치에 merge
+- develop > release merge 시 code review 진행
+- 주기적 형상 유지를 위해 release > main 브랜치 싱크 유지
+
+## Code-Review
+
+- develop > release merge 시 코드리뷰 진행
+- 전 인원 함께 코드 파악 진행
+- + 룰 개발 진행하면서 정립
+
+
+## 📛 Naming
+
+### 👨‍🦳 React Component
+
+- **Extensions:** Use .tsx extension for React components.
+
+- **Filename:** Use PascalCase for filenames. E.g., ReservationCard.tsx.
+
+- **Reference Naming:** Use PascalCase for React components and camelCase for their instances.
+
+  ```tsx
+  // bad
+  import reservationCard from './ReservationCard';
+
+  // good
+  import ReservationCard from './ReservationCard';
+
+  // bad
+  const ReservationItem = <ReservationCard />;
+
+  // good
+  const reservationItem = <ReservationCard />;
+  ```
+
+
+# ⭐️ Stack
+
+- **Framework:** Next.js
+- **Library:** React 18
+- **State Management:** React Query, Recoil
+- **Styling:** Emotion
