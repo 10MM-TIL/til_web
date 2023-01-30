@@ -10,5 +10,3 @@ export const BoxLayoutContainer = styled.div`
   background: #1e252f;
   border-radius: 12px;
 `;
-
-export const BoxTitle = styled.div``;
