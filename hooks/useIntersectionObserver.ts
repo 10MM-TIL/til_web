@@ -1,6 +1,8 @@
-import { useEffect, useState, useRef, RefObject } from 'react';
 
-const useOnScreen = <T extends HTMLElement>(
+import { useEffect, useRef } from 'react';
+
+const useIntersectionObserver = <T extends HTMLElement>(
+
   callback: (entry: IntersectionObserverEntry) => void,
   option: IntersectionObserverInit | undefined = { threshold: 1 },
 ) => {
@@ -27,4 +29,4 @@ const useOnScreen = <T extends HTMLElement>(
   return [observe, unobserve];
 };
 
-export default useOnScreen;
+export default useIntersectionObserver;
