@@ -62,8 +62,8 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
 
     // 아래 공간이 더 많이 남았으면 아래로 보여주기
     // 위의 공간이 더 많이 남았으면 위로 보여주기
-
     setIsIntersectInTop(spaceBelow >= spaceAbove ? true : false);
+
   };
 
   const handleOptionClick = (name: string) => {
@@ -118,6 +118,7 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
       >
         {defaultSelect}
       </DropdownText>
+
       {isOpen ? (
         <OptionList ref={optionRef} isIntersectInTop={isIntersectInTop}>
           <ul>
