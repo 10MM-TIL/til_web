@@ -24,9 +24,6 @@ const ButtonTest: NextPage = () => {
           gap: 10px;
         `}
       >
-        <Button types='category' backgroundColor={'rgba(255, 255, 255, 0.1)'}>
-          메일
-        </Button>
         <Button types='float'>메일</Button>
         <Button types='x-lg' backgroundColor={'#FDDC3F'}>
           로그인 버튼
