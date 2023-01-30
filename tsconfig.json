@@ -1,19 +1,33 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true
+    "target": "es5", // 사용할 특정 ECMAScript 버전 설정
+    "lib": ["dom", "dom.iterable", "esnext"], // 컴파일에 포함될 라이브러리 파일 목록
+    "allowJs": true, // 자바스크립트 파일 컴파일 허용 여부
+    "skipLibCheck": true, // 모든 선언 파일(*.d.ts)의 타입 검사를 건너뜁니다
+    "strict": true, // 모든 엄격한 타입-체킹 옵션 활성화 여부
+    "forceConsistentCasingInFileNames": true, // 파일 대소문자 비교 허용
+    "noEmit": true, // 결과 파일 내보낼지 여부
+    "esModuleInterop": true, // 모든 imports에 대한 namespace 생성을 통해 CommonJS와 ES Modules 간의 상호 운용성이 생기게할 지 여부
+    "module": "esnext", // 자바스크립트 파일간의 import 문법을 구현할 때의 문법을 결정하는 부분
+    "moduleResolution": "node", // 모듈 해석 방법 설정: 'node' (Node.js) 혹은 'classic' (TypeScript pre-1.6).
+    "resolveJsonModule": true, // .json 확장자로 import된 모듈을 포함합니다.
+    "isolatedModules": true, // 추가 검사를 수행하여 별도의 컴파일이 안전한지 확인합니다.
+    "jsx": "preserve", // JSX 코드 생성 설정
+    "jsxImportSource": "@emotion/react",
+    "strictNullChecks": true,
+    "incremental": true, // 이전 컴파일 단계에서의 디스크의 파일로 정보를 읽거나 기록하는 기능
+    "baseUrl": ".", // 모듈 이름을 처리할 기준 디렉토리를 지정
+    "paths": {
+      // 'baseUrl'를 기준으로 불러올 모듈의 위치를 재지정하는 엔트리 시리즈
+      "@/components/*": ["./components/*"],
+      "@/constants/*": ["./constants/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/pages/*": ["./pages/*"],
+      "@/utils/*": ["./utils/*"],
+      "@/types/*": ["./types/*"],
+      "@/stores/*": ["./stores/*"],
+      "@/styles/*": ["./styles/*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
