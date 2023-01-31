@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "chrome-extensions-build": "cross-env next build && next export && npm run change-nextname",
+    "change-nextname": "mv ./out/_next ./out/next && cd ./out && grep -rli '_next' * | xargs -I@ sed -i '' 's|/_next|/next|g' @;",
     "lint": "next lint"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
+    "cross-env": "^7.0.3",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
     "prettier": "^2.8.2",
