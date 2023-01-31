@@ -60,13 +60,10 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
     const spaceAbove = dropdownRect.top;
     const spaceBelow = window.innerHeight - dropdownRect.top;
 
-    if (spaceBelow >= spaceAbove) {
-      // 아래 공간이 더 많이 남았으면 아래로 보여주기
-      setIsIntersectInTop(true);
-    } else {
-      // 위의 공간이 더 많이 남았으면 위로 보여주기
-      setIsIntersectInTop(false);
-    }
+    // 아래 공간이 더 많이 남았으면 아래로 보여주기
+    // 위의 공간이 더 많이 남았으면 위로 보여주기
+    setIsIntersectInTop(spaceBelow >= spaceAbove ? true : false);
+
   };
 
   const handleOptionClick = (name: string) => {
@@ -82,7 +79,7 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
     }
 
     // focus 된 상태에서 Enter, ArrowDown 키 클릭시 optionList open
-    if (isOpen === false && (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+    if (!isOpen && (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
       e.stopPropagation();
       e.preventDefault();
       toggleOptionList();
@@ -102,17 +99,9 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
     }
 
     if (e.key === 'ArrowUp') {
-      if (cursor > 0) {
-        setCurser((cursor) => cursor - 1);
-      } else {
-        setCurser(optionList.length - 1);
-      }
+      cursor > 0 ? setCurser((cursor) => cursor - 1) : setCurser(optionList.length - 1);
     } else if (e.key === 'ArrowDown' || e.key === 'Tab') {
-      if (cursor < optionList.length - 1) {
-        setCurser((cursor) => cursor + 1);
-      } else {
-        setCurser(0);
-      }
+      cursor < optionList.length - 1 ? setCurser((cursor) => cursor + 1) : setCurser(0);
     }
   };
 
@@ -129,7 +118,7 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
       >
         {defaultSelect}
       </DropdownText>
-      {isOpen && (
+      {isOpen ? (
         <OptionList ref={optionRef} isIntersectInTop={isIntersectInTop}>
           <ul>
             {optionList.map((option, index) => {
@@ -145,7 +134,7 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
             })}
           </ul>
         </OptionList>
-      )}
+      ) : null}
     </DropdownContainer>
   );
 };
