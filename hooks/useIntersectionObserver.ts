@@ -1,3 +1,4 @@
+
 import { useEffect, useRef } from 'react';
 
 const useIntersectionObserver = <T extends HTMLElement>(
@@ -29,4 +30,3 @@ const useIntersectionObserver = <T extends HTMLElement>(
 };
 
 export default useIntersectionObserver;
-

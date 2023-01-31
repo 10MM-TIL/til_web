@@ -73,6 +73,7 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
 
   const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     // 열리지 않았을때는 기본적인 기능 활성화
+
     if (isOpen) {
       e.stopPropagation();
       e.preventDefault();
@@ -99,6 +100,7 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
     }
 
     if (e.key === 'ArrowUp') {
+
       cursor > 0 ? setCurser((cursor) => cursor - 1) : setCurser(optionList.length - 1);
     } else if (e.key === 'ArrowDown' || e.key === 'Tab') {
       cursor < optionList.length - 1 ? setCurser((cursor) => cursor + 1) : setCurser(0);
