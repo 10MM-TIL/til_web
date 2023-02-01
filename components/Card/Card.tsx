@@ -28,27 +28,25 @@ export type CardContentProps = {
 
 export const Card = ({ size, theme = 'dark', content }: CardProps): ReactElement => {
   return (
-    <div>
-      <CardContainer size={size} theme={theme}>
+    <CardContainer size={size} theme={theme}>
+      <div>
+        <Typo.Label2 color='#22FFA2'>#{content?.category && category[content?.category]}</Typo.Label2>
+      </div>
+      <div>
+        <Typo.H2 color='#DADFE6'>{content?.header}</Typo.H2>
+      </div>
+      <CardBodyContent>
+        <Typo.Body color='#636C78'>{content?.body}</Typo.Body>
+      </CardBodyContent>
+      <CardInfoWrapper>
+        <Image src={content?.img as string} alt='test' width={19} height={19} />
         <div>
-          <Typo.Label2 color='#22FFA2'>#{content?.category && category[content?.category]}</Typo.Label2>
+          <Typo.Label1 color='#C5CAD0'>{content?.name}</Typo.Label1>
         </div>
         <div>
-          <Typo.H2 color='#DADFE6'>{content?.header}</Typo.H2>
+          <Typo.Label1 color='#636C78'>{content?.date}</Typo.Label1>
         </div>
-        <CardBodyContent>
-          <Typo.Body color='#636C78'>{content?.body}</Typo.Body>
-        </CardBodyContent>
-        <CardInfoWrapper>
-          <Image src={content?.img as string} alt='test' width={19} height={19} />
-          <div>
-            <Typo.Label1 color='#C5CAD0'>{content?.name}</Typo.Label1>
-          </div>
-          <div>
-            <Typo.Label1 color='#636C78'>{content?.date}</Typo.Label1>
-          </div>
-        </CardInfoWrapper>
-      </CardContainer>
-    </div>
+      </CardInfoWrapper>
+    </CardContainer>
   );
 };
