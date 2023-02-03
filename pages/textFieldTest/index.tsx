@@ -9,13 +9,13 @@ const TextFieldTest: NextPage = () => {
   const [url, setUrl] = useState('');
   const [name, setName] = useState('');
 
-  const onChangeIntroduce = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChangeIntroduce = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setIntroduce(event.target.value);
   };
-  const onChangeUrl = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChangeUrl = (event: ChangeEvent<HTMLInputElement>) => {
     setUrl(event.target.value);
   };
-  const onChangeName = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChangeName = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
   return (

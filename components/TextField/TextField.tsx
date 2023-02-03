@@ -1,16 +1,8 @@
-import { ReactElement, ChangeEvent, useRef } from 'react';
+import { ReactElement, useRef } from 'react';
 import * as Typo from '@/components/Typography';
 import { TextFieldContainer, TextFieldInput, TextFieldTextArea, TextFieldWrapper, TextFieldLength } from './styles';
 import { useState } from 'react';
-
-type TextFieldProps = {
-  title: string;
-  isInput?: boolean;
-  placeholder?: string;
-  maxLength?: number;
-  inputValue: string;
-  onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-};
+import { TextFieldProps } from './types';
 
 export const TextField = ({
   title,
@@ -51,7 +43,7 @@ export const TextField = ({
             placeholder={placeholder}
             maxLength={maxLength}
             value={inputValue}
-            onChange={onChange}
+            onChange={onChange as (e: React.ChangeEvent<HTMLInputElement>) => void}
             onFocus={toggleFocus}
             onBlur={toggleFocus}
           />
@@ -63,12 +55,12 @@ export const TextField = ({
             value={inputValue}
             maxLength={maxLength}
             onChange={(e) => {
-              onChange(e);
+              (onChange as (e: React.ChangeEvent<HTMLTextAreaElement>) => void)(e);
               handleResizeHeight();
             }}
             onFocus={toggleFocus}
             onBlur={toggleFocus}
-          ></TextFieldTextArea>
+          />
         )}
       </TextFieldWrapper>
 
