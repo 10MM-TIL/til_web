@@ -27,7 +27,7 @@ export const MoreButtonWrapper = styled.ul<{ moreButtonPositionCss: EditDropdown
 
 export const EditDropdownWrapper = styled.div<{ editListPositionCss: EditDropdownProps['editListPositionCss'] }>`
   position: absolute;
-  z-index: 99px;
+  z-index: 99;
   display: flex;
   justify-content: center;
   flex-direction: column;
