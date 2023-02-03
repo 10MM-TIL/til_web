@@ -1,15 +1,15 @@
 import type { NextPage } from 'next';
 import { css } from '@emotion/react';
 
-import { Card } from '@/components/Card';
+import { Card, CardProps } from '@/components/Card';
 import { useState } from 'react';
 
 const CardTest: NextPage = () => {
-  const [testCardContent, setTestCardContent] = useState({
-    category: 'develop' as 'develop',
+  const [testCardContent, setTestCardContent] = useState<CardProps['content']>({
+    category: 'develop',
     header: 'hackerrank - Nested Lists',
-    body: 'Given the names and grades for each...',
-    img: require('@/assets/images/test.png'),
+    body: 'Given the names and grades for each 123123123123123',
+    img: require('@/assets/images/test.png') as string,
     name: '김선철',
     date: '2023.01.07',
   });
@@ -22,7 +22,7 @@ const CardTest: NextPage = () => {
         width: 100%;
         height: 100%;
         justify-content: center;
-        background-color: #252e38;
+        background-color: #191f28;
       `}
     >
       <div
@@ -32,11 +32,12 @@ const CardTest: NextPage = () => {
           flex-direction: column;
           align-items: center;
           gap: 10px;
+          margin-top: 100px;
         `}
       >
-        <Card size='sm' content={testCardContent}></Card>
-        <Card size='lg' content={testCardContent}></Card>
-        <Card size='lg' theme='light' content={testCardContent}></Card>
+        <Card size='sm' content={testCardContent} hasBadge={true}></Card>
+        <Card size='lg' content={testCardContent} hasBadge={true}></Card>
+        <Card size='lg' theme='light' content={testCardContent} hasBadge={true}></Card>
       </div>
       <div
         css={css`

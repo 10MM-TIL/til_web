@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
-import { CardProps } from './Card';
+import { CardProps } from './types';
+import Crown from '@/assets/svgs/ic_crown.svg';
 
 export const CardContainer = styled.div<CardProps>`
+  position: relative;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -14,9 +16,11 @@ export const CardContainer = styled.div<CardProps>`
   height: ${({ size }) => (size === 'sm' ? '132px' : '170px')};
   padding: ${({ size }) => (size === 'sm' ? '16px 23px 16px 20px' : '35px 40px')};
   cursor: pointer;
-  > div:first-child {
-    margin-bottom: 4px;
-  }
+`;
+
+export const CardHeader = styled.div`
+  position: relative;
+  margin-bottom: 4px;
 `;
 
 export const CardBodyContent = styled.div`
@@ -27,6 +31,52 @@ export const CardBodyContent = styled.div`
     text-overflow: ellipsis;
     word-break: break-all;
   }
+`;
+
+const BadgeTopSmWidth = 22;
+const BadgeTopSmHeight = 27;
+
+const BadgeTopLgWidth = 34;
+const BadgeTopLgHeight = 41.25;
+
+const BadgeBottomSmHeight = 9;
+const BadgeBottomLgHeight = 13.75;
+
+export const BadgeTop = styled.div<Pick<CardProps, 'size'>>`
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  top: -1px;
+  right: ${({ size }) => (size === 'sm' ? '16px' : '20px')};
+  width: ${({ size }) => (size === 'sm' ? `${BadgeTopSmWidth}px` : `${BadgeTopLgWidth}px`)};
+  height: ${({ size }) => (size === 'sm' ? `${BadgeTopSmHeight}px` : `${BadgeTopLgHeight}px`)};
+  background-color: #8bffff;
+  &::after {
+    content: '';
+  }
+`;
+export const CrownIcon = styled(Crown)<Pick<CardProps, 'size'>>`
+  display: block;
+  width: ${({ size }) => (size === 'sm' ? '14' : '21.64')}px;
+  height: ${({ size }) => (size === 'sm' ? '14' : '21.39')}px;
+  margin-bottom: ${({ size }) => (size === 'sm' ? '3' : '4.58')}px;
+`;
+
+// border에 1px이 존재해서 1px만큼 더위로 올려놔야함
+export const BadgeBottom = styled.div<Pick<CardProps, 'size'>>`
+  position: absolute;
+  right: ${({ size }) => (size === 'sm' ? '16px' : '20px')};
+  top: ${({ size }) => (size === 'sm' ? `calc(${BadgeTopSmHeight}px - 1px)` : `calc(${BadgeTopLgHeight}px - 1px)`)};
+  width: 0;
+  height: 0;
+  border-bottom: ${({ size }) => (size === 'sm' ? `${BadgeBottomSmHeight}px` : `${BadgeBottomLgHeight}px`)} solid
+    transparent;
+  border-top: ${({ size }) => (size === 'sm' ? `${BadgeBottomSmHeight}px` : `${BadgeBottomLgHeight}px`)} solid #8bffff;
+  border-left: ${({ size }) => (size === 'sm' ? `${BadgeTopSmWidth / 2}px` : `${BadgeTopLgWidth / 2}px`)} solid
+    transparent;
+  border-right: ${({ size }) => (size === 'sm' ? `${BadgeTopSmWidth / 2}px` : `${BadgeTopLgWidth / 2}px`)} solid
+    transparent;
 `;
 
 export const CardInfoWrapper = styled.div`

@@ -1,37 +1,38 @@
 import { ReactElement } from 'react';
 import Image from 'next/image';
-import { CardContainer, CardInfoWrapper, CardBodyContent } from './styles';
+import {
+  CardContainer,
+  CardHeader,
+  CardInfoWrapper,
+  CardBodyContent,
+  BadgeTop,
+  BadgeBottom,
+  CrownIcon,
+} from './styles';
 import * as Typo from '@/components/Typography';
+import { CardProps, category } from './types';
 
-export type CardProps = {
-  size: 'sm' | 'lg';
-  theme?: 'dark' | 'light';
-  content?: CardContentProps;
+export const Badge = ({ size }: Pick<CardProps, 'size'>) => {
+  return (
+    <>
+      <BadgeTop size={size}>
+        <CrownIcon size={size} />
+      </BadgeTop>
+      <BadgeBottom size={size}></BadgeBottom>
+    </>
+  );
 };
 
-const category = {
-  develop: '개발자',
-  design: '디자인',
-  planning: '기획',
-  marketing: '마케팅',
-  startup: '기업/스타트업',
-} as const;
-
-export type CardContentProps = {
-  category: keyof typeof category; // 카테고리가 픽스되면 as const로 정리 필요
-  header: string;
-  body: string;
-  img: string;
-  name: string;
-  date: string;
-};
-
-export const Card = ({ size, theme = 'dark', content }: CardProps): ReactElement => {
+export const Card = ({ size, theme = 'dark', hasBadge = false, content }: CardProps): ReactElement => {
   return (
     <CardContainer size={size} theme={theme}>
-      <div>
-        <Typo.Label2 color='#22FFA2'>#{content?.category && category[content?.category]}</Typo.Label2>
-      </div>
+      {hasBadge ? <Badge size={size} /> : null}
+      <CardHeader>
+        <Typo.Label2 color='#22FFA2'>
+          #{content?.category && category[content?.category]}
+          {hasBadge && size === 'sm' ? ' #추천 회고' : ''}
+        </Typo.Label2>
+      </CardHeader>
       <div>
         <Typo.H2 color='#DADFE6'>{content?.header}</Typo.H2>
       </div>
