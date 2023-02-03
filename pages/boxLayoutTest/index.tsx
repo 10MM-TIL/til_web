@@ -24,9 +24,11 @@ const ButtonTest: NextPage = () => {
           flex-direction: column;
           align-items: center;
           gap: 10px;
+          margin-top: 50px;
         `}
       >
-        <LinkComponent />
+        <ColBoxComponent />
+        <RowBoxComponent />
       </div>
       <div
         css={css`
@@ -40,9 +42,26 @@ const ButtonTest: NextPage = () => {
 };
 
 // 예시) 컴포넌트 조합해서 쓰기
-const LinkComponent = () => {
+// 이런식으로 상위에서 조정이 필요할때 css직접 삽입이 가능한데, 이렇게 하기위해 가로 세로 구분이 필요한가?
+const ColBoxComponent = () => {
   return (
-    <BoxLayout title='새 탭에서 브릭로그 확인'>
+    <BoxLayout title='새 탭에서 브릭로그 확인' childrenWrapperCss={{ justifyContent: 'flex-start', gap: '10px' }}>
+      <Button types='md'>
+        <Typo.Label1>크롬 확장앱 다운로드</Typo.Label1>
+      </Button>
+      <Button types='md'>
+        <Typo.Label1>크롬 확장앱 다운로드</Typo.Label1>
+      </Button>
+    </BoxLayout>
+  );
+};
+
+const RowBoxComponent = () => {
+  return (
+    <BoxLayout title='새 탭에서 브릭로그 확인' childDirection='col'>
+      <Button types='md'>
+        <Typo.Label1>크롬 확장앱 다운로드</Typo.Label1>
+      </Button>
       <Button types='md'>
         <Typo.Label1>크롬 확장앱 다운로드</Typo.Label1>
       </Button>
