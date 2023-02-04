@@ -3,7 +3,7 @@ export const BACKGROUND_COLOR = {
   NAVY_2: '#1B222C',
   NAVY_3: '#1E252F',
   NAVY_4: '#252E38',
-  FIELD_10: 'rgba(255, 255, 255, 0.1)',
+  FIELD_10: '#FFFFFF1A',
 };
 
 export const FONT_COLOR = {
