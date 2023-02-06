@@ -1,10 +1,12 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState, memo, useCallback } from 'react';
 import Image from 'next/image';
 import {
   CardContainer,
   CardHeader,
   CardInfoWrapper,
   CardBodyContent,
+  CardBodyDesc,
+  TagWrapper,
   BadgeTop,
   BadgeBottom,
   CrownIcon,
@@ -12,7 +14,7 @@ import {
 import * as Typo from '@/components/Typography';
 import { CardProps, category } from './types';
 
-export const Badge = ({ size }: Pick<CardProps, 'size'>) => {
+export const Badge = memo(function Badge({ size }: Pick<CardProps, 'size'>) {
   return (
     <>
       <BadgeTop size={size}>
@@ -21,25 +23,47 @@ export const Badge = ({ size }: Pick<CardProps, 'size'>) => {
       <BadgeBottom size={size}></BadgeBottom>
     </>
   );
-};
+});
 
-export const Card = ({ size, theme = 'dark', hasBadge = false, content }: CardProps): ReactElement => {
+const Card = ({
+  size,
+  hasBadge = false,
+  content,
+  onClickTag,
+  onClickContent,
+  onClickUser,
+}: CardProps): ReactElement => {
+  const [tagList, setTagList] = useState([category[content.category]]);
+
+  useEffect(() => {
+    if (hasBadge) setTagList([...tagList, '추천 회고']);
+    else setTagList(tagList.filter((tag) => tag !== '추천 회고'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasBadge]);
+
   return (
-    <CardContainer size={size} theme={theme}>
+    <CardContainer size={size}>
       {hasBadge ? <Badge size={size} /> : null}
       <CardHeader>
-        <Typo.Label2 color='#22FFA2'>
-          #{content?.category && category[content?.category]}
-          {hasBadge && size === 'sm' ? ' #추천 회고' : ''}
-        </Typo.Label2>
+        {tagList.map((tag) => {
+          return (
+            <TagWrapper key={tag} onClick={(e) => onClickTag(e, tag)}>
+              <Typo.Label2 color='#22FFA2'>
+                {tag === '추천 회고' ? ' ' : ''}#{tag}
+              </Typo.Label2>
+            </TagWrapper>
+          );
+        })}
       </CardHeader>
-      <div>
-        <Typo.H2 color='#DADFE6'>{content?.header}</Typo.H2>
-      </div>
-      <CardBodyContent>
-        <Typo.Body color='#636C78'>{content?.body}</Typo.Body>
+      <CardBodyContent onClick={onClickContent}>
+        <div>
+          <Typo.H2 color='#DADFE6'>{content?.header}</Typo.H2>
+        </div>
+        <CardBodyDesc>
+          <Typo.Body color='#636C78'>{content?.body}</Typo.Body>
+        </CardBodyDesc>
       </CardBodyContent>
-      <CardInfoWrapper>
+      <CardInfoWrapper onClick={onClickUser}>
         <Image src={content?.img as string} alt='test' width={19} height={19} />
         <div>
           <Typo.Label1 color='#C5CAD0'>{content?.name}</Typo.Label1>
@@ -51,3 +75,5 @@ export const Card = ({ size, theme = 'dark', hasBadge = false, content }: CardPr
     </CardContainer>
   );
 };
+
+export default memo(Card);

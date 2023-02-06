@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { css } from '@emotion/react';
 
 import { Card, CardProps } from '@/components/Card';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const CardTest: NextPage = () => {
   const [testCardContent, setTestCardContent] = useState<CardProps['content']>({
@@ -13,6 +13,26 @@ const CardTest: NextPage = () => {
     name: '김선철',
     date: '2023.01.07',
   });
+
+  const [badge, setBadge] = useState(true);
+  const onClickTag = useCallback(
+    (): CardProps['onClickTag'] => (e, tag) => {
+      console.log(`${tag} 태그 클릭`);
+    },
+    [],
+  );
+
+  const onClickContent = useCallback(() => {
+    () => {
+      console.log('본문 클릭');
+    };
+  }, []);
+
+  const onClickUser = useCallback(() => {
+    () => {
+      console.log('user 클릭');
+    };
+  }, []);
 
   return (
     <div
@@ -35,9 +55,31 @@ const CardTest: NextPage = () => {
           margin-top: 100px;
         `}
       >
-        <Card size='sm' content={testCardContent} hasBadge={true}></Card>
-        <Card size='lg' content={testCardContent} hasBadge={true}></Card>
-        <Card size='lg' theme='light' content={testCardContent} hasBadge={true}></Card>
+        <Card
+          size='sm'
+          content={testCardContent}
+          hasBadge={true}
+          onClickTag={onClickTag}
+          onClickContent={onClickContent}
+          onClickUser={onClickUser}
+        ></Card>
+
+        <Card
+          size='lg'
+          content={testCardContent}
+          hasBadge={badge}
+          onClickTag={onClickTag}
+          onClickContent={onClickContent}
+          onClickUser={onClickUser}
+        ></Card>
+        <button
+          onClick={() => setBadge(!badge)}
+          css={css`
+            color: #fff;
+          `}
+        >
+          변환
+        </button>
       </div>
       <div
         css={css`

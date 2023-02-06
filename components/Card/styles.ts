@@ -1,20 +1,35 @@
+import { memo } from 'react';
+
 import styled from '@emotion/styled';
 import { CardProps } from './types';
 import Crown from '@/assets/svgs/ic_crown.svg';
 
-export const CardContainer = styled.div<CardProps>`
+export const CardContainer = styled.div<{ size: CardProps['size'] }>`
   position: relative;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  background: ${({ theme }) => (theme === 'dark' ? '#191f28' : 'rgba(255, 255, 255, 0.06)')};
+  background: #191f28;
   color: #ffffff;
-  border: ${({ theme }) =>
-    theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.07)' : '1px solid rgba(255, 255, 255, 0.07)'};
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 9px;
   width: ${({ size }) => (size === 'sm' ? '284px' : '384px')};
   height: ${({ size }) => (size === 'sm' ? '132px' : '170px')};
   padding: ${({ size }) => (size === 'sm' ? '16px 23px 16px 20px' : '35px 40px')};
+
+  &:hover {
+    transition: all 0.15s ease 0s;
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+  }
+`;
+
+export const CardBodyContent = styled.div`
+  cursor: pointer;
+`;
+
+export const TagWrapper = styled.div`
+  display: inline;
   cursor: pointer;
 `;
 
@@ -23,7 +38,7 @@ export const CardHeader = styled.div`
   margin-bottom: 4px;
 `;
 
-export const CardBodyContent = styled.div`
+export const CardBodyDesc = styled.div`
   width: 241px;
   > p {
     overflow: hidden;
@@ -84,6 +99,7 @@ export const CardInfoWrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   margin-top: 15px;
+  cursor: pointer;
   > img {
     border-radius: 47.5px;
     margin-right: 6px;
