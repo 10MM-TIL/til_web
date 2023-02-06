@@ -1,9 +1,14 @@
 import type { NextPage } from 'next';
+import { useState } from 'react';
 
 import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
+import Modal from '@/components/Modal';
+import { Button } from '@/components/Button';
+import { FONT_COLOR } from '@/constants/color';
 
 const Test: NextPage = () => {
+  const [modal, setModal] = useState(false);
   // !! Color관련 ThemeProvider 적용할건지 여부
   return (
     <div>
@@ -25,6 +30,26 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
+      <br />
+      <Button
+        types='sm'
+        onClick={() => {
+          setModal(true);
+        }}
+      >
+        모달버튼
+      </Button>
+      <Modal isOpen={modal} onClose={() => setModal(false)}>
+        <Typo.H1 style={{ fontSize: '24px' }} color={FONT_COLOR.WHITE}>
+          제목
+        </Typo.H1>
+        <Typo.Body color={FONT_COLOR.GRAY_2}>내용</Typo.Body>
+        <div> TEST DIV</div>
+        <Toggle />
+        <Button types='lg' onClick={() => setModal(false)}>
+          모달 닫기 버튼 test
+        </Button>
+      </Modal>
     </div>
   );
 };
