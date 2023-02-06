@@ -2,12 +2,14 @@ import { EditDropdownProps } from '@/components/EditDropdown';
 
 export type TimeLineProps = {
   content?: TimeLineContentProps;
-  editList: EditDropdownProps['editList'];
   moreButtonPositionCss?: EditDropdownProps['moreButtonPositionCss'];
   editListPositionCss?: EditDropdownProps['editListPositionCss'];
+  onSaveAllContent: (timeLineContent: TimeLineContentProps) => Promise<void>;
+  onDeleteContent: () => Promise<void>;
 };
 export type TimeLineContentProps = {
   date: string;
-  body: string;
+  title: string;
+  desc: string;
   img: string;
 };
