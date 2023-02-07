@@ -1,31 +1,37 @@
 import type { NextPage } from 'next';
 import { css } from '@emotion/react';
 
-import { TimeLine, TimeLineProps, TimeLineContentProps } from '@/components/TimeLine';
-import { useState } from 'react';
+import { TimeLine, TimeLineContentProps } from '@/components/TimeLine';
+import { useState, useCallback } from 'react';
 
 const Home: NextPage = () => {
   const [timelineContent, setTimelineContent] = useState<TimeLineContentProps>({
     date: '2023.01.07',
-    body: 'TIL (커뮤니케이션 방법과 CEO)의 글자 길이 테스트123123123123123123123',
+    title: 'TIL 커뮤니케이션 123123123123123123',
+    desc: 'TIL (커뮤니케이션 방법과 CEO의 한마디디디디디디디',
     img: require('../../assets/images/test.png'),
   });
 
-  // 수정 삭제 드랍다운 데이터
-  const EditList: TimeLineProps['editList'] = [
-    {
-      text: '수정',
-      onClickHandler: () => {
-        console.log('수정 클릭!');
-      },
-    },
-    {
-      text: '삭제',
-      onClickHandler: () => {
-        console.log('삭제 클릭!');
-      },
-    },
-  ];
+  const onSaveAllContent = useCallback((timeLineContentParams: TimeLineContentProps): Promise<void> => {
+    // 저장하는 api 함수 추가
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        setTimelineContent({ ...timeLineContentParams });
+        console.log(timelineContent, +' 저장 완료');
+        resolve();
+      }, 1000);
+    });
+  }, []);
+
+  const onDeleteContent = useCallback((): Promise<void> => {
+    // 삭제하는 api 함수 추가
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log('삭제 완료!');
+        resolve();
+      }, 1000);
+    });
+  }, []);
 
   return (
     <div
@@ -48,13 +54,7 @@ const Home: NextPage = () => {
         `}
       >
         {/* 서로다른 위치의 더보기 버튼 형태로 구현 */}
-        <TimeLine editList={EditList} content={timelineContent} />
-        <TimeLine
-          editList={EditList}
-          content={timelineContent}
-          moreButtonPositionCss={{ top: '11px' }}
-          editListPositionCss={{ right: '10px' }}
-        />
+        <TimeLine content={timelineContent} onSaveAllContent={onSaveAllContent} onDeleteContent={onDeleteContent} />
       </div>
       <div
         css={css`

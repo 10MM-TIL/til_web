@@ -5,6 +5,16 @@ const nextConfig = {
   compiler: {
     emotion: true,
   },
+  images: {
+    // remotePatterns: [
+    //   {
+    //     protocol: 'https',
+    //     hostname: 'api.surfit.io',
+    //     port: '',
+    //     pathname: '/**',
+    //   },
+    // ],
+  },
 };
 
 module.exports = nextConfig;
