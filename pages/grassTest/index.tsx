@@ -1,62 +1,54 @@
 import type { NextPage } from 'next';
 import { css } from '@emotion/react';
-
-import { Grass, GrassData } from '@/components/Grass';
-import { useState } from 'react';
+import { Grass } from '@/components/Grass';
+import { useCalendar } from '@/hooks/useCalendarData';
 
 const GrassTest: NextPage = () => {
-  const [grassData, setGrassData] = useState<GrassData>([
-    [
-      { date: '', status: 'disabled' },
-      { date: '', status: 'disabled' },
-      { date: '0', status: 'unstack' },
-      { date: '1', status: 'unstack' },
-      { date: '2', status: 'unstack' },
-      { date: '3', status: 'unstack' },
-      { date: '4', status: 'unstack' },
-    ],
-    [
-      { date: '5', status: 'unstack' },
-      { date: '6', status: 'unstack' },
-      { date: '7', status: 'unstack' },
-      { date: '8', status: 'unstack' },
-      { date: '9', status: 'unstack' },
-      { date: '10', status: 'unstack' },
-      { date: '11', status: 'unstack' },
-    ],
-    [
-      { date: '12', status: 'stack' },
-      { date: '13', status: 'stack' },
-      { date: '14', status: 'stack' },
-      { date: '15', status: 'stack' },
-      { date: '16', status: 'stack' },
-      { date: '17', status: 'stack' },
-      { date: '18', status: 'stack' },
-    ],
-    [
-      { date: '19', status: 'stack' },
-      { date: '20', status: 'stack' },
-      { date: '21', status: 'stack' },
-      { date: '22', status: 'stack' },
-      { date: '23', status: 'stack' },
-      { date: '24', status: 'stack' },
-      { date: '25', status: 'stack' },
-    ],
-    [
-      { date: '26', status: 'stack' },
-      { date: '27', status: 'stack' },
-      { date: '28', status: 'stack' },
-      { date: '', status: 'disabled' },
-      { date: '', status: 'disabled' },
-      { date: '', status: 'disabled' },
-      { date: '', status: 'disabled' },
-    ],
+  // 추후 잔디의 데이터를 받아오면 수정이 필요함
+  const grassDataForJan = useCalendar(2023, 1, [
+    new Date(2023, 0, 1).toString(),
+    new Date(2023, 0, 3).toString(),
+    new Date(2023, 0, 12).toString(),
+    new Date(2023, 0, 13).toString(),
+    new Date(2023, 0, 14).toString(),
+    new Date(2023, 0, 15).toString(),
+    new Date(2023, 0, 29).toString(),
+  ]);
+
+  const grassDataForFeb = useCalendar(2023, 2, [
+    new Date(2023, 1, 1).toString(),
+    new Date(2023, 1, 3).toString(),
+    new Date(2023, 1, 12).toString(),
+    new Date(2023, 3, 13).toString(),
+    new Date(2023, 1, 14).toString(),
+    new Date(2023, 1, 15).toString(),
+    new Date(2023, 1, 29).toString(),
+  ]);
+
+  const grassDataForMar = useCalendar(2023, 3, [
+    new Date(2023, 2, 1).toString(),
+    new Date(2023, 2, 3).toString(),
+    new Date(2023, 2, 12).toString(),
+    new Date(2023, 2, 13).toString(),
+    new Date(2023, 2, 14).toString(),
+    new Date(2023, 2, 15).toString(),
+    new Date(2023, 2, 29).toString(),
+  ]);
+
+  const grassDataForApr = useCalendar(2023, 4, [
+    new Date(2023, 3, 1).toString(),
+    new Date(2023, 3, 3).toString(),
+    new Date(2023, 3, 12).toString(),
+    new Date(2023, 3, 13).toString(),
+    new Date(2023, 3, 14).toString(),
+    new Date(2023, 3, 15).toString(),
+    new Date(2023, 3, 29).toString(),
   ]);
 
   const clickCellTest = (date: string) => {
     // 데이터 조정은 여기서 수행
     // setGrassData();
-    console.log(`cell 클릭/날짜: ${date}`);
+    console.log(`클릭한 날짜 정보: ${date}`);
   };
 
   return (
@@ -77,9 +69,10 @@ const GrassTest: NextPage = () => {
           margin-top: 200px;
         `}
       >
-        <Grass date={'2023 Jan'} GrassData={grassData} onClickCell={clickCellTest} />
-        <Grass date={'2023 Jan'} GrassData={grassData} onClickCell={clickCellTest} />
-        <Grass date={'2023 Jan'} GrassData={grassData} onClickCell={clickCellTest} />
+        <Grass date={'2023 Jan'} GrassData={grassDataForJan} onClickCell={clickCellTest} />
+        <Grass date={'2023 Feb'} GrassData={grassDataForFeb} onClickCell={clickCellTest} />
+        <Grass date={'2023 Mar'} GrassData={grassDataForMar} onClickCell={clickCellTest} />
+        <Grass date={'2023 Apr'} GrassData={grassDataForApr} onClickCell={clickCellTest} />
       </div>
       <div
         css={css`

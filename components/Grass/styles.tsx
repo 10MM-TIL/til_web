@@ -9,7 +9,7 @@ export const GrassContainer = styled.div`
   align-items: center;
   padding: 16px;
   width: 189px;
-  height: 170px;
+  height: 193px;
   background: #1e252f;
   border-radius: 11px;
 `;

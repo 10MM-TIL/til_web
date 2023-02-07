@@ -6,7 +6,7 @@ export type GrassClickEvent = (date: string) => void;
 
 export type GrassProps = {
   date: string;
-  GrassData: GrassData;
+  GrassData: GrassData | null;
   onClickCell: GrassClickEvent;
 };
 export type GrassCellInfo = {
@@ -30,4 +30,3 @@ export type ColProps = {
   cellStatus: GrassStatus;
   onClickCell: GrassClickEvent;
 };
-export {};
