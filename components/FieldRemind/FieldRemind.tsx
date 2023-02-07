@@ -15,6 +15,7 @@ import { FieldRemindProps, FieldRemindPropsForDatepicker } from './types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
+import { FONT_COLOR } from '@/constants/color';
 
 export const FieldRemind = (props: FieldRemindProps): ReactElement => {
   return (
@@ -23,10 +24,10 @@ export const FieldRemind = (props: FieldRemindProps): ReactElement => {
         {props.type === 'date' ? (
           <>
             <FieldRemindDate>
-              <Typo.Label1 color='#636C78'>{'2023 11'}</Typo.Label1>
+              <Typo.Label1 color={FONT_COLOR.GRAY_2}>{'2023 11'}</Typo.Label1>
             </FieldRemindDate>
             <FieldRemindDesc>
-              <Typo.SubHeader color='#E0E6EE'>{'12312312312'}</Typo.SubHeader>
+              <Typo.SubHeader color={FONT_COLOR.GRAY_4}>{'12312312312'}</Typo.SubHeader>
             </FieldRemindDesc>
           </>
         ) : (
@@ -63,7 +64,7 @@ const CustomDatePicker = ({
     ) => (
       <FieldRemindDatePickerWrapper onClick={onClick} ref={ref}>
         <FieldRemindDate type={type}>
-          <Typo.Label1 color='#636C78'>{value ? value : '날짜를 입력해주세요.'}</Typo.Label1>
+          <Typo.Label1 color={FONT_COLOR.GRAY_2}>{value ? value : '날짜를 입력해주세요.'}</Typo.Label1>
         </FieldRemindDate>
         <CalendarIcon />
       </FieldRemindDatePickerWrapper>

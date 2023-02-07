@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 import Copy from '@/assets/svgs/copy.svg';
 import Calendar from '@/assets/svgs/calendar.svg';
 import { FieldRemindProps } from './types';
+import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
 export const FieldRemindContainer = styled.div`
   display: flex;
@@ -10,7 +10,7 @@ export const FieldRemindContainer = styled.div`
   justify-content: space-between;
   width: 496px;
   height: 69px;
-  background: #1e252f;
+  background: ${BACKGROUND_COLOR.NAVY_3};
   border-radius: 6px;
   padding: 13px 22px 13px 24px;
 `;
@@ -52,7 +52,7 @@ export const FieldRemindCopyContainer = styled.div`
 export const FieldRemindCopy = styled.div`
   width: 33.33px;
   height: 33.33px;
-  background: rgba(255, 255, 255, 0.1);
+  background: ${BACKGROUND_COLOR.FIELD_10};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -66,17 +66,17 @@ export const CopyIcon = styled(Copy)`
 export const FieldRemindTitleInput = styled.input`
   width: 197px;
   height: 26px;
-  border-bottom: 1px solid #636c78;
+  border-bottom: 1px solid ${FONT_COLOR.GRAY_2};
   background: transparent;
   font-weight: 700;
   font-size: 14px;
   line-height: 26px;
-  color: #ffffff;
+  color: ${FONT_COLOR.WHITE};
   &::placeholder {
-    color: #c5cad0;
+    color: ${FONT_COLOR.GRAY_3};
   }
   &:focus {
-    border-bottom: 1px solid #22ffa2;
+    border-bottom: 1px solid ${POINT_COLOR.MAIN};
     transition: all 0.15s ease 0s;
   }
 `;
