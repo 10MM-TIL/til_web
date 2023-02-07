@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 
 const useIntersectionObserver = <T extends HTMLElement>(
-
   callback: (entry: IntersectionObserverEntry) => void,
   option: IntersectionObserverInit | undefined = { threshold: 1 },
 ) => {
