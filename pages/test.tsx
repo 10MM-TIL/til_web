@@ -2,11 +2,18 @@ import type { NextPage } from 'next';
 
 import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
+import Radio from '@/components/Radio';
+import { css } from '@emotion/react';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
   return (
-    <div>
+    <div
+      css={css`
+        background-color: black;
+        color: white;
+      `}
+    >
       <div>컴포넌트를 위한 테스트 페이지입니다.</div>
       <Typo.H1>Header 1</Typo.H1>
       <Typo.H1 color='#FF0000'>Header 1</Typo.H1>
@@ -25,6 +32,8 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
+      <Radio>#개발</Radio>
+      <Radio checked>#개발</Radio>
     </div>
   );
 };
