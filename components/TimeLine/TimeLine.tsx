@@ -4,6 +4,7 @@ import * as Typo from '@/components/Typography';
 import * as Styled from './styles';
 import { TimeLineProps } from './types';
 import { EditDropdown, EditDropdownProps } from '@/components/EditDropdown';
+import { POINT_COLOR, FONT_COLOR } from '@/constants/color';
 
 // [TODO] 최대 글자수 지정 필요
 const TITLE_MAX_LENGTH = 30;
@@ -20,10 +21,10 @@ const EditStatusButton = memo(function EditStatusButton({
   return (
     <>
       <Styled.TimeLineSaveButton onClick={onSaveTimeLine}>
-        <Typo.Label2 color={'#22FFA2'}>저장</Typo.Label2>
+        <Typo.Label2 color={POINT_COLOR.MAIN}>저장</Typo.Label2>
       </Styled.TimeLineSaveButton>
       <Styled.TimeLineCancelButton onClick={onCancelTimeLine}>
-        <Typo.Label2 color={'#22FFA2'}>취소</Typo.Label2>
+        <Typo.Label2 color={POINT_COLOR.MAIN}>취소</Typo.Label2>
       </Styled.TimeLineCancelButton>
     </>
   );
@@ -63,7 +64,7 @@ const EditInputContent = memo(function EditInputContent({
             onBlur={() => setTitleFocus(false)}
             disabled={!!error}
           ></Styled.TimeLineTitleInput>
-          <Typo.Label2 color='#636C78'>
+          <Typo.Label2 color={FONT_COLOR.GRAY_2}>
             {titleFocus ? `${title.length} / ${titleRef.current?.maxLength}` : ''}
           </Typo.Label2>
         </Styled.TimeLineTitleWrapper>
@@ -77,7 +78,9 @@ const EditInputContent = memo(function EditInputContent({
             onBlur={() => setDescFocus(false)}
             disabled={!!error}
           ></Styled.TimeLineDescInput>
-          <Typo.Label2 color='#636C78'>{descFocus ? `${desc.length} / ${descRef.current?.maxLength}` : ''}</Typo.Label2>
+          <Typo.Label2 color={FONT_COLOR.GRAY_2}>
+            {descFocus ? `${desc.length} / ${descRef.current?.maxLength}` : ''}
+          </Typo.Label2>
         </Styled.TimeLineDescWrapper>
       </Styled.TimeLineInputWrapper>
     </>
@@ -179,7 +182,7 @@ const TimeLine = ({
         ></EditDropdown>
       )}
       <Styled.TimeLineDate>
-        <Typo.Label1 color='#636C78'>{timeLineContent?.date}</Typo.Label1>
+        <Typo.Label1 color={FONT_COLOR.GRAY_2}>{timeLineContent?.date}</Typo.Label1>
       </Styled.TimeLineDate>
       <Styled.TimeLineContent>
         <div>
@@ -196,10 +199,10 @@ const TimeLine = ({
           ) : (
             <>
               <Styled.TimeLineTitle>
-                <Typo.H1 color='#FFFFFF'>{timeLineContent?.title}</Typo.H1>
+                <Typo.H1 color={FONT_COLOR.WHITE}>{timeLineContent?.title}</Typo.H1>
               </Styled.TimeLineTitle>
               <Styled.TimeLineDesc>
-                <Typo.Label2 color='#C5CAD0'>{timeLineContent?.desc}</Typo.Label2>
+                <Typo.Label2 color={FONT_COLOR.GRAY_3}>{timeLineContent?.desc}</Typo.Label2>
               </Styled.TimeLineDesc>
             </>
           )}

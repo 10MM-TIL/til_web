@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { CSSProperties } from '@emotion/serialize';
+import { BACKGROUND_COLOR, POINT_COLOR, FONT_COLOR } from '@/constants/color';
 
 export const TimeLineContainer = styled.div`
   position: relative;
@@ -10,7 +11,7 @@ export const TimeLineContainer = styled.div`
   flex-direction: column;
   width: 745px;
   height: 110px;
-  background: #1e252f;
+  background: ${BACKGROUND_COLOR.NAVY_3};
   border-radius: 6px;
   padding: 20px 36px 22px 24px;
 `;
@@ -84,22 +85,22 @@ const inputCss = ({
   width: ${width}px;
   height: ${height}px;
   background-color: transparent;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid ${BACKGROUND_COLOR.FIELD_10};
   font-weight: ${fontWeight};
   font-size: ${fontSize}px;
   line-height: ${lineHeight}px;
   color: ${color};
   &:focus {
-    border-bottom: 2px solid #22ffa2;
+    border-bottom: 2px solid ${POINT_COLOR.MAIN};
   }
 `;
 
 export const TimeLineTitleInput = styled.input`
-  ${inputCss({ width: 273, height: 26, fontWeight: 700, fontSize: 16, lineHeight: 24, color: '#ffffff' })}
+  ${inputCss({ width: 273, height: 26, fontWeight: 700, fontSize: 16, lineHeight: 24, color: FONT_COLOR.WHITE })}
 `;
 
 export const TimeLineDescInput = styled.input`
-  ${inputCss({ width: 273, height: 19, fontWeight: 400, fontSize: 12, lineHeight: 16, color: '#c5cad0' })}
+  ${inputCss({ width: 273, height: 19, fontWeight: 400, fontSize: 12, lineHeight: 16, color: FONT_COLOR.GRAY_3 })}
 `;
 
 export const TimeLineInputWrapper = styled.div`
