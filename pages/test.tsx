@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 
-import * as Typo from '../components/Typography';
+import * as Typo from '@/components/Typography';
+import Toggle from '@/components/Toggle';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
@@ -22,6 +23,8 @@ const Test: NextPage = () => {
       <Typo.Label1>Label2</Typo.Label1>
       <br />
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
+      <br />
+      <Toggle />
     </div>
   );
 };
