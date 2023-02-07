@@ -2,6 +2,7 @@ import { GrassContainer, GrassDate, GrassRowG, GrassCell } from './styles';
 import * as Typo from '@/components/Typography';
 import { GrassProps, RowProps, ColProps } from './types';
 import { useCallback } from 'react';
+import { FONT_COLOR } from '@/constants/color';
 
 const RADIUS_X = 1;
 const RADIUS_Y = 1;
@@ -46,7 +47,7 @@ export const Grass = ({ date, GrassData, onClickCell }: GrassProps) => {
     <GrassContainer>
       <div>
         <GrassDate>
-          <Typo.Label2 color='#C5CAD0'>{date}</Typo.Label2>
+          <Typo.Label2 color={FONT_COLOR.GRAY_3}>{date}</Typo.Label2>
         </GrassDate>
         <svg width={TABLE_WIDTH} height={TABLE_HEIGHT}>
           {GrassData.map((row, row_index) => {
