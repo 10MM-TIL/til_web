@@ -96,7 +96,7 @@ const inputCss = ({
 `;
 
 export const TimeLineTitleInput = styled.input`
-  ${inputCss({ width: 273, height: 26, fontWeight: 700, fontSize: 16, lineHeight: 24, color: FONT_COLOR.WHITE })}
+  ${inputCss({ width: 273, height: 24, fontWeight: 700, fontSize: 16, lineHeight: 24, color: FONT_COLOR.WHITE })}
 `;
 
 export const TimeLineDescInput = styled.input`
