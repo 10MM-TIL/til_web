@@ -1,16 +1,17 @@
 import styled from '@emotion/styled';
+import { FONT_COLOR, POINT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
 
 export const TextFieldContainer = styled.div<{ isInput: boolean; isFocus: boolean }>`
   position: relative;
   display: flex;
   width: 483px;
   min-height: ${({ isInput }) => (isInput ? '56px' : '96px')};
-  background: #1e252f;
+  background: ${BACKGROUND_COLOR.NAVY_3};
   border-radius: 12px;
   padding: ${({ isInput }) => (isInput ? '16px 24px' : '16px 16px 16px 24px')};
   transition: all 0.15s ease 0s;
   border: 1px solid transparent;
-  ${({ isFocus }) => (isFocus ? 'border: 1px solid #22ffa2;' : '')};
+  ${({ isFocus }) => (isFocus ? `border: 1px solid ${POINT_COLOR}` : '')};
 
   &:hover {
     ${({ isFocus }) => (!isFocus ? 'border: 1px solid #22ffa299;' : '')};
@@ -36,6 +37,7 @@ export const TextFieldInput = styled.input`
   font-weight: 400;
   font-size: 14px;
   line-height: 22px;
+  /* url 설정 하는 color 색상 보류 */
   color: #545454;
 `;
 
@@ -49,7 +51,7 @@ export const TextFieldTextArea = styled.textarea`
   font-weight: 400;
   font-size: 14px;
   line-height: 22px;
-  color: #ffffff;
+  color: ${FONT_COLOR.WHITE};
 `;
 
 export const TextFieldLength = styled.div<{ isInput: boolean }>`

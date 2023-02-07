@@ -3,6 +3,7 @@ import * as Typo from '@/components/Typography';
 import { TextFieldContainer, TextFieldInput, TextFieldTextArea, TextFieldWrapper, TextFieldLength } from './styles';
 import { useState } from 'react';
 import { TextFieldProps } from './types';
+import { FONT_COLOR } from '@/constants/color';
 
 export const TextField = ({
   title,
@@ -32,7 +33,7 @@ export const TextField = ({
   return (
     <TextFieldContainer isInput={isInput} isFocus={isFocus} onClick={handleFocus}>
       <div>
-        <Typo.H1 color='#FFFFFF'>{title}</Typo.H1>
+        <Typo.H1 color={FONT_COLOR.WHITE}>{title}</Typo.H1>
       </div>
 
       <TextFieldWrapper isInput={isInput}>
@@ -65,7 +66,7 @@ export const TextField = ({
       </TextFieldWrapper>
 
       <TextFieldLength isInput={isInput}>
-        <Typo.Label2 color='#636c78'>
+        <Typo.Label2 color={FONT_COLOR.GRAY_2}>
           {inputValue?.length} / {maxLength}
         </Typo.Label2>
       </TextFieldLength>
