@@ -414,9 +414,31 @@
   dependencies:
     "glob" "7.1.7"
 
+"@next/swc-android-arm-eabi@13.1.1":
+
+"@next/swc-android-arm64@13.1.1":
+
 "@next/swc-darwin-arm64@13.1.1":
-  "integrity" "sha512-9zRJSSIwER5tu9ADDkPw5rIZ+Np44HTXpYMr0rkM656IvssowPxmhK0rTreC1gpUCYwFsRbxarUJnJsTWiutPg=="
-  "resolved" "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-13.1.1.tgz"
+
+"@next/swc-darwin-x64@13.1.1":
+
+"@next/swc-freebsd-x64@13.1.1":
+
+"@next/swc-linux-arm-gnueabihf@13.1.1":
+
+"@next/swc-linux-arm64-gnu@13.1.1":
+
+"@next/swc-linux-arm64-musl@13.1.1":
+
+"@next/swc-linux-x64-gnu@13.1.1":
+
+"@next/swc-linux-x64-musl@13.1.1":
+
+"@next/swc-win32-arm64-msvc@13.1.1":
+
+"@next/swc-win32-ia32-msvc@13.1.1":
+
+"@next/swc-win32-x64-msvc@13.1.1":
   "version" "13.1.1"
 
 "@nodelib/fs.scandir@2.1.5":
@@ -494,8 +516,8 @@
     "use-sync-external-store" "^1.2.0"
 
 "@types/js-cookie@^2.2.6":
-  "integrity" "sha1-ImqeMWgINaYYjoh/OYjmDATT9qM="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/@types/js-cookie/-/js-cookie-2.2.7.tgz"
+  "integrity" "sha512-aLkWa0C0vO5b4Sr798E26QgOkss68Un0bLjs7u9qxzPT5CG+8DuNTffWES58YzJs3hrVAOs1wonycqEBqNJubA=="
+  "resolved" "https://registry.npmjs.org/@types/js-cookie/-/js-cookie-2.2.7.tgz"
   "version" "2.2.7"
 
 "@types/json5@^0.0.29":
@@ -584,8 +606,8 @@
     "eslint-visitor-keys" "^3.3.0"
 
 "@xobotyi/scrollbar-width@^1.9.5":
-  "integrity" "sha1-gCJKaRknL0Bbh5E8oTuSkpvfPE0="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/@xobotyi/scrollbar-width/-/scrollbar-width-1.9.5.tgz"
+  "integrity" "sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ=="
+  "resolved" "https://registry.npmjs.org/@xobotyi/scrollbar-width/-/scrollbar-width-1.9.5.tgz"
   "version" "1.9.5"
 
 "acorn-jsx@^5.3.2":
@@ -850,8 +872,8 @@
     "is-what" "^4.1.8"
 
 "copy-to-clipboard@^3.3.1":
-  "integrity" "sha1-VaxDoduK5jmkvZlRHBSM3RuDobA="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/copy-to-clipboard/-/copy-to-clipboard-3.3.3.tgz"
+  "integrity" "sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA=="
+  "resolved" "https://registry.npmjs.org/copy-to-clipboard/-/copy-to-clipboard-3.3.3.tgz"
   "version" "3.3.3"
   dependencies:
     "toggle-selection" "^1.0.6"
@@ -877,15 +899,15 @@
     "which" "^2.0.1"
 
 "css-in-js-utils@^3.1.0":
-  "integrity" "sha1-ZArmozZG1AH8cgxU/GHELNdq4rs="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/css-in-js-utils/-/css-in-js-utils-3.1.0.tgz"
+  "integrity" "sha512-fJAcud6B3rRu+KHYk+Bwf+WFL2MDCJJ1XG9x137tJQ0xYxor7XziQtuGFbWNdqrvF4Tk26O3H73nfVqXt/fW1A=="
+  "resolved" "https://registry.npmjs.org/css-in-js-utils/-/css-in-js-utils-3.1.0.tgz"
   "version" "3.1.0"
   dependencies:
     "hyphenate-style-name" "^1.0.3"
 
 "css-tree@^1.1.2":
-  "integrity" "sha1-60hw+2/XcHMn7JXC/yqwm16NuR0="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/css-tree/-/css-tree-1.1.3.tgz"
+  "integrity" "sha512-tRpdppF7TRazZrjJ6v3stzv93qxRcSsFmW6cX0Zm2NVKpxE1WV1HblnghVv9TreireHkqI/VDEsfolRF1p6y7Q=="
+  "resolved" "https://registry.npmjs.org/css-tree/-/css-tree-1.1.3.tgz"
   "version" "1.1.3"
   dependencies:
     "mdn-data" "2.0.14"
@@ -1008,8 +1030,8 @@
     "is-arrayish" "^0.2.1"
 
 "error-stack-parser@^2.0.6":
-  "integrity" "sha1-IpywHNv6hEQL+pGHYoW5RoAYgoY="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/error-stack-parser/-/error-stack-parser-2.1.4.tgz"
+  "integrity" "sha512-Sk5V6wVazPhq5MhpO+AUxJn5x7XSXGl1R93Vn7i+zS15KDVxQijejNCrz8340/2bgLBjR9GtEG8ZVKONDjcqGQ=="
+  "resolved" "https://registry.npmjs.org/error-stack-parser/-/error-stack-parser-2.1.4.tgz"
   "version" "2.1.4"
   dependencies:
     "stackframe" "^1.3.4"
@@ -1350,18 +1372,18 @@
   "version" "2.0.6"
 
 "fast-loops@^1.1.3":
-  "integrity" "sha1-zpatuG0H57+bSCKrnG+smWSYH3U="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/fast-loops/-/fast-loops-1.1.3.tgz"
+  "integrity" "sha512-8EZzEP0eKkEEVX+drtd9mtuQ+/QrlfW/5MlwcwK5Nds6EkZ/tRzEexkzUY2mIssnAyVLT+TKHuRXmFNNXYUd6g=="
+  "resolved" "https://registry.npmjs.org/fast-loops/-/fast-loops-1.1.3.tgz"
   "version" "1.1.3"
 
 "fast-shallow-equal@^1.0.0":
-  "integrity" "sha1-1NyvZHJEDc76b4i5jjJR4n8lYos="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/fast-shallow-equal/-/fast-shallow-equal-1.0.0.tgz"
+  "integrity" "sha512-HPtaa38cPgWvaCFmRNhlc6NG7pv6NUHqjPgVAkWGoB9mQMwYB27/K0CvOM5Czy+qpT3e8XJ6Q4aPAnzpNpzNaw=="
+  "resolved" "https://registry.npmjs.org/fast-shallow-equal/-/fast-shallow-equal-1.0.0.tgz"
   "version" "1.0.0"
 
 "fastest-stable-stringify@^2.0.2":
-  "integrity" "sha1-N1emd09uyN5AxOhuwo6gJBchTHY="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/fastest-stable-stringify/-/fastest-stable-stringify-2.0.2.tgz"
+  "integrity" "sha512-bijHueCGd0LqqNK9b5oCMHc0MluJAx0cwqASgbWMvkO01lCYgIhacVRLcaDz3QnyYIRNJRDwMb41VuT6pHJ91Q=="
+  "resolved" "https://registry.npmjs.org/fastest-stable-stringify/-/fastest-stable-stringify-2.0.2.tgz"
   "version" "2.0.2"
 
 "fastq@^1.6.0":
@@ -1650,8 +1672,8 @@
     "react-is" "^16.7.0"
 
 "hyphenate-style-name@^1.0.3":
-  "integrity" "sha1-aRh5r44iCupXUOiCfbTvYqVONh0="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz"
+  "integrity" "sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ=="
+  "resolved" "https://registry.npmjs.org/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz"
   "version" "1.0.4"
 
 "ignore@^5.2.0":
@@ -1686,8 +1708,8 @@
   "version" "2.0.4"
 
 "inline-style-prefixer@^6.0.0":
-  "integrity" "sha1-QpDtRTqw5EQVgyhK2G5BrYg4T0Q="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/inline-style-prefixer/-/inline-style-prefixer-6.0.4.tgz"
+  "integrity" "sha512-FwXmZC2zbeeS7NzGjJ6pAiqRhXR0ugUShSNb6GApMl6da0/XGc4MOJsoWAywia52EEWbXNSy0pzkwz/+Y+swSg=="
+  "resolved" "https://registry.npmjs.org/inline-style-prefixer/-/inline-style-prefixer-6.0.4.tgz"
   "version" "6.0.4"
   dependencies:
     "css-in-js-utils" "^3.1.0"
@@ -1890,8 +1912,8 @@
   "version" "2.0.0"
 
 "js-cookie@^2.2.1":
-  "integrity" "sha1-aeEG3F1YBolFYpAqpbrsN0Tpsrg="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/js-cookie/-/js-cookie-2.2.1.tgz"
+  "integrity" "sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ=="
+  "resolved" "https://registry.npmjs.org/js-cookie/-/js-cookie-2.2.1.tgz"
   "version" "2.2.1"
 
 "js-sdsl@^4.1.4":
@@ -2010,8 +2032,8 @@
     "yallist" "^4.0.0"
 
 "mdn-data@2.0.14":
-  "integrity" "sha1-cRP8QoGRfWPOKbQ0RvcB5owlulA="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/mdn-data/-/mdn-data-2.0.14.tgz"
+  "integrity" "sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow=="
+  "resolved" "https://registry.npmjs.org/mdn-data/-/mdn-data-2.0.14.tgz"
   "version" "2.0.14"
 
 "merge2@^1.3.0", "merge2@^1.4.1":
@@ -2062,8 +2084,8 @@
   "version" "2.1.2"
 
 "nano-css@^5.3.1":
-  "integrity" "sha1-MHXqKf/esMfLbSXtsh2Pf6jo/o4="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/nano-css/-/nano-css-5.3.5.tgz"
+  "integrity" "sha512-vSB9X12bbNu4ALBu7nigJgRViZ6ja3OU7CeuiV1zMIbXOdmkLahgtPmh3GBOlDxbKY0CitqlPdOReGlBLSp+yg=="
+  "resolved" "https://registry.npmjs.org/nano-css/-/nano-css-5.3.5.tgz"
   "version" "5.3.5"
   dependencies:
     "css-tree" "^1.1.2"
@@ -2334,13 +2356,13 @@
   "version" "16.13.1"
 
 "react-universal-interface@^0.6.2":
-  "integrity" "sha1-Xo1DigFymk27y+7OsLhr4Ub+Kzs="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/react-universal-interface/-/react-universal-interface-0.6.2.tgz"
+  "integrity" "sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw=="
+  "resolved" "https://registry.npmjs.org/react-universal-interface/-/react-universal-interface-0.6.2.tgz"
   "version" "0.6.2"
 
 "react-use@^17.4.0":
-  "integrity" "sha1-zv7yWLCmxTSlyAIcJSisbhpM3G0="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/react-use/-/react-use-17.4.0.tgz"
+  "integrity" "sha512-TgbNTCA33Wl7xzIJegn1HndB4qTS9u03QUwyNycUnXaweZkE4Kq2SB+Yoxx8qbshkZGYBDvUXbXWRUmQDcZZ/Q=="
+  "resolved" "https://registry.npmjs.org/react-use/-/react-use-17.4.0.tgz"
   "version" "17.4.0"
   dependencies:
     "@types/js-cookie" "^2.2.6"
@@ -2397,8 +2419,8 @@
   "version" "0.4.2"
 
 "resize-observer-polyfill@^1.5.1":
-  "integrity" "sha1-DpAg3T0hAkRY1OvSfiPkAmmBBGQ="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz"
+  "integrity" "sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg=="
+  "resolved" "https://registry.npmjs.org/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz"
   "version" "1.5.1"
 
 "resolve-from@^4.0.0":
@@ -2437,8 +2459,8 @@
     "glob" "^7.1.3"
 
 "rtl-css-js@^1.14.0":
-  "integrity" "sha1-S0i0NUsP+RejBIjZUQD79yGaPoA="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/rtl-css-js/-/rtl-css-js-1.16.1.tgz"
+  "integrity" "sha512-lRQgou1mu19e+Ya0LsTvKrVJ5TYUbqCVPAiImX3UfLTenarvPUl1QFdvu5Z3PYmHT9RCcwIfbjRQBntExyj3Zg=="
+  "resolved" "https://registry.npmjs.org/rtl-css-js/-/rtl-css-js-1.16.1.tgz"
   "version" "1.16.1"
   dependencies:
     "@babel/runtime" "^7.1.2"
@@ -2467,8 +2489,8 @@
     "loose-envify" "^1.1.0"
 
 "screenfull@^5.1.0":
-  "integrity" "sha1-ZTPVJNMGIfwSg7lpIUbz8TqT0bo="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/screenfull/-/screenfull-5.2.0.tgz"
+  "integrity" "sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA=="
+  "resolved" "https://registry.npmjs.org/screenfull/-/screenfull-5.2.0.tgz"
   "version" "5.2.0"
 
 "semver@^6.3.0":
@@ -2484,8 +2506,8 @@
     "lru-cache" "^6.0.0"
 
 "set-harmonic-interval@^1.0.1":
-  "integrity" "sha1-4Xc3BVOc37gM4cPZnn8pi7OZUkk="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/set-harmonic-interval/-/set-harmonic-interval-1.0.1.tgz"
+  "integrity" "sha512-AhICkFV84tBP1aWqPwLZqFvAwqEoVA9kxNMniGEUvzOlm4vLmOFLiTT3UZ6bziJTy4bOVpzWGTfSCbmaayGx8g=="
+  "resolved" "https://registry.npmjs.org/set-harmonic-interval/-/set-harmonic-interval-1.0.1.tgz"
   "version" "1.0.1"
 
 "shebang-command@^2.0.0":
@@ -2530,43 +2552,43 @@
   "version" "0.5.7"
 
 "source-map@^0.6.1":
-  "integrity" "sha1-dHIq8y6WFOnCh6jQu95IteLxomM="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/source-map/-/source-map-0.6.1.tgz"
+  "integrity" "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="
+  "resolved" "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
   "version" "0.6.1"
 
 "source-map@0.5.6":
-  "integrity" "sha1-dc449SvwczxafwwRjYEzSiu19BI="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/source-map/-/source-map-0.5.6.tgz"
+  "integrity" "sha512-MjZkVp0NHr5+TPihLcadqnlVoGIoWo4IBHptutGh9wI3ttUYvCG26HkSuDi+K6lsZ25syXJXcctwgyVCt//xqA=="
+  "resolved" "https://registry.npmjs.org/source-map/-/source-map-0.5.6.tgz"
   "version" "0.5.6"
 
 "sourcemap-codec@^1.4.8":
-  "integrity" "sha1-6oBL2UhXQC5pktBaOO8a41qatMQ="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz"
+  "integrity" "sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA=="
+  "resolved" "https://registry.npmjs.org/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz"
   "version" "1.4.8"
 
 "stack-generator@^2.0.5":
-  "integrity" "sha1-iuFx6YXtYih9Tx7VWhYzs/tTu00="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/stack-generator/-/stack-generator-2.0.10.tgz"
+  "integrity" "sha512-mwnua/hkqM6pF4k8SnmZ2zfETsRUpWXREfA/goT8SLCV4iOFa4bzOX2nDipWAZFPTjLvQB82f5yaodMVhK0yJQ=="
+  "resolved" "https://registry.npmjs.org/stack-generator/-/stack-generator-2.0.10.tgz"
   "version" "2.0.10"
   dependencies:
     "stackframe" "^1.3.4"
 
 "stackframe@^1.3.4":
-  "integrity" "sha1-uIGgBMjBSaXo7+831RsW5BKUMxA="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/stackframe/-/stackframe-1.3.4.tgz"
+  "integrity" "sha512-oeVtt7eWQS+Na6F//S4kJ2K2VbRlS9D43mAlMyVpVWovy9o+jfgH8O9agzANzaiLjclA0oYzUXEM4PurhSUChw=="
+  "resolved" "https://registry.npmjs.org/stackframe/-/stackframe-1.3.4.tgz"
   "version" "1.3.4"
 
 "stacktrace-gps@^3.0.4":
-  "integrity" "sha1-DECySpsRmyDaRSXDmHlTOJZqL7A="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/stacktrace-gps/-/stacktrace-gps-3.1.2.tgz"
+  "integrity" "sha512-GcUgbO4Jsqqg6RxfyTHFiPxdPqF+3LFmQhm7MgCuYQOYuWyqxo5pwRPz5d/u6/WYJdEnWfK4r+jGbyD8TSggXQ=="
+  "resolved" "https://registry.npmjs.org/stacktrace-gps/-/stacktrace-gps-3.1.2.tgz"
   "version" "3.1.2"
   dependencies:
     "source-map" "0.5.6"
     "stackframe" "^1.3.4"
 
 "stacktrace-js@^2.0.2":
-  "integrity" "sha1-TKk+qfSUdS1VcJoIHUAP2uvuiXs="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/stacktrace-js/-/stacktrace-js-2.0.2.tgz"
+  "integrity" "sha512-Je5vBeY4S1r/RnLydLl0TBTi3F2qdfWmYsGvtfZgEI+SCprPppaIhQf5nGcal4gI4cGpCV/duLcAzT1np6sQqg=="
+  "resolved" "https://registry.npmjs.org/stacktrace-js/-/stacktrace-js-2.0.2.tgz"
   "version" "2.0.2"
   dependencies:
     "error-stack-parser" "^2.0.6"
@@ -2679,8 +2701,8 @@
   "version" "0.2.0"
 
 "throttle-debounce@^3.0.1":
-  "integrity" "sha1-MvlNhN+olPeGyaHykOemRbahmrs="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/throttle-debounce/-/throttle-debounce-3.0.1.tgz"
+  "integrity" "sha512-dTEWWNu6JmeVXY0ZYoPuH5cRIwc0MeGbJwah9KUNYSJwommQpCzTySTpEe8Gs1J23aeWEuAobe4Ag7EHVt/LOg=="
+  "resolved" "https://registry.npmjs.org/throttle-debounce/-/throttle-debounce-3.0.1.tgz"
   "version" "3.0.1"
 
 "tiny-glob@^0.2.9":
@@ -2704,13 +2726,13 @@
     "is-number" "^7.0.0"
 
 "toggle-selection@^1.0.6":
-  "integrity" "sha1-bkWxJj8gF/oKzH2J14sVuL932jI="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/toggle-selection/-/toggle-selection-1.0.6.tgz"
+  "integrity" "sha512-BiZS+C1OS8g/q2RRbJmy59xpyghNBqrr6k5L/uKBGRsTfxmu3ffiRnd8mlGPUVayg8pvfi5urfnu8TU7DVOkLQ=="
+  "resolved" "https://registry.npmjs.org/toggle-selection/-/toggle-selection-1.0.6.tgz"
   "version" "1.0.6"
 
 "ts-easing@^0.2.0":
-  "integrity" "sha1-yKijUCUQVWZYjYfb2gXdf7+lpOw="
-  "resolved" "https://repo.ncsoft.net:443/artifactory/api/npm/npm/ts-easing/-/ts-easing-0.2.0.tgz"
+  "integrity" "sha512-Z86EW+fFFh/IFB1fqQ3/+7Zpf9t2ebOAxNI/V6Wo7r5gqiqtxmgTlQ1qbqQcjLKYeSHPTsEmvlJUDg/EuL0uHQ=="
+  "resolved" "https://registry.npmjs.org/ts-easing/-/ts-easing-0.2.0.tgz"
   "version" "0.2.0"
 
 "tsconfig-paths@^3.14.1":
