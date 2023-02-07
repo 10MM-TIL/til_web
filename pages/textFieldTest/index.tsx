@@ -41,8 +41,8 @@ const TextFieldTest: NextPage = () => {
         `}
       ></div>
       <TextField title={'소개'} isInput={false} inputValue={introduce} onChange={onChangeIntroduce}></TextField>
-      <TextField title={'URL 주소 설정'} inputValue={url} onChange={onChangeUrl}></TextField>
-      <TextField title={'이름'} inputValue={name} onChange={onChangeName}></TextField>
+      <TextField title={'URL 주소 설정'} isInput={true} inputValue={url} onChange={onChangeUrl}></TextField>
+      <TextField title={'이름'} isInput={true} inputValue={name} onChange={onChangeName}></TextField>
       <div
         css={css`
           display: flex;

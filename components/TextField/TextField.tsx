@@ -7,7 +7,7 @@ import { FONT_COLOR } from '@/constants/color';
 
 export const TextField = ({
   title,
-  isInput = true,
+  isInput,
   placeholder = '',
   maxLength = 200,
   inputValue,
@@ -25,10 +25,8 @@ export const TextField = ({
   };
 
   const toggleFocus = () => setFocus((prevFocus) => !prevFocus);
-  const handleFocus = () => {
-    isInput ? inputRef.current?.focus() : textareaRef.current?.focus();
-    // focus 시 focus이벤트가 발생해 toggleFocus() 실행됌
-  };
+  // focus 시 focus이벤트가 발생해 toggleFocus() 실행됌
+  const handleFocus = () => (isInput ? inputRef.current?.focus() : textareaRef.current?.focus());
 
   return (
     <TextFieldContainer isInput={isInput} isFocus={isFocus} onClick={handleFocus}>
@@ -44,7 +42,7 @@ export const TextField = ({
             placeholder={placeholder}
             maxLength={maxLength}
             value={inputValue}
-            onChange={onChange as (e: React.ChangeEvent<HTMLInputElement>) => void}
+            onChange={onChange}
             onFocus={toggleFocus}
             onBlur={toggleFocus}
           />
@@ -56,7 +54,7 @@ export const TextField = ({
             value={inputValue}
             maxLength={maxLength}
             onChange={(e) => {
-              (onChange as (e: React.ChangeEvent<HTMLTextAreaElement>) => void)(e);
+              onChange(e);
               handleResizeHeight();
             }}
             onFocus={toggleFocus}
