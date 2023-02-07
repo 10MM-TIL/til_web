@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { FONT_COLOR } from '@/constants/color';
 
 export const CertifiedBlogContainer = styled.div`
   position: relative;
@@ -37,7 +38,7 @@ export const DeleteButton = styled.button`
     content: '';
     height: 16px;
     width: 1.8px;
-    background-color: #ffff;
+    background-color: ${FONT_COLOR.WHITE};
   }
   &::before {
     transform: rotate(45deg);
