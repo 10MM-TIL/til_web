@@ -46,12 +46,6 @@ const buttonStyles = {
     height: '68px',
     borderRadius: '50%',
   },
-  category: {
-    // 카테고리 버튼
-    width: '56px',
-    height: '36px',
-    borderRadius: '40px',
-  },
 };
 
 export const Button = styled.button<ButtonLayoutProps>`
