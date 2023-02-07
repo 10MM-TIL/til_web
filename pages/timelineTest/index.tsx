@@ -12,19 +12,16 @@ const Home: NextPage = () => {
     img: require('../../assets/images/test.png'),
   });
 
-  const onSaveAllContent = useCallback(
-    (timeLineContent: TimeLineContentProps): Promise<void> => {
-      // 저장하는 api 함수 추가
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          console.log(`${timeLineContent} 저장 완료`);
-          setTimelineContent({ ...timelineContent });
-          resolve();
-        }, 1000);
-      });
-    },
-    [timelineContent],
-  );
+  const onSaveAllContent = useCallback((timeLineContentParams: TimeLineContentProps): Promise<void> => {
+    // 저장하는 api 함수 추가
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        setTimelineContent({ ...timeLineContentParams });
+        console.log(timelineContent, +' 저장 완료');
+        resolve();
+      }, 1000);
+    });
+  }, []);
 
   const onDeleteContent = useCallback((): Promise<void> => {
     // 삭제하는 api 함수 추가
