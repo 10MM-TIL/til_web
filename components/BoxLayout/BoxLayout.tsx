@@ -1,6 +1,7 @@
 import { ReactNode, ReactElement } from 'react';
 import * as Typo from '@/components/Typography';
 import { BoxLayoutContainer } from './style';
+import { FONT_COLOR } from '@/constants/color';
 
 export type BoxLayoutProps = {
   title?: string;
@@ -11,7 +12,7 @@ export const BoxLayout = ({ title = '분야', children }: BoxLayoutProps): React
   return (
     <BoxLayoutContainer>
       <div>
-        <Typo.H1 color='#FFFFFF'>{title}</Typo.H1>
+        <Typo.H1 color={FONT_COLOR.WHITE}>{title}</Typo.H1>
       </div>
       <div>{children}</div>
     </BoxLayoutContainer>
