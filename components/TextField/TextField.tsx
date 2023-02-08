@@ -1,32 +1,49 @@
-import { ReactElement, useRef } from 'react';
+import { memo, ReactElement, MouseEvent, useCallback, useRef } from 'react';
 import * as Typo from '@/components/Typography';
-import { TextFieldContainer, TextFieldInput, TextFieldTextArea, TextFieldWrapper, TextFieldLength } from './styles';
+import {
+  TextFieldContainer,
+  TextFieldInput,
+  TextFieldTextArea,
+  TextFieldWrapper,
+  TextFieldLength,
+  TextFieldFixedString,
+} from './styles';
 import { useState } from 'react';
 import { TextFieldProps } from './types';
 import { FONT_COLOR } from '@/constants/color';
-
-export const TextField = ({
+const DOMAIN = 'bricklog.kr/';
+const TextField = ({
   title,
   isInput,
   placeholder = '',
   maxLength = 200,
+  useFixedString = false,
   inputValue,
   onChange,
 }: TextFieldProps): ReactElement => {
   const [isFocus, setFocus] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fixeStringRef = useRef<HTMLParagraphElement>(null);
 
   // 글자에 따라 textarea 높이가 변경됨
-  const handleResizeHeight = () => {
+  const handleResizeHeight = useCallback(() => {
     if (!textareaRef.current) return;
     textareaRef.current.style.height = 'auto';
     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-  };
+  }, []);
 
-  const toggleFocus = () => setFocus((prevFocus) => !prevFocus);
+  const toggleFocus = useCallback(() => setFocus((prevFocus) => !prevFocus), []);
   // focus 시 focus이벤트가 발생해 toggleFocus() 실행됌
-  const handleFocus = () => (isInput ? inputRef.current?.focus() : textareaRef.current?.focus());
+
+  const handleFocus = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      // 고정된 스트링 클릭시는 무시
+      if (e.target === fixeStringRef.current) return;
+      isInput ? inputRef.current?.focus() : textareaRef.current?.focus();
+    },
+    [isInput],
+  );
 
   return (
     <TextFieldContainer isInput={isInput} isFocus={isFocus} onClick={handleFocus}>
@@ -36,16 +53,27 @@ export const TextField = ({
 
       <TextFieldWrapper isInput={isInput}>
         {isInput ? (
-          <TextFieldInput
-            ref={inputRef}
-            type='text'
-            placeholder={placeholder}
-            maxLength={maxLength}
-            value={inputValue}
-            onChange={onChange}
-            onFocus={toggleFocus}
-            onBlur={toggleFocus}
-          />
+          <>
+            <TextFieldInput
+              ref={inputRef}
+              type='text'
+              placeholder={placeholder}
+              maxLength={maxLength}
+              value={inputValue}
+              onChange={onChange}
+              onFocus={toggleFocus}
+              onBlur={toggleFocus}
+              useFixedString={useFixedString}
+              fixedWidth={fixeStringRef.current?.clientWidth ?? 0}
+            />
+            {useFixedString ? (
+              <TextFieldFixedString>
+                <Typo.Body ref={fixeStringRef} color='#545454'>
+                  {DOMAIN}
+                </Typo.Body>
+              </TextFieldFixedString>
+            ) : null}
+          </>
         ) : (
           <TextFieldTextArea
             ref={textareaRef}
@@ -71,3 +99,5 @@ export const TextField = ({
     </TextFieldContainer>
   );
 };
+
+export default memo(TextField);

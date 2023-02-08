@@ -11,7 +11,7 @@ export const TextFieldContainer = styled.div<{ isInput: boolean; isFocus: boolea
   padding: ${({ isInput }) => (isInput ? '16px 24px' : '16px 16px 16px 24px')};
   transition: all 0.15s ease 0s;
   border: 1px solid transparent;
-  ${({ isFocus }) => (isFocus ? `border: 1px solid ${POINT_COLOR}` : '')};
+  ${({ isFocus }) => (isFocus ? `border: 1px solid ${POINT_COLOR.MAIN}` : '')};
 
   &:hover {
     ${({ isFocus }) => (!isFocus ? 'border: 1px solid #22ffa299;' : '')};
@@ -27,18 +27,26 @@ export const TextFieldWrapper = styled.div<{ isInput: boolean }>`
   min-height: ${({ isInput }) => (isInput ? '24px' : '64px')};
 `;
 
-export const TextFieldInput = styled.input`
+export const TextFieldFixedString = styled.span`
+  /* url 설정 하는 color 색상 보류 */
+  position: absolute;
+  display: block;
+  left: 0px;
+  top: 2px;
+  z-index: 9;
+`;
+
+export const TextFieldInput = styled.input<{ useFixedString: boolean; fixedWidth: number }>`
   position: relative;
   display: inline-block;
-  width: 100%;
+  width: calc(100% - 75px);
   height: 100%;
   background: transparent;
   border: none;
-  font-weight: 400;
   font-size: 14px;
   line-height: 22px;
-  /* url 설정 하는 color 색상 보류 */
-  color: #545454;
+  color: ${FONT_COLOR.WHITE};
+  margin-left: ${({ fixedWidth }) => `${fixedWidth + 2}px`};
 `;
 
 export const TextFieldTextArea = styled.textarea`
@@ -48,7 +56,6 @@ export const TextFieldTextArea = styled.textarea`
   height: 100%;
   background: transparent;
   resize: none;
-  font-weight: 400;
   font-size: 14px;
   line-height: 22px;
   color: ${FONT_COLOR.WHITE};
