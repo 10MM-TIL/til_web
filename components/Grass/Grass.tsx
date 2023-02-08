@@ -1,7 +1,7 @@
 import { GrassContainer, GrassDate, GrassRowG, GrassCell } from './styles';
 import * as Typo from '@/components/Typography';
 import { GrassProps, RowProps, ColProps } from './types';
-import { useCallback } from 'react';
+import { useCallback, memo } from 'react';
 import { FONT_COLOR } from '@/constants/color';
 
 const RADIUS_X = 1;
@@ -13,15 +13,26 @@ const TABLE_GAP = 8;
 const CELL_WIDTH = 15;
 const CELL_HEIGHT = 15;
 
-const GrassRow = ({ row_index, children }: RowProps) => {
+const GrassRow = memo(function GrassRow({ row_index, children }: RowProps) {
   return (
     <GrassRowG key={`row-${row_index}`} transform={`translate(0, ${0 + row_index * TABLE_GAP})`}>
       {children}
     </GrassRowG>
   );
-};
+});
 
-const GrassCol = ({ width, height, x, y, rx, ry, text, cellStatus, cellDate, onClickCell }: ColProps) => {
+const GrassCol = memo(function GrassCol({
+  width,
+  height,
+  x,
+  y,
+  rx,
+  ry,
+  text,
+  cellStatus,
+  cellDate,
+  onClickCell,
+}: ColProps) {
   const cellClickHandler = useCallback(() => {
     onClickCell(cellDate);
   }, [cellDate, onClickCell]);
@@ -40,7 +51,7 @@ const GrassCol = ({ width, height, x, y, rx, ry, text, cellStatus, cellDate, onC
       {text}
     </GrassCell>
   );
-};
+});
 
 export const Grass = ({ date, GrassData, onClickCell }: GrassProps) => {
   return (
@@ -79,3 +90,5 @@ export const Grass = ({ date, GrassData, onClickCell }: GrassProps) => {
     </GrassContainer>
   );
 };
+
+export default memo(Grass);
