@@ -18,6 +18,10 @@ const EditStatusButton = memo(function EditStatusButton({
   onCancelTimeLine: () => void;
   onSaveTimeLine: () => void;
 }) {
+  useEffect(() => {
+    console.log('render');
+  }, [onSaveTimeLine]);
+
   return (
     <>
       <Styled.TimeLineSaveButton onClick={onSaveTimeLine}>
@@ -30,63 +34,87 @@ const EditStatusButton = memo(function EditStatusButton({
   );
 });
 
-// 수정 클릭시 뜨는 입력 컴포넌트
-const EditInputContent = memo(function EditInputContent({
-  titleRef,
-  descRef,
-  error,
-  title,
-  desc,
-  onChangeTitle,
-  onChangeDesc,
-}: {
-  titleRef: RefObject<HTMLInputElement>;
-  descRef: RefObject<HTMLInputElement>;
-  error: string | null;
-  title: string;
-  desc: string;
-  onChangeTitle: (e: ChangeEvent<HTMLInputElement>) => void;
-  onChangeDesc: (e: ChangeEvent<HTMLInputElement>) => void;
-}) {
-  const [titleFocus, setTitleFocus] = useState(false);
-  const [descFocus, setDescFocus] = useState(false);
-
+// 날짜
+const TimeLineDate = memo(function TimeLineDate({ date }: { date: string }) {
   return (
-    <>
-      <Styled.TimeLineInputWrapper>
-        <Styled.TimeLineTitleWrapper>
-          <Styled.TimeLineTitleInput
-            ref={titleRef}
-            value={title}
-            onChange={onChangeTitle}
-            maxLength={TITLE_MAX_LENGTH}
-            onFocus={() => setTitleFocus(true)}
-            onBlur={() => setTitleFocus(false)}
-            disabled={!!error}
-          ></Styled.TimeLineTitleInput>
-          <Typo.Label2 color={FONT_COLOR.GRAY_2}>
-            {titleFocus ? `${title.length} / ${titleRef.current?.maxLength}` : ''}
-          </Typo.Label2>
-        </Styled.TimeLineTitleWrapper>
-        <Styled.TimeLineDescWrapper>
-          <Styled.TimeLineDescInput
-            ref={descRef}
-            value={desc}
-            onChange={onChangeDesc}
-            maxLength={DESC_MAX_LENGTH}
-            onFocus={() => setDescFocus(true)}
-            onBlur={() => setDescFocus(false)}
-            disabled={!!error}
-          ></Styled.TimeLineDescInput>
-          <Typo.Label2 color={FONT_COLOR.GRAY_2}>
-            {descFocus ? `${desc.length} / ${descRef.current?.maxLength}` : ''}
-          </Typo.Label2>
-        </Styled.TimeLineDescWrapper>
-      </Styled.TimeLineInputWrapper>
-    </>
+    <Styled.TimeLineDate>
+      <Typo.Label1 color={FONT_COLOR.GRAY_2}>{date}</Typo.Label1>
+    </Styled.TimeLineDate>
   );
 });
 
+// 이미지
+const TimeLineImage = memo(function TimeLineImage({ src }: { src: string }) {
+  return (
+    <Styled.TimeLineImage>
+      <Image src={src} alt='test' width={37} height={37} />
+    </Styled.TimeLineImage>
+  );
+});
+
+// 타이틀 input
+const TimeLineTitleInput = memo(function TimeLineTitleInput({
+  titleRef,
+  error,
+  title,
+  onChangeTitle,
+}: {
+  titleRef: RefObject<HTMLInputElement>;
+  error: string | null;
+  title: string;
+  onChangeTitle: (e: ChangeEvent<HTMLInputElement>) => void;
+}) {
+  const [titleFocus, setTitleFocus] = useState(false);
+
+  return (
+    <Styled.TimeLineTitleWrapper>
+      <Styled.TimeLineTitleInput
+        ref={titleRef}
+        value={title}
+        onChange={onChangeTitle}
+        maxLength={TITLE_MAX_LENGTH}
+        onFocus={() => setTitleFocus(true)}
+        onBlur={() => setTitleFocus(false)}
+        disabled={!!error}
+      ></Styled.TimeLineTitleInput>
+      <Typo.Label2 color={FONT_COLOR.GRAY_2}>
+        {titleFocus ? `${title.length} / ${titleRef.current?.maxLength}` : ''}
+      </Typo.Label2>
+    </Styled.TimeLineTitleWrapper>
+  );
+});
+
+// 설명 Input
+const TimeLineDescInput = memo(function TimeLineDescInput({
+  descRef,
+  error,
+  desc,
+  onChangeDesc,
+}: {
+  descRef: RefObject<HTMLInputElement>;
+  error: string | null;
+  desc: string;
+  onChangeDesc: (e: ChangeEvent<HTMLInputElement>) => void;
+}) {
+  const [descFocus, setDescFocus] = useState(false);
+
+  return (
+    <Styled.TimeLineDescWrapper>
+      <Styled.TimeLineDescInput
+        ref={descRef}
+        value={desc}
+        onChange={onChangeDesc}
+        maxLength={DESC_MAX_LENGTH}
+        onFocus={() => setDescFocus(true)}
+        onBlur={() => setDescFocus(false)}
+        disabled={!!error}
+      ></Styled.TimeLineDescInput>
+      <Typo.Label2 color={FONT_COLOR.GRAY_2}>
+        {descFocus ? `${desc.length} / ${descRef.current?.maxLength}` : ''}
+      </Typo.Label2>
+    </Styled.TimeLineDescWrapper>
+  );
+});
 const TimeLine = ({
   content = {
     date: '',
@@ -122,25 +150,30 @@ const TimeLine = ({
       }, [onDeleteContent]),
     },
   ]);
-
   // 수정시 title에 focus
   useEffect(() => {
     if (isEdit) titleRef.current?.focus();
   }, [isEdit]);
 
   // 드롭다운 Open/close 함수
-  const toggleOpen = () => setIsDropdownOpen((prevIsOpen) => !prevIsOpen);
+  const toggleOpen = useCallback(() => setIsDropdownOpen((prevIsOpen) => !prevIsOpen), []);
 
   // 저장
+  // TODO 이부분을 수정해야 '저장' / '취소' 가 입력할때마다 리랜더링이 안되는데 방법을 모르겠음
   const onSaveTimeLine = useCallback(async () => {
     // 추후 API 요청 추가 필요
     try {
       await onSaveAllContent(timeLineContent);
-      setIsEdit(false);
     } catch (err) {
       setError('오류가 발생했습니다.');
+    } finally {
+      setIsEdit(false);
     }
   }, [onSaveAllContent, timeLineContent]);
+
+  useEffect(() => {
+    console.log('render');
+  }, [onSaveTimeLine]);
 
   // 취소
   const onCancelTimeLine = useCallback(() => {
@@ -150,27 +183,23 @@ const TimeLine = ({
   }, [content]);
 
   // 타이틀 변경
-  const onChangeTitle = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setTimeLineContent({ ...timeLineContent, title: e.target.value });
-    },
-    [timeLineContent],
-  );
+  const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setTimeLineContent((prevTimeLineContent) => ({ ...prevTimeLineContent, title: e.target.value }));
+  }, []);
 
   // 내용 변경
-  const onChangeDesc = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setTimeLineContent({ ...timeLineContent, desc: e.target.value });
-    },
-    [timeLineContent],
-  );
+  const onChangeDesc = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setTimeLineContent((prevTimeLineContent) => ({ ...prevTimeLineContent, desc: e.target.value }));
+  }, []);
+
+  useEffect(() => {
+    console.log('render');
+  }, [onSaveTimeLine, onCancelTimeLine]);
 
   return (
     <Styled.TimeLineContainer>
       {isEdit ? (
-        <>
-          <EditStatusButton onSaveTimeLine={() => onSaveTimeLine()} onCancelTimeLine={onCancelTimeLine} />
-        </>
+        <EditStatusButton onSaveTimeLine={onSaveTimeLine} onCancelTimeLine={onCancelTimeLine} />
       ) : (
         <EditDropdown
           editList={editList}
@@ -181,21 +210,24 @@ const TimeLine = ({
           editListPositionCss={editListPositionCss}
         ></EditDropdown>
       )}
-      <Styled.TimeLineDate>
-        <Typo.Label1 color={FONT_COLOR.GRAY_2}>{timeLineContent?.date}</Typo.Label1>
-      </Styled.TimeLineDate>
+      <TimeLineDate date={timeLineContent?.date}></TimeLineDate>
       <Styled.TimeLineContent>
         <div>
           {isEdit ? (
-            <EditInputContent
-              titleRef={titleRef}
-              descRef={descRef}
-              error={error}
-              title={timeLineContent?.title}
-              desc={timeLineContent?.desc}
-              onChangeTitle={onChangeTitle}
-              onChangeDesc={onChangeDesc}
-            ></EditInputContent>
+            <Styled.TimeLineInputWrapper>
+              <TimeLineTitleInput
+                titleRef={titleRef}
+                error={error}
+                title={timeLineContent?.title}
+                onChangeTitle={onChangeTitle}
+              ></TimeLineTitleInput>
+              <TimeLineDescInput
+                descRef={descRef}
+                error={error}
+                desc={timeLineContent?.desc}
+                onChangeDesc={onChangeDesc}
+              ></TimeLineDescInput>
+            </Styled.TimeLineInputWrapper>
           ) : (
             <>
               <Styled.TimeLineTitle>
@@ -207,9 +239,7 @@ const TimeLine = ({
             </>
           )}
         </div>
-        <Styled.TimeLineImage>
-          <Image src={timeLineContent?.img as string} alt='test' width={37} height={37} />
-        </Styled.TimeLineImage>
+        <TimeLineImage src={timeLineContent?.img as string} />
       </Styled.TimeLineContent>
     </Styled.TimeLineContainer>
   );

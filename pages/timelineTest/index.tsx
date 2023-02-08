@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { css } from '@emotion/react';
 
 import { TimeLine, TimeLineContentProps } from '@/components/TimeLine';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 const Home: NextPage = () => {
   const [timelineContent, setTimelineContent] = useState<TimeLineContentProps>({
@@ -17,11 +17,14 @@ const Home: NextPage = () => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         setTimelineContent({ ...timeLineContentParams });
-        console.log(timelineContent, +' 저장 완료');
         resolve();
       }, 1000);
     });
   }, []);
+
+  useEffect(() => {
+    console.log(timelineContent);
+  }, [timelineContent]);
 
   const onDeleteContent = useCallback((): Promise<void> => {
     // 삭제하는 api 함수 추가
