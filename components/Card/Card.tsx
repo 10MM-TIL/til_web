@@ -14,17 +14,6 @@ import {
 import * as Typo from '@/components/Typography';
 import { CardProps, category } from './types';
 
-export const Badge = memo(function Badge({ size }: Pick<CardProps, 'size'>) {
-  return (
-    <>
-      <BadgeTop size={size}>
-        <CrownIcon size={size} />
-      </BadgeTop>
-      <BadgeBottom size={size}></BadgeBottom>
-    </>
-  );
-});
-
 const Card = ({
   size,
   hasBadge = false,
@@ -41,9 +30,20 @@ const Card = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBadge]);
 
+  const Badge = () => {
+    return (
+      <>
+        <BadgeTop size={size}>
+          <CrownIcon size={size} />
+        </BadgeTop>
+        <BadgeBottom size={size}></BadgeBottom>
+      </>
+    );
+  };
+
   return (
     <CardContainer size={size}>
-      {hasBadge ? <Badge size={size} /> : null}
+      {hasBadge ? <Badge /> : null}
       <CardHeader>
         {tagList.map((tag) => {
           return (
