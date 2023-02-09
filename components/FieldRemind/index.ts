@@ -1,2 +1,2 @@
-import { FieldRemind } from './FieldRemind';
+import FieldRemind from './FieldRemind';
 export { FieldRemind };

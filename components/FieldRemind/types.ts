@@ -12,6 +12,8 @@ type RequiredPropsForDatepicker = {
 
 type FieldRemindPropsForDate = {
   type: 'date';
+  date: string;
+  desc: string;
   onClickCopy?: MouseEventHandler<HTMLDivElement>;
 };
 

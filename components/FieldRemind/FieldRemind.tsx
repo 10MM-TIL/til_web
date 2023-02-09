@@ -1,4 +1,4 @@
-import { ReactElement, forwardRef, ForwardedRef, MouseEvent } from 'react';
+import { ReactElement, forwardRef, ForwardedRef, MouseEvent, memo, useCallback } from 'react';
 import {
   FieldRemindContainer,
   FieldRemindDate,
@@ -17,46 +17,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import { FONT_COLOR } from '@/constants/color';
 
-export const FieldRemind = (props: FieldRemindProps): ReactElement => {
-  return (
-    <FieldRemindContainer>
-      <div>
-        {props.type === 'date' ? (
-          <>
-            <FieldRemindDate>
-              <Typo.Label1 color={FONT_COLOR.GRAY_2}>{'2023 11'}</Typo.Label1>
-            </FieldRemindDate>
-            <FieldRemindDesc>
-              <Typo.SubHeader color={FONT_COLOR.GRAY_4}>{'12312312312'}</Typo.SubHeader>
-            </FieldRemindDesc>
-          </>
-        ) : (
-          <>
-            <CustomDatePicker type={props.type} date={props.date} onDateChange={props.onDateChange}></CustomDatePicker>
-            {/* [TODO} maxLength 정하기 필요 */}
-            <FieldRemindTitleInput
-              type='text'
-              placeholder='제목을 입력해주세요'
-              value={props.title}
-              onChange={props.onTitleChange}
-              maxLength={200}
-            />
-          </>
-        )}
-      </div>
-
-      <CopyBtn onClickCopy={props.onClickCopy}></CopyBtn>
-    </FieldRemindContainer>
-  );
-};
 const DATE_FORMAT = 'yyyy.MM.dd';
 
-// 데이트 피커 커스텀 필요
-const CustomDatePicker = ({
+// TODO 데이트 피커 커스텀 필요
+const CustomDatePicker = memo(function CustomDatePicker({
   type,
   date,
   onDateChange,
-}: Omit<FieldRemindPropsForDatepicker, 'title' | 'onTitleChange'>) => {
+}: Omit<FieldRemindPropsForDatepicker, 'title' | 'onTitleChange'>) {
   const ExampleCustomInput = forwardRef(
     (
       { value = '', onClick }: { value?: string; onClick?: (event: MouseEvent<HTMLDivElement>) => void },
@@ -89,14 +57,48 @@ const CustomDatePicker = ({
       dropdownMode='scroll'
     />
   );
-};
+});
 
-const CopyBtn = ({ onClickCopy }: Pick<FieldRemindProps, 'onClickCopy'>) => {
+const FieldRemind = (props: FieldRemindProps): ReactElement => {
+  const CopyBtn = () => {
+    return (
+      <FieldRemindCopyContainer onClick={props.onClickCopy}>
+        <FieldRemindCopy>
+          <CopyIcon></CopyIcon>
+        </FieldRemindCopy>
+      </FieldRemindCopyContainer>
+    );
+  };
+
   return (
-    <FieldRemindCopyContainer onClick={onClickCopy}>
-      <FieldRemindCopy>
-        <CopyIcon></CopyIcon>
-      </FieldRemindCopy>
-    </FieldRemindCopyContainer>
+    <FieldRemindContainer>
+      <div>
+        {props.type === 'date' ? (
+          <>
+            <FieldRemindDate>
+              <Typo.Label1 color={FONT_COLOR.GRAY_2}>{props.date}</Typo.Label1>
+            </FieldRemindDate>
+            <FieldRemindDesc>
+              <Typo.SubHeader color={FONT_COLOR.GRAY_4}>{props.desc}</Typo.SubHeader>
+            </FieldRemindDesc>
+          </>
+        ) : (
+          <>
+            <CustomDatePicker type={props.type} date={props.date} onDateChange={props.onDateChange}></CustomDatePicker>
+            {/* [TODO} maxLength 정하기 필요 */}
+            <FieldRemindTitleInput
+              key='datepicker'
+              type='text'
+              placeholder='제목을 입력해주세요'
+              value={props.title}
+              onChange={props.onTitleChange}
+              maxLength={200}
+            />
+          </>
+        )}
+      </div>
+      <CopyBtn></CopyBtn>
+    </FieldRemindContainer>
   );
 };
+export default memo(FieldRemind);

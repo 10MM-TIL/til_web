@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { css } from '@emotion/react';
-import { ChangeEvent, useState, MouseEvent } from 'react';
+import { ChangeEvent, useState, useCallback } from 'react';
 
 import { FieldRemind } from '@/components/FieldRemind';
 
@@ -12,15 +12,16 @@ const FieldRemindTest: NextPage = () => {
   };
 
   const [date, setDate] = useState<Date | null>(null);
-  const onDateChanged = (date: Date | null) => {
+  const onDateChanged = useCallback((date: Date | null) => {
     console.log('선택한 날짜' + date);
     setDate(date);
-  };
+  }, []);
 
-  const onClickCopy = () => {
+  const onClickCopy = useCallback(() => {
     // 아직 어떤 기능인지 확실치 않아 테스트용으로 작성
     window.alert('링크가 복사되었습니다!');
-  };
+  }, []);
+
   return (
     <div
       css={css`
@@ -42,7 +43,7 @@ const FieldRemindTest: NextPage = () => {
           margin-top: 50px;
         `}
       >
-        <FieldRemind type='date' onClickCopy={onClickCopy}></FieldRemind>
+        <FieldRemind type='date' date={'2023 11'} desc={'12312312312'} onClickCopy={onClickCopy}></FieldRemind>
         <FieldRemind
           type='datepicker'
           title={title}
