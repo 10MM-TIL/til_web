@@ -13,47 +13,44 @@ const TABLE_GAP = 8;
 const CELL_WIDTH = 15;
 const CELL_HEIGHT = 15;
 
-const GrassRow = memo(function GrassRow({ row_index, children }: RowProps) {
-  return (
-    <GrassRowG key={`row-${row_index}`} transform={`translate(0, ${0 + row_index * TABLE_GAP})`}>
-      {children}
-    </GrassRowG>
-  );
-});
+const Grass = ({ date, GrassData, onClickCell }: GrassProps) => {
+  // GrassRow
+  const GrassRow = ({ row_index, children }: RowProps) => {
+    return (
+      <GrassRowG key={`row-${row_index}`} transform={`translate(0, ${0 + row_index * TABLE_GAP})`}>
+        {children}
+      </GrassRowG>
+    );
+  };
 
-const GrassCol = memo(function GrassCol({
-  width,
-  height,
-  x,
-  y,
-  rx,
-  ry,
-  text,
-  cellStatus,
-  cellDate,
-  onClickCell,
-}: ColProps) {
-  const cellClickHandler = useCallback(() => {
-    onClickCell(cellDate);
-  }, [cellDate, onClickCell]);
+  // GrassCol
+  const GrassCol = ({
+    width,
+    height,
+    x,
+    y,
+    rx,
+    ry,
+    text,
+    cellStatus,
+    onClickCell,
+  }: Omit<ColProps, 'onCLickCell' | 'cellDate'> & { onClickCell: () => void }) => {
+    return (
+      <GrassCell
+        width={width}
+        height={height}
+        x={x}
+        y={y}
+        rx={rx}
+        ry={ry}
+        cellStatus={cellStatus}
+        onClick={onClickCell}
+      >
+        {text}
+      </GrassCell>
+    );
+  };
 
-  return (
-    <GrassCell
-      width={width}
-      height={height}
-      x={x}
-      y={y}
-      rx={rx}
-      ry={ry}
-      cellStatus={cellStatus}
-      onClick={cellClickHandler}
-    >
-      {text}
-    </GrassCell>
-  );
-});
-
-export const Grass = ({ date, GrassData, onClickCell }: GrassProps) => {
   return (
     <GrassContainer>
       <div>
@@ -66,6 +63,7 @@ export const Grass = ({ date, GrassData, onClickCell }: GrassProps) => {
               return (
                 <GrassRow key={`row-${row_index}`} row_index={row_index}>
                   {row.map((column, col_index) => {
+                    const clickCellDate = () => onClickCell(column.date);
                     return (
                       <GrassCol
                         key={`column-${col_index}`}
@@ -77,8 +75,7 @@ export const Grass = ({ date, GrassData, onClickCell }: GrassProps) => {
                         ry={RADIUS_Y}
                         text={column.date}
                         cellStatus={column.status}
-                        cellDate={column.date}
-                        onClickCell={() => onClickCell(column.date)}
+                        onClickCell={clickCellDate}
                       ></GrassCol>
                     );
                   })}
