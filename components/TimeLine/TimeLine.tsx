@@ -18,10 +18,6 @@ const EditStatusButton = memo(function EditStatusButton({
   onCancelTimeLine: () => void;
   onSaveTimeLine: () => void;
 }) {
-  useEffect(() => {
-    console.log('render');
-  }, [onSaveTimeLine]);
-
   return (
     <>
       <Styled.TimeLineSaveButton onClick={onSaveTimeLine}>
@@ -115,6 +111,7 @@ const TimeLineDescInput = memo(function TimeLineDescInput({
     </Styled.TimeLineDescWrapper>
   );
 });
+
 const TimeLine = ({
   content = {
     date: '',
@@ -150,17 +147,17 @@ const TimeLine = ({
       }, [onDeleteContent]),
     },
   ]);
+
   // 수정시 title에 focus
   useEffect(() => {
     if (isEdit) titleRef.current?.focus();
   }, [isEdit]);
 
   // 드롭다운 Open/close 함수
-  const toggleOpen = useCallback(() => setIsDropdownOpen((prevIsOpen) => !prevIsOpen), []);
+  const toggleOpen = () => setIsDropdownOpen((prevIsOpen) => !prevIsOpen);
 
   // 저장
-  // TODO 이부분을 수정해야 '저장' / '취소' 가 입력할때마다 리랜더링이 안되는데 방법을 모르겠음
-  const onSaveTimeLine = useCallback(async () => {
+  const onSaveTimeLine = async () => {
     // 추후 API 요청 추가 필요
     try {
       await onSaveAllContent(timeLineContent);
@@ -169,32 +166,25 @@ const TimeLine = ({
     } finally {
       setIsEdit(false);
     }
-  }, [onSaveAllContent, timeLineContent]);
-
-  useEffect(() => {
-    console.log('render');
-  }, [onSaveTimeLine]);
+  };
 
   // 취소
-  const onCancelTimeLine = useCallback(() => {
+  const onCancelTimeLine = () => {
+    // 취소시 처음 값으로 덮어씌우기, edit모드 종로, 에러 초기화
     setTimeLineContent(content);
     setIsEdit(false);
     setError(null);
-  }, [content]);
+  };
 
   // 타이틀 변경
-  const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTimeLineContent((prevTimeLineContent) => ({ ...prevTimeLineContent, title: e.target.value }));
-  }, []);
+  };
 
   // 내용 변경
-  const onChangeDesc = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeDesc = (e: ChangeEvent<HTMLInputElement>) => {
     setTimeLineContent((prevTimeLineContent) => ({ ...prevTimeLineContent, desc: e.target.value }));
-  }, []);
-
-  useEffect(() => {
-    console.log('render');
-  }, [onSaveTimeLine, onCancelTimeLine]);
+  };
 
   return (
     <Styled.TimeLineContainer>
