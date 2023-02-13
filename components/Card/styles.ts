@@ -1,16 +1,15 @@
-import { memo } from 'react';
-
 import styled from '@emotion/styled';
 import { CardProps } from './types';
 import Crown from '@/assets/svgs/ic_crown.svg';
+import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
 export const CardContainer = styled.div<{ size: CardProps['size'] }>`
   position: relative;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  background: #191f28;
-  color: #ffffff;
+  background: ${BACKGROUND_COLOR.NAVY_1};
+  color: ${FONT_COLOR.WHITE};
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 9px;
   width: ${({ size }) => (size === 'sm' ? '284px' : '384px')};
@@ -20,7 +19,7 @@ export const CardContainer = styled.div<{ size: CardProps['size'] }>`
   &:hover {
     transition: all 0.15s ease 0s;
     background: rgba(255, 255, 255, 0.06);
-    color: #ffffff;
+    color: ${FONT_COLOR.WHITE};
   }
 `;
 
@@ -66,7 +65,7 @@ export const BadgeTop = styled.div<Pick<CardProps, 'size'>>`
   right: ${({ size }) => (size === 'sm' ? '16px' : '20px')};
   width: ${({ size }) => (size === 'sm' ? `${BadgeTopSmWidth}px` : `${BadgeTopLgWidth}px`)};
   height: ${({ size }) => (size === 'sm' ? `${BadgeTopSmHeight}px` : `${BadgeTopLgHeight}px`)};
-  background-color: #8bffff;
+  background-color: ${POINT_COLOR.SAVE};
   &::after {
     content: '';
   }
@@ -87,7 +86,8 @@ export const BadgeBottom = styled.div<Pick<CardProps, 'size'>>`
   height: 0;
   border-bottom: ${({ size }) => (size === 'sm' ? `${BadgeBottomSmHeight}px` : `${BadgeBottomLgHeight}px`)} solid
     transparent;
-  border-top: ${({ size }) => (size === 'sm' ? `${BadgeBottomSmHeight}px` : `${BadgeBottomLgHeight}px`)} solid #8bffff;
+  border-top: ${({ size }) => (size === 'sm' ? `${BadgeBottomSmHeight}px` : `${BadgeBottomLgHeight}px`)} solid
+    ${POINT_COLOR.SAVE};
   border-left: ${({ size }) => (size === 'sm' ? `${BadgeTopSmWidth / 2}px` : `${BadgeTopLgWidth / 2}px`)} solid
     transparent;
   border-right: ${({ size }) => (size === 'sm' ? `${BadgeTopSmWidth / 2}px` : `${BadgeTopLgWidth / 2}px`)} solid
