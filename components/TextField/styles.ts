@@ -23,7 +23,7 @@ export const TextFieldContainer = styled.div<{ isInput: boolean; isFocus: boolea
 
 export const TextFieldWrapper = styled.div<{ isInput: boolean }>`
   position: relative;
-  width: ${({ isInput }) => (isInput ? '268px' : '395px')};
+  width: ${({ isInput }) => (isInput ? '228px' : '338px')};
   min-height: ${({ isInput }) => (isInput ? '24px' : '64px')};
 `;
 
@@ -65,4 +65,11 @@ export const TextFieldLength = styled.div<{ isInput: boolean }>`
   position: absolute;
   right: 16px;
   ${({ isInput }) => (isInput ? 'top: 17px' : 'bottom: 16px')};
+`;
+
+export const TextFieldCopy = styled.button`
+  position: absolute;
+  right: -35px;
+  top: 2px;
+  z-index: 11;
 `;

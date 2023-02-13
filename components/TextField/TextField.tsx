@@ -1,16 +1,11 @@
-import { memo, ReactElement, MouseEvent, useCallback, useRef } from 'react';
+import { memo, ReactElement, MouseEvent, useCallback, useRef, forwardRef, Ref } from 'react';
 import * as Typo from '@/components/Typography';
-import {
-  TextFieldContainer,
-  TextFieldInput,
-  TextFieldTextArea,
-  TextFieldWrapper,
-  TextFieldLength,
-  TextFieldFixedString,
-} from './styles';
+import * as Style from './styles';
 import { useState } from 'react';
 import { TextFieldProps } from './types';
 import { FONT_COLOR } from '@/constants/color';
+import { IconCopy } from '@/assets/svgs/IconCopy';
+import useCopyClipBoard from '@/hooks/useCopyClipBoard';
 
 const DOMAIN = 'bricklog.kr/';
 const TextField = ({
@@ -19,6 +14,7 @@ const TextField = ({
   placeholder = '',
   maxLength = 200,
   useFixedString = false,
+  useCopy = false,
   inputValue,
   onChange,
 }: TextFieldProps): ReactElement => {
@@ -26,6 +22,7 @@ const TextField = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fixeStringRef = useRef<HTMLParagraphElement>(null);
+  const [isCopy, onCopy] = useCopyClipBoard();
 
   // focus 시 focus이벤트가 발생해 toggleFocus() 실행됌
   const toggleFocus = useCallback(() => setFocus((prevFocus) => !prevFocus), []);
@@ -39,8 +36,8 @@ const TextField = ({
 
   const handleFocus = useCallback(
     (e: MouseEvent<HTMLDivElement>) => {
-      // 고정된 스트링 클릭시는 무시
-      if (e.target === fixeStringRef.current) return;
+      // 고정된 스트링 또는 복사하기 버튼 클릭시는 무시
+      // e.stopPropagation 으로 막음
       isInput ? inputRef.current?.focus() : textareaRef.current?.focus();
     },
     [isInput],
@@ -56,21 +53,34 @@ const TextField = ({
 
   const TextFieldFixedStringComp = memo(function TextFieldFixedStringComp() {
     return (
-      <TextFieldFixedString>
+      <Style.TextFieldFixedString onClick={(e) => e.stopPropagation()}>
         <Typo.Body ref={fixeStringRef} color='#545454'>
           {DOMAIN}
         </Typo.Body>
-      </TextFieldFixedString>
+      </Style.TextFieldFixedString>
+    );
+  });
+
+  const TextFieldCopyIcon = memo(function TextFieldFixedStringComp() {
+    const copyUrl = (e: MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      onCopy(`${DOMAIN}${inputValue}`);
+    };
+    // mouseDown 이벤트로 처리해야 blur 이벤트보다 먼저 처리된다.
+    return (
+      <Style.TextFieldCopy onMouseDown={copyUrl}>
+        <IconCopy></IconCopy>
+      </Style.TextFieldCopy>
     );
   });
 
   return (
-    <TextFieldContainer isInput={isInput} isFocus={isFocus} onClick={handleFocus}>
+    <Style.TextFieldContainer isInput={isInput} isFocus={isFocus} onClick={handleFocus}>
       <TextFieldTitle></TextFieldTitle>
-      <TextFieldWrapper isInput={isInput}>
+      <Style.TextFieldWrapper isInput={isInput}>
         {isInput ? (
           <>
-            <TextFieldInput
+            <Style.TextFieldInput
               ref={inputRef}
               type='text'
               placeholder={placeholder}
@@ -83,9 +93,10 @@ const TextField = ({
               fixedWidth={fixeStringRef.current?.clientWidth ?? 0}
             />
             {useFixedString ? <TextFieldFixedStringComp></TextFieldFixedStringComp> : null}
+            {useCopy ? <TextFieldCopyIcon></TextFieldCopyIcon> : null}
           </>
         ) : (
-          <TextFieldTextArea
+          <Style.TextFieldTextArea
             ref={textareaRef}
             rows={1}
             placeholder={placeholder}
@@ -99,13 +110,13 @@ const TextField = ({
             onBlur={toggleFocus}
           />
         )}
-      </TextFieldWrapper>
-      <TextFieldLength isInput={isInput}>
+      </Style.TextFieldWrapper>
+      <Style.TextFieldLength isInput={isInput}>
         <Typo.Label2 color={FONT_COLOR.GRAY_2}>
           {inputValue?.length} / {maxLength}
         </Typo.Label2>
-      </TextFieldLength>
-    </TextFieldContainer>
+      </Style.TextFieldLength>
+    </Style.TextFieldContainer>
   );
 };
 
