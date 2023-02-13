@@ -75,7 +75,7 @@ const TextField = ({
   });
 
   return (
-    <Style.TextFieldContainer isInput={isInput} isFocus={isFocus} onClick={handleFocus}>
+    <Style.TextFieldContainer isInput={isInput} isFocus={isFocus} useCopy={useCopy} onClick={handleFocus}>
       <TextFieldTitle></TextFieldTitle>
       <Style.TextFieldWrapper isInput={isInput}>
         {isInput ? (
@@ -93,7 +93,6 @@ const TextField = ({
               fixedWidth={fixeStringRef.current?.clientWidth ?? 0}
             />
             {useFixedString ? <TextFieldFixedStringComp></TextFieldFixedStringComp> : null}
-            {useCopy ? <TextFieldCopyIcon></TextFieldCopyIcon> : null}
           </>
         ) : (
           <Style.TextFieldTextArea
@@ -111,11 +110,12 @@ const TextField = ({
           />
         )}
       </Style.TextFieldWrapper>
-      <Style.TextFieldLength isInput={isInput}>
+      <Style.TextFieldLength isInput={isInput} useCopy={useCopy}>
         <Typo.Label2 color={FONT_COLOR.GRAY_2}>
           {inputValue?.length} / {maxLength}
         </Typo.Label2>
       </Style.TextFieldLength>
+      {useCopy ? <TextFieldCopyIcon></TextFieldCopyIcon> : null}
     </Style.TextFieldContainer>
   );
 };

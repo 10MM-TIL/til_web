@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import { FONT_COLOR, POINT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
 
-export const TextFieldContainer = styled.div<{ isInput: boolean; isFocus: boolean }>`
+export const TextFieldContainer = styled.div<{ isInput: boolean; isFocus: boolean; useCopy: boolean }>`
   position: relative;
   display: flex;
-  width: 483px;
+  width: 100%;
   min-height: ${({ isInput }) => (isInput ? '56px' : '96px')};
   background: ${BACKGROUND_COLOR.NAVY_3};
   border-radius: 12px;
@@ -16,8 +16,17 @@ export const TextFieldContainer = styled.div<{ isInput: boolean; isFocus: boolea
   &:hover {
     ${({ isFocus }) => (!isFocus ? 'border: 1px solid #22ffa299;' : '')};
   }
-  > div:first-of-type {
+  > div:nth-child(1) {
     margin-right: 18px;
+    min-width: fit-content;
+  }
+  > div:nth-child(2) {
+    max-width: 258px;
+    min-width: 139px;
+    margin-right: 80px;
+  }
+  @media screen and (max-width: 411px) {
+    min-height: ${({ isInput, useCopy }) => (isInput && useCopy ? '69px' : '')};
   }
 `;
 
@@ -39,8 +48,8 @@ export const TextFieldFixedString = styled.span`
 export const TextFieldInput = styled.input<{ useFixedString: boolean; fixedWidth: number }>`
   position: relative;
   display: inline-block;
-  width: calc(100% - 75px);
-  height: 100%;
+  width: ${({ fixedWidth }) => `calc(100% - ${fixedWidth + 2}px)`};
+  height: 24px;
   background: transparent;
   border: none;
   font-size: 14px;
@@ -61,15 +70,22 @@ export const TextFieldTextArea = styled.textarea`
   color: ${FONT_COLOR.WHITE};
 `;
 
-export const TextFieldLength = styled.div<{ isInput: boolean }>`
+export const TextFieldLength = styled.div<{ isInput: boolean; useCopy: boolean }>`
   position: absolute;
   right: 16px;
   ${({ isInput }) => (isInput ? 'top: 17px' : 'bottom: 16px')};
+
+  @media screen and (max-width: 411px) {
+    top: ${({ isInput, useCopy }) => (isInput && useCopy ? '39px' : '')};
+  }
 `;
 
 export const TextFieldCopy = styled.button`
   position: absolute;
-  right: -35px;
-  top: 2px;
-  z-index: 11;
+  right: 65px;
+  top: 18px;
+
+  @media screen and (max-width: 411px) {
+    right: 16px;
+  }
 `;
