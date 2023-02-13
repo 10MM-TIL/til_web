@@ -8,11 +8,18 @@ export const FieldRemindContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 496px;
-  height: 69px;
+  width: 100%;
+  height: 89px;
   background: ${BACKGROUND_COLOR.NAVY_3};
   border-radius: 6px;
-  padding: 13px 22px 13px 24px;
+  padding: 12px 24px 11px 24px;
+  flex-wrap: nowrap;
+
+  > div:nth-child(1) {
+    flex-grow: 1;
+    max-width: 339px;
+    min-width: 217px;
+  }
 `;
 
 export const FieldRemindDatePickerWrapper = styled.div`
@@ -30,7 +37,6 @@ export const FieldRemindDate = styled.div<{ type?: FieldRemindProps['type'] }>`
 `;
 
 export const FieldRemindDesc = styled.div`
-  width: 141px;
   cursor: pointer;
   p {
     overflow: hidden;
@@ -63,20 +69,30 @@ export const CopyIcon = styled(Copy)`
   display: block;
 `;
 
-export const FieldRemindTitleInput = styled.input`
-  width: 197px;
-  height: 26px;
-  border-bottom: 1px solid ${FONT_COLOR.GRAY_2};
+export const FieldRemindInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 1px;
+`;
+
+export const FieldRemindInput = styled.input`
+  width: calc(100% - 50px);
+  height: 24px;
+  border-bottom: 2px solid ${FONT_COLOR.GRAY_2};
   background: transparent;
   font-weight: 700;
   font-size: 14px;
-  line-height: 26px;
+  line-height: 22px;
   color: ${FONT_COLOR.WHITE};
   &::placeholder {
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 400;
     color: ${FONT_COLOR.GRAY_3};
   }
   &:focus {
-    border-bottom: 1px solid ${POINT_COLOR.MAIN};
+    border-bottom: 2px solid ${POINT_COLOR.MAIN};
     transition: all 0.15s ease 0s;
   }
 `;

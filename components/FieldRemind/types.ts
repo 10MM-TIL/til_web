@@ -6,6 +6,9 @@ type RequiredPropsForDatepicker = {
   title: string;
   onTitleChange: ChangeEventHandler<HTMLInputElement>;
 
+  desc: string;
+  onDescChange: ChangeEventHandler<HTMLInputElement>;
+
   date: Date | null;
   onDateChange: (date: Date | null) => void;
 };
@@ -13,6 +16,7 @@ type RequiredPropsForDatepicker = {
 type FieldRemindPropsForDate = {
   type: 'date';
   date: string;
+  title: string;
   desc: string;
   onClickCopy?: MouseEventHandler<HTMLDivElement>;
 };

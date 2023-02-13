@@ -1,17 +1,19 @@
-import { ReactElement, forwardRef, ForwardedRef, MouseEvent, memo, useCallback } from 'react';
 import {
-  FieldRemindContainer,
-  FieldRemindDate,
-  FieldRemindDesc,
-  FieldRemindCopyContainer,
-  FieldRemindCopy,
-  FieldRemindDatePickerWrapper,
-  FieldRemindTitleInput,
-  CopyIcon,
-  CalendarIcon,
-} from './styles';
+  ReactElement,
+  forwardRef,
+  ForwardedRef,
+  MouseEvent,
+  memo,
+  useRef,
+  useState,
+  RefObject,
+  ChangeEvent,
+} from 'react';
+import * as Styled from './styles';
+
 import * as Typo from '@/components/Typography';
 import { FieldRemindProps, FieldRemindPropsForDatepicker } from './types';
+import { css } from '@emotion/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
@@ -24,18 +26,18 @@ const CustomDatePicker = memo(function CustomDatePicker({
   type,
   date,
   onDateChange,
-}: Omit<FieldRemindPropsForDatepicker, 'title' | 'onTitleChange'>) {
+}: Pick<FieldRemindPropsForDatepicker, 'date' | 'onDateChange' | 'type'>) {
   const ExampleCustomInput = forwardRef(
     (
       { value = '', onClick }: { value?: string; onClick?: (event: MouseEvent<HTMLDivElement>) => void },
       ref: ForwardedRef<HTMLDivElement>,
     ) => (
-      <FieldRemindDatePickerWrapper onClick={onClick} ref={ref}>
-        <FieldRemindDate type={type}>
+      <Styled.FieldRemindDatePickerWrapper onClick={onClick} ref={ref}>
+        <Styled.FieldRemindDate type={type}>
           <Typo.Label1 color={FONT_COLOR.GRAY_2}>{value ? value : '날짜를 입력해주세요.'}</Typo.Label1>
-        </FieldRemindDate>
-        <CalendarIcon />
-      </FieldRemindDatePickerWrapper>
+        </Styled.FieldRemindDate>
+        <Styled.CalendarIcon />
+      </Styled.FieldRemindDatePickerWrapper>
     ),
   );
   ExampleCustomInput.displayName = 'ExampleCustomInput';
@@ -59,46 +61,113 @@ const CustomDatePicker = memo(function CustomDatePicker({
   );
 });
 
+const FieldRemindTitleInput = memo(function FieldRemindTitleInput({
+  title,
+  onTitleChange,
+}: {
+  title: string;
+  onTitleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}) {
+  const titleRef = useRef<HTMLInputElement>(null);
+  const [titleFocus, setTitleFocus] = useState(false);
+
+  return (
+    <div
+      css={css`
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      `}
+    >
+      <Styled.FieldRemindInput
+        ref={titleRef}
+        type='text'
+        placeholder='제목을 입력해주세요'
+        value={title}
+        onChange={onTitleChange}
+        onFocus={() => setTitleFocus(true)}
+        onBlur={() => setTitleFocus(false)}
+        maxLength={200}
+      />
+      <Typo.Label2 color={FONT_COLOR.GRAY_2}>
+        {titleFocus ? `${title.length} / ${titleRef.current?.maxLength}` : ''}
+      </Typo.Label2>
+    </div>
+  );
+});
+
+const FieldRemindDescInput = memo(function FieldRemindDescInput({
+  desc,
+  onDescChange,
+}: {
+  desc: string;
+  onDescChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}) {
+  const descRef = useRef<HTMLInputElement>(null);
+  const [descFocus, setDescFocus] = useState(false);
+  return (
+    <div
+      css={css`
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      `}
+    >
+      <Styled.FieldRemindInput
+        ref={descRef}
+        type='text'
+        placeholder='내용을 입력해주세요'
+        value={desc}
+        onChange={onDescChange}
+        onFocus={() => setDescFocus(true)}
+        onBlur={() => setDescFocus(false)}
+        maxLength={200}
+      />
+      <Typo.Label2 color={FONT_COLOR.GRAY_2}>
+        {descFocus ? `${desc.length} / ${descRef.current?.maxLength}` : ''}
+      </Typo.Label2>
+    </div>
+  );
+});
+
 const FieldRemind = (props: FieldRemindProps): ReactElement => {
   const CopyBtn = () => {
     return (
-      <FieldRemindCopyContainer onClick={props.onClickCopy}>
-        <FieldRemindCopy>
-          <CopyIcon></CopyIcon>
-        </FieldRemindCopy>
-      </FieldRemindCopyContainer>
+      <Styled.FieldRemindCopyContainer onClick={props.onClickCopy}>
+        <Styled.FieldRemindCopy>
+          <Styled.CopyIcon></Styled.CopyIcon>
+        </Styled.FieldRemindCopy>
+      </Styled.FieldRemindCopyContainer>
     );
   };
 
   return (
-    <FieldRemindContainer>
+    <Styled.FieldRemindContainer>
       <div>
         {props.type === 'date' ? (
           <>
-            <FieldRemindDate>
+            <Styled.FieldRemindDate>
               <Typo.Label1 color={FONT_COLOR.GRAY_2}>{props.date}</Typo.Label1>
-            </FieldRemindDate>
-            <FieldRemindDesc>
+            </Styled.FieldRemindDate>
+            <Styled.FieldRemindDesc>
+              <Typo.SubHeader color={FONT_COLOR.GRAY_4}>{props.title}</Typo.SubHeader>
+            </Styled.FieldRemindDesc>
+            <Styled.FieldRemindDesc>
               <Typo.SubHeader color={FONT_COLOR.GRAY_4}>{props.desc}</Typo.SubHeader>
-            </FieldRemindDesc>
+            </Styled.FieldRemindDesc>
           </>
         ) : (
           <>
             <CustomDatePicker type={props.type} date={props.date} onDateChange={props.onDateChange}></CustomDatePicker>
-            {/* [TODO} maxLength 정하기 필요 */}
-            <FieldRemindTitleInput
-              key='datepicker'
-              type='text'
-              placeholder='제목을 입력해주세요'
-              value={props.title}
-              onChange={props.onTitleChange}
-              maxLength={200}
-            />
+            <Styled.FieldRemindInputContainer>
+              <FieldRemindTitleInput title={props.title} onTitleChange={props.onTitleChange}></FieldRemindTitleInput>
+              <FieldRemindDescInput desc={props.desc} onDescChange={props.onDescChange}></FieldRemindDescInput>
+            </Styled.FieldRemindInputContainer>
           </>
         )}
       </div>
       <CopyBtn></CopyBtn>
-    </FieldRemindContainer>
+    </Styled.FieldRemindContainer>
   );
 };
 export default memo(FieldRemind);
