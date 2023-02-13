@@ -1,8 +1,9 @@
 import { ReactElement } from 'react';
 import Image from 'next/image';
-import { CertifiedBlogContainer, CertifiedBlogBadge, CertifiedBlogName, DeleteButton } from './styles';
+import { CertifiedBlogContainer, CertifiedBlogName, DeleteButton } from './styles';
 import * as Typo from '@/components/Typography';
 import { CertifiedBlogProps, ImageTypeObject } from './types';
+import { IconX } from '@/assets/svgs/iconX';
 import { FONT_COLOR } from '@/constants/color';
 
 // 이미지 추가 및 허용된 블로그만 설정 필요
@@ -39,9 +40,6 @@ export const CertifiedBlog = ({ blogName, blogType, isDeleted, onDeleteBlog }: C
     <>
       {!isDeleted ? (
         <CertifiedBlogContainer>
-          <CertifiedBlogBadge>
-            <Typo.Label2 color={FONT_COLOR.GRAY_3}>인증된 블로그</Typo.Label2>
-          </CertifiedBlogBadge>
           <Image
             src={imageType[blogType].src}
             alt={blogType}
@@ -51,7 +49,9 @@ export const CertifiedBlog = ({ blogName, blogType, isDeleted, onDeleteBlog }: C
           <CertifiedBlogName>
             <Typo.Body color={FONT_COLOR.WHITE}>{blogName}</Typo.Body>
           </CertifiedBlogName>
-          <DeleteButton onClick={onDeleteBlog}></DeleteButton>
+          <DeleteButton onClick={onDeleteBlog}>
+            <IconX></IconX>
+          </DeleteButton>
         </CertifiedBlogContainer>
       ) : null}
     </>

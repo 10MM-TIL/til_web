@@ -1,21 +1,15 @@
 import styled from '@emotion/styled';
-import { FONT_COLOR } from '@/constants/color';
 
 export const CertifiedBlogContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  width: 377px;
+  max-width: 345px;
+  min-width: 300px;
   height: 45px;
   background: #252e38;
   border-radius: 12px;
-  padding: 10px 18px 10px 24px;
-`;
-
-export const CertifiedBlogBadge = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 25px;
+  padding: 10px 10px 10px 24px;
 `;
 
 // 블로그 이름이 길다면 어떻게 할것 인가??
@@ -29,21 +23,4 @@ export const DeleteButton = styled.button`
   width: 24px;
   height: 24px;
   right: 18px;
-  &::before,
-  &::after {
-    position: absolute;
-    top: 4px;
-    right: 11px;
-    /* right: 8px; */
-    content: '';
-    height: 16px;
-    width: 1.8px;
-    background-color: ${FONT_COLOR.WHITE};
-  }
-  &::before {
-    transform: rotate(45deg);
-  }
-  &::after {
-    transform: rotate(-45deg);
-  }
 `;
