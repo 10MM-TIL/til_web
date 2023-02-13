@@ -1,7 +1,9 @@
 import type { NextPage } from 'next';
-
 import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
+import { css } from '@emotion/react';
+import { BoxLayout } from '@/components/BoxLayout';
+import { Button } from '@/components/Button';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
@@ -25,6 +27,34 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
+      <BoxLayoutTest></BoxLayoutTest>
+    </div>
+  );
+};
+
+const BoxLayoutTest = () => {
+  const LinkComponent = () => {
+    return (
+      <BoxLayout title='새 탭에서 브릭로그 확인'>
+        <Button types='md'>
+          <Typo.Label1>크롬 확장앱 다운</Typo.Label1>
+        </Button>
+      </BoxLayout>
+    );
+  };
+
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      `}
+    >
+      <h1>
+        <strong>box Layout 컴포넌트</strong>
+      </h1>
+      <LinkComponent />
     </div>
   );
 };
