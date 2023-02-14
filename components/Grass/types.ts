@@ -15,14 +15,14 @@ export type GrassCellInfo = {
 };
 
 export type RowProps = {
-  row_index: number;
+  tanslateYPos: number;
   children: ReactNode;
 };
 export type ColProps = {
   width: number;
   height: number;
-  x: string;
-  y: string;
+  x: number;
+  y: number;
   rx: number;
   ry: number;
   text: string;
