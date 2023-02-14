@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import IconCheckBig from 'public/svgs/IconCheckBig';
-import IconError from 'public/svgs/IconError';
-import IconSaving from 'public/svgs/IconSaving';
 
 import * as Typo from '@/components/Typography';
 import { POINT_COLOR } from '@/constants/color';
+import IconCheckBig from '@/assets/svgs/IconCheckBig';
+import IconError from '@/assets/svgs/IconError';
+import IconSaving from '@/assets/svgs/IconSaving';
 
 interface StateProps {
   state: 'checked' | 'saving' | 'error';
@@ -16,6 +16,7 @@ const State = ({ state }: StateProps) => {
       css={css`
         display: flex;
         align-items: center;
+        gap: 2px;
       `}
     >
       {state === 'checked' ? <IconCheckBig /> : state === 'saving' ? <IconSaving /> : <IconError />}
