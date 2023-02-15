@@ -1,95 +1,126 @@
 import * as Styled from './styles';
 import * as Typo from '@/components/Typography';
-import { GrassProps, RowProps, ColProps, GrassStatus } from './types';
-import { useCallback, memo, useState, useMemo, useRef, RefObject, MouseEvent, useEffect } from 'react';
+import { GrassProps, RowProps, ColProps, GrassStatus, HoverProps } from './types';
+import { useCallback, memo, useState, useMemo, MouseEvent, useEffect } from 'react';
 import { FONT_COLOR } from '@/constants/color';
-import { IconArrow } from '@/assets/svgs/IconArrow';
 import { css } from '@emotion/react';
 import { format } from 'date-fns';
+import { useResize } from '@/hooks/useResize';
 
 const RADIUS_X = 1;
 const RADIUS_Y = 1;
 const TABLE_WIDTH = 155;
+const TABLE_WIDTH_M = 263;
 const TABLE_HEIGHT = 132;
+const TABLE_HEIGHT_M = 230;
 
 const TABLE_GAP = 6;
+const TABLE_GAP_M = 10;
+
 const CELL_WIDTH = 17;
+const CELL_WIDTH_M = 29;
+
 const CELL_HEIGHT = 17;
+const CELL_HEIGHT_M = 29;
 
-const TABLE_TOTAL = 23; // (17 + 6)
+const TABLE_TOTAL = CELL_WIDTH + TABLE_GAP; // (17 + 6)
+const TABLE_TOTAL_M = CELL_WIDTH_M + TABLE_GAP_M; // (29 + 10)
 
-// 미리 x, y의 포지션을 정함
-// const setGrassPosArr = (xRatio: number, yRatio: number) => {
-//   const grassPosArray: GrassPos[][] = [];
-//   for (let i = 0; i < 6; i++) {
-//     const xyPosArray: GrassPos[] = [];
-//     for (let j = 0; j < 7; j++) {
-//       xyPosArray.push({ x: j * 23, y: i * 17 });
-//     }
-//     grassPosArray.push(xyPosArray);
-//   }
-//   return grassPosArray;
-// };
-
-const HoverContent = ({
-  hoverRef,
-  x,
-  y,
-  isHover,
-  dateText,
-}: {
-  hoverRef: RefObject<HTMLDivElement>;
-  x: number;
-  y: number;
-  isHover: boolean;
-  dateText: string;
-}) => {
+// map으로 처리되는 부분은 함수로 분리해야 리랜더링이 일어나지 않는다!!
+const HoverContent = ({ device, x, y, isHover, dateText }: HoverProps) => {
   // TODO x축 변경 필요
-  // const Xpos = useMemo(() => {
+  // const ContentXpos = useMemo(() => {
   //   // x의 시작 지점
   //   // 0, 23, 46
   //   return -10;
   // }, []);
+  const cellWidth = useMemo(() => (device === 'desktop' ? CELL_WIDTH : CELL_WIDTH_M), [device]);
+  const cellHeight = useMemo(() => (device === 'desktop' ? CELL_HEIGHT : CELL_HEIGHT_M), [device]);
+  const tableGap = useMemo(() => (device === 'desktop' ? TABLE_GAP : TABLE_GAP_M), [device]);
+  const yDiff = useMemo(() => (device === 'desktop' ? 50 + 10 : 60 + 10), [device]);
 
-  const Ypos = useMemo(() => {
+  // 호버 Y축 이동
+  const ContentYpos = useMemo(() => {
     // Y의 시작 지점
     // 0, 15, 30 ....
     // Y 포지션 + (row * GAP의 간격)
-    const colIndex = y / CELL_HEIGHT;
-    const firstYPos = y + TABLE_GAP * (colIndex - 1);
-    // Y의 시작 지점 - 툴팁 높이(50px)
-    return firstYPos - 50;
-  }, [y]);
+    const colIndex = y / cellHeight;
+    const firstYPos = y + tableGap * (colIndex - 1);
+    // Y의 시작 지점 - (툴팁 높이 + 화살표 높이)
+    return firstYPos - yDiff;
+  }, [y, cellHeight, tableGap, yDiff]);
 
-  const Arrow = () => {
-    return (
-      <button>
-        <IconArrow></IconArrow>
-      </button>
-    );
-  };
+  // 화살표가 보여질 위치
+  const ArrowXPos = useMemo(() => {
+    return x + cellWidth / 2;
+  }, [x, cellWidth]);
+
   return (
     <Styled.GrassHoverContainer
       isHover={isHover}
       css={css`
-        transform: ${`translate3d(${-10}px, ${Ypos}px, 0px)`};
+        transform: ${`translate3d(${-10}px, ${ContentYpos}px, 0px)`};
       `}
-      ref={hoverRef}
     >
-      <div>
-        <Typo.Label1 color={FONT_COLOR.GRAY_3}>{dateText}</Typo.Label1>
-        <Arrow></Arrow>
-      </div>
+      <Styled.GrassHoverWrapper>
+        <div>
+          {device === 'desktop' ? (
+            <Typo.Label1 color={FONT_COLOR.GRAY_3}>{dateText}</Typo.Label1>
+          ) : (
+            <Typo.H1 color={FONT_COLOR.GRAY_3}>{dateText}</Typo.H1>
+          )}
+        </div>
+        <Styled.RoundArrow
+          css={css`
+            transform: ${`translate3d(${ArrowXPos}px, 0px, 0px) rotate(-45deg)`};
+          `}
+        ></Styled.RoundArrow>
+      </Styled.GrassHoverWrapper>
     </Styled.GrassHoverContainer>
   );
 };
 
 // GrassRow
-const GrassRow = memo(function GrassRow({ tanslateYPos, children }: RowProps) {
-  return <Styled.GrassRowG transform={`translate(0, ${tanslateYPos})`}>{children}</Styled.GrassRowG>;
+const GrassRow = memo(function GrassRow({
+  device,
+  tanslateYPos,
+  row,
+  row_index,
+  onClickCell,
+  closeHover,
+  onCellMouseEnter,
+}: RowProps) {
+  const cellWidth = useMemo(() => (device === 'desktop' ? CELL_WIDTH : CELL_WIDTH_M), [device]);
+  const cellHeight = useMemo(() => (device === 'desktop' ? CELL_HEIGHT : CELL_HEIGHT_M), [device]);
+  const tableTotal = useMemo(() => (device === 'desktop' ? TABLE_TOTAL : TABLE_TOTAL_M), [device]);
+  const tableGap = useMemo(() => (device === 'desktop' ? TABLE_GAP : TABLE_GAP_M), [device]);
+
+  return (
+    <Styled.GrassRowG transform={`translate(0, ${tanslateYPos})`}>
+      {row.map((column, col_index) => {
+        return (
+          <GrassCol
+            key={`column-${col_index}`}
+            width={cellWidth}
+            height={cellHeight}
+            x={col_index * tableTotal}
+            y={row_index * (tableTotal - tableGap)}
+            rx={RADIUS_X}
+            ry={RADIUS_Y}
+            date={column.date}
+            cellStatus={column.status}
+            onClickCell={onClickCell}
+            closeHover={closeHover}
+            onCellMouseEnter={onCellMouseEnter}
+          ></GrassCol>
+        );
+      })}
+    </Styled.GrassRowG>
+  );
 });
+
 // GrassCol
-const GrassCol = memo(function GrassCol({
+const GrassCol = ({
   width,
   height,
   x,
@@ -101,17 +132,7 @@ const GrassCol = memo(function GrassCol({
   closeHover,
   onClickCell,
   onCellMouseEnter,
-}: Omit<ColProps, 'onCLickCell' | 'cellDate'> & {
-  onClickCell: (date: string) => void;
-  onCellMouseEnter: (
-    e: MouseEvent<SVGRectElement>,
-    date: string,
-    x: number,
-    y: number,
-    cellStatus: GrassStatus,
-  ) => void;
-  closeHover: (e: MouseEvent<SVGRectElement>) => void;
-}) {
+}: Omit<ColProps, 'cellDate'>) => {
   return (
     <>
       <Styled.GrassCell
@@ -130,77 +151,64 @@ const GrassCol = memo(function GrassCol({
       ></Styled.GrassCell>
     </>
   );
-});
+};
 
 const Grass = ({ date, GrassData, onClickCell }: GrassProps) => {
   const [isHover, setIsHover] = useState(false);
   const [hoverText, setHoverText] = useState('');
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
-  const hoverRef = useRef<HTMLDivElement>(null);
+
+  const device = useResize();
 
   const closeHover = useCallback((e: MouseEvent<SVGRectElement>) => {
     e.stopPropagation();
     setIsHover(false);
   }, []);
 
-  const GrassDate = () => {
-    return (
-      <Styled.GrassDate>
-        <Typo.Label2 color={FONT_COLOR.GRAY_3}>{date}</Typo.Label2>
-      </Styled.GrassDate>
-    );
-  };
-
   const onCellMouseEnter = useCallback(
     (e: MouseEvent<SVGRectElement>, date: string, x: number, y: number, cellStatus: GrassStatus) => {
       e.stopPropagation();
       if (cellStatus === 'disabled') return;
-      // setIsHover(true);
+      setIsHover(true);
       setHoverText(format(new Date(date), 'yyyy.MM.dd'));
-      setHoverPosition({ x, y });
+      setHoverPosition((prev) => ({ ...prev, x, y }));
     },
     [],
   );
 
-  useEffect(() => {
-    console.log(11);
-  }, [isHover]);
-
   return (
     <Styled.GrassContainer>
       <div>
-        <GrassDate></GrassDate>
+        <Styled.GrassDate>
+          {device === 'desktop' ? (
+            <Typo.Label2 color={FONT_COLOR.GRAY_3}>{date}</Typo.Label2>
+          ) : (
+            <Typo.H1 color={FONT_COLOR.GRAY_3}>{date}</Typo.H1>
+          )}
+        </Styled.GrassDate>
         <Styled.GrassSVGWrapper>
-          <svg width={TABLE_WIDTH} height={TABLE_HEIGHT}>
+          <svg
+            width={device === 'desktop' ? TABLE_WIDTH : TABLE_WIDTH_M}
+            height={device === 'desktop' ? TABLE_HEIGHT : TABLE_HEIGHT_M}
+          >
             {GrassData?.map((row, row_index) => {
               return (
-                <GrassRow key={`row-${row_index}`} tanslateYPos={row_index * TABLE_GAP}>
-                  {row.map((column, col_index) => {
-                    return (
-                      <GrassCol
-                        key={`column-${col_index}`}
-                        width={CELL_WIDTH}
-                        height={CELL_HEIGHT}
-                        x={col_index * TABLE_TOTAL}
-                        y={row_index * (TABLE_TOTAL - TABLE_GAP)}
-                        rx={RADIUS_X}
-                        ry={RADIUS_Y}
-                        date={column.date}
-                        cellStatus={column.status}
-                        onClickCell={onClickCell}
-                        closeHover={closeHover}
-                        onCellMouseEnter={onCellMouseEnter}
-                      ></GrassCol>
-                    );
-                  })}
-                </GrassRow>
+                <GrassRow
+                  device={device}
+                  key={`row-${row_index}`}
+                  tanslateYPos={row_index * (device === 'desktop' ? TABLE_GAP : TABLE_GAP_M)}
+                  row={row}
+                  row_index={row_index}
+                  onClickCell={onClickCell}
+                  closeHover={closeHover}
+                  onCellMouseEnter={onCellMouseEnter}
+                ></GrassRow>
               );
             })}
           </svg>
-
           <HoverContent
+            device={device}
             isHover={isHover}
-            hoverRef={hoverRef}
             x={hoverPosition.x}
             y={hoverPosition.y}
             dateText={hoverText}
