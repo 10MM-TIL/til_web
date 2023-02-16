@@ -43,7 +43,7 @@ const CardTest: NextPage = () => {
           <Button types='sm' onClick={handleClick}>
             test
           </Button>
-          {isOpen && <ToastMessage>{text}</ToastMessage>}
+          {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
         </div>
       </div>
       <div
