@@ -4,7 +4,7 @@ import * as Typo from '@/components/Typography';
 import * as Styled from './styles';
 import { TimeLineProps } from './types';
 import { EditDropdown, EditDropdownProps } from '@/components/EditDropdown';
-import { POINT_COLOR, FONT_COLOR } from '@/constants/color';
+import { POINT_COLOR, FONT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
 
 // [TODO] 최대 글자수 지정 필요
 const TITLE_MAX_LENGTH = 30;
@@ -24,7 +24,7 @@ const EditStatusButton = memo(function EditStatusButton({
         <Typo.Label2 color={POINT_COLOR.MAIN}>저장</Typo.Label2>
       </Styled.TimeLineSaveButton>
       <Styled.TimeLineCancelButton onClick={onCancelTimeLine}>
-        <Typo.Label2 color={POINT_COLOR.MAIN}>취소</Typo.Label2>
+        <Typo.Label2 color={FONT_COLOR.WHITE}>취소</Typo.Label2>
       </Styled.TimeLineCancelButton>
     </>
   );
