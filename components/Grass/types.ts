@@ -1,6 +1,7 @@
 import { MouseEvent } from 'react';
 import { device } from '@/hooks/useResize';
 
+export type GrassCalendarArray = { data: GrassData }[];
 export type GrassData = GrassCellInfo[][];
 export type GrassStatus = 'disabled' | 'stack' | 'unstack';
 // date 형태가 정해지면 수정 필요
