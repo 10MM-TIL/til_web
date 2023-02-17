@@ -2,6 +2,8 @@ import type { NextPage } from 'next';
 
 import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
+import { mq } from '@/styles/mediaQuery';
+import { css } from '@emotion/react';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
@@ -25,6 +27,19 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
+
+      <div
+        css={css`
+          background-color: aqua;
+          width: 300px;
+          height: 300px;
+          ${mq('desktop')} {
+            background-color: orange;
+          }
+        `}
+      >
+        123
+      </div>
     </div>
   );
 };
