@@ -6,6 +6,7 @@ import { FONT_COLOR } from '@/constants/color';
 import { css } from '@emotion/react';
 import { format } from 'date-fns';
 import { useResize } from '@/hooks/useResize';
+import { IconGrassHoverArrow } from '@/assets/svgs/IconGrassHoverArrow';
 
 const RADIUS_X = 1;
 const RADIUS_Y = 1;
@@ -37,7 +38,7 @@ const HoverContent = ({ device, x, y, isHover, dateText }: HoverProps) => {
   const cellWidth = useMemo(() => (device === 'desktop' ? CELL_WIDTH : CELL_WIDTH_M), [device]);
   const cellHeight = useMemo(() => (device === 'desktop' ? CELL_HEIGHT : CELL_HEIGHT_M), [device]);
   const tableGap = useMemo(() => (device === 'desktop' ? TABLE_GAP : TABLE_GAP_M), [device]);
-  const yDiff = useMemo(() => (device === 'desktop' ? 50 + 10 : 60 + 10), [device]);
+  const yDiff = useMemo(() => (device === 'desktop' ? 50 : 60), [device]);
 
   // 호버 Y축 이동
   const ContentYpos = useMemo(() => {
@@ -51,9 +52,6 @@ const HoverContent = ({ device, x, y, isHover, dateText }: HoverProps) => {
   }, [y, cellHeight, tableGap, yDiff]);
 
   // 화살표가 보여질 위치
-  const ArrowXPos = useMemo(() => {
-    return x + cellWidth / 2;
-  }, [x, cellWidth]);
 
   return (
     <Styled.GrassHoverContainer
@@ -64,17 +62,20 @@ const HoverContent = ({ device, x, y, isHover, dateText }: HoverProps) => {
     >
       <Styled.GrassHoverWrapper>
         <div>
-          {device === 'desktop' ? (
+          {/* {device === 'desktop' ? (
             <Typo.Label1 color={FONT_COLOR.GRAY_3}>{dateText}</Typo.Label1>
           ) : (
             <Typo.H1 color={FONT_COLOR.GRAY_3}>{dateText}</Typo.H1>
-          )}
+          )} */}
+          <Typo.Label1 color={FONT_COLOR.GRAY_3}>{dateText}</Typo.Label1>
         </div>
         <Styled.RoundArrow
           css={css`
-            transform: ${`translate3d(${ArrowXPos}px, 0px, 0px) rotate(-45deg)`};
+            transform: ${`translate3d(${x}px, 8px, 0px)`};
           `}
-        ></Styled.RoundArrow>
+        >
+          <IconGrassHoverArrow></IconGrassHoverArrow>
+        </Styled.RoundArrow>
       </Styled.GrassHoverWrapper>
     </Styled.GrassHoverContainer>
   );
