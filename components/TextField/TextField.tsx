@@ -1,4 +1,4 @@
-import { memo, ReactElement, MouseEvent, useCallback, useRef, forwardRef, Ref } from 'react';
+import { memo, ReactElement, MouseEvent, useCallback, useRef, useMemo, useEffect } from 'react';
 import * as Typo from '@/components/Typography';
 import * as Style from './styles';
 import { useState } from 'react';
@@ -26,13 +26,19 @@ const TextField = ({
 
   // focus 시 focus이벤트가 발생해 toggleFocus() 실행됌
   const toggleFocus = useCallback(() => setFocus((prevFocus) => !prevFocus), []);
-
-  // 글자에 따라 textarea 높이가 변경됨
   const handleResizeHeight = useCallback(() => {
     if (!textareaRef.current) return;
     textareaRef.current.style.height = 'auto';
     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
   }, []);
+
+  // 소개 필드에 이미 200자정도 작성해놓고 화면을 resize 하면
+  // 이전에 정한 height 으로 고정이 되기 때문에 화면 리사이즈시에 새로운 height 으로 지정
+  useEffect(() => {
+    window.addEventListener('resize', handleResizeHeight);
+    return () => window.removeEventListener('resize', handleResizeHeight);
+  }, [handleResizeHeight]);
+  // 글자에 따라 textarea 높이가 변경됨
 
   const handleFocus = useCallback(
     (e: MouseEvent<HTMLDivElement>) => {

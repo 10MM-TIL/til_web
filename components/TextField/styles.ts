@@ -16,11 +16,11 @@ export const TextFieldContainer = styled.div<{ isInput: boolean; isFocus: boolea
   &:hover {
     ${({ isFocus }) => (!isFocus ? 'border: 1px solid #22ffa299;' : '')};
   }
-  > div:nth-child(1) {
+  > div:nth-of-type(1) {
     margin-right: 18px;
     min-width: fit-content;
   }
-  > div:nth-child(2) {
+  > div:nth-of-type(2) {
     max-width: 258px;
     min-width: 139px;
     margin-right: 80px;
