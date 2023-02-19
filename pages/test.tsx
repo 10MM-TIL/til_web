@@ -78,19 +78,34 @@ const TimeLineComponent = () => {
       }, 1000);
     });
   }, []);
+
   return (
     <div
       css={css`
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 50px;
+        max-width: 1200px;
+        padding: 30px;
       `}
     >
-      {/* 서로다른 위치의 더보기 버튼 형태로 구현 */}
-      <TimeLine content={timelineContent} onSaveAllContent={onSaveAllContent} onDeleteContent={onDeleteContent} />
+      <div
+        css={css`
+          max-width: 745px;
+          min-width: 305px;
+          margin: 0 auto;
+          padding: 40px 0 40px 0;
+        `}
+      >
+        <div
+          css={css`
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+          `}
+        >
+          <TimeLine content={timelineContent} onSaveAllContent={onSaveAllContent} onDeleteContent={onDeleteContent} />
+        </div>
+      </div>
     </div>
   );
 };
