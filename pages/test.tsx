@@ -6,6 +6,8 @@ import Toggle from '@/components/Toggle';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/Button';
 import { FONT_COLOR } from '@/constants/color';
+import { mq } from '@/styles/mediaQuery';
+import { css } from '@emotion/react';
 
 const Test: NextPage = () => {
   const [modal, setModal] = useState(false);
@@ -30,6 +32,7 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
+
       <br />
       <Button
         types='sm'
@@ -50,6 +53,19 @@ const Test: NextPage = () => {
           모달 닫기 버튼 test
         </Button>
       </Modal>
+
+      <div
+        css={css`
+          background-color: aqua;
+          width: 300px;
+          height: 300px;
+          ${mq('desktop')} {
+            background-color: orange;
+          }
+        `}
+      >
+        123
+      </div>
     </div>
   );
 };
