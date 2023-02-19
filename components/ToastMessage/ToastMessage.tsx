@@ -6,9 +6,6 @@ interface ToastProps {
   children: ReactNode;
 }
 const ToastMessage = ({ isOpen, children }: ToastProps) => {
-  useEffect(() => {
-    console.log('isOpen', isOpen);
-  }, [isOpen]);
   return <ToastMessageContainer isOpen={isOpen}>{children}</ToastMessageContainer>;
 };
 
