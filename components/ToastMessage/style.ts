@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { keyframes, css } from '@emotion/react';
 import { POINT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
+import { mq } from '@/styles/mediaQuery';
 
 const fadeIn = keyframes({
   '0%': {
@@ -36,8 +37,8 @@ const ToastMessageContainer = styled.div<{ isOpen: boolean }>`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 90px;
-  width: 300px;
+  top: 60px;
+  width: 270px;
   height: 52px;
   background: ${BACKGROUND_COLOR.FIELD_10};
 
@@ -65,6 +66,10 @@ const ToastMessageContainer = styled.div<{ isOpen: boolean }>`
       : ''};
   /* 텍스트 선택 되는 부분 block */
   user-select: none;
+  ${mq('desktop')} {
+    top: 90px;
+    width: 300px;
+  }
 `;
 
 export { ToastMessageContainer };
