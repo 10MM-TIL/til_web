@@ -1,12 +1,43 @@
 import type { NextPage } from 'next';
-
+import { useCallback, useState } from 'react';
 import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
-import { mq } from '@/styles/mediaQuery';
 import { css } from '@emotion/react';
+import { Card, CardProps } from '@/components/Card';
+import { BACKGROUND_COLOR } from '@/constants/color';
+import { mq } from '@/styles/mediaQuery';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
+
+  const [testCardContent, setTestCardContent] = useState<CardProps['content']>({
+    category: 'develop',
+    header: 'hackerrank - Nested Lists',
+    body: 'Given the names and grades for each 123123123123123',
+    img: require('@/assets/images/test.png') as string,
+    name: '김선철',
+    date: '2023.01.07',
+  });
+
+  const [badge, setBadge] = useState(true);
+  const onClickTag = useCallback(
+    (): CardProps['onClickTag'] => (e, tag) => {
+      console.log(`${tag} 태그 클릭`);
+    },
+    [],
+  );
+
+  const onClickContent = useCallback(() => {
+    () => {
+      console.log('본문 클릭');
+    };
+  }, []);
+
+  const onClickUser = useCallback(() => {
+    () => {
+      console.log('user 클릭');
+    };
+  }, []);
   return (
     <div>
       <div>컴포넌트를 위한 테스트 페이지입니다.</div>
@@ -27,7 +58,6 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
-
       <div
         css={css`
           background-color: aqua;
@@ -39,6 +69,50 @@ const Test: NextPage = () => {
         `}
       >
         123
+      </div>
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          padding: 50px;
+          background-color: ${BACKGROUND_COLOR.NAVY_1};
+        `}
+      >
+        <h1
+          css={css`
+            color: white;
+          `}
+        >
+          <strong>카드 컴포넌트</strong>
+        </h1>
+        <Card
+          size='sm'
+          content={testCardContent}
+          hasBadge={true}
+          onClickTag={onClickTag}
+          onClickContent={onClickContent}
+          onClickUser={onClickUser}
+        ></Card>
+
+        <Card
+          size='lg'
+          content={testCardContent}
+          hasBadge={badge}
+          onClickTag={onClickTag}
+          onClickContent={onClickContent}
+          onClickUser={onClickUser}
+        ></Card>
+        <button
+          onClick={() => setBadge(!badge)}
+          css={css`
+            color: #fff;
+          `}
+        >
+          뱃지 변환
+        </button>
       </div>
     </div>
   );

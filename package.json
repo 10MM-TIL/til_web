@@ -21,6 +21,7 @@
     "recoil": "^0.7.6"
   },
   "devDependencies": {
+    "@svgr/webpack": "^6.5.1",
     "@tanstack/react-query-devtools": "^4.22.0",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
