@@ -3,7 +3,8 @@ import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
 import { GrassArea } from '@/components/Molecules/GrassArea';
 import { css } from '@emotion/react';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { TimeLine, TimeLineContentProps } from '@/components/TimeLine';
+import { ChangeEvent, useState, useCallback, useEffect } from 'react';
 import { TextField } from '@/components/TextField';
 import { BACKGROUND_COLOR } from '@/constants/color';
 import { FieldRemind } from '@/components/FieldRemind';
@@ -67,6 +68,7 @@ const Test: NextPage = () => {
       <ButtonComponent></ButtonComponent>
       <BoxLayoutTest></BoxLayoutTest>
       <DropdownComponent></DropdownComponent>
+      <TimeLineComponent></TimeLineComponent>
     </div>
   );
 };
@@ -495,4 +497,68 @@ const FieldRemindComponent = () => {
     </div>
   );
 };
+
+const TimeLineComponent = () => {
+  const [timelineContent, setTimelineContent] = useState<TimeLineContentProps>({
+    date: '2023.01.07',
+    title: 'TIL 커뮤니케이션 123123123123123123',
+    desc: 'TIL (커뮤니케이션 방법과 CEO의 한마디디디디디디디',
+    img: require('../assets/images/test.png'),
+  });
+
+  const onSaveAllContent = useCallback((timeLineContentParams: TimeLineContentProps): Promise<void> => {
+    // 저장하는 api 함수 추가
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        setTimelineContent({ ...timeLineContentParams });
+        resolve();
+      }, 1000);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(timelineContent);
+  }, [timelineContent]);
+
+  const onDeleteContent = useCallback((): Promise<void> => {
+    // 삭제하는 api 함수 추가
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log('삭제 완료!');
+        resolve();
+      }, 1000);
+    });
+  }, []);
+
+  return (
+    <div
+      css={css`
+        max-width: 1200px;
+        padding: 30px;
+      `}
+    >
+      <div
+        css={css`
+          max-width: 745px;
+          min-width: 305px;
+          margin: 0 auto;
+          padding: 40px 0 40px 0;
+        `}
+      >
+        <div
+          css={css`
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+          `}
+        >
+          <TimeLine content={timelineContent} onSaveAllContent={onSaveAllContent} onDeleteContent={onDeleteContent} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default Test;
