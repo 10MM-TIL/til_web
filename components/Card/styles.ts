@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { CardProps } from './types';
-import Crown from '@/assets/svgs/ic_crown.svg';
+
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
 export const CardContainer = styled.div<{ size: CardProps['size'] }>`
@@ -70,7 +70,7 @@ export const BadgeTop = styled.div<Pick<CardProps, 'size'>>`
     content: '';
   }
 `;
-export const CrownIcon = styled(Crown)<Pick<CardProps, 'size'>>`
+export const CrownIcon = styled.div<Pick<CardProps, 'size'>>`
   display: block;
   width: ${({ size }) => (size === 'sm' ? '14' : '21.64')}px;
   height: ${({ size }) => (size === 'sm' ? '14' : '21.39')}px;

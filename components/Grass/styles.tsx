@@ -68,11 +68,6 @@ export const GrassHoverContainer = styled.div<{ isHover: boolean }>`
   left: 0px;
   ${({ isHover }) => (!isHover ? 'visibility: hidden; opacity: 0;' : 'will-change: transform;')};
   pointer-events: none;
-
-  /* ${mq('desktop')} {
-    width: 171px;
-    height: 50px;
-  } */
 `;
 
 export const GrassHoverWrapper = styled.div`
@@ -85,7 +80,7 @@ export const GrassHoverWrapper = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     top: 0px;
     right: 0px;
     width: 100%;
@@ -101,5 +96,5 @@ export const RoundArrow = styled.div`
   height: 12px;
   border-radius: 0 0 0 2px;
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s;
-  filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.3));
+  /* filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.3)); */
 `;

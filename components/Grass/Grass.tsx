@@ -27,18 +27,39 @@ const CELL_HEIGHT_M = 29;
 const TABLE_TOTAL = CELL_WIDTH + TABLE_GAP; // (17 + 6)
 const TABLE_TOTAL_M = CELL_WIDTH_M + TABLE_GAP_M; // (29 + 10)
 
+// 호버 컨텐츠 총 width
+const HOVER_WRAPPER_WIDTH = 101;
+const HOVER_WRAPPER_PADDING_RIGHT = 18.5;
+
+const HOVER_WRAPPER_HEIGHT = 48;
+// 호버 컨텐츠 내부 width
+const HOVER_CONTENT_WIDTH = 64;
+// 화살표 width
+const HOVER_ARROW_WIDTH = 11;
+
 // map으로 처리되는 부분은 함수로 분리해야 리랜더링이 일어나지 않는다!!
 const HoverContent = ({ device, x, y, isHover, dateText }: HoverProps) => {
   // TODO x축 변경 필요
-  // const ContentXpos = useMemo(() => {
-  //   // x의 시작 지점
-  //   // 0, 23, 46
-  //   return -10;
-  // }, []);
+
   const cellWidth = useMemo(() => (device === 'desktop' ? CELL_WIDTH : CELL_WIDTH_M), [device]);
   const cellHeight = useMemo(() => (device === 'desktop' ? CELL_HEIGHT : CELL_HEIGHT_M), [device]);
   const tableGap = useMemo(() => (device === 'desktop' ? TABLE_GAP : TABLE_GAP_M), [device]);
-  const yDiff = useMemo(() => (device === 'desktop' ? 50 : 60), [device]);
+  const tableTotal = useMemo(() => (device === 'desktop' ? TABLE_TOTAL : TABLE_TOTAL_M), [device]);
+  const yDiff = useMemo(() => (device === 'desktop' ? -1 : 7), [device]); // 화면 보면서 맞춤
+  const rowIndex = x / tableTotal;
+
+  const ContentXpos = useMemo(() => {
+    // x의 시작 지점
+    // 0, 23, 46 | 0 39 78
+    // x - (패딩 값 + 화살표 반) + 셀의 중앙
+
+    if (rowIndex < 3) return x - (HOVER_WRAPPER_PADDING_RIGHT + HOVER_ARROW_WIDTH / 2) + cellWidth / 2;
+    // 테이블 셀 중앙 - (호버 컨텐츠 길이/2) + 셀의 반
+    else if (rowIndex === 3) return tableTotal * rowIndex - HOVER_WRAPPER_WIDTH / 2 + cellWidth / 2;
+    //
+    // else return x - HOVER_CONTENT_WIDTH - HOVER_ARROW_WIDTH / 2;
+    else return x - (HOVER_WRAPPER_WIDTH - HOVER_WRAPPER_PADDING_RIGHT - cellWidth / 2 - HOVER_ARROW_WIDTH / 2);
+  }, [x, cellWidth, rowIndex, tableTotal]);
 
   // 호버 Y축 이동
   const ContentYpos = useMemo(() => {
@@ -46,32 +67,35 @@ const HoverContent = ({ device, x, y, isHover, dateText }: HoverProps) => {
     // 0, 15, 30 ....
     // Y 포지션 + (row * GAP의 간격)
     const colIndex = y / cellHeight;
-    const firstYPos = y + tableGap * (colIndex - 1);
+    const firstYPos = y + tableGap * colIndex;
     // Y의 시작 지점 - (툴팁 높이 + 화살표 높이)
-    return firstYPos - yDiff;
+    return firstYPos - HOVER_WRAPPER_HEIGHT + yDiff;
   }, [y, cellHeight, tableGap, yDiff]);
 
   // 화살표가 보여질 위치
+  const ArrowXpos = useMemo(() => {
+    // 인덱스 3이하는 화살표 그대로
+    if (rowIndex < 3) return 0;
+    // hover content width / 2 - 화살표 반
+    else if (rowIndex === 3) return HOVER_CONTENT_WIDTH / 2 - HOVER_ARROW_WIDTH / 2;
+    // 인덱스 3이상은 화살표 오른쪽
+    else return HOVER_CONTENT_WIDTH - HOVER_ARROW_WIDTH;
+  }, [rowIndex]);
 
   return (
     <Styled.GrassHoverContainer
       isHover={isHover}
       css={css`
-        transform: ${`translate3d(${-10}px, ${ContentYpos}px, 0px)`};
+        transform: ${`translate3d(${ContentXpos}px, ${ContentYpos}px, 0px)`};
       `}
     >
       <Styled.GrassHoverWrapper>
         <div>
-          {/* {device === 'desktop' ? (
-            <Typo.Label1 color={FONT_COLOR.GRAY_3}>{dateText}</Typo.Label1>
-          ) : (
-            <Typo.H1 color={FONT_COLOR.GRAY_3}>{dateText}</Typo.H1>
-          )} */}
           <Typo.Label1 color={FONT_COLOR.GRAY_3}>{dateText}</Typo.Label1>
         </div>
         <Styled.RoundArrow
           css={css`
-            transform: ${`translate3d(${x}px, 8px, 0px)`};
+            transform: ${`translate3d(${ArrowXpos}px, 8px, 0px)`};
           `}
         >
           <IconGrassHoverArrow></IconGrassHoverArrow>
