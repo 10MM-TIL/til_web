@@ -13,7 +13,7 @@ export const FieldRemindContainer = styled.div`
   padding: 12px 24px 11px 24px;
   flex-wrap: nowrap;
 
-  > div:nth-child(1) {
+  > div:nth-of-type(1) {
     flex-grow: 1;
     max-width: 339px;
     min-width: 217px;
