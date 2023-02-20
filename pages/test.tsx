@@ -1,25 +1,27 @@
 import type { NextPage } from 'next';
+import { ChangeEvent, useState, useCallback, useEffect } from 'react';
 
 import * as Typo from '@/components/Typography';
-import Toggle from '@/components/Toggle';
-import { GrassArea } from '@/components/Molecules/GrassArea';
-import { css } from '@emotion/react';
-import { TimeLine, TimeLineContentProps } from '@/components/TimeLine';
-import { ChangeEvent, useState, useCallback, useEffect } from 'react';
-import { TextField } from '@/components/TextField';
-import { BACKGROUND_COLOR } from '@/constants/color';
-import { FieldRemind } from '@/components/FieldRemind';
-import { Card, CardProps } from '@/components/Card';
 import { mq } from '@/styles/mediaQuery';
 import styled from '@emotion/styled';
-import { Button } from '@/components/Button';
+import { css } from '@emotion/react';
+import { BACKGROUND_COLOR } from '@/constants/color';
 import { IconFloat } from '@/assets/svgs/IconFloat';
 import { IconGoogle } from '@/assets/svgs/IconGoogle';
 import { IconKakao } from '@/assets/svgs/IconKakao';
 import { IconPlus } from '@/assets/svgs/IconPlus';
-import { BoxLayout } from '@/components/BoxLayout';
-import { Dropdown } from '@/components/Dropdown';
-import { CertifiedBlog } from '@/components/CertifiedBlog';
+
+import Toggle from '@/components/Toggle';
+import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
+import { TextField } from '@/components/Atom/TextField';
+import { FieldRemind } from '@/components/Atom/FieldRemind';
+import { Card, CardProps } from '@/components/Atom/Card';
+import { Button } from '@/components/Atom/Button';
+import { BoxLayout } from '@/components/Atom/BoxLayout';
+import { Dropdown } from '@/components/Atom/Dropdown';
+import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
+
+import { GrassArea } from '@/components/Molecules/GrassArea';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
