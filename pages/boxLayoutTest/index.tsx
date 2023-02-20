@@ -1,19 +1,11 @@
 import type { NextPage } from 'next';
 import { css } from '@emotion/react';
 
-import { Card } from '@/components/Card';
-import { useState } from 'react';
+import { BoxLayout } from '@/components/BoxLayout';
+import { Button } from '@/components/Button';
+import * as Typo from '@/components/Typography';
 
-const CardTest: NextPage = () => {
-  const [testCardContent, setTestCardContent] = useState({
-    category: 'develop' as 'develop',
-    header: 'hackerrank - Nested Lists',
-    body: 'Given the names and grades for each...',
-    img: require('@/assets/images/test.png'),
-    name: '김선철',
-    date: '2023.01.07',
-  });
-
+const ButtonTest: NextPage = () => {
   return (
     <div
       css={css`
@@ -34,9 +26,7 @@ const CardTest: NextPage = () => {
           gap: 10px;
         `}
       >
-        <Card size='sm' content={testCardContent}></Card>
-        <Card size='lg' content={testCardContent}></Card>
-        <Card size='lg' theme='light' content={testCardContent}></Card>
+        <LinkComponent />
       </div>
       <div
         css={css`
@@ -49,4 +39,15 @@ const CardTest: NextPage = () => {
   );
 };
 
-export default CardTest;
+// 예시) 컴포넌트 조합해서 쓰기
+const LinkComponent = () => {
+  return (
+    <BoxLayout title='새 탭에서 브릭로그 확인'>
+      <Button types='md'>
+        <Typo.Label1>크롬 확장앱 다운로드</Typo.Label1>
+      </Button>
+    </BoxLayout>
+  );
+};
+
+export default ButtonTest;
