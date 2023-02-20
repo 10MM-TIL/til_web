@@ -117,7 +117,6 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
       >
         {defaultSelect}
       </DropdownText>
-
       {isOpen ? (
         <OptionList ref={optionRef} isIntersectInTop={isIntersectInTop}>
           <ul>
