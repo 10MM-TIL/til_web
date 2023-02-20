@@ -1,6 +1,4 @@
 import styled from '@emotion/styled';
-import Copy from '@/assets/svgs/copy.svg';
-import Calendar from '@/assets/svgs/calendar.svg';
 import { FieldRemindProps } from './types';
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
@@ -65,10 +63,6 @@ export const FieldRemindCopy = styled.div`
   justify-content: center;
 `;
 
-export const CopyIcon = styled(Copy)`
-  display: block;
-`;
-
 export const FieldRemindInputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -97,7 +91,7 @@ export const FieldRemindInput = styled.input`
   }
 `;
 
-export const CalendarIcon = styled(Calendar)`
+export const CalendarIcon = styled.div`
   cursor: pointer;
   margin-left: -2px;
 `;

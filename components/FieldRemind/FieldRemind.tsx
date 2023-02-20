@@ -1,16 +1,5 @@
-import {
-  ReactElement,
-  forwardRef,
-  ForwardedRef,
-  MouseEvent,
-  memo,
-  useRef,
-  useState,
-  RefObject,
-  ChangeEvent,
-} from 'react';
+import { ReactElement, forwardRef, ForwardedRef, MouseEvent, memo, useRef, useState, ChangeEvent } from 'react';
 import * as Styled from './styles';
-
 import * as Typo from '@/components/Typography';
 import { FieldRemindProps, FieldRemindPropsForDatepicker } from './types';
 import { css } from '@emotion/react';
@@ -18,6 +7,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import { FONT_COLOR } from '@/constants/color';
+import { IconLinkCopy } from '@/assets/svgs/IconLinkCopy';
+import { IconCalendar } from '@/assets/svgs/IconCalendar';
 
 const DATE_FORMAT = 'yyyy.MM.dd';
 
@@ -36,7 +27,9 @@ const CustomDatePicker = memo(function CustomDatePicker({
         <Styled.FieldRemindDate type={type}>
           <Typo.Label1 color={FONT_COLOR.GRAY_2}>{value ? value : '날짜를 입력해주세요.'}</Typo.Label1>
         </Styled.FieldRemindDate>
-        <Styled.CalendarIcon />
+        <Styled.CalendarIcon>
+          <IconCalendar></IconCalendar>
+        </Styled.CalendarIcon>
       </Styled.FieldRemindDatePickerWrapper>
     ),
   );
@@ -135,7 +128,7 @@ const FieldRemind = (props: FieldRemindProps): ReactElement => {
     return (
       <Styled.FieldRemindCopyContainer onClick={props.onClickCopy}>
         <Styled.FieldRemindCopy>
-          <Styled.CopyIcon></Styled.CopyIcon>
+          <IconLinkCopy></IconLinkCopy>
         </Styled.FieldRemindCopy>
       </Styled.FieldRemindCopyContainer>
     );
