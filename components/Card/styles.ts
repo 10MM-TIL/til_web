@@ -104,7 +104,7 @@ export const CardInfoWrapper = styled.div`
     border-radius: 47.5px;
     margin-right: 6px;
   }
-  > div:nth-child(2) {
+  > div:nth-of-type(2) {
     margin-right: 8px;
   }
 `;
