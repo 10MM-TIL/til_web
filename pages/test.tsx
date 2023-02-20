@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+
 import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
 import { GrassArea } from '@/components/Molecules/GrassArea';
@@ -18,6 +19,7 @@ import { IconKakao } from '@/assets/svgs/IconKakao';
 import { IconPlus } from '@/assets/svgs/IconPlus';
 import { BoxLayout } from '@/components/BoxLayout';
 import { Dropdown } from '@/components/Dropdown';
+import { CertifiedBlog } from '@/components/CertifiedBlog';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
@@ -49,6 +51,7 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
+      <CertifiedBlogComponent></CertifiedBlogComponent>
       <GrassArea title={'내가 모은 기록'}></GrassArea>
       <TextFieldComponent></TextFieldComponent>
       <FieldRemindComponent></FieldRemindComponent>
@@ -557,6 +560,53 @@ const TimeLineComponent = () => {
           <TimeLine content={timelineContent} onSaveAllContent={onSaveAllContent} onDeleteContent={onDeleteContent} />
         </div>
       </div>
+    </div>
+  );
+};
+
+const CertifiedBlogComponent = () => {
+  const [isDeleted1, setDeleted1] = useState(false);
+  const [isDeleted2, setDeleted2] = useState(false);
+  const handleDeleteButton1 = () => {
+    // 특정 조건 이후 없어져야함
+    console.log('blog1 삭제 Post API 전송');
+    setTimeout(() => {
+      console.log('blog1 삭제 완료');
+      setDeleted1(true);
+    }, 2000);
+  };
+  const handleDeleteButton2 = () => {
+    // 특정 조건 이후 없어져야함
+    console.log('blog1 삭제 Post API  전송');
+    setTimeout(() => {
+      console.log('blog2 삭제 완료');
+      setDeleted2(true);
+    }, 2000);
+  };
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      `}
+    >
+      <h1>
+        <strong>인증된 블로그 컴포넌트</strong>
+      </h1>
+      <CertifiedBlog
+        blogName={'github.exaple.com/example1'}
+        blogType={'GitHub'}
+        isDeleted={isDeleted1}
+        onDeleteBlog={handleDeleteButton1}
+      />
+      <CertifiedBlog
+        blogName={'github.exaple.com/example2'}
+        blogType={'GitHub'}
+        isDeleted={isDeleted2}
+        onDeleteBlog={handleDeleteButton2}
+      />
     </div>
   );
 };
