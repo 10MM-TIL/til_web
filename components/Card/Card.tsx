@@ -12,6 +12,7 @@ import {
   CrownIcon,
 } from './styles';
 import * as Typo from '@/components/Typography';
+import { IconCrown } from '@/assets/svgs/IconCrown';
 import { CardProps, category } from './types';
 
 const Card = ({
@@ -34,7 +35,9 @@ const Card = ({
     return (
       <>
         <BadgeTop size={size}>
-          <CrownIcon size={size} />
+          <CrownIcon size={size}>
+            <IconCrown></IconCrown>
+          </CrownIcon>
         </BadgeTop>
         <BadgeBottom size={size}></BadgeBottom>
       </>
