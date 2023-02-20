@@ -28,3 +28,4 @@ const useIntersectionObserver = <T extends HTMLElement>(
 };
 
 export default useIntersectionObserver;
+
