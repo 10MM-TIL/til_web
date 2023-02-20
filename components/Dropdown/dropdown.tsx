@@ -72,7 +72,7 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
 
   const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     // 열리지 않았을때는 기본적인 기능 활성화
-    if (isOpen) {
+    if (isOpen === true) {
       e.stopPropagation();
       e.preventDefault();
     }
@@ -117,7 +117,6 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
       >
         {defaultSelect}
       </DropdownText>
-
       {isOpen ? (
         <OptionList ref={optionRef} isIntersectInTop={isIntersectInTop}>
           <ul>

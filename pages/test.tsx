@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
+import { GrassArea } from '@/components/Molecules/GrassArea';
 import { css } from '@emotion/react';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { TextField } from '@/components/TextField';
@@ -39,6 +40,7 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
+      <GrassArea title={'내가 모은 기록'}></GrassArea>
       <TextFieldComponent></TextFieldComponent>
       <FieldRemindComponent></FieldRemindComponent>
       <div
