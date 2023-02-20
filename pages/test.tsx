@@ -16,6 +16,7 @@ import { IconGoogle } from '@/assets/svgs/IconGoogle';
 import { IconKakao } from '@/assets/svgs/IconKakao';
 import { IconPlus } from '@/assets/svgs/IconPlus';
 import { BoxLayout } from '@/components/BoxLayout';
+import { Dropdown } from '@/components/Dropdown';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
@@ -65,6 +66,36 @@ const Test: NextPage = () => {
       <CardComponent></CardComponent>
       <ButtonComponent></ButtonComponent>
       <BoxLayoutTest></BoxLayoutTest>
+      <DropdownComponent></DropdownComponent>
+    </div>
+  );
+};
+
+const DropdownComponent = () => {
+  const [optionList, setOptionList] = useState([
+    { id: 'develop', name: '🤐 개발' },
+    { id: 'planning', name: '🤐 기획' },
+    { id: 'design', name: '🤐 디자인' },
+    { id: 'marketing', name: '🤐 마케팅' },
+    { id: 'startup', name: '🤐 스타트업' },
+    { id: 'etc', name: '🤐 기타' },
+  ]);
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      `}
+    >
+      <div
+        css={css`
+          max-width: 500px;
+        `}
+      >
+        <Dropdown optionList={optionList} />
+      </div>
     </div>
   );
 };
