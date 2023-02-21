@@ -53,7 +53,7 @@ const Test: NextPage = () => {
       <TypoComponent></TypoComponent>
       <ToggleComponent></ToggleComponent>
       <CertifiedBlogComponent></CertifiedBlogComponent>
-      <GrassArea title={'내가 모은 기록'}></GrassArea>
+      <GrassAreaComponent></GrassAreaComponent>
       <TextFieldComponent></TextFieldComponent>
       <FieldRemindComponent></FieldRemindComponent>
       <CardComponent></CardComponent>
@@ -80,6 +80,7 @@ const TypoComponent = () => {
           color: white;
           text-align: center;
           padding-top: 30px;
+          margin-bottom: 30px;
         `}
       >
         <strong>Typography</strong>
@@ -176,6 +177,31 @@ const CertifiedBlogComponent = () => {
         isDeleted={isDeleted2}
         onDeleteBlog={handleDeleteButton2}
       />
+    </div>
+  );
+};
+
+const GrassAreaComponent = () => {
+  return (
+    <div
+      css={css`
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+      `}
+    >
+      <h1
+        css={css`
+          color: white;
+          text-align: center;
+          padding-top: 30px;
+        `}
+      >
+        <strong>GrassArea 컴포넌트</strong>
+      </h1>
+      <GrassArea title={'내가 모은 기록'}></GrassArea>
     </div>
   );
 };
