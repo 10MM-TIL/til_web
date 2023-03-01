@@ -34,7 +34,7 @@ const ToastMessageContainer = styled.div<{ isOpen: boolean }>`
   padding: 14px;
   gap: 10px;
 
-  position: absolute;
+  position: fixed;
   left: 50%;
   transform: translateX(-50%);
   top: 60px;
