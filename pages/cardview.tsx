@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import * as Typo from '@/components/Typography';
 import * as Styled from '@/styles/cardview.module';
 import { FONT_COLOR } from '@/constants/color';
+import * as Layout from '@/styles/layout.module';
 
 import axios from 'axios';
 import { QueryFunctionContext, QueryKey, useInfiniteQuery } from '@tanstack/react-query';
@@ -12,19 +13,25 @@ import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 import { Card, CardProps } from '@/components/Card';
+const LargeCardView = 384;
 
 // https://velog.io/@hdpark/React-Query%EC%99%80-%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94-Next.js-%EB%AC%B4%ED%95%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4
 
 const CardView: NextPage = () => {
   const device = useResize();
   return (
-    <Styled.CardViewContainer>
-      <Styled.CardViewWrapper>
-        <CardCategory></CardCategory>
-        <PopularCard device={device}></PopularCard>
-        <AllCard device={device}></AllCard>
-      </Styled.CardViewWrapper>
-    </Styled.CardViewContainer>
+    <Layout.Container>
+      <Layout.InnerContent>
+        <Layout.GridContainer
+          tabletColums={`repeat(4, calc((${LargeCardView}px - 8px) / 2))`}
+          desktopColums={`repeat(6, calc((${LargeCardView}px - 8px) / 2));`}
+        >
+          <CardCategory></CardCategory>
+          <PopularCard device={device}></PopularCard>
+          <AllCard device={device}></AllCard>
+        </Layout.GridContainer>
+      </Layout.InnerContent>
+    </Layout.Container>
   );
 };
 
@@ -39,13 +46,33 @@ const CardCategory = () => {
 
 // 이달의 회고
 const PopularCard = ({ device }: { device: device }) => {
-  const [testCardContent, setTestCardContent] = useState<CardProps['content']>({
-    category: 'develop',
-    header: 'hackerrank - Nested Lists',
-    body: 'Given the names and grades for each 123123123123123',
-    img: require('@/assets/images/test.png') as string,
-    name: '김선철',
-    date: '2023.01.07',
+  const [testCardContent, setTestCardContent] = useState<{ data: CardProps['content'][] }>({
+    data: [
+      {
+        category: 'develop',
+        header: 'hackerrank - Nested Lists',
+        body: 'Given the names and grades for each 123123123123123',
+        img: require('@/assets/images/test.png') as string,
+        name: '김선철',
+        date: '2023.01.07',
+      },
+      {
+        category: 'develop',
+        header: 'hackerrank - Nested Lists',
+        body: 'Given the names and grades for each 123123123123123',
+        img: require('@/assets/images/test.png') as string,
+        name: '김선철',
+        date: '2023.01.07',
+      },
+      {
+        category: 'develop',
+        header: 'hackerrank - Nested Lists',
+        body: 'Given the names and grades for each 123123123123123',
+        img: require('@/assets/images/test.png') as string,
+        name: '김선철',
+        date: '2023.01.07',
+      },
+    ],
   });
 
   const onClickTag = useCallback(
@@ -73,30 +100,20 @@ const PopularCard = ({ device }: { device: device }) => {
         <Typo.H1 color={FONT_COLOR.WHITE}>이번주의 회고</Typo.H1>
       </Styled.PopularCardHeader>
       <Styled.PopularCardContent>
-        <Card
-          size={device === 'desktop' ? 'lg' : 'sm'}
-          content={testCardContent}
-          hasBadge={true}
-          onClickTag={onClickTag}
-          onClickContent={onClickContent}
-          onClickUser={onClickUser}
-        ></Card>
-        <Card
-          size={device === 'desktop' ? 'lg' : 'sm'}
-          content={testCardContent}
-          hasBadge={true}
-          onClickTag={onClickTag}
-          onClickContent={onClickContent}
-          onClickUser={onClickUser}
-        ></Card>
-        <Card
-          size={device === 'desktop' ? 'lg' : 'sm'}
-          content={testCardContent}
-          hasBadge={true}
-          onClickTag={onClickTag}
-          onClickContent={onClickContent}
-          onClickUser={onClickUser}
-        ></Card>
+        {testCardContent.data.map((test, index) => {
+          return (
+            <Styled.PopularCardItem key={`popular-${index}`}>
+              <Card
+                size={device === 'desktop' ? 'lg' : 'mobile'}
+                content={test}
+                hasBadge={true}
+                onClickTag={onClickTag}
+                onClickContent={onClickContent}
+                onClickUser={onClickUser}
+              ></Card>
+            </Styled.PopularCardItem>
+          );
+        })}
       </Styled.PopularCardContent>
     </Styled.PopularCardViewContainer>
   );
@@ -304,25 +321,26 @@ const AllCard = ({ device }: { device: device }) => {
 
   return (
     <>
-      <Styled.AllCardViewConttainer>
+      <Styled.AllCardViewContainer>
         <Styled.AllCardHeader>
           <Typo.H1 color={FONT_COLOR.WHITE}>전체 회고</Typo.H1>
         </Styled.AllCardHeader>
         <Styled.AllCardContent>
           {testCardList.data.map((testCardItem, index) => {
             return (
-              <Card
-                key={`card-${index}`}
-                size={device === 'desktop' ? 'lg' : 'sm'}
-                content={testCardItem}
-                onClickTag={onClickTag}
-                onClickContent={onClickContent}
-                onClickUser={onClickUser}
-              ></Card>
+              <Styled.AllCardItem key={`card-${index}`}>
+                <Card
+                  size={device === 'desktop' ? 'lg' : 'mobile'}
+                  content={testCardItem}
+                  onClickTag={onClickTag}
+                  onClickContent={onClickContent}
+                  onClickUser={onClickUser}
+                ></Card>
+              </Styled.AllCardItem>
             );
           })}
         </Styled.AllCardContent>
-      </Styled.AllCardViewConttainer>
+      </Styled.AllCardViewContainer>
       <div ref={bottom} />
     </>
   );

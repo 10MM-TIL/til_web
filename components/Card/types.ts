@@ -10,7 +10,7 @@ export const category = {
 } as const;
 
 export type CardProps = {
-  size: 'sm' | 'lg';
+  size: 'sm' | 'lg' | 'mobile';
   hasBadge?: boolean;
   content: CardContentProps;
   onClickTag: (event: MouseEvent, tag: (typeof category)[keyof typeof category]) => void;
