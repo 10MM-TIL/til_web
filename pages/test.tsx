@@ -24,7 +24,7 @@ import State from '@/components/State';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
-  const [status, setStatus] = useState<'' | 'saving' | 'checked' | 'error'>('error');
+  const [status, setStatus] = useState<'' | 'saving' | 'checked' | 'error'>('saving');
 
   return (
     <div
@@ -53,6 +53,7 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
+      {status !== '' && <State state={status} />}
       <CertifiedBlogComponent></CertifiedBlogComponent>
       <GrassArea title={'내가 모은 기록'}></GrassArea>
       <TextFieldComponent></TextFieldComponent>
@@ -74,7 +75,6 @@ const Test: NextPage = () => {
       <BoxLayoutTest></BoxLayoutTest>
       <DropdownComponent></DropdownComponent>
       <TimeLineComponent></TimeLineComponent>
-      {status !== '' && <State state={status} />}
     </div>
   );
 };
