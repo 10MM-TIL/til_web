@@ -20,9 +20,11 @@ import { IconPlus } from '@/assets/svgs/IconPlus';
 import { BoxLayout } from '@/components/BoxLayout';
 import { Dropdown } from '@/components/Dropdown';
 import { CertifiedBlog } from '@/components/CertifiedBlog';
+import State from '@/components/State';
 
 const Test: NextPage = () => {
   // !! Color관련 ThemeProvider 적용할건지 여부
+  const [status, setStatus] = useState<'' | 'saving' | 'checked' | 'error'>('error');
 
   return (
     <div
@@ -72,6 +74,7 @@ const Test: NextPage = () => {
       <BoxLayoutTest></BoxLayoutTest>
       <DropdownComponent></DropdownComponent>
       <TimeLineComponent></TimeLineComponent>
+      {status !== '' && <State state={status} />}
     </div>
   );
 };
