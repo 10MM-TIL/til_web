@@ -19,3 +19,9 @@ export const POINT_COLOR = {
   SAVE: '#8BFFFF',
   ERROR: '#FF6060',
 };
+
+export const LOG_COLOR = {
+  POINT: '#22FFA2',
+  DEFAULT: '#3B4652',
+  DISABLED: '#0000001F',
+};

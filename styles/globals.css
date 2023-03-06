@@ -70,8 +70,10 @@ button,
 input,
 select {
   margin: 0;
+  padding: 0;
 }
 
+textarea:focus,
 input:focus {
   border: none;
   outline: 0;
