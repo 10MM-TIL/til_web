@@ -5,28 +5,28 @@ const style = css`
     @font-face {
       font-family: 'Pretendard';
       font-weight: 700;
-      src: url('/fonts/Pretendard-Bold.otf') format('opentype');
+      src: url('/fonts/Pretendard-Bold.woff2') format('woff2');
       font-display: fallback;
     }
 
     @font-face {
       font-family: 'Pretendard';
       font-weight: 300;
-      src: url('/fonts/Pretendard-Light.otf') format('opentype');
+      src: url('/fonts/Pretendard-Light.woff2') format('woff2');
       font-display: fallback;
     }
 
     @font-face {
       font-family: 'Pretendard';
       font-weight: 500;
-      src: url('/fonts/Pretendard-Medium.otf') format('opentype');
+      src: url('/fonts/Pretendard-Medium.woff2') format('woff2');
       font-display: fallback;
     }
 
     @font-face {
       font-family: 'Pretendard';
       font-weight: 400;
-      src: url('/fonts/Pretendard-Regular.otf') format('opentype');
+      src: url('/fonts/Pretendard-Regular.woff2') format('woff2');
       font-display: fallback;
     }
   }
