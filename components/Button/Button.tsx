@@ -22,6 +22,11 @@ const buttonStyles = {
     height: '62px',
     borderRadius: '12px',
   },
+  'x-lg-m': {
+    width: '328px',
+    height: '52px',
+    borderRadius: '12px',
+  },
   lg: {
     // 큰 버튼
     width: '450px',
