@@ -1,6 +1,4 @@
 import type { NextPage } from 'next';
-import { useState } from 'react';
-
 import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
 import Modal from '@/components/Modal';

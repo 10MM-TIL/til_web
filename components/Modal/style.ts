@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { FONT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
-import Close from '@/assets/svgs/ic_x.svg';
 import { mq } from '@/styles/mediaQuery';
 
 const OutLayer = styled.div`
@@ -38,7 +37,7 @@ const ModalContainer = styled.div`
   }
 `;
 
-const CloseButton = styled(Close)`
+const CloseButton = styled.button`
   position: absolute;
   width: 24px;
   height: 24px;

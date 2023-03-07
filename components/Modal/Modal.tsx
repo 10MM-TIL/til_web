@@ -1,7 +1,6 @@
-import React, { useState, useCallback, useRef, useEffect, ReactComponentElement, ReactNode } from 'react';
-import { FONT_COLOR } from '@/constants/color';
+import { useEffect, ReactNode } from 'react';
 import { ModalContainer, CloseButton, OutLayer } from './style';
-import { H1, Body } from '@/components/Typography';
+import { IconX } from '@/assets/svgs/iconX';
 
 interface ModalProps {
   closable?: boolean;
@@ -27,7 +26,11 @@ const Modal = ({ closable = true, isOpen = true, onClose, children }: ModalProps
         <>
           <OutLayer onClick={handleCloseModal} />
           <ModalContainer>
-            {closable ? <CloseButton onClick={handleCloseModal} /> : null}
+            {closable ? (
+              <CloseButton onClick={handleCloseModal}>
+                <IconX />
+              </CloseButton>
+            ) : null}
             {children}
           </ModalContainer>
         </>
