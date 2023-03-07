@@ -20,18 +20,14 @@ const LargeCardView = 384;
 const CardView: NextPage = () => {
   const device = useResize();
   return (
-    <Layout.Container>
-      <Layout.InnerContent>
-        <Layout.GridContainer
-          tabletColums={`repeat(4, calc((${LargeCardView}px - 8px) / 2))`}
-          desktopColums={`repeat(6, calc((${LargeCardView}px - 8px) / 2));`}
-        >
-          <CardCategory></CardCategory>
-          <PopularCard device={device}></PopularCard>
-          <AllCard device={device}></AllCard>
-        </Layout.GridContainer>
-      </Layout.InnerContent>
-    </Layout.Container>
+    <Layout.GridContainer
+      tabletColums={`repeat(4, calc((${LargeCardView}px - 8px) / 2))`}
+      desktopColums={`repeat(6, calc((${LargeCardView}px - 8px) / 2));`}
+    >
+      <CardCategory></CardCategory>
+      <PopularCard device={device}></PopularCard>
+      <AllCard device={device}></AllCard>
+    </Layout.GridContainer>
   );
 };
 
