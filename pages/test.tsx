@@ -1,7 +1,8 @@
 import type { NextPage } from 'next';
-
 import * as Typo from '@/components/Typography';
 import Toggle from '@/components/Toggle';
+import Modal from '@/components/Modal';
+import { FONT_COLOR } from '@/constants/color';
 import { GrassArea } from '@/components/Molecules/GrassArea';
 import { css } from '@emotion/react';
 import { TimeLine, TimeLineContentProps } from '@/components/TimeLine';
@@ -23,6 +24,7 @@ import { CertifiedBlog } from '@/components/CertifiedBlog';
 import State from '@/components/State';
 
 const Test: NextPage = () => {
+  const [modal, setModal] = useState(false);
   // !! Color관련 ThemeProvider 적용할건지 여부
   const [status, setStatus] = useState<'' | 'saving' | 'checked' | 'error'>('saving');
 
@@ -53,6 +55,26 @@ const Test: NextPage = () => {
       <Typo.Label1 color='violet'>Label2</Typo.Label1>
       <br />
       <Toggle />
+      <br />
+      <Button
+        types='sm'
+        onClick={() => {
+          setModal(true);
+        }}
+      >
+        모달버튼
+      </Button>
+      <Modal isOpen={modal} onClose={() => setModal(false)}>
+        <Typo.H1 style={{ fontSize: '24px' }} color={FONT_COLOR.WHITE}>
+          제목
+        </Typo.H1>
+        <Typo.Body color={FONT_COLOR.GRAY_2}>내용</Typo.Body>
+        <div> TEST DIV</div>
+        <Toggle />
+        <Button types='lg' onClick={() => setModal(false)}>
+          모달 닫기 버튼 test
+        </Button>
+      </Modal>
       {status !== '' && <State state={status} />}
       <CertifiedBlogComponent></CertifiedBlogComponent>
       <GrassArea title={'내가 모은 기록'}></GrassArea>
