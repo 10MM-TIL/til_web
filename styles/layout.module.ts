@@ -19,6 +19,8 @@ export const InnerContent = styled.div`
 `;
 
 export const GridContainer = styled.div<{
+  rowGap?: CSSProperties['rowGap'];
+  colGap?: CSSProperties['columnGap'];
   tabletColums?: CSSProperties['gridTemplateColumns'];
   desktopColums?: CSSProperties['gridTemplateColumns'];
 }>`
@@ -26,9 +28,10 @@ export const GridContainer = styled.div<{
   justify-content: center;
   height: fit-content;
 
-  row-gap: 12px; // 행사이의 간격
-  column-gap: 8px; // 열사이의 간격
+  row-gap: ${({ rowGap }) => rowGap ?? '12px'}; // 행사이의 간격
+  column-gap: ${({ colGap }) => colGap ?? '8px'}; // 열사이의 간격
   width: 100%;
+
   grid-template-columns: repeat(1, 100%);
 
   @media screen and (min-width: 780px) {

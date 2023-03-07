@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import * as Typo from '@/components/Typography';
 import * as Styled from '@/styles/cardview.module';
+import { RowGap, ColGap, ColumnTemplate } from '@/styles/cardview.module';
 import { FONT_COLOR } from '@/constants/color';
 import * as Layout from '@/styles/layout.module';
 
@@ -13,7 +14,6 @@ import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 import { Card, CardProps } from '@/components/Card';
-const LargeCardView = 384;
 
 // https://velog.io/@hdpark/React-Query%EC%99%80-%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94-Next.js-%EB%AC%B4%ED%95%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4
 
@@ -21,8 +21,10 @@ const CardView: NextPage = () => {
   const device = useResize();
   return (
     <Layout.GridContainer
-      tabletColums={`repeat(4, calc((${LargeCardView}px - 8px) / 2))`}
-      desktopColums={`repeat(6, calc((${LargeCardView}px - 8px) / 2));`}
+      colGap={`${ColGap}px`}
+      rowGap={`${RowGap}px`}
+      tabletColums={`repeat(4, ${ColumnTemplate})`}
+      desktopColums={`repeat(6, ${ColumnTemplate})`}
     >
       <CardCategory></CardCategory>
       <PopularCard device={device}></PopularCard>

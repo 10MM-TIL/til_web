@@ -2,27 +2,28 @@ import styled from '@emotion/styled';
 import { BACKGROUND_COLOR } from '@/constants/color';
 import { mq } from './mediaQuery';
 
-const LargeCardView = 384;
+export const LargeCardView = 384;
+export const RowGap = 12;
+export const ColGap = 8;
+export const ColumnTemplate = `calc((${LargeCardView}px - ${ColGap}px) / 2)`;
 
 export const PopularCardViewContainer = styled.section`
   position: relative;
   display: grid;
-  grid-column: span 1 / auto;
   grid-template-columns: inherit;
   column-gap: inherit;
   row-gap: inherit;
   position: relative;
   height: fit-content;
+  grid-column: span 1 / auto;
   margin-bottom: 32px;
 
   @media screen and (min-width: 780px) {
     grid-column: span 4 / auto;
-    grid-template-columns: repeat(auto-fill, calc((${LargeCardView}px - 8px) / 2));
   }
 
   ${mq('desktop')} {
     grid-column: span 6 / auto;
-    grid-template-columns: repeat(auto-fill, calc((${LargeCardView}px - 8px) / 2));
   }
 `;
 export const PopularCardHeader = styled.div`
@@ -39,24 +40,23 @@ export const PopularCardContent = styled.div`
 
   // 태블릿
   @media screen and (min-width: 780px) {
-    grid-template-columns: repeat(auto-fill, calc((${LargeCardView}px - 8px) / 2));
+    grid-template-columns: repeat(auto-fill, ${ColumnTemplate});
   }
 
   ${mq('desktop')} {
-    grid-template-columns: repeat(auto-fill, calc((${LargeCardView}px - 8px) / 2));
+    grid-template-columns: repeat(auto-fill, ${ColumnTemplate});
   }
 `;
 
 export const PopularCardItem = styled.div`
-  grid-column: span 1 / auto; // 2칸 차지
+  grid-column: span 1 / auto; // 1칸 차지
 
   @media screen and (min-width: 780px) {
-    grid-column: span 4 / auto;
+    grid-column: span 4 / auto; // 4칸 차지
   }
 
   ${mq('desktop')} {
     grid-column: span 2 / auto; // 2칸 차지
-    grid-template-columns: repeat(auto-fill, calc((${LargeCardView}px - 8px) / 2));
   }
 `;
 
@@ -71,12 +71,10 @@ export const AllCardViewContainer = styled.section`
   // 태블릿
   @media screen and (min-width: 780px) {
     grid-column: span 4 / auto;
-    grid-template-columns: repeat(auto-fill, calc((${LargeCardView}px - 8px) / 2));
   }
 
   ${mq('desktop')} {
     grid-column: span 6 / auto;
-    grid-template-columns: repeat(auto-fill, calc((${LargeCardView}px - 8px) / 2));
   }
 `;
 export const AllCardHeader = styled.div`
@@ -93,19 +91,18 @@ export const AllCardContent = styled.div`
 
   // 태블릿
   @media screen and (min-width: 780px) {
-    grid-template-columns: repeat(auto-fill, calc((${LargeCardView}px - 8px) / 2));
+    grid-template-columns: repeat(auto-fill, ${ColumnTemplate});
   }
 
   ${mq('desktop')} {
-    grid-template-columns: repeat(auto-fill, calc((${LargeCardView}px - 8px) / 2));
+    grid-template-columns: repeat(auto-fill, ${ColumnTemplate});
   }
 `;
-
 export const AllCardItem = styled.div`
   grid-column: span 1 / auto; // 1칸 차지
 
   @media screen and (min-width: 780px) {
-    grid-column: span 4 / auto; // 2칸 차지
+    grid-column: span 4 / auto; // 4칸 차지
   }
 
   ${mq('desktop')} {
