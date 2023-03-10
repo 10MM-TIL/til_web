@@ -5,12 +5,15 @@ import { mq } from '@/styles/mediaQuery';
 export const HeaderContainer = styled.header`
   position: fixed;
   top: 0;
-  background-color: transparent;
+  background: rgba(25, 31, 40, 0.9);
+  backdrop-filter: blur(9.5px);
+  z-index: 999;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
+  height: 80px;
   padding-left: 58px;
-  padding-top: 29px;
   padding-right: 42px;
 `;
 
