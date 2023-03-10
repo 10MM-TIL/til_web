@@ -1,4 +1,4 @@
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import { css } from '@emotion/react';
 import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
 

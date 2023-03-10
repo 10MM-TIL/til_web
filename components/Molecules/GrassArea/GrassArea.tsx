@@ -1,7 +1,7 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { Grass, GrassData } from '@/components/Atom/Grass';
 import { useCalendarData, monthYearData } from '@/hooks/useCalendarData';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './style';
 import { format, getMonth, getYear, getDaysInMonth } from 'date-fns';
 import { IconGrassArrow } from '@/assets/svgs/IconGrassArrow';

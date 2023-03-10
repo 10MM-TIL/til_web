@@ -11,7 +11,7 @@ import {
   BadgeBottom,
   CrownIcon,
 } from './styles';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import { IconCrown } from '@/assets/svgs/IconCrown';
 import { CardProps, category } from './types';
 

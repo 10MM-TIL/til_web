@@ -2,7 +2,7 @@ import { useClickAway } from 'react-use';
 import { useRef, RefObject, memo } from 'react';
 import { MoreButtonWrapper, EditDropdownWrapper, EditDropdownItem } from './styles';
 import { EditDropdownProps } from './types';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 
 // 더보기 버튼 (...)
 const MoreButton = memo(function MoreButton({
