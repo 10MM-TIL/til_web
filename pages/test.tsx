@@ -209,7 +209,7 @@ const GrassAreaComponent = () => {
 const TextFieldComponent = () => {
   // !추후에 유효성 검사 필요 (특수문자 등등 ?)
   const [introduce, setIntroduce] = useState('');
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState('ㅁㅁㅁㅁㅁㅁ');
   const [name, setName] = useState('');
 
   const onChangeIntroduce = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -247,7 +247,7 @@ const TextFieldComponent = () => {
           <h1>
             <strong>TextField 컴포넌트</strong>
           </h1>
-          <TextField title={'소개'} isInput={false} inputValue={introduce} onChange={onChangeIntroduce}></TextField>
+          {/* <TextField title={'소개'} isInput={false} inputValue={introduce} onChange={onChangeIntroduce}></TextField> */}
           <TextField
             title={'URL 주소 설정'}
             isInput={true}
@@ -256,7 +256,7 @@ const TextFieldComponent = () => {
             useCopy={true}
             onChange={onChangeUrl}
           ></TextField>
-          <TextField title={'이름'} isInput={true} inputValue={name} onChange={onChangeName}></TextField>
+          {/* <TextField title={'이름'} isInput={true} inputValue={name} onChange={onChangeName}></TextField> */}
         </div>
       </div>
     </div>
@@ -562,10 +562,6 @@ const TimeLineComponent = () => {
       }, 1000);
     });
   }, []);
-
-  useEffect(() => {
-    console.log(timelineContent);
-  }, [timelineContent]);
 
   const onDeleteContent = useCallback((): Promise<void> => {
     // 삭제하는 api 함수 추가
