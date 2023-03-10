@@ -6,7 +6,7 @@ const HomePage = () => {
   return (
     <div
       css={css`
-        min-height: 100vh;
+        min-height: 100%;
         display: flex;
         justify-content: center;
         background-color: ${BACKGROUND_COLOR['NAVY_1']};

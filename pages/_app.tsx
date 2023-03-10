@@ -1,4 +1,3 @@
-import '../styles/globals.css';
 import GlobalStyles from '@/styles/globals';
 import { useState } from 'react';
 import type { AppProps } from 'next/app';

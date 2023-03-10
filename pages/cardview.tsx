@@ -5,15 +5,15 @@ import * as Styled from '@/styles/cardview.module';
 import { RowGap, ColGap, ColumnTemplate } from '@/styles/cardview.module';
 import { FONT_COLOR } from '@/constants/color';
 import * as Layout from '@/styles/layout.module';
+import { fetchPopularCard } from '@/apis/card';
 
-import axios from 'axios';
 import { QueryFunctionContext, QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 
 import { useResize, device } from '@/hooks/useResize';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
-import { Card, CardProps } from '@/components/Card';
+import { Card, CardProps } from '@/components/Atom/Card';
 
 // https://velog.io/@hdpark/React-Query%EC%99%80-%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94-Next.js-%EB%AC%B4%ED%95%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4
 
@@ -345,3 +345,11 @@ const AllCard = ({ device }: { device: device }) => {
 };
 
 export default CardView;
+
+// export async function getStaticProps() {
+//   const data = fetchPopularCard();
+//   return {
+//     props: { data },
+//     revalidate: 60 * 60,
+//   };
+// }
