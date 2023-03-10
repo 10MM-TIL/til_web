@@ -12,20 +12,11 @@ import { TextField } from '@/components/Atom/TextField';
 import { FieldRemind } from '@/components/Atom/FieldRemind';
 import { Card, CardProps } from '@/components/Atom/Card';
 import { Button } from '@/components/Atom/Button';
-import {
-  KakaoLoginButton,
-  KakaoLoginMButton,
-  GoogleLoginButton,
-  GoogleLoginMButton,
-  LargeButton,
-  LargeButtonDisabled,
-  LargeMobileButton,
-  MediumButton,
-  MediumButtonDisabled,
-  SmallButton,
-  SmallButtonDisabled,
-  FloatingButton,
-} from '@/components/Molecules/Buttons';
+import { IconFloat } from '@/assets/svgs/IconFloat';
+import { IconGoogle } from '@/assets/svgs/IconGoogle';
+import { IconKakao } from '@/assets/svgs/IconKakao';
+import { IconPlus } from '@/assets/svgs/IconPlus';
+
 import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
@@ -418,6 +409,30 @@ const ButtonComponent = () => {
     gap: 10px;
   `;
 
+  const GoogleLoginButton = () => {
+    return (
+      <Button
+        size='x-lg'
+        backgroundColor='#FFFFFF'
+        svg={<IconGoogle></IconGoogle>}
+        textChildren={<Typo.H1>Google 로그인</Typo.H1>}
+        gap={'16px'}
+      ></Button>
+    );
+  };
+
+  const KakaoLoginButton = () => {
+    return (
+      <Button
+        size='x-lg'
+        backgroundColor='#FDDC3F'
+        svg={<IconKakao></IconKakao>}
+        textChildren={<Typo.H1>카카오 로그인</Typo.H1>}
+        gap={'6px'}
+      ></Button>
+    );
+  };
+
   const Loginbutton = () => {
     return (
       <div
@@ -434,6 +449,33 @@ const ButtonComponent = () => {
       </div>
     );
   };
+
+  const GoogleLoginMButton = () => {
+    return (
+      <Button
+        size='x-lg-m'
+        backgroundColor='#FFFFFF'
+        svg={<IconGoogle></IconGoogle>}
+        textChildren={<Typo.H1>Google 로그인</Typo.H1>}
+      ></Button>
+    );
+  };
+
+  const KakaoLoginMButton = () => {
+    return (
+      <Button
+        size='x-lg-m'
+        backgroundColor='#FDDC3F'
+        svg={<IconKakao></IconKakao>}
+        textChildren={<Typo.H1>카카오 로그인</Typo.H1>}
+      ></Button>
+    );
+  };
+
+  const FloatingButton = () => {
+    return <Button size='float' svg={<IconFloat></IconFloat>}></Button>;
+  };
+
   const Loginbutton_M = () => {
     return (
       <div
@@ -447,22 +489,6 @@ const ButtonComponent = () => {
       >
         <GoogleLoginMButton></GoogleLoginMButton>
         <KakaoLoginMButton></KakaoLoginMButton>
-      </div>
-    );
-  };
-  const LargeButtons = () => {
-    return (
-      <div
-        css={css`
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          gap: 6px;
-        `}
-      >
-        <LargeButton></LargeButton>
-        <LargeButtonDisabled></LargeButtonDisabled>
       </div>
     );
   };
@@ -495,24 +521,6 @@ const ButtonComponent = () => {
         <h3>Login Button_Medium_Mobile</h3>
         <Loginbutton_M></Loginbutton_M>
       </Wrapper>
-      <Wrapper>
-        <h3>Large</h3>
-        <LargeButtons></LargeButtons>
-      </Wrapper>
-      <Wrapper>
-        <h3>Medium</h3>
-        <MediumButton></MediumButton>
-        <MediumButtonDisabled></MediumButtonDisabled>
-      </Wrapper>
-      <Wrapper>
-        <h3>Small</h3>
-        <SmallButton></SmallButton>
-        <SmallButtonDisabled></SmallButtonDisabled>
-      </Wrapper>
-      <Wrapper>
-        <h3>Large Mobile</h3>
-        <LargeMobileButton></LargeMobileButton>
-      </Wrapper>
     </div>
   );
 };
@@ -521,9 +529,7 @@ const BoxLayoutTest = () => {
   const LinkComponent = () => {
     return (
       <BoxLayout title='새 탭에서 브릭로그 확인'>
-        <Button types='md'>
-          <Typo.Label1>크롬 확장앱 다운</Typo.Label1>
-        </Button>
+        <Button size='md' textChildren={<Typo.Label1>크롬 확장앱 다운</Typo.Label1>}></Button>
       </BoxLayout>
     );
   };
