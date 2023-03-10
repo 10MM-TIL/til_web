@@ -1,5 +1,5 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
-import { Grass, GrassData } from '@/components/Grass';
+import { Grass, GrassData } from '@/components/Atom/Grass';
 import { useCalendarData, monthYearData } from '@/hooks/useCalendarData';
 import * as Typo from '@/components/Typography';
 import * as Styled from './style';

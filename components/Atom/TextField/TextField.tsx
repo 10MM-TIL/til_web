@@ -21,7 +21,8 @@ const TextField = ({
   const [isFocus, setFocus] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const fixeStringRef = useRef<HTMLParagraphElement>(null);
+  const fixedStringRef = useRef<HTMLParagraphElement>(null);
+  const [fixedStringWidth, setFixedStringWidth] = useState(0);
   const [isCopy, onCopy] = useCopyClipBoard();
 
   // focus 시 focus이벤트가 발생해 toggleFocus() 실행됌
@@ -57,17 +58,21 @@ const TextField = ({
     );
   });
 
+  useEffect(() => {
+    if (fixedStringRef.current) setFixedStringWidth(fixedStringRef.current.clientWidth);
+  }, []);
+
   const TextFieldFixedStringComp = memo(function TextFieldFixedStringComp() {
     return (
       <Style.TextFieldFixedString onClick={(e) => e.stopPropagation()}>
-        <Typo.Body ref={fixeStringRef} color='#545454'>
+        <Typo.Body ref={fixedStringRef} color='#545454'>
           {DOMAIN}
         </Typo.Body>
       </Style.TextFieldFixedString>
     );
   });
 
-  const TextFieldCopyIcon = memo(function TextFieldFixedStringComp() {
+  const TextFieldCopyIcon = memo(function TextFieldCopyIcon() {
     const copyUrl = (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       onCopy(`${DOMAIN}${inputValue}`);
@@ -96,7 +101,7 @@ const TextField = ({
               onFocus={toggleFocus}
               onBlur={toggleFocus}
               useFixedString={useFixedString}
-              fixedWidth={fixeStringRef.current?.clientWidth ?? 0}
+              fixedWidth={fixedStringWidth}
             />
             {useFixedString ? <TextFieldFixedStringComp></TextFieldFixedStringComp> : null}
           </>

@@ -5,6 +5,13 @@ export interface TypographProps {
   color?: CSSProperties['color'];
 }
 
+export const Title = styled.h1<TypographProps>`
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 39px;
+  color: ${({ color }) => color ?? 'black'};
+`;
+
 export const H1 = styled.h1<TypographProps>`
   font-size: 16px;
   font-weight: 700;

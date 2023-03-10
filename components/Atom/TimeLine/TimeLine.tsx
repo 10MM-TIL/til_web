@@ -3,7 +3,7 @@ import Image from 'next/image';
 import * as Typo from '@/components/Typography';
 import * as Styled from './styles';
 import { TimeLineProps } from './types';
-import { EditDropdown, EditDropdownProps } from '@/components/EditDropdown';
+import { EditDropdown, EditDropdownProps } from '@/components/Atom/EditDropdown';
 import { POINT_COLOR, FONT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
 
 // [TODO] 최대 글자수 지정 필요
