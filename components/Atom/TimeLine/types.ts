@@ -1,4 +1,4 @@
-import { EditDropdownProps } from '@/components/EditDropdown';
+import { EditDropdownProps } from '@/components/Atom/EditDropdown';
 
 export type TimeLineProps = {
   content?: TimeLineContentProps;
