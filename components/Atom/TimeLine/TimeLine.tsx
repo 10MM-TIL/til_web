@@ -1,6 +1,6 @@
 import { ReactElement, useState, useRef, memo, ChangeEvent, useCallback, RefObject, useEffect } from 'react';
 import Image from 'next/image';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './styles';
 import { TimeLineProps } from './types';
 import { EditDropdown, EditDropdownProps } from '@/components/Atom/EditDropdown';

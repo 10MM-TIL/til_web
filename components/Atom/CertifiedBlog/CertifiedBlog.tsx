@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import Image from 'next/image';
 import { CertifiedBlogContainer, CertifiedBlogName, DeleteButton } from './styles';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import { CertifiedBlogProps, ImageTypeObject } from './types';
 import { IconX } from '@/assets/svgs/iconX';
 import { FONT_COLOR } from '@/constants/color';

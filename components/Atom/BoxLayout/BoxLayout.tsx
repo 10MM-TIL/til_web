@@ -1,5 +1,5 @@
 import { ReactNode, ReactElement } from 'react';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import { BoxLayoutContainer } from './style';
 import { FONT_COLOR } from '@/constants/color';
 

@@ -1,5 +1,5 @@
 import { memo, ReactElement, MouseEvent, useCallback, useRef, useMemo, useEffect } from 'react';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import * as Style from './styles';
 import { useState } from 'react';
 import { TextFieldProps } from './types';

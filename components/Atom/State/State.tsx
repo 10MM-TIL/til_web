@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import { POINT_COLOR } from '@/constants/color';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import IconError from '@/assets/svgs/IconError';
