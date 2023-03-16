@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import * as Styled from '@/styles/cardview.module';
 import { RowGap, ColGap, ColumnTemplate } from '@/styles/cardview.module';
 import { FONT_COLOR } from '@/constants/color';

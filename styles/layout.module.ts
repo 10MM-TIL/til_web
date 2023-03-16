@@ -7,7 +7,7 @@ import { CSSProperties } from '@emotion/serialize';
 export const Container = styled.div`
   display: flex;
   justify-content: center;
-  padding: 0 20px;
+  padding: 0 23px 0 24px;
   position: relative;
   background-color: ${BACKGROUND_COLOR.NAVY_1};
 `;
