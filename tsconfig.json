@@ -28,6 +28,7 @@
       "@/stores/*": ["./stores/*"],
       "@/styles/*": ["./styles/*"],
       "@/assets/*": ["./assets/*"],
+      "@/states/*": ["./states/*"],
       "@/apis/*": ["./apis/*"]
     }
   },

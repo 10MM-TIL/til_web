@@ -4,6 +4,7 @@ const nextConfig = {
   swcMinify: true,
   compiler: {
     emotion: true,
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   images: {
     // remotePatterns: [
@@ -14,6 +15,14 @@ const nextConfig = {
     //     pathname: '/**',
     //   },
     // ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/:path*',
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
+      },
+    ];
   },
   webpack: (config) => {
     // 아래를 추가합니다.

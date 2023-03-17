@@ -14,7 +14,7 @@ export type CardProps = {
   hasBadge?: boolean;
   content: CardContentProps;
   onClickTag: (event: MouseEvent, tag: (typeof category)[keyof typeof category]) => void;
-  onClickContent: MouseEventHandler<HTMLDivElement>;
+  onClickContent: (url?: string) => void;
   onClickUser: MouseEventHandler<HTMLDivElement>;
 };
 
