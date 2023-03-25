@@ -20,31 +20,38 @@ const Header = ({ onModalOn }: HeaderProps) => {
         z-index: 999; // TODO Z-Index
         width: 100%;
         height: 80px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 28px 20px 20px 24px;
       `}
     >
       <div
         css={css`
           display: flex;
           align-items: center;
-          gap: 24px;
+          justify-content: space-between;
+          padding: 28px 20px 20px 24px;
+          max-width: 1194px;
+          margin: 0 auto;
         `}
       >
-        <Link href={'/'} css={css``}>
-          <IconLogo />
-        </Link>
-        {/* desktop && isLogin => 마이페이지 이동 버튼 */}
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+            gap: 24px;
+          `}
+        >
+          <Link href={'/'} css={css``}>
+            <IconLogo />
+          </Link>
+          {/* desktop && isLogin => 마이페이지 이동 버튼 */}
+        </div>
+        {isLogin ? (
+          <></>
+        ) : (
+          <Button types='sm' onClick={() => onModalOn(true)}>
+            로그인
+          </Button>
+        )}
       </div>
-      {isLogin ? (
-        <></>
-      ) : (
-        <Button types='sm' onClick={() => onModalOn(true)}>
-          로그인
-        </Button>
-      )}
     </header>
   );
 };

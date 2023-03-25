@@ -18,6 +18,7 @@ const Layout = ({ children }: LayoutProps) => {
     <div
       css={css`
         overflow: hidden;
+        background-color: ${BACKGROUND_COLOR['NAVY_1']};
       `}
     >
       {isModal && <LoginModal onModalOff={handleModalToggle} />}
@@ -25,9 +26,10 @@ const Layout = ({ children }: LayoutProps) => {
       <main
         css={css`
           padding-top: 80px;
-          background-color: ${BACKGROUND_COLOR['NAVY_1']};
+
           min-height: calc(100vh);
           margin: 0 auto;
+          max-width: 1194px;
         `}
       >
         {children}
