@@ -4,7 +4,7 @@ import { IconKakao } from '@/assets/svgs/IconKakao';
 import { IconPlus } from '@/assets/svgs/IconPlus';
 
 import { Button } from '@/components/Atom/Button';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './styles';
 
 // 쓰이는 버튼들 정의 필요

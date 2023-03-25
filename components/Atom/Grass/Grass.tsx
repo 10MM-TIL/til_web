@@ -1,5 +1,5 @@
 import * as Styled from './styles';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import { GrassProps, RowProps, ColProps, GrassStatus, HoverProps } from './types';
 import { useCallback, memo, useState, useMemo, MouseEvent, useEffect } from 'react';
 import { FONT_COLOR } from '@/constants/color';
