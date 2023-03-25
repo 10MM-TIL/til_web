@@ -1,7 +1,7 @@
 import '../styles/globals.tsx';
 import type { AppProps } from 'next/app';
 import GlobalStyles from '@/styles/globals';
-import KakaoScript from '@/components/common/KakaoScript';
+import { KakaoScript, Layout } from '@/components/common';
 
 declare global {
   interface Window {
@@ -13,9 +13,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   // TODO Recoil install 후 RecoilRoot로 감싸주기
   return (
     <>
-      <GlobalStyles />
       <KakaoScript />
-      <Component {...pageProps} />
+      <GlobalStyles />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   );
 }

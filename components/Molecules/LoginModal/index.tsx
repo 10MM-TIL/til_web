@@ -2,12 +2,16 @@ import { IconX } from '@/assets/svgs/iconX';
 import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
 import { css } from '@emotion/react';
 
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import IconRocket from '@/assets/svgs/IconRocket';
 import { GoogleLoginMButton, KakaoLoginMButton } from '../Buttons';
 import keyframes from '@/styles/keyframe';
 
-const LoginModal = () => {
+interface LoginModalProps {
+  onModalOff: (flag: boolean) => void;
+}
+
+const LoginModal = ({ onModalOff }: LoginModalProps) => {
   // TODO desktop, mobile size
 
   return (
@@ -20,14 +24,13 @@ const LoginModal = () => {
         bottom: 0;
         overflow: hidden;
         background-color: rgba(25, 31, 40, 0.5);
-        z-index: 99; // TODO Z-Index 정리
+        z-index: 9999; // TODO Z-Index 정리
       `}
     >
       <div
         css={css`
           margin-top: 56px;
           background-color: ${BACKGROUND_COLOR.NAVY_3};
-          opacity: 1;
           min-height: calc(100vh - 56px);
           border-top-left-radius: 20px;
           border-top-right-radius: 20px;
@@ -41,7 +44,7 @@ const LoginModal = () => {
             padding: 24px;
           `}
         >
-          <IconX onClick={() => console.log(1)} />
+          <IconX onClick={() => onModalOff(false)} />
         </div>
         <div
           css={css`
