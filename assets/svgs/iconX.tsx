@@ -1,11 +1,24 @@
+import { css } from '@emotion/react';
+
 interface SvgProps {
   fill?: string;
   stroke?: string;
+  onClick: () => void;
 }
 
-export const IconX = ({ fill, stroke }: SvgProps) => {
+export const IconX = ({ fill, stroke, onClick }: SvgProps) => {
   return (
-    <svg width='24' height='25' viewBox='0 0 24 25' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <svg
+      width='24'
+      height='25'
+      viewBox='0 0 24 25'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+      css={css`
+        cursor: pointer;
+      `}
+      onClick={onClick}
+    >
       <path
         fillRule='evenodd'
         clipRule='evenodd'

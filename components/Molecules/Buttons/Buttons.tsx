@@ -31,8 +31,15 @@ export const KakaoLoginButton = () => {
 };
 
 export const KakaoLoginMButton = () => {
+  const handleKakaoLogin = () => {
+    window.Kakao.Auth.authorize({
+      redirectUri: `${process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI}`,
+      state: 'userme',
+    });
+  };
+
   return (
-    <Button types='x-lg-m' backgroundColor='#FDDC3F'>
+    <Button types='x-lg-m' backgroundColor='#FDDC3F' onClick={handleKakaoLogin}>
       <Styled.LoginBtnWrapper>
         <IconKakao></IconKakao>
         <Typo.H1>카카오 로그인</Typo.H1>
