@@ -1,21 +1,8 @@
-import styled from '@emotion/styled';
-import { CSSProperties } from 'react';
+import * as Styled from './styles';
+import { ButtonProps } from './types';
+import { POINT_COLOR } from '@/constants/color';
 
-type TypeObjectKey = keyof typeof buttonStyles;
-type TypeObject = {
-  [K in TypeObjectKey]: {
-    width: CSSProperties['width'];
-    height: CSSProperties['height'];
-    borderRadius: CSSProperties['borderRadius'];
-  };
-};
-interface ButtonLayoutProps {
-  types: keyof TypeObject;
-  color?: CSSProperties['color'];
-  backgroundColor?: CSSProperties['backgroundColor'];
-}
-
-const buttonStyles = {
+export const buttonStyles = {
   'x-lg': {
     // 로그인 버튼
     width: '485px',
@@ -53,15 +40,20 @@ const buttonStyles = {
   },
 };
 
-export const Button = styled.button<ButtonLayoutProps>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: ${({ types }) => buttonStyles[types].width ?? '450px'};
-  height: ${({ types }) => buttonStyles[types].height ?? '52px'};
-  border-radius: ${({ types }) => buttonStyles[types].borderRadius ?? '12px'};
-  background-color: ${({ backgroundColor }) => backgroundColor ?? '#22FFA2'};
-  color: ${({ color }) => color ?? 'black'};
-`;
-
+export const Button = ({
+  size = 'sm',
+  backgroundColor = POINT_COLOR.MAIN,
+  gap = '0px',
+  svg,
+  textChildren,
+}: ButtonProps) => {
+  return (
+    <Styled.ButtonWrapper types={size} backgroundColor={backgroundColor}>
+      <Styled.ButtonContent gap={gap}>
+        {svg && svg}
+        {textChildren && textChildren}
+      </Styled.ButtonContent>
+    </Styled.ButtonWrapper>
+  );
+};
 // 로그인,
