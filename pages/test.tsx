@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { BACKGROUND_COLOR } from '@/constants/color';
 
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import Toggle from '@/components/Toggle';
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
 import { GrassArea } from '@/components/Molecules/GrassArea';

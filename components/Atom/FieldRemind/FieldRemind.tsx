@@ -1,6 +1,6 @@
 import { ReactElement, forwardRef, ForwardedRef, MouseEvent, memo, useRef, useState, ChangeEvent } from 'react';
 import * as Styled from './styles';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import { FieldRemindProps, FieldRemindPropsForDatepicker } from './types';
 import { css } from '@emotion/react';
 import DatePicker from 'react-datepicker';
