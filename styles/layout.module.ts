@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { mq } from './mediaQuery';
 import { BACKGROUND_COLOR } from '@/constants/color';
-import { CSSProperties } from '@emotion/serialize';
+import { CSSProperties, CSSObject } from '@emotion/serialize';
 
 // 현재 데스크탑 > 모바일인데 좀더 세분화가 필요해보임 많이 어색함
 export const Container = styled.div`
@@ -23,6 +23,7 @@ export const GridContainer = styled.div<{
   colGap?: CSSProperties['columnGap'];
   tabletColums?: CSSProperties['gridTemplateColumns'];
   desktopColums?: CSSProperties['gridTemplateColumns'];
+  css?: CSSObject;
 }>`
   display: grid;
   justify-content: center;
@@ -31,7 +32,6 @@ export const GridContainer = styled.div<{
   row-gap: ${({ rowGap }) => rowGap ?? '12px'}; // 행사이의 간격
   column-gap: ${({ colGap }) => colGap ?? '8px'}; // 열사이의 간격
   width: 100%;
-
   grid-template-columns: repeat(1, 100%);
 
   @media screen and (min-width: 780px) {
@@ -42,4 +42,6 @@ export const GridContainer = styled.div<{
   ${mq('desktop')} {
     grid-template-columns: ${({ desktopColums }) => desktopColums};
   }
+
+  ${({ css }) => css}
 `;

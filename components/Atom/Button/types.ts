@@ -6,7 +6,8 @@ export type ButtonProps = {
   backgroundColor?: CSSProperties['backgroundColor'];
   gap?: CSSProperties['gap'];
   svg?: ReactNode;
-  textChildren?: ReactNode;
+  children?: ReactNode;
+  onClick: () => void;
 };
 export type TypeObjectKey = keyof typeof buttonStyles;
 type TypeObject = {

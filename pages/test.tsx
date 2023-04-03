@@ -48,43 +48,45 @@ const DATA = [
 
 const Test: NextPage = () => {
   return (
-    <div
-      css={css`
-        background-color: ${BACKGROUND_COLOR.NAVY_1};
-      `}
-    >
+    <>
       <Header isLogin={true}></Header>
       <div
         css={css`
-          max-width: 1180px;
-          padding: 0 23px;
-          margin: 0 auto;
+          background-color: ${BACKGROUND_COLOR.NAVY_1};
         `}
       >
-        <h1
+        <div
           css={css`
-            color: white;
-            font-size: 22px;
-            text-align: center;
-            padding-top: 30px;
+            max-width: 1180px;
+            padding: 0 23px;
+            margin: 0 auto;
           `}
         >
-          컴포넌트를 위한 테스트 페이지입니다.
-        </h1>
-        <RadioComponent />
-        <TypoComponent></TypoComponent>
-        <ToggleComponent></ToggleComponent>
-        <CertifiedBlogComponent></CertifiedBlogComponent>
-        <GrassAreaComponent></GrassAreaComponent>
-        <TextFieldComponent></TextFieldComponent>
-        <FieldRemindComponent></FieldRemindComponent>
-        <CardComponent></CardComponent>
-        <ButtonComponent></ButtonComponent>
-        <BoxLayoutTest></BoxLayoutTest>
-        <TimeLineComponent></TimeLineComponent>
-        <DropdownComponent></DropdownComponent>
+          <h1
+            css={css`
+              color: white;
+              font-size: 22px;
+              text-align: center;
+              padding-top: 30px;
+            `}
+          >
+            컴포넌트를 위한 테스트 페이지입니다.
+          </h1>
+          <RadioComponent />
+          <TypoComponent></TypoComponent>
+          <ToggleComponent></ToggleComponent>
+          <CertifiedBlogComponent></CertifiedBlogComponent>
+          <GrassAreaComponent></GrassAreaComponent>
+          <TextFieldComponent></TextFieldComponent>
+          <FieldRemindComponent></FieldRemindComponent>
+          <CardComponent></CardComponent>
+          <ButtonComponent></ButtonComponent>
+          <BoxLayoutTest></BoxLayoutTest>
+          <TimeLineComponent></TimeLineComponent>
+          <DropdownComponent></DropdownComponent>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

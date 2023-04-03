@@ -1,11 +1,11 @@
 import * as Styled from './styles';
-import * as Typo from '@/components/Typography';
+import * as Typo from '@/components/Atom/Typography';
 import { HeaderProps } from './types';
 import { FONT_COLOR, POINT_COLOR } from '@/constants/color';
 import { memo } from 'react';
 import { IconBrickLog } from '@/assets/svgs/IconBrickLog';
 import { IconShortCut } from '@/assets/svgs/IconShorCut';
-import { Button } from '../Button';
+import { Button } from '@/components/Atom/Button';
 
 import Link from 'next/link';
 
@@ -34,7 +34,7 @@ const Header = ({ isLogin }: HeaderProps) => {
           </Link>
         </Styled.HeaderRight>
       ) : (
-        <Button types='sm' backgroundColor={POINT_COLOR.MAIN} onClick={onClickLogin}>
+        <Button size='sm' backgroundColor={POINT_COLOR.MAIN} onClick={onClickLogin}>
           로그인
         </Button>
       )}
