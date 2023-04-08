@@ -20,6 +20,30 @@ import { IconPlus } from '@/assets/svgs/IconPlus';
 import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
+import RadioGroup from '@/components/Molecules/RadioGroup';
+
+const DATA = [
+  {
+    id: 1,
+    text: '#개발',
+  },
+  {
+    id: 2,
+    text: '#디자인',
+  },
+  {
+    id: 3,
+    text: '#기획',
+  },
+  {
+    id: 4,
+    text: '#마케팅',
+  },
+  {
+    id: 5,
+    text: '#기업/스타트업',
+  },
+];
 
 const Test: NextPage = () => {
   return (
@@ -41,6 +65,7 @@ const Test: NextPage = () => {
       >
         컴포넌트를 위한 테스트 페이지입니다.
       </h1>
+      <RadioComponent />
       <TypoComponent></TypoComponent>
       <ToggleComponent></ToggleComponent>
       <CertifiedBlogComponent></CertifiedBlogComponent>
@@ -54,6 +79,16 @@ const Test: NextPage = () => {
       <DropdownComponent></DropdownComponent>
     </div>
   );
+};
+
+const RadioComponent = () => {
+  const [selectedId, setSelectedId] = useState(1);
+
+  const handleRadioClick = (value: number) => {
+    setSelectedId(value);
+  };
+
+  return <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />;
 };
 
 const TypoComponent = () => {
