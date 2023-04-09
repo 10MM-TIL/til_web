@@ -20,6 +20,7 @@ import { IconPlus } from '@/assets/svgs/IconPlus';
 import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
+import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import RadioGroup from '@/components/Molecules/RadioGroup';
 
 const DATA = [
@@ -77,6 +78,7 @@ const Test: NextPage = () => {
       <BoxLayoutTest></BoxLayoutTest>
       <TimeLineComponent></TimeLineComponent>
       <DropdownComponent></DropdownComponent>
+      <CheckboxComponent />
     </div>
   );
 };
@@ -688,4 +690,35 @@ const DropdownComponent = () => {
   );
 };
 
+const CheckboxComponent = () => {
+  const [checked, setChecked] = useState(false);
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding-bottom: 50px;
+      `}
+    >
+      <h1>
+        <strong>Checkbox 컴포넌트</strong>
+      </h1>
+      <div
+        css={css`
+          max-width: 500px;
+        `}
+      >
+        <CheckboxLabel
+          checked={checked}
+          onClick={() => setChecked(!checked)}
+          text='마케팅 활용 및 뉴스레터 수신 동의'
+        />
+        {/* <Dropdown optionList={optionList} /> */}
+      </div>
+    </div>
+  );
+};
 export default Test;
