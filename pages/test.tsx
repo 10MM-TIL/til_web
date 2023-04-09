@@ -21,6 +21,7 @@ import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
 import RadioGroup from '@/components/Molecules/RadioGroup';
+import ProfileIcon from '@/components/Molecules/ProfileIcon';
 
 const DATA = [
   {
@@ -66,6 +67,7 @@ const Test: NextPage = () => {
         컴포넌트를 위한 테스트 페이지입니다.
       </h1>
       <RadioComponent />
+      <ProfileIcon editable={true} />
       <TypoComponent></TypoComponent>
       <ToggleComponent></ToggleComponent>
       <CertifiedBlogComponent></CertifiedBlogComponent>
