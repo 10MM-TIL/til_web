@@ -22,6 +22,7 @@ import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import RadioGroup from '@/components/Molecules/RadioGroup';
+import BlogGroup from '@/components/Molecules/BlogGroup';
 
 const DATA = [
   {
@@ -43,6 +44,27 @@ const DATA = [
   {
     id: 5,
     text: '#기업/스타트업',
+  },
+];
+
+const BLOG_DATA = [
+  {
+    url: 'https://www.naver.com',
+  },
+  {
+    url: 'https://www.tistory.com',
+  },
+  {
+    url: 'https://velog.io',
+  },
+  {
+    url: 'https://brunch.co.kr',
+  },
+  {
+    url: 'https://www.daum.net',
+  },
+  {
+    url: 'https://www.medium.com',
   },
 ];
 
@@ -79,6 +101,7 @@ const Test: NextPage = () => {
       <TimeLineComponent></TimeLineComponent>
       <DropdownComponent></DropdownComponent>
       <CheckboxComponent />
+      <BlogGroupComponent />
     </div>
   );
 };
@@ -717,6 +740,32 @@ const CheckboxComponent = () => {
           text='마케팅 활용 및 뉴스레터 수신 동의'
         />
         {/* <Dropdown optionList={optionList} /> */}
+      </div>
+    </div>
+  );
+};
+
+const BlogGroupComponent = () => {
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding-bottom: 50px;
+      `}
+    >
+      <h1>
+        <strong>BlogGroup 컴포넌트</strong>
+      </h1>
+      <div
+        css={css`
+          max-width: 500px;
+        `}
+      >
+        <BlogGroup data={BLOG_DATA} />
       </div>
     </div>
   );
