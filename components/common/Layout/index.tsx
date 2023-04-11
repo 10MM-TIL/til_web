@@ -9,11 +9,12 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const [isModal, setIsModal] = useState(true);
+  const [isModal, setIsModal] = useState(false);
 
   const handleModalToggle = (flag: boolean) => {
     setIsModal(flag);
   };
+
   return (
     <div
       css={css`
@@ -26,7 +27,6 @@ const Layout = ({ children }: LayoutProps) => {
       <main
         css={css`
           padding-top: 80px;
-
           min-height: calc(100vh);
           margin: 0 auto;
           max-width: 1194px;
