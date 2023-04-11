@@ -27,7 +27,6 @@ const HomePage = () => {
         <Typo.Title color={FONT_COLOR['WHITE']}>
           꾸준한 회고와 기록을 통해 <br /> 매일 성장하세요
         </Typo.Title>
-        r
       </div>
     </div>
   );
