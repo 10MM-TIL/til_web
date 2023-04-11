@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import * as Typo from '@/components/Atom/Typography';
 import IconRocket from '@/assets/svgs/IconRocket';
 import { GoogleLoginMButton, KakaoLoginMButton } from '../Buttons';
-import keyframes from '@/styles/keyframe';
+import Link from 'next/link';
 
 interface LoginModalProps {
   onModalOff: (flag: boolean) => void;
@@ -13,6 +13,8 @@ interface LoginModalProps {
 
 const LoginModal = ({ onModalOff }: LoginModalProps) => {
   // TODO desktop, mobile size
+
+  const GOOGLE_LOGIN_LINK = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI}&response_type=token&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
 
   return (
     <div
@@ -79,7 +81,9 @@ const LoginModal = ({ onModalOff }: LoginModalProps) => {
             gap: 12px;
           `}
         >
-          <GoogleLoginMButton />
+          <Link href={GOOGLE_LOGIN_LINK} onClick={() => onModalOff(false)}>
+            <GoogleLoginMButton />
+          </Link>
           <KakaoLoginMButton />
         </div>
       </div>
