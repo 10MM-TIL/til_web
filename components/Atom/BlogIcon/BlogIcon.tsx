@@ -1,5 +1,4 @@
 import { ReactElement, useEffect, useState } from 'react';
-import Image from 'next/image';
 import IconBrunch from '@/assets/svgs/IconBrunch.svg';
 import IconNaver from '@/assets/svgs/IconNaver.svg';
 import IconTistory from '@/assets/svgs/IconTistory.svg';
@@ -54,10 +53,6 @@ const BlogIcon = ({ url }: { url: string }) => {
     }
   }, [setBlogType, url]);
 
-  // <a target='_blank' rel='noreferrer noopener' href={url}>
-  //   {/* <Image src={IconBrunch} alt='test' width={25} height={25} /> */}
-  //   <IconBrunch />
-  // </a>
   switch (blogType) {
     case 'naver':
       return <IconNaver />;
