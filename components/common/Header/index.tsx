@@ -4,6 +4,7 @@ import { useResize } from '@/hooks/useResize';
 import { css } from '@emotion/react';
 import Link from 'next/link';
 import { useState } from 'react';
+import styles from './Header.styled';
 
 interface HeaderProps {
   onModalOn: (flag: boolean) => void;
@@ -13,32 +14,12 @@ const Header = ({ onModalOn }: HeaderProps) => {
   const [isLogin, setIsLogin] = useState(false);
   const device = useResize();
 
+  // TODO Desktop에서 마이페이지 버튼, 로그인 이후에 변경되는 UI
+
   return (
-    <header
-      css={css`
-        position: fixed;
-        z-index: 999; // TODO Z-Index
-        width: 100%;
-        height: 80px;
-      `}
-    >
-      <div
-        css={css`
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 28px 20px 20px 24px;
-          max-width: 1194px;
-          margin: 0 auto;
-        `}
-      >
-        <div
-          css={css`
-            display: flex;
-            align-items: center;
-            gap: 24px;
-          `}
-        >
+    <header css={styles.container}>
+      <div css={styles.inner}>
+        <div css={styles.logoContainer}>
           <Link href={'/'} css={css``}>
             <IconLogo />
           </Link>
