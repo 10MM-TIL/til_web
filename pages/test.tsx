@@ -22,6 +22,8 @@ import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
 import RadioGroup from '@/components/Molecules/RadioGroup';
 import ProfileIcon from '@/components/Molecules/ProfileIcon';
+import ProfileImage from '@/components/Atom/ProfileImage';
+import ProfileImageSet from '@/components/Molecules/ProfileImageSet';
 
 const DATA = [
   {
@@ -67,7 +69,7 @@ const Test: NextPage = () => {
         컴포넌트를 위한 테스트 페이지입니다.
       </h1>
       <RadioComponent />
-      <ProfileIcon editable={true} />
+      <ProfileIcon imgUrl={require('@/assets/images/1.png')} editable={true} />
       <TypoComponent></TypoComponent>
       <ToggleComponent></ToggleComponent>
       <CertifiedBlogComponent></CertifiedBlogComponent>

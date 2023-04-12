@@ -8,6 +8,7 @@ import Modal from '@/components/Modal';
 import { Button } from '@/components/Atom/Button';
 import { POINT_COLOR } from '@/constants/color';
 import { H1 } from '@/components/Atom/Typography';
+import ProfileImageSet from '@/components/Molecules/ProfileImageSet';
 
 const ProfileIcon = ({ imgUrl = 'default', editable = false, onClick }: ProfileIconProps) => {
   // const [image, setImage] = useState(imgUrl === 'default' ? DefaultPhoto : imgUrl);
@@ -29,7 +30,7 @@ const ProfileIcon = ({ imgUrl = 'default', editable = false, onClick }: ProfileI
     <>
       <PhotoAreaWrapper editable={editable}>
         <CircleContainer editable={editable}>
-          <Image alt='profile' src={''} width={200} height={200} />
+          <Image alt='profile' src={imgUrl} width={200} height={200} />
         </CircleContainer>
         {editable ? (
           <EditButton onClick={handleClickEdit}>
@@ -38,10 +39,7 @@ const ProfileIcon = ({ imgUrl = 'default', editable = false, onClick }: ProfileI
         ) : null}
       </PhotoAreaWrapper>
       <Modal closable={true} isOpen={isModalOpen} onClose={handleClickClose}>
-        <div> 디자인 픽스 나오면 수정 진행 </div>
-        <div>프로필 사진 바꾸는 모달 테스트</div>
-        <div>여기에 프로필 8개 깔아두고</div>
-        <div>여기에 확인 / 취소 버튼?</div>
+        <ProfileImageSet />
         <div>
           <Button backgroundColor={POINT_COLOR.MAIN} size='md' textChildren={<H1>확인</H1>} />
           <Button backgroundColor={POINT_COLOR.MAIN} size='md' textChildren={<H1>취소</H1>} />
