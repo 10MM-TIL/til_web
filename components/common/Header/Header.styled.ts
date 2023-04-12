@@ -1,3 +1,4 @@
+import { POINT_COLOR } from '@/constants/color';
 import { css } from '@emotion/react';
 
 const container = css`
@@ -22,6 +23,15 @@ const logoContainer = css`
   gap: 24px;
 `;
 
-const styles = { container, inner, logoContainer };
+const btn = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: ${POINT_COLOR.MAIN};
+  border-radius: 8px;
+`;
+
+const styles = { container, inner, logoContainer, btn };
 
 export default styles;

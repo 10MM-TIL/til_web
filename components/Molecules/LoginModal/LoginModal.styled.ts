@@ -1,4 +1,4 @@
-import { BACKGROUND_COLOR } from '@/constants/color';
+import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
 import { mq } from '@/styles/mediaQuery';
 import { css } from '@emotion/react';
 
@@ -66,6 +66,20 @@ const btnContainer = css`
   }
 `;
 
+const googleBtn = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${FONT_COLOR.WHITE};
+  padding: 14px 0;
+  width: 328px;
+  border-radius: 12px;
+
+  ${mq('desktop')} {
+    width: 450px;
+  }
+`;
+
 const styles = {
   outside,
   container,
@@ -73,6 +87,7 @@ const styles = {
   msgContainer,
   iconContainer,
   btnContainer,
+  googleBtn,
 };
 
 export default styles;

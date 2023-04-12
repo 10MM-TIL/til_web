@@ -1,10 +1,14 @@
 import { IconLogo } from '@/assets/svgs/IconLogo';
-import { Button } from '@/components/Atom/Button';
+
 import { useResize } from '@/hooks/useResize';
 import { css } from '@emotion/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from './Header.styled';
+import { Button } from '@/components/Atom/Button';
+
+import * as Typo from '@/components/Atom/Typography';
+import { POINT_COLOR } from '@/constants/color';
 
 interface HeaderProps {
   onModalOn: (flag: boolean) => void;
@@ -28,9 +32,9 @@ const Header = ({ onModalOn }: HeaderProps) => {
         {isLogin ? (
           <></>
         ) : (
-          <Button types='sm' onClick={() => onModalOn(true)}>
+          <button css={styles.btn} onClick={() => onModalOn(true)}>
             로그인
-          </Button>
+          </button>
         )}
       </div>
     </header>

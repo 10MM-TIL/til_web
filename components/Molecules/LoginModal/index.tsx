@@ -4,10 +4,11 @@ import { css } from '@emotion/react';
 
 import * as Typo from '@/components/Atom/Typography';
 import IconRocket from '@/assets/svgs/IconRocket';
-import { GoogleLoginMButton, KakaoLoginMButton } from '../Buttons';
+
 import Link from 'next/link';
 import { mq } from '@/styles/mediaQuery';
 import styles from './LoginModal.styled';
+import { IconGoogle } from '@/assets/svgs/IconGoogle';
 
 interface LoginModalProps {
   onModalOff: (flag: boolean) => void;
@@ -33,10 +34,11 @@ const LoginModal = ({ onModalOff }: LoginModalProps) => {
           <IconRocket />
         </div>
         <div css={styles.btnContainer}>
-          <Link href={GOOGLE_LOGIN_LINK} onClick={() => onModalOff(false)}>
-            <GoogleLoginMButton />
+          <Link href={GOOGLE_LOGIN_LINK} onClick={() => onModalOff(false)} css={styles.googleBtn}>
+            <IconGoogle />
+            <Typo.H2>Google 로그인</Typo.H2>
           </Link>
-          <KakaoLoginMButton />
+          {/* 카카오 로그인 추후 도입 여부 결정 */}
         </div>
       </div>
     </div>
