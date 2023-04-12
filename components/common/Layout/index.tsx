@@ -3,6 +3,7 @@ import { BACKGROUND_COLOR } from '@/constants/color';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import Header from '../Header';
+import styles from './Layout.styled';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,24 +17,10 @@ const Layout = ({ children }: LayoutProps) => {
   };
 
   return (
-    <div
-      css={css`
-        overflow: hidden;
-        background-color: ${BACKGROUND_COLOR['NAVY_1']};
-      `}
-    >
+    <div css={styles.container}>
       {isModal && <LoginModal onModalOff={handleModalToggle} />}
       <Header onModalOn={handleModalToggle} />
-      <main
-        css={css`
-          padding-top: 80px;
-          min-height: calc(100vh);
-          margin: 0 auto;
-          max-width: 1194px;
-        `}
-      >
-        {children}
-      </main>
+      <main css={styles.mainContainer}>{children}</main>
     </div>
   );
 };
