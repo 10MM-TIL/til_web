@@ -45,13 +45,15 @@ export const Button = ({
   backgroundColor = POINT_COLOR.MAIN,
   gap = '0px',
   svg,
-  textChildren,
+  children,
+  onClick,
+  ...props
 }: ButtonProps) => {
   return (
-    <Styled.ButtonWrapper types={size} backgroundColor={backgroundColor}>
+    <Styled.ButtonWrapper types={size} backgroundColor={backgroundColor} onClick={onClick} {...props}>
       <Styled.ButtonContent gap={gap}>
         {svg && svg}
-        {textChildren && textChildren}
+        {children && children}
       </Styled.ButtonContent>
     </Styled.ButtonWrapper>
   );
