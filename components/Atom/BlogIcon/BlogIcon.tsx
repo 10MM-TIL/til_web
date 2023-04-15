@@ -14,27 +14,6 @@ type BlogImageObject = {
   src: string | ReactElement;
 };
 
-const blogTypeObj: BlogTypeObject = {
-  naver: {
-    src: require('@/assets/images/naver.png'),
-  },
-  tistory: {
-    src: require('@/assets/images/tistory.png'),
-  },
-  brunch: {
-    src: require('@/assets/images/brunch.png'),
-  },
-  velog: {
-    src: require('@/assets/images/velog.png'),
-  },
-  medium: {
-    src: require('@/assets/images/medium.png'),
-  },
-  custom: {
-    src: require('@/assets/images/custom.png'),
-  },
-};
-
 const BlogIcon = ({ url }: { url: string }) => {
   const [blogType, setBlogType] = useState<blogName>('custom');
   useEffect(() => {
