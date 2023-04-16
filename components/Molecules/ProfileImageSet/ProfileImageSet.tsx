@@ -12,11 +12,15 @@ const IMAGE_SET = [
   { id: 8, url: require('@/assets/images/8.png') as string },
 ];
 
-const ProfileImageSet = () => {
-  const [selectedId, setSelectedId] = useState(1);
-  const handleClick = useCallback((id: number) => {
-    setSelectedId(id);
-  }, []);
+const ProfileImageSet = ({ onClick, id }: { onClick: (id: number) => void; id: number }) => {
+  const [selectedId, setSelectedId] = useState(id);
+  const handleClick = useCallback(
+    (id: number) => {
+      onClick(id);
+      setSelectedId(id);
+    },
+    [onClick],
+  );
   return (
     <SetContainer>
       {IMAGE_SET.map((value) => (

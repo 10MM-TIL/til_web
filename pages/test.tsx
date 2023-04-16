@@ -92,7 +92,7 @@ const Test: NextPage = () => {
         컴포넌트를 위한 테스트 페이지입니다.
       </h1>
       <RadioComponent />
-      <ProfileIcon imgUrl={require('@/assets/images/1.png')} editable={true} />
+      <ProfilComponent />
       <TypoComponent></TypoComponent>
       <ToggleComponent></ToggleComponent>
       <CertifiedBlogComponent></CertifiedBlogComponent>
@@ -118,6 +118,43 @@ const RadioComponent = () => {
   };
 
   return <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />;
+};
+
+const ProfilComponent = () => {
+  const [id, setId] = useState(1);
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    setUrl(require(`@/assets/images/${id}.png`) as string);
+  }, [id]);
+  return (
+    <div
+      css={css`
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      `}
+    >
+      <h1
+        css={css`
+          color: white;
+          text-align: center;
+          padding-top: 30px;
+          margin-bottom: 30px;
+        `}
+      >
+        <strong>프로필 아이콘</strong>
+      </h1>
+      <ProfileIcon
+        imgUrl={url}
+        editable={true}
+        onClick={(id) => {
+          setId(id);
+        }}
+      />
+    </div>
+  );
 };
 
 const TypoComponent = () => {

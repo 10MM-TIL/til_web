@@ -8,10 +8,10 @@ interface ProfileImageProps {
   onClick: () => void;
 }
 
-const ProfileImage = ({ url, id, selected, onClick }: ProfileImageProps) => {
+const ProfileImage = ({ url, selected, onClick }: ProfileImageProps) => {
   return (
     <ImageContainer selected={selected} onClick={onClick}>
-      <Image alt='img' src={url} width={100} height={100} />
+      <Image alt='img' src={url} width={100} height={100} priority={true} />
     </ImageContainer>
   );
 };

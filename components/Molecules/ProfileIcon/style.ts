@@ -40,4 +40,12 @@ const EditButton = styled.button`
   justify-content: center;
 `;
 
-export { PhotoAreaWrapper, CircleContainer, EditButton };
+const ModalContentsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  /* width: 100%; */
+`;
+
+export { PhotoAreaWrapper, CircleContainer, EditButton, ModalContentsContainer };
