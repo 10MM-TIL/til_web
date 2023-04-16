@@ -142,6 +142,10 @@ const style = css`
     padding: 0;
   }
 
+  a {
+    text-decoration: none;
+  }
+
   /* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
