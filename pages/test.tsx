@@ -23,8 +23,6 @@ import { Dropdown } from '@/components/Atom/Dropdown';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import RadioGroup from '@/components/Molecules/RadioGroup';
 import ProfileIcon from '@/components/Molecules/ProfileIcon';
-import ProfileImage from '@/components/Atom/ProfileImage';
-import ProfileImageSet from '@/components/Molecules/ProfileImageSet';
 import BlogGroup from '@/components/Molecules/BlogGroup';
 
 const DATA = [
@@ -121,11 +119,14 @@ const RadioComponent = () => {
 };
 
 const ProfilComponent = () => {
-  const [id, setId] = useState(1);
-  const [url, setUrl] = useState('');
+  /**
+   * 저장 버튼 누를 때 url 던져줘야하는데 image 주소 필요 HOW?
+   */
+  const [id, setId] = useState(0);
+  const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
 
   useEffect(() => {
-    setUrl(require(`@/assets/images/${id}.png`) as string);
+    if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
   }, [id]);
   return (
     <div

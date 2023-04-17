@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 import { mq } from '@/styles/mediaQuery';
-import DefaultPhoto from '@/assets/images/default-photo.png';
-// import { POINT_COLOR } from '@/constants/color';
 
 const PhotoAreaWrapper = styled.div<{ editable: boolean }>`
   width: ${(props) => (props.editable ? '200px' : '80px')};
@@ -13,18 +11,16 @@ const PhotoAreaWrapper = styled.div<{ editable: boolean }>`
   }
 `;
 
-const CircleContainer = styled.div<{ editable: boolean; imgUrl?: string | StaticImageData }>`
+const CircleContainer = styled.div<{ editable: boolean; imgUrl?: string }>`
   width: ${(props) => (props.editable ? '200px' : '80px')};
   height: ${(props) => (props.editable ? '200px' : '80px')};
   border-radius: 100%;
-  mix-blend-mode: ${(props) => (props.imgUrl === DefaultPhoto ? 'luminosity' : 'normal')};
   overflow: hidden;
   position: relative;
   ${mq('desktop')} {
     width: 200px;
     height: 200px;
   }
-  background: white;
 `;
 
 const EditButton = styled.button`
@@ -45,7 +41,6 @@ const ModalContentsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  /* width: 100%; */
 `;
 
 export { PhotoAreaWrapper, CircleContainer, EditButton, ModalContentsContainer };
