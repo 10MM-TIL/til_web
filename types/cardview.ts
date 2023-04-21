@@ -1,16 +1,7 @@
-export type categoriesResponse = {
-  categories: categories[];
-};
-
 export type categories = {
   identifier: string;
   name: string;
   selected?: boolean;
-};
-
-export type recommandPostResponse = {
-  postList: recommandPostList[];
-  size: number;
 };
 
 export type recommandPostList = {
@@ -22,12 +13,6 @@ export type recommandPostList = {
   title: string;
   url: string;
   userIdentifier: string;
-};
-
-export type allPostResponse = {
-  postList: allPostList[];
-  size: number;
-  nextPageToken: string;
 };
 
 export type allPostList = {

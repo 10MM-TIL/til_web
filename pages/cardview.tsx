@@ -9,7 +9,6 @@ import { useResize } from '@/hooks/useResize';
 
 import { CardProps } from '@/components/Atom/Card';
 import axios from 'axios';
-import { categoriesResponse } from '@/types/cardview';
 import { CardCategory, PopularCard, AllCard } from '@/components/Templates/Cardview';
 
 // const API_URL = 'http://152.69.231.228:8080/v1';

@@ -10,6 +10,7 @@ export const Container = styled.div`
   padding: 0 23px 0 24px;
   position: relative;
   background-color: ${BACKGROUND_COLOR.NAVY_1};
+  height: 100%;
 `;
 
 export const InnerContent = styled.div`

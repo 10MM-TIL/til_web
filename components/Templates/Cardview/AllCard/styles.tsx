@@ -22,14 +22,14 @@ export const AllCardViewContainer = styled.section`
 export const AllCardHeader = styled.div`
   margin-bottom: 20px;
 `;
-export const AllCardContent = styled.div`
+export const AllCardContent = styled.div<{ isEmpty: boolean }>`
   display: grid;
   column-gap: inherit;
   row-gap: inherit;
   position: relative;
   height: fit-content;
   grid-column: 1 / -1;
-  grid-template-columns: repeat(1, 100%);
+  grid-template-columns: repeat(1, 100%) ${({ isEmpty }) => (isEmpty ? '!important' : '')};
 
   // 태블릿
   @media screen and (min-width: 780px) {

@@ -5,19 +5,13 @@ import { FONT_COLOR } from '@/constants/color';
 import { useQuery } from '@tanstack/react-query';
 
 import RadioGroup from '@/components/Molecules/RadioGroup';
-import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { categoryState } from '@/states/cardview';
-import { categoriesResponse } from '@/types/cardview';
-
-const getCategories = async () => {
-  const response = await axios.get<categoriesResponse>(`${process.env.NEXT_PUBLIC_API_URL}/v1/categories`);
-  return response.data;
-};
+import { fetchCategories } from '@/apis/cardview';
 
 // 카테고리 버튼
 const CardCategory = () => {
-  const { data } = useQuery({ queryKey: ['categories'], queryFn: () => getCategories() });
+  const { data } = useQuery({ queryKey: ['categories'], queryFn: () => fetchCategories() });
   const [categories, setCategories] = useRecoilState(categoryState);
 
   const RadioComponent = () => {

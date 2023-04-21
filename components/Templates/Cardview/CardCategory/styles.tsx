@@ -7,7 +7,7 @@ export const CardviewContainer = styled.div`
 export const CategoryContainer = styled.section`
   display: flex;
   flex-direction: column;
-  grid-column: span 4 / auto;
+  /* grid-column: span 4 / auto; */
 `;
 export const CategoryHeader = styled.div`
   margin-bottom: 20px;

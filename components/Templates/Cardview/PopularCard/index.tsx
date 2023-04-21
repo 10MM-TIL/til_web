@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './styles';
+import * as CardView from '@/styles/cardview.module';
 import { FONT_COLOR } from '@/constants/color';
 
 import { useQuery } from '@tanstack/react-query';
@@ -8,17 +9,11 @@ import { useQuery } from '@tanstack/react-query';
 import { device } from '@/hooks/useResize';
 
 import { Card, CardProps } from '@/components/Atom/Card';
-import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { categoryState } from '@/states/cardview';
-import { categories, recommandPostResponse } from '@/types/cardview';
 import { formatDate } from '@/utils/utils';
-
-const findSelectedCategory = (categories: categories[]) => {
-  return categories[categories.findIndex((category) => category.selected === true)]?.identifier.match(
-    /value=(.*)\)/,
-  )![1];
-};
+import { findSelectedCategory } from '@/utils/cardview';
+import { fetchRecommandPosts } from '@/apis/cardview';
 
 // 이달의 회고
 const PopularCard = ({
@@ -37,16 +32,9 @@ const PopularCard = ({
   >([]);
   const [categories, setCategories] = useRecoilState(categoryState);
 
-  const getRecommandPosts = async (category: string) => {
-    const response = await axios.get<recommandPostResponse>(`/v1/post/category/recommend`, {
-      params: { value: category },
-    });
-    return response.data;
-  };
-
   const { data: recommandCard } = useQuery({
     queryKey: ['recommand_card'],
-    queryFn: () => getRecommandPosts(findSelectedCategory(categories)),
+    queryFn: () => fetchRecommandPosts(findSelectedCategory(categories)),
     retry: 2,
     enabled: categories.length !== 0,
   });
@@ -78,21 +66,27 @@ const PopularCard = ({
       <Styled.PopularCardHeader>
         <Typo.H1 color={FONT_COLOR.WHITE}>이번주의 회고</Typo.H1>
       </Styled.PopularCardHeader>
-      <Styled.PopularCardContent>
-        {recommandCardContent.map((recommandCard, index) => {
-          return (
-            <Styled.PopularCardItem key={`popular-${recommandCard.identifier}-${index}`}>
-              <Card
-                size={device === 'desktop' ? 'lg' : 'mobile'}
-                content={recommandCard}
-                hasBadge={true}
-                onClickTag={onClickTag}
-                onClickContent={() => onClickContent(recommandCard.url)}
-                onClickUser={onClickUser}
-              ></Card>
-            </Styled.PopularCardItem>
-          );
-        })}
+      <Styled.PopularCardContent isEmpty={recommandCardContent.length === 0}>
+        {recommandCardContent.length === 0 ? (
+          <CardView.EmptyCard>
+            <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
+          </CardView.EmptyCard>
+        ) : (
+          recommandCardContent.map((recommandCard, index) => {
+            return (
+              <Styled.PopularCardItem key={`popular-${recommandCard.identifier}-${index}`}>
+                <Card
+                  size={device === 'desktop' ? 'lg' : 'mobile'}
+                  content={recommandCard}
+                  hasBadge={true}
+                  onClickTag={onClickTag}
+                  onClickContent={() => onClickContent(recommandCard.url)}
+                  onClickUser={onClickUser}
+                ></Card>
+              </Styled.PopularCardItem>
+            );
+          })
+        )}
       </Styled.PopularCardContent>
     </Styled.PopularCardViewContainer>
   );
