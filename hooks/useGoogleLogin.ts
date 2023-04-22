@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
 import { useAuthLogin } from './queries/authQuery';
 
 export interface GoogleUserInfoModel {

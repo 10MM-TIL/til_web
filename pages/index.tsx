@@ -18,7 +18,7 @@ const HomePage = () => {
         padding-top: 38px;
       `}
     >
-      <div
+      {/* <div
         css={css`
           position: absolute;
           width: 100%;
@@ -36,12 +36,46 @@ const HomePage = () => {
           z-index: 2; // TODO Z-Index 관련 정리
           padding-top: 35px;
           text-align: center;
+          position: absolute;
+          height: 803px;
+          top: 0;
+          left: 0;
+          right: 0;
+
+          background: radial-gradient(104.36% 136.15% at 49.88% 4.82%, rgba(0, 78, 228, 0) 46.48%, #22ffa2 100%);
+          opacity: 0.4;
+          filter: blur(10px);
+          transform: rotate(180deg);
         `}
-      >
-        <Typo.Title color={FONT_COLOR['WHITE']}>
-          꾸준한 회고와 기록을 통해 <br /> 매일 성장하세요
-        </Typo.Title>
-      </div>
+      ></div>
+      <div
+        css={css`
+          position: absolute;
+          top: 72px;
+          left: 0;
+          right: 0;
+          height: 555.74px;
+
+          background: linear-gradient(180deg, #004ee4 -21.96%, rgba(194, 226, 68, 0) 107.42%);
+          opacity: 0.8;
+          filter: blur(61px);
+        `}
+      ></div>
+      <div
+        css={css`
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 384px;
+          background-color: black;
+          opacity: 0.3;
+        `}
+      ></div> */}
+
+      <Typo.Title color={FONT_COLOR['WHITE']}>
+        꾸준한 회고와 기록을 통해 <br /> 매일 성장하세요
+      </Typo.Title>
     </div>
   );
 };
