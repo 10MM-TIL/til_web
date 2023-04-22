@@ -1,10 +1,7 @@
 import * as Typo from '@/components/Atom/Typography';
 import { css } from '@emotion/react';
-import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
+import { FONT_COLOR } from '@/constants/color';
 import { useResize } from '@/hooks/useResize';
-
-import { useState } from 'react';
-import LoginModal from '@/components/Molecules/LoginModal';
 
 const HomePage = () => {
   const resize = useResize();
@@ -18,7 +15,7 @@ const HomePage = () => {
         padding-top: 38px;
       `}
     >
-      {/* <div
+      <div
         css={css`
           position: absolute;
           width: 100%;
@@ -68,14 +65,25 @@ const HomePage = () => {
           left: 0;
           right: 0;
           height: 384px;
-          background-color: black;
-          opacity: 0.3;
-        `}
-      ></div> */}
+          left: 0;
+          top: 0;
+          background-image: url('/images/background.png');
 
-      <Typo.Title color={FONT_COLOR['WHITE']}>
-        꾸준한 회고와 기록을 통해 <br /> 매일 성장하세요
-      </Typo.Title>
+          background-position: center;
+        `}
+      ></div>
+
+      <div
+        css={css`
+          z-index: 2; // TODO Z-Index 관련 정리
+          padding-top: 35px;
+          text-align: center;
+        `}
+      >
+        <Typo.Title color={FONT_COLOR['WHITE']}>
+          꾸준한 회고와 기록을 통해 <br /> 매일 성장하세요
+        </Typo.Title>
+      </div>
     </div>
   );
 };
