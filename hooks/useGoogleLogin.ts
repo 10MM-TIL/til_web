@@ -24,21 +24,21 @@ const useGoogleLogin = () => {
     setIsLoading(flag);
   };
 
-  const handleGoogleLogin = useCallback(
-    async (token: string) => {
-      setIsLoading(true);
+  const handleGoogleLogin = useCallback(async (token: string) => {
+    setIsLoading(true);
 
-      const res: GoogleUserInfoModel = await axios.get(`/oauth2/v1/userinfo?access_token=${token}`);
-      console.log(res);
-      const { id: accountId, email, name, picture: profile, family_name, given_name } = res.data;
+    const res = await axios.post('http://152.69.231.228:8080/v1/auth/login', {
+      token,
+      type: 'GOOGLE',
+    });
+    console.log(res);
+    // const { id: accountId, email, name, picture: profile, family_name, given_name } = res.data;
 
-      if (!res?.data?.id) {
-        router.push('/auth/signin');
-      }
-      const type = 'google';
-    },
-    [router],
-  );
+    // if (!res?.data?.id) {
+    //   router.push('/auth/signin');
+    // }
+    // const type = 'google';
+  }, []);
 
   useEffect(() => {
     const token = router?.asPath?.split('=')[1]?.split('&')[0];
