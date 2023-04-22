@@ -8,13 +8,13 @@ const container = css`
   height: 80px;
 `;
 
-const inner = css`
+const inner = ({ isMobile }: { isMobile: boolean }) => css`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 28px 20px 20px 24px;
-  max-width: 1194px;
-  margin: 0 auto;
+  max-width: 1920px;
+  margin: 0 ${isMobile ? 0 : '58px'};
 `;
 
 const logoContainer = css`

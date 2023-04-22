@@ -22,7 +22,7 @@ const Header = ({ onModalOn }: HeaderProps) => {
 
   return (
     <header css={styles.container}>
-      <div css={styles.inner}>
+      <div css={styles.inner({ isMobile: device === 'mobile' })}>
         <div css={styles.logoContainer}>
           <Link href={'/'} css={css``}>
             <IconLogo />
