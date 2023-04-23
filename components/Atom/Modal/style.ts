@@ -4,7 +4,7 @@ import { mq } from '@/styles/mediaQuery';
 
 const OutLayer = styled.div`
   z-index: 2;
-  background: ${BACKGROUND_COLOR.FIELD_10};
+  background: rgba(0, 0, 0, 0.5);
 
   display: block;
   position: fixed;
@@ -12,7 +12,6 @@ const OutLayer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  margin-right: 15px;
 `;
 
 const ModalContainer = styled.div`
