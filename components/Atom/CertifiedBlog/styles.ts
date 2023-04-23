@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { FONT_COLOR } from '@/constants/color';
 
 export const CertifiedBlogContainer = styled.div`
   position: relative;
@@ -23,4 +24,16 @@ export const DeleteButton = styled.button`
   width: 24px;
   height: 24px;
   right: 18px;
+`;
+
+export const InputField = styled.input`
+  position: relative;
+  display: inline-block;
+  /* width: ${({ fixedWidth }) => `calc(100% - ${fixedWidth + 2}px)`}; */
+  height: 24px;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  line-height: 22px;
+  color: ${FONT_COLOR.WHITE};
 `;
