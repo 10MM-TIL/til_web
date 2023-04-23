@@ -21,7 +21,7 @@ import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
 import RadioGroup from '@/components/Molecules/RadioGroup';
-import Modal from '@/components/Modal';
+import Modal from '@/components/Atom/Modal';
 
 const DATA = [
   {

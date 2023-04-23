@@ -12,6 +12,7 @@ const OutLayer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
+  margin-right: 15px;
 `;
 
 const ModalContainer = styled.div`
