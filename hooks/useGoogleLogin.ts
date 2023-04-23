@@ -42,9 +42,8 @@ const useGoogleLogin = () => {
 
   useEffect(() => {
     const token = router?.asPath?.split('=')[1]?.split('&')[0];
-    if (token) handleGoogleLogin(token);
-    else router.isReady && router.push('/');
-  }, [handleGoogleLogin, router, router?.asPath]);
+    if (token && router.isReady) handleGoogleLogin(token);
+  }, [handleGoogleLogin, router?.asPath, router.isReady]);
 
   return { isLoading, onLoadingToggle: handleLoadingToggle };
 };
