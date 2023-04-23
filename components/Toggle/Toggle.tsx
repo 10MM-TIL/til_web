@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { POINT_COLOR } from '@/constants/color';
 import { ToggleContainer, ToggleButton } from './style';
-import { Label2 } from '@/components/Typography';
+import { Label2 } from '@/components/Atom/Typography';
 
 // Toggle Button => absolute
 const Toggle = () => {
