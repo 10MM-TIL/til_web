@@ -5,10 +5,6 @@ import { getCookie, setCookie } from 'cookies-next';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-    // 기존에 accept 헤더 커스텀해두신 것은 기본값으로 들어가고 있는 값이어서 제거해두었습니다.
-    // accept: 'application/json',
-  },
 });
 
 // 첫 접근 시, 토큰이 있을 때, instance header에 주입
@@ -42,6 +38,8 @@ instance.interceptors.response.use(
     return response;
   },
   async (err) => {
+    // TODO status === 418일 때 renew token API 호출
+
     if (err?.code === 'ERR_NETWORK' && typeof window !== 'undefined') {
       // 서버에서 대응하지 못한 에러가 날때의 대응입니다.
       // 추후 해당 에러에 대한 UI를 구현해서 값을 sync해주면 될 것 같습니다.
@@ -59,8 +57,6 @@ instance.interceptors.response.use(
     }
 
     const { config, response } = err;
-
-    // TODO access token 만료시 renew 후 재전송
 
     const e = err?.response?.data ?? {};
 

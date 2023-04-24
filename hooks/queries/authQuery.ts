@@ -22,10 +22,11 @@ export const useAuthLogin = () => {
         maxAge: 60 * 60 * 24, // * 1일
       });
 
-      router.reload(); // TODO 로그인 후 같은 페이지 새로 고침 (다듬어야 하는지 체크)
+      router.push('/'); // TODO 로그인 후 같은 페이지 새로 고침 (다듬어야 하는지 체크)
     },
-    onError: () => {
+    onError: (e) => {
       // TODO 구글 로그인 실패 시 보여주는 오류 ?
+      console.error(e);
     },
   });
 };
