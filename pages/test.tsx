@@ -23,6 +23,7 @@ import { Dropdown } from '@/components/Atom/Dropdown';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import RadioGroup from '@/components/Molecules/RadioGroup';
 import BlogGroup from '@/components/Molecules/BlogGroup';
+import Modal from '@/components/Atom/Modal';
 
 const DATA = [
   {
@@ -102,6 +103,7 @@ const Test: NextPage = () => {
       <DropdownComponent></DropdownComponent>
       <CheckboxComponent />
       <BlogGroupComponent />
+      <ModalComponent />
     </div>
   );
 };
@@ -674,6 +676,45 @@ const TimeLineComponent = () => {
         >
           <TimeLine content={timelineContent} onSaveAllContent={onSaveAllContent} onDeleteContent={onDeleteContent} />
         </div>
+      </div>
+    </div>
+  );
+};
+
+const ModalComponent = () => {
+  const [open, setOpen] = useState(false);
+  const handleClick = useCallback(() => {
+    setOpen(true);
+  }, []);
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding-bottom: 50px;
+      `}
+    >
+      <h1>
+        <strong>Modal 컴포넌트</strong>
+      </h1>
+      <div
+        css={css`
+          max-width: 500px;
+        `}
+      >
+        {/* <Button onClick={handleClick}>열기</Button> */}
+        <button style={{ background: 'white' }} onClick={handleClick}>
+          열기
+        </button>
+        <Modal onClose={handleClose} closable={true} isOpen={open}>
+          <div>TEST</div>
+        </Modal>
       </div>
     </div>
   );

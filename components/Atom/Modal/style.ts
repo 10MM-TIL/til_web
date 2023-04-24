@@ -4,7 +4,7 @@ import { mq } from '@/styles/mediaQuery';
 
 const OutLayer = styled.div`
   z-index: 2;
-  background: ${BACKGROUND_COLOR.FIELD_10};
+  background: rgba(0, 0, 0, 0.5);
 
   display: block;
   position: fixed;
@@ -16,24 +16,27 @@ const OutLayer = styled.div`
 
 const ModalContainer = styled.div`
   /* position: relative; */
-  position: absolute;
+  position: fixed;
   width: 100%;
-  height: 100%;
+  height: 95%;
   // Modal Component 항상 중앙유지
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -47%);
 
   background: ${BACKGROUND_COLOR.NAVY_3};
   // padding 의 경우 figma상의 최소치 설정
   padding: 86px 78px 40px 78px;
   text-align: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   // outLayer보다 높은 z-index 값 부여
   z-index: 5;
   ${mq('desktop')} {
     height: 580px;
     width: 656px;
     border-radius: 12px;
+    transform: translate(-50%, -50%);
   }
 `;
 
