@@ -7,32 +7,22 @@ import { IconX } from '@/assets/svgs/iconX';
 import { FONT_COLOR } from '@/constants/color';
 import BlogIcon from '@/components/Atom/BlogIcon';
 
-export const CertifiedBlog = ({ blogName, isDeleted, onDeleteBlog, setBlogUrl }: CertifiedBlogProps): ReactElement => {
+export const CertifiedBlog = ({ id, blogName, onDeleteBlog, setBlogUrl }: CertifiedBlogProps): ReactElement => {
   const handleChangeBlogUrl = (e: ChangeEvent<HTMLInputElement>) => {
-    setBlogUrl(e.target.value);
+    setBlogUrl(id, e.target.value);
   };
-  // const handleChangeBlogUrl = useCallback(
-  //   (e: ChangeEvent<HTMLInputElement>, id: number) => {
-  //     const nextValue = e.target.value;
-  //     onChange(nextValue, id);
-  //     setBlogUrl(nextValue);
-  //   },
-  //   [onChange],
-  // );
 
   return (
     <>
-      {!isDeleted ? (
-        <CertifiedBlogContainer>
-          <BlogIcon url={blogName} />
-          <CertifiedBlogName>
-            <InputField value={blogName} onChange={(e) => handleChangeBlogUrl(e)} />
-          </CertifiedBlogName>
-          <DeleteButton onClick={onDeleteBlog}>
-            <IconX />
-          </DeleteButton>
-        </CertifiedBlogContainer>
-      ) : null}
+      <CertifiedBlogContainer>
+        <BlogIcon url={blogName} />
+        <CertifiedBlogName>
+          <InputField value={blogName} onChange={(e) => handleChangeBlogUrl(e)} />
+        </CertifiedBlogName>
+        <DeleteButton onClick={() => onDeleteBlog(id)}>
+          <IconX />
+        </DeleteButton>
+      </CertifiedBlogContainer>
     </>
   );
 };

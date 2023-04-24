@@ -182,35 +182,41 @@ const ToggleComponent = () => {
 };
 
 const CertifiedBlogComponent = () => {
-  const [blog1, setBlog1] = useState('github.exaple.com/example1');
-  const [blog2, setBlog2] = useState('github.exaple.com/example2');
-
-  const [isDeleted1, setDeleted1] = useState(false);
-  const [isDeleted2, setDeleted2] = useState(false);
-  const handleDeleteButton1 = () => {
+  const [blogList, setBlogList] = useState([
+    {
+      id: '1',
+      url: 'github.exaple.com/example1',
+    },
+    {
+      id: '2',
+      url: 'github.exaple.com/example2',
+    },
+  ]);
+  const handleDeleteBlog = (id: string) => {
     // 특정 조건 이후 없어져야함
-    console.log('blog1 삭제 Post API 전송');
+    console.log('삭제 Post API 전송');
     setTimeout(() => {
-      console.log('blog1 삭제 완료');
-      setDeleted1(true);
+      console.log('삭제 완료');
+      setBlogList(
+        blogList.filter((blogItem) => {
+          if (blogItem.id !== id) return true;
+        }),
+      );
     }, 2000);
   };
-  const handleDeleteButton2 = () => {
-    // 특정 조건 이후 없어져야함
-    console.log('blog1 삭제 Post API  전송');
-    setTimeout(() => {
-      console.log('blog2 삭제 완료');
-      setDeleted2(true);
-    }, 2000);
+
+  const setBlog = (id: string, url: string) => {
+    setBlogList(
+      blogList.map((blogItem) => {
+        if (blogItem.id === id) return { ...blogItem, url };
+        else return { ...blogItem };
+      }),
+    );
   };
 
   useEffect(() => {
-    console.log('blog1', blog1);
-  }, [blog1]);
-
-  useEffect(() => {
-    console.log('blog2', blog2);
-  }, [blog2]);
+    console.log('blogList', blogList);
+  }, [blogList]);
 
   return (
     <div
@@ -228,8 +234,18 @@ const CertifiedBlogComponent = () => {
       <h1>
         <strong>인증된 블로그 컴포넌트</strong>
       </h1>
-      <CertifiedBlog blogName={blog1} isDeleted={isDeleted1} onDeleteBlog={handleDeleteButton1} setBlogUrl={setBlog1} />
-      <CertifiedBlog blogName={blog2} isDeleted={isDeleted2} onDeleteBlog={handleDeleteButton2} setBlogUrl={setBlog2} />
+
+      {blogList.map((blogItem, index) => {
+        return (
+          <CertifiedBlog
+            key={blogItem.id}
+            id={blogItem.id}
+            blogName={blogItem.url}
+            onDeleteBlog={handleDeleteBlog}
+            setBlogUrl={setBlog}
+          />
+        );
+      })}
     </div>
   );
 };
