@@ -1,10 +1,8 @@
-import { ChangeEvent, ReactElement, useCallback, useEffect, useState } from 'react';
-import Image from 'next/image';
+import { ChangeEvent, ReactElement } from 'react';
 import { CertifiedBlogContainer, CertifiedBlogName, DeleteButton, InputField } from './styles';
-import * as Typo from '@/components/Atom/Typography';
 import { CertifiedBlogProps } from './types';
 import { IconX } from '@/assets/svgs/iconX';
-import { FONT_COLOR } from '@/constants/color';
+
 import BlogIcon from '@/components/Atom/BlogIcon';
 
 export const CertifiedBlog = ({ id, blogName, onDeleteBlog, setBlogUrl }: CertifiedBlogProps): ReactElement => {

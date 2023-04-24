@@ -4,7 +4,7 @@ import { FONT_COLOR } from '@/constants/color';
 import { Container } from './style';
 
 interface AddBlogProps {
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 const AddBlog = ({ onClick }: AddBlogProps) => {

@@ -23,6 +23,7 @@ import { Dropdown } from '@/components/Atom/Dropdown';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import RadioGroup from '@/components/Molecules/RadioGroup';
 import BlogGroup from '@/components/Molecules/BlogGroup';
+import AddBlog from '@/components/Atom/AddBlog';
 
 const DATA = [
   {
@@ -213,6 +214,15 @@ const CertifiedBlogComponent = () => {
       }),
     );
   };
+  const getMaximumId = (list: Array<{ id: string; url: string }>) => {
+    return list.reduce((min, p) => (Number(p.id) > Number(min) ? p.id : min), list[0].id);
+  };
+  const handleAddBlog = () => {
+    if (blogList.length < 6) {
+      const maxId = parseInt(getMaximumId(blogList)) + 1;
+      setBlogList([...blogList, { id: String(maxId), url: '' }]);
+    }
+  };
 
   useEffect(() => {
     console.log('blogList', blogList);
@@ -234,7 +244,7 @@ const CertifiedBlogComponent = () => {
       <h1>
         <strong>인증된 블로그 컴포넌트</strong>
       </h1>
-
+      <AddBlog onClick={handleAddBlog} />
       {blogList.map((blogItem, index) => {
         return (
           <CertifiedBlog
