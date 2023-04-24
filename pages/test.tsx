@@ -473,25 +473,17 @@ const ButtonComponent = () => {
 
   const GoogleLoginButton = () => {
     return (
-      <Button
-        size='x-lg'
-        backgroundColor='#FFFFFF'
-        svg={<IconGoogle></IconGoogle>}
-        textChildren={<Typo.H1>Google 로그인</Typo.H1>}
-        gap={'16px'}
-      ></Button>
+      <Button size='x-lg' backgroundColor='#FFFFFF' svg={<IconGoogle></IconGoogle>} gap={'16px'}>
+        <Typo.H1>Google 로그인</Typo.H1>
+      </Button>
     );
   };
 
   const KakaoLoginButton = () => {
     return (
-      <Button
-        size='x-lg'
-        backgroundColor='#FDDC3F'
-        svg={<IconKakao></IconKakao>}
-        textChildren={<Typo.H1>카카오 로그인</Typo.H1>}
-        gap={'6px'}
-      ></Button>
+      <Button size='x-lg' backgroundColor='#FDDC3F' svg={<IconKakao></IconKakao>} gap={'6px'}>
+        <Typo.H1>카카오 로그인</Typo.H1>
+      </Button>
     );
   };
 
@@ -514,23 +506,17 @@ const ButtonComponent = () => {
 
   const GoogleLoginMButton = () => {
     return (
-      <Button
-        size='x-lg-m'
-        backgroundColor='#FFFFFF'
-        svg={<IconGoogle></IconGoogle>}
-        textChildren={<Typo.H1>Google 로그인</Typo.H1>}
-      ></Button>
+      <Button size='x-lg-m' backgroundColor='#FFFFFF' svg={<IconGoogle></IconGoogle>}>
+        <Typo.H1>Google 로그인</Typo.H1>
+      </Button>
     );
   };
 
   const KakaoLoginMButton = () => {
     return (
-      <Button
-        size='x-lg-m'
-        backgroundColor='#FDDC3F'
-        svg={<IconKakao></IconKakao>}
-        textChildren={<Typo.H1>카카오 로그인</Typo.H1>}
-      ></Button>
+      <Button size='x-lg-m' backgroundColor='#FDDC3F' svg={<IconKakao></IconKakao>}>
+        <Typo.H1>카카오 로그인</Typo.H1>
+      </Button>
     );
   };
 
@@ -591,7 +577,9 @@ const BoxLayoutTest = () => {
   const LinkComponent = () => {
     return (
       <BoxLayout title='새 탭에서 브릭로그 확인'>
-        <Button size='md' children={<Typo.Label1>크롬 확장앱 다운</Typo.Label1>}></Button>
+        <Button size='md'>
+          <Typo.Label1>크롬 확장앱 다운</Typo.Label1>
+        </Button>
       </BoxLayout>
     );
   };
