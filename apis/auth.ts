@@ -1,5 +1,5 @@
 import { devError } from '@/utils/system';
-import { ErrorModel, ServerResponse, SignInModel } from '../types';
+import { ServerResponse, SignInModel } from '../types';
 import instance from './instance';
 
 export const postAuthLoginAPI = async ({ token, type }: { token: string; type: string }) => {
