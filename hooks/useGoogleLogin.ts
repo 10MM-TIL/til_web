@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { useAuthLogin } from './queries/authQuery';
 
 export interface GoogleUserInfoModel {
   data: {
@@ -17,6 +18,7 @@ export interface GoogleUserInfoModel {
 
 const useGoogleLogin = () => {
   const router = useRouter();
+  const { mutateAsync } = useAuthLogin();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,21 +26,14 @@ const useGoogleLogin = () => {
     setIsLoading(flag);
   };
 
-  const handleGoogleLogin = useCallback(async (token: string) => {
-    setIsLoading(true);
+  const handleGoogleLogin = useCallback(
+    async (token: string) => {
+      setIsLoading(true);
 
-    const res = await axios.post('http://152.69.231.228:8080/v1/auth/login', {
-      token,
-      type: 'GOOGLE',
-    });
-    console.log(res);
-    // const { id: accountId, email, name, picture: profile, family_name, given_name } = res.data;
-
-    // if (!res?.data?.id) {
-    //   router.push('/auth/signin');
-    // }
-    // const type = 'google';
-  }, []);
+      await mutateAsync({ token, type: 'GOOGLE' });
+    },
+    [mutateAsync],
+  );
 
   useEffect(() => {
     const token = router?.asPath?.split('=')[1]?.split('&')[0];
