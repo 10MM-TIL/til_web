@@ -182,6 +182,9 @@ const ToggleComponent = () => {
 };
 
 const CertifiedBlogComponent = () => {
+  const [blog1, setBlog1] = useState('github.exaple.com/example1');
+  const [blog2, setBlog2] = useState('github.exaple.com/example2');
+
   const [isDeleted1, setDeleted1] = useState(false);
   const [isDeleted2, setDeleted2] = useState(false);
   const handleDeleteButton1 = () => {
@@ -200,6 +203,15 @@ const CertifiedBlogComponent = () => {
       setDeleted2(true);
     }, 2000);
   };
+
+  useEffect(() => {
+    console.log('blog1', blog1);
+  }, [blog1]);
+
+  useEffect(() => {
+    console.log('blog2', blog2);
+  }, [blog2]);
+
   return (
     <div
       css={css`
@@ -216,18 +228,8 @@ const CertifiedBlogComponent = () => {
       <h1>
         <strong>인증된 블로그 컴포넌트</strong>
       </h1>
-      <CertifiedBlog
-        blogName={'github.exaple.com/example1'}
-        blogType={'GitHub'}
-        isDeleted={isDeleted1}
-        onDeleteBlog={handleDeleteButton1}
-      />
-      <CertifiedBlog
-        blogName={'github.exaple.com/example2'}
-        blogType={'GitHub'}
-        isDeleted={isDeleted2}
-        onDeleteBlog={handleDeleteButton2}
-      />
+      <CertifiedBlog blogName={blog1} isDeleted={isDeleted1} onDeleteBlog={handleDeleteButton1} setBlogUrl={setBlog1} />
+      <CertifiedBlog blogName={blog2} isDeleted={isDeleted2} onDeleteBlog={handleDeleteButton2} setBlogUrl={setBlog2} />
     </div>
   );
 };
@@ -589,7 +591,7 @@ const BoxLayoutTest = () => {
   const LinkComponent = () => {
     return (
       <BoxLayout title='새 탭에서 브릭로그 확인'>
-        <Button size='md' textChildren={<Typo.Label1>크롬 확장앱 다운</Typo.Label1>}></Button>
+        <Button size='md' children={<Typo.Label1>크롬 확장앱 다운</Typo.Label1>}></Button>
       </BoxLayout>
     );
   };

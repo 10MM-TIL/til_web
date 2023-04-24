@@ -1,13 +1,10 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 
 export type CertifiedBlogProps = {
   blogName: string;
-  // blogType: blogType;
   isDeleted: boolean;
   onDeleteBlog: () => void;
-  id: number;
-  onChange: (url: string, id: number) => void;
-  // onChange: (id: number) => void;
+  setBlogUrl: Dispatch<SetStateAction<string>>;
 };
 
 // export type blogType = 'GitHub' | 'Naver' | 'Tistory' | 'Velog' | 'Personal';
