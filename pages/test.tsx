@@ -22,6 +22,7 @@ import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import RadioGroup from '@/components/Molecules/RadioGroup';
+import ProfileIcon from '@/components/Molecules/ProfileIcon';
 import BlogGroup from '@/components/Molecules/BlogGroup';
 import Modal from '@/components/Atom/Modal';
 
@@ -90,6 +91,7 @@ const Test: NextPage = () => {
         컴포넌트를 위한 테스트 페이지입니다.
       </h1>
       <RadioComponent />
+      <ProfilComponent />
       <TypoComponent></TypoComponent>
       <ToggleComponent></ToggleComponent>
       <CertifiedBlogComponent></CertifiedBlogComponent>
@@ -116,6 +118,46 @@ const RadioComponent = () => {
   };
 
   return <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />;
+};
+
+const ProfilComponent = () => {
+  /**
+   * 저장 버튼 누를 때 url 던져줘야하는데 image 주소 필요 HOW?
+   */
+  const [id, setId] = useState(0);
+  const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
+
+  useEffect(() => {
+    if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
+  }, [id]);
+  return (
+    <div
+      css={css`
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      `}
+    >
+      <h1
+        css={css`
+          color: white;
+          text-align: center;
+          padding-top: 30px;
+          margin-bottom: 30px;
+        `}
+      >
+        <strong>프로필 아이콘</strong>
+      </h1>
+      <ProfileIcon
+        imgUrl={url}
+        editable={true}
+        onClick={(id) => {
+          setId(id);
+        }}
+      />
+    </div>
+  );
 };
 
 const TypoComponent = () => {
