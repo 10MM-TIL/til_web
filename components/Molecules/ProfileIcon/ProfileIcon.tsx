@@ -33,7 +33,7 @@ const ProfileIcon = ({ imgUrl, editable = false, onClick }: ProfileIconProps) =>
     <>
       <PhotoAreaWrapper editable={editable}>
         <CircleContainer editable={editable}>
-          <Image alt='profile' src={imgUrl} width={200} height={200} />
+          <Image alt='profile' src={imgUrl} width={200} height={200} priority={true} />
         </CircleContainer>
         {editable ? (
           <EditButton onClick={handleClickEdit}>
