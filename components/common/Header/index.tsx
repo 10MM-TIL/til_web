@@ -58,7 +58,17 @@ const Header = ({ onModalOn }: HeaderProps) => {
               </Link>
             )}
             <IconApps />
-            {userData && <Image src={userData?.profileImgSrc} width={36} height={36} alt={'profile'} />}
+            {userData && (
+              <Image
+                src={userData?.profileImgSrc}
+                width={36}
+                height={36}
+                alt={'profile'}
+                css={css`
+                  border-radius: 100%;
+                `}
+              />
+            )}
           </div>
         ) : (
           <button css={styles.btn} onClick={() => onModalOn(true)}>

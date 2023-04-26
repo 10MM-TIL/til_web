@@ -14,6 +14,7 @@ const nextConfig = {
     //     pathname: '/**',
     //   },
     // ],
+    domains: ['search.pstatic.net'],
   },
   webpack: (config) => {
     // 아래를 추가합니다.
