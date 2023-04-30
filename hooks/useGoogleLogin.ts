@@ -22,15 +22,16 @@ const useGoogleLogin = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLoadingToggle = (flag: boolean) => {
-    setIsLoading(flag);
-  };
-
   const handleGoogleLogin = useCallback(
     async (token: string) => {
       setIsLoading(true);
 
-      await mutateAsync({ token, type: 'GOOGLE' });
+      await mutateAsync(
+        { token, type: 'GOOGLE' },
+        {
+          onSettled: () => setIsLoading(false),
+        },
+      );
     },
     [mutateAsync],
   );
@@ -40,7 +41,7 @@ const useGoogleLogin = () => {
     if (token && router.isReady) handleGoogleLogin(token);
   }, [handleGoogleLogin, router?.asPath, router.isReady]);
 
-  return { isLoading, onLoadingToggle: handleLoadingToggle };
+  return { isLoading };
 };
 
 export default useGoogleLogin;

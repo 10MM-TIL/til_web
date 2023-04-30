@@ -26,7 +26,6 @@ const Header = ({ onModalOn }: HeaderProps) => {
 
   const { data } = useMyUser({ isLogin });
   const userData = data?.data;
-  console.log(userData);
 
   return (
     <header css={styles.container}>
