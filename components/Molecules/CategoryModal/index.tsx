@@ -5,11 +5,10 @@ import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import { Button } from '@/components/Atom/Button';
 
 import * as Typo from '@/components/Atom/Typography';
-import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
-import { css } from '@emotion/react';
-import { mq } from '@/styles/mediaQuery';
+import { FONT_COLOR } from '@/constants/color';
 import { useResize } from '@/hooks/useResize';
-import { useState } from 'react';
+import { FormEventHandler, useState } from 'react';
+import styles from './CategoryModal.styled';
 
 interface CategoryModalProps {
   isOpen: boolean;
@@ -23,58 +22,31 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
   const [isAlertAgree, setIsAlertAgree] = useState(true);
   const [frequency, setFrequency] = useState(0);
 
+  const [isReceiveAgree, setIsReceiveAgree] = useState(true);
+
   const handleIsAlertAgreeToggle = () => setIsAlertAgree((prev) => !prev);
+
+  const handleIsReceiveAgreeToggle = () => setIsReceiveAgree((prev) => !prev);
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+
+    console.log('submitted');
+    console.log('selectedCategoryId', selectedCategoryId);
+    console.log('isAlertAgree', isAlertAgree);
+    console.log('frequency', frequency);
+  };
 
   return (
     <Modal closable={false} isOpen={isOpen} onClose={onClose}>
-      <form
-        css={css`
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        `}
-      >
-        <div
-          css={css`
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-          `}
-        >
-          <Typo.Title>관심 카테고리 선택</Typo.Title>
+      <form css={styles.form} onSubmit={handleSubmit}>
+        <div css={styles.titleContainer}>
+          <Typo.Title color={FONT_COLOR.WHITE}>관심 카테고리 선택</Typo.Title>
           <Typo.Body color={FONT_COLOR.GRAY_2}>내 직군과 관심분야가 비슷한 사람들의 회고를 확인해보세요</Typo.Body>
         </div>
-        <div
-          css={css`
-            margin-top: 24px;
-            background-color: ${BACKGROUND_COLOR.NAVY_2};
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 18px 0;
-            border-radius: 12px;
-            width: 328px;
-            gap: 16px;
-
-            ${mq('desktop')} {
-              width: 500px;
-            }
-          `}
-        >
-          <Typo.H1>분야</Typo.H1>
-          <div
-            css={css`
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              flex-wrap: wrap;
-              width: 190px;
-
-              ${mq('desktop')} {
-                width: auto;
-              }
-            `}
-          >
+        <div css={styles.categoryContainer}>
+          <Typo.H1 color={FONT_COLOR.WHITE}>분야</Typo.H1>
+          <div css={styles.categoryRadioContainer}>
             <RadioGroup
               data={[
                 { id: 0, text: '#개발' },
@@ -88,40 +60,11 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
             />
           </div>
         </div>
-        <div
-          css={css`
-            margin-top: 24px;
-            background-color: ${BACKGROUND_COLOR.NAVY_2};
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 18px 0;
-            border-radius: 12px;
-            width: 328px;
-            gap: 16px;
-
-            ${mq('desktop')} {
-              width: 500px;
-            }
-          `}
-        >
-          <Typo.H1>알림설정</Typo.H1>
-          <div
-            css={css`
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              gap: 8px;
-            `}
-          >
+        <div css={styles.alertContainer}>
+          <Typo.H1 color={FONT_COLOR.WHITE}>알림설정</Typo.H1>
+          <div css={styles.alertRadioContainer}>
             <Toggle isOn={isAlertAgree} onIsOnToggle={handleIsAlertAgreeToggle} />
-            <div
-              css={css`
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              `}
-            >
+            <div css={styles.alertRadioRow}>
               <RadioGroup
                 data={[
                   { id: 0, text: '매달' },
@@ -134,16 +77,12 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
             </div>
           </div>
         </div>
-        <div
-          css={css`
-            padding: 16px 0 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-          `}
-        >
-          <CheckboxLabel text='마케팅 활용 및 뉴스레터 수신 동의' checked={true} onClick={() => console.log(1)} />
+        <div css={styles.agreeContainer}>
+          <CheckboxLabel
+            text='마케팅 활용 및 뉴스레터 수신 동의'
+            checked={isReceiveAgree}
+            onClick={handleIsReceiveAgreeToggle}
+          />
           <Typo.Label2 color={FONT_COLOR.GRAY_2}>브릭로그와 관련된 유용한 정보를 받아보실 수 있습니다.</Typo.Label2>
         </div>
         <Button size={device === 'mobile' ? 'x-lg-m' : 'lg'}>

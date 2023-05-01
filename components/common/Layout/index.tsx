@@ -33,7 +33,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div css={styles.container}>
       {!isLogin && isModal && <LoginModal onModalOff={handleModalToggle} />}
-      {userData && <CategoryModal isOpen={!!userData.categoryId} />}
+      {userData && <CategoryModal isOpen={!userData.categoryId} />}
       <Header onModalOn={handleModalToggle} />
       <main css={styles.mainContainer}>{children}</main>
     </div>

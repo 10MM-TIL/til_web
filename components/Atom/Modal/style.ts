@@ -3,7 +3,7 @@ import { FONT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
 import { mq } from '@/styles/mediaQuery';
 
 const OutLayer = styled.div`
-  z-index: 2;
+  z-index: 9999;
   background: rgba(0, 0, 0, 0.5);
 
   display: block;
@@ -31,7 +31,7 @@ const ModalContainer = styled.div`
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   // outLayer보다 높은 z-index 값 부여
-  z-index: 5;
+  z-index: 9999;
   ${mq('desktop')} {
     height: 580px;
     width: 656px;
