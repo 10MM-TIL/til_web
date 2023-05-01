@@ -36,7 +36,7 @@ const LoginModal = ({ onModalOff }: LoginModalProps) => {
         <div css={styles.btnContainer}>
           <Link href={GOOGLE_LOGIN_LINK} onClick={() => onModalOff(false)} css={styles.googleBtn}>
             <IconGoogle />
-            <Typo.H2>Google 로그인</Typo.H2>
+            <Typo.H2 color='black'>Google 로그인</Typo.H2>
           </Link>
           {/* 카카오 로그인 추후 도입 여부 결정 */}
         </div>
