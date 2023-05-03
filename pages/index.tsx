@@ -7,8 +7,6 @@ import { useState } from 'react';
 import LoginModal from '@/components/Molecules/LoginModal';
 
 const HomePage = () => {
-  // TODO 데스크탑과 모바일 뷰 렌더링 디자인 다름
-
   const resize = useResize();
 
   return (
@@ -16,11 +14,27 @@ const HomePage = () => {
       css={css`
         display: flex;
         justify-content: center;
+        position: relative;
+        padding-top: 38px;
       `}
     >
       <div
         css={css`
+          position: absolute;
           width: 100%;
+          height: 384px;
+          left: 0;
+          top: 0;
+          background-image: url('/images/background.png');
+
+          background-position: center;
+        `}
+      ></div>
+
+      <div
+        css={css`
+          z-index: 2; // TODO Z-Index 관련 정리
+          padding-top: 35px;
           text-align: center;
         `}
       >

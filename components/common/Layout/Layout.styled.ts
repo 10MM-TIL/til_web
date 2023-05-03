@@ -10,7 +10,7 @@ const mainContainer = css`
   padding-top: 80px;
   min-height: calc(100vh);
   margin: 0 auto;
-  max-width: 1194px;
+  max-width: 1920px;
 `;
 
 const styles = { container, mainContainer };

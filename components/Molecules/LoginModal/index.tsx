@@ -15,7 +15,7 @@ interface LoginModalProps {
 }
 
 const LoginModal = ({ onModalOff }: LoginModalProps) => {
-  const GOOGLE_LOGIN_LINK = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI}&response_type=token&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
+  const GOOGLE_LOGIN_LINK = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_ID}&access_type=offline&prompt=consent&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
 
   return (
     <div css={styles.outside}>
