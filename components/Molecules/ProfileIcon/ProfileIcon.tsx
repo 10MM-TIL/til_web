@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { IconEdit } from '@/assets/svgs/IconEdit';
 // import DefaultPhoto from '@/assets/images/default-photo.png';
 import { ProfileIconProps } from './types';
-import Modal from '@/components/Modal';
+import Modal from '@/components/Atom/Modal';
 import { Button } from '@/components/Atom/Button';
 import { FONT_COLOR, POINT_COLOR } from '@/constants/color';
 import { Body, H1, Title } from '@/components/Atom/Typography';

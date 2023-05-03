@@ -1,7 +1,7 @@
-import { Fragment } from 'react';
 import BlogIcon from '@/components/Atom/BlogIcon';
 import { BlogGroupContainter } from './style';
 interface BlogData {
+  identifier: string;
   url: string;
 }
 interface BlogGroupProps {
@@ -11,7 +11,7 @@ const BlogGroup = ({ data }: BlogGroupProps) => {
   return (
     <BlogGroupContainter>
       {data.map((value) => (
-        <a key={value.url} target='_blank' rel='noreferrer noopener' href={value.url}>
+        <a key={value.identifier} target='_blank' rel='noreferrer noopener' href={value.url}>
           <BlogIcon url={value.url} />
         </a>
       ))}

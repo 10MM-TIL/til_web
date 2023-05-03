@@ -6,6 +6,7 @@ const nextConfig = {
     emotion: true,
   },
   images: {
+    domains: ['search.pstatic.net'],
     // remotePatterns: [
     //   {
     //     protocol: 'https',

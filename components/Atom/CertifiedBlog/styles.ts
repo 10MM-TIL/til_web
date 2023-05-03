@@ -16,7 +16,7 @@ export const CertifiedBlogContainer = styled.div`
 // 블로그 이름이 길다면 어떻게 할것 인가??
 export const CertifiedBlogName = styled.div`
   margin-left: 8px;
-  width: 174px;
+  width: 200px;
 `;
 
 export const DeleteButton = styled.button`
@@ -29,6 +29,7 @@ export const DeleteButton = styled.button`
 export const InputField = styled.input`
   position: relative;
   display: inline-block;
+  width: 100%;
   /* width: ${({ fixedWidth }) => `calc(100% - ${fixedWidth + 2}px)`}; */
   height: 24px;
   background: transparent;
