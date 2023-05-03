@@ -1,8 +1,9 @@
+import OAuthLoading from '@/components/Molecules/OAuthLoading';
 import useGoogleLogin from '@/hooks/useGoogleLogin';
 
 const OAuthGooglePage = () => {
-  useGoogleLogin();
-  return <div></div>;
+  const { isLoading } = useGoogleLogin();
+  return isLoading ? <OAuthLoading /> : null;
 };
 
 export default OAuthGooglePage;

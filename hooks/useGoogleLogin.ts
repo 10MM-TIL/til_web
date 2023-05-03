@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { useAuthLogin } from './queries/authQuery';
 
 export interface GoogleUserInfoModel {
   data: {
@@ -17,36 +18,30 @@ export interface GoogleUserInfoModel {
 
 const useGoogleLogin = () => {
   const router = useRouter();
+  const { mutateAsync } = useAuthLogin();
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleLoadingToggle = (flag: boolean) => {
-    setIsLoading(flag);
-  };
 
   const handleGoogleLogin = useCallback(
     async (token: string) => {
       setIsLoading(true);
 
-      const res: GoogleUserInfoModel = await axios.get(`/oauth2/v1/userinfo?access_token=${token}`);
-      console.log(res);
-      const { id: accountId, email, name, picture: profile, family_name, given_name } = res.data;
-
-      if (!res?.data?.id) {
-        router.push('/auth/signin');
-      }
-      const type = 'google';
+      await mutateAsync(
+        { token, type: 'GOOGLE' },
+        {
+          onSettled: () => setIsLoading(false),
+        },
+      );
     },
-    [router],
+    [mutateAsync],
   );
 
   useEffect(() => {
     const token = router?.asPath?.split('=')[1]?.split('&')[0];
-    if (token) handleGoogleLogin(token);
-    else router.isReady && router.push('/');
-  }, [handleGoogleLogin, router, router?.asPath]);
+    if (token && router.isReady) handleGoogleLogin(token);
+  }, [handleGoogleLogin, router?.asPath, router.isReady]);
 
-  return { isLoading, onLoadingToggle: handleLoadingToggle };
+  return { isLoading };
 };
 
 export default useGoogleLogin;
