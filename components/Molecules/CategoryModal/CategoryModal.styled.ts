@@ -43,7 +43,7 @@ const categoryRadioContainer = css`
 `;
 
 const alertContainer = css`
-  margin-top: 24px;
+  margin-top: 8px;
   background-color: ${BACKGROUND_COLOR.NAVY_2};
   display: flex;
   flex-direction: column;

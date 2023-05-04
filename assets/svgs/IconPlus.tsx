@@ -1,6 +1,18 @@
-export const IconPlus = ({ fill, stroke }: { fill?: string; stroke?: string }) => {
+import { he } from 'date-fns/locale';
+
+export const IconPlus = ({
+  fill,
+  stroke,
+  width = '16',
+  height = '16',
+}: {
+  fill?: string;
+  stroke?: string;
+  width?: string;
+  height?: string;
+}) => {
   return (
-    <svg width='16' height='16' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <svg width={width} height={height} viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
       <path
         fillRule='evenodd'
         clipRule='evenodd'

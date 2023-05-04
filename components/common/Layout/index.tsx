@@ -21,19 +21,17 @@ const Layout = ({ children }: LayoutProps) => {
 
   const { data } = useMyUser({ isLogin });
   const userData = data?.data;
-
+  console.log(userData);
   const [isModal, setIsModal] = useState(false);
 
   const handleModalToggle = (flag: boolean) => {
     setIsModal(flag);
   };
 
-  // TODO userData에서 category가 만약 없으면 카테고리 팝업 띄워줌
-
   return (
     <div css={styles.container}>
       {!isLogin && isModal && <LoginModal onModalOff={handleModalToggle} />}
-      {userData && <CategoryModal isOpen={!userData.categoryId} />}
+      {userData && <CategoryModal isOpen={userData.categoryId === null} />}
       <Header onModalOn={handleModalToggle} />
       <main css={styles.mainContainer}>{children}</main>
     </div>

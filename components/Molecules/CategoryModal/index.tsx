@@ -9,6 +9,9 @@ import { FONT_COLOR } from '@/constants/color';
 import { useResize } from '@/hooks/useResize';
 import { FormEventHandler, useState } from 'react';
 import styles from './CategoryModal.styled';
+import { useCategories } from '@/hooks/queries/categoryQuery';
+import { useMyProfileOnboarding } from '@/hooks/queries/profileQuery';
+import { useUpdateMyNotification } from '@/hooks/queries/alarmQuery';
 
 interface CategoryModalProps {
   isOpen: boolean;
@@ -18,43 +21,45 @@ interface CategoryModalProps {
 const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
   const device = useResize();
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState(0);
+  const [selectedCategoryId, setSelectedCategoryId] = useState('0ec30e71-38ba-4837-8804-f0e1180c5bf1');
   const [isAlertAgree, setIsAlertAgree] = useState(true);
-  const [frequency, setFrequency] = useState(0);
-
+  const [frequency, setFrequency] = useState('');
   const [isReceiveAgree, setIsReceiveAgree] = useState(true);
 
-  const handleIsAlertAgreeToggle = () => setIsAlertAgree((prev) => !prev);
+  const { data: category } = useCategories();
+  const { mutateAsync: categoryMutate } = useMyProfileOnboarding();
+  const { mutateAsync: notificationMutate } = useUpdateMyNotification();
+
+  const categoryData = category?.data;
+
+  const handleIsAlertAgreeToggle = () => {
+    isAlertAgree && setFrequency('');
+    setIsAlertAgree((prev) => !prev);
+  };
 
   const handleIsReceiveAgreeToggle = () => setIsReceiveAgree((prev) => !prev);
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    console.log('submitted');
-    console.log('selectedCategoryId', selectedCategoryId);
-    console.log('isAlertAgree', isAlertAgree);
-    console.log('frequency', frequency);
+    await categoryMutate({ categoryIdentifier: selectedCategoryId, mailAgreement: isReceiveAgree });
+    await notificationMutate({ enable: isAlertAgree, iteration: frequency });
   };
 
   return (
     <Modal closable={false} isOpen={isOpen} onClose={onClose}>
       <form css={styles.form} onSubmit={handleSubmit}>
         <div css={styles.titleContainer}>
-          <Typo.Title color={FONT_COLOR.WHITE}>관심 카테고리 선택</Typo.Title>
+          <Typo.Title color={FONT_COLOR.WHITE} lineHeight={device === 'mobile' ? '24px' : '100%'}>
+            관심 카테고리 선택
+          </Typo.Title>
           <Typo.Body color={FONT_COLOR.GRAY_2}>내 직군과 관심분야가 비슷한 사람들의 회고를 확인해보세요</Typo.Body>
         </div>
         <div css={styles.categoryContainer}>
           <Typo.H1 color={FONT_COLOR.WHITE}>분야</Typo.H1>
           <div css={styles.categoryRadioContainer}>
             <RadioGroup
-              data={[
-                { id: 0, text: '#개발' },
-                { id: 1, text: '#디자인' },
-                { id: 2, text: '#기획' },
-                { id: 3, text: '#마케팅' },
-                { id: 4, text: '#기업/스타트업' },
-              ]}
+              data={categoryData?.categories ?? []}
               selectedId={selectedCategoryId}
               onClick={setSelectedCategoryId}
             />
@@ -67,12 +72,14 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
             <div css={styles.alertRadioRow}>
               <RadioGroup
                 data={[
-                  { id: 0, text: '매달' },
-                  { id: 1, text: '매주' },
-                  { id: 2, text: '매일' },
+                  { identifier: 'every-month', name: '매달' },
+                  { identifier: 'every-week', name: '매주' },
+                  { identifier: 'every-day', name: '매일' },
                 ]}
                 selectedId={frequency}
-                onClick={setFrequency}
+                onClick={(value) => {
+                  isAlertAgree && setFrequency(value);
+                }}
               />
             </div>
           </div>
