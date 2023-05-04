@@ -7,7 +7,7 @@ import Link from 'next/link';
 import styles from './Header.styled';
 
 import * as Typo from '@/components/Atom/Typography';
-import { FONT_COLOR, POINT_COLOR } from '@/constants/color';
+import { FONT_COLOR } from '@/constants/color';
 import { useRecoilValue } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { useMyUser } from '@/hooks/queries/profileQuery';
@@ -31,7 +31,7 @@ const Header = ({ onModalOn }: HeaderProps) => {
     <header css={styles.container}>
       <div css={styles.inner({ isMobile: device === 'mobile' })}>
         <div css={styles.logoContainer}>
-          <Link href={'/'} css={css``}>
+          <Link href={'/'}>
             <IconLogo />
           </Link>
           {device === 'desktop' && isLogin && (

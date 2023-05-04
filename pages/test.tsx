@@ -91,7 +91,7 @@ const Test: NextPage = () => {
       >
         컴포넌트를 위한 테스트 페이지입니다.
       </h1>
-      <RadioComponent />
+
       <ProfilComponent />
       <TypoComponent></TypoComponent>
       <ToggleComponent></ToggleComponent>
@@ -109,16 +109,6 @@ const Test: NextPage = () => {
       <ModalComponent />
     </div>
   );
-};
-
-const RadioComponent = () => {
-  const [selectedId, setSelectedId] = useState(1);
-
-  const handleRadioClick = (value: number) => {
-    setSelectedId(value);
-  };
-
-  return <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />;
 };
 
 const ProfilComponent = () => {
@@ -221,7 +211,6 @@ const ToggleComponent = () => {
       >
         <strong>Toggle 컴포넌트</strong>
       </h1>
-      <Toggle />;
     </div>
   );
 };

@@ -20,3 +20,10 @@ export interface MyUserModel {
   categoryId: string;
   isAuthorized: boolean;
 }
+
+export interface CategoryModel {
+  categories: {
+    identifier: string;
+    name: string;
+  }[];
+}
