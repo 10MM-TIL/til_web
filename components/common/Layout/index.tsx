@@ -21,7 +21,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   const { data } = useMyUser({ isLogin });
   const userData = data?.data;
-  console.log(userData);
+
   const [isModal, setIsModal] = useState(false);
 
   const handleModalToggle = (flag: boolean) => {
