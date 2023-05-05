@@ -1,5 +1,6 @@
 // [user].tsx
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useState, useEffect, useCallback } from 'react';
 import {
   MypageWrapper,
@@ -92,12 +93,16 @@ const TimeLineArea = () => {
   );
 };
 
-const Mypage: NextPage = ({ dehydratedState: any }) => {
+const Mypage: NextPage = () => {
+  const router = useRouter();
+  // console.log('router', router);
+  const path = router.query.user as string;
+  // console.log('path', path);
   const [user, setUser] = useRecoilState(userInformation);
   const [blogs, setBlogs] = useRecoilState(myBloglist);
   const [timeline, setTimeLine] = useRecoilState(myTimelineList);
-  const { data, status } = useQuery(['profile'], getMyProfile, { onSuccess: (data) => setUser(data) });
-  useQuery(['blog'], () => getMyBlog(data.path), {
+  // const { data, status } = useQuery(['profile'], getMyProfile, { onSuccess: (data) => setUser(data) });
+  useQuery(['blog'], () => getMyBlog(path), {
     onSuccess: (data) => setBlogs(data.blogs),
   });
   useQuery(['post'], () => getMyTimeline(data?.path, 10), {
@@ -136,23 +141,30 @@ const Mypage: NextPage = ({ dehydratedState: any }) => {
 
 export default Mypage;
 
-export const getStaticPaths = async () => {
-  return {
-    paths: [{ params: { user: 'duck' } }],
-    fallback: false,
-  };
-};
+// export const getServerSideProps = async (context: any) => {
+//   const path = router.query.user as string;
+//   console.log('context,', context);
+//   console.log('getserverside', path);
+//   return { props: {} };
+// };
 
-export const getStaticProps = async (context: any) => {
-  const queryClient = new QueryClient();
-  console.log('context', context);
-  await queryClient.prefetchQuery(['profile'], getMyProfile);
-  await queryClient.prefetchQuery(['blog'], () => getMyBlog(context.params?.name));
-  await queryClient.prefetchQuery(['post'], () => getMyTimeline(context.params?.name, 10));
-  await queryClient.prefetchQuery(['grass'], () => getMyGrass(context.name, 1, 12));
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-};
+// export const getStaticPaths = async () => {
+//   return {
+//     paths: [{ params: { user: 'duck' } }],
+//     fallback: true,
+//   };
+// };
+
+// export const getStaticProps = async (context: any) => {
+//   const queryClient = new QueryClient();
+//   console.log('context', context);
+//   await queryClient.prefetchQuery(['profile'], getMyProfile);
+//   await queryClient.prefetchQuery(['blog'], () => getMyBlog(context.params?.name));
+//   await queryClient.prefetchQuery(['post'], () => getMyTimeline(context.params?.name, 10));
+//   await queryClient.prefetchQuery(['grass'], () => getMyGrass(context.name, 1, 12));
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// };
