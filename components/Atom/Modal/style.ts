@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 import { FONT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
 import { mq } from '@/styles/mediaQuery';
+import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 
 const OutLayer = styled.div`
-  z-index: 9999;
+  z-index: ${Z_INDEX_LEVEL['MODAL']};
   background: rgba(0, 0, 0, 0.5);
 
   display: block;
@@ -31,7 +32,7 @@ const ModalContainer = styled.div`
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   // outLayer보다 높은 z-index 값 부여
-  z-index: 9999;
+  z-index: ${Z_INDEX_LEVEL['MODAL']};
   ${mq('desktop')} {
     height: 580px;
     width: 656px;

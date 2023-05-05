@@ -1,3 +1,4 @@
+import { categories } from '@/types/cardview';
 export interface ServerResponse<T> {
   data?: T;
   status?: number;
@@ -14,16 +15,15 @@ export interface SignInModel {
 }
 
 export interface MyUserModel {
-  name: string;
-  profileImgSrc: string;
+  categoryIdentifier?: string;
+  categoryName?: string;
   introduction: string;
-  categoryId: string;
   isAuthorized: boolean;
+  name: string;
+  path: string;
+  profileImgSrc: string;
 }
 
 export interface CategoryModel {
-  categories: {
-    identifier: string;
-    name: string;
-  }[];
+  categories: categories[];
 }

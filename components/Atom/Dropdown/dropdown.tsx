@@ -32,7 +32,7 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
     { threshold: [0, 0.25, 0.5, 0.75, 1] },
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!isOpen) return;
     checkInnerView();
   }, [isOpen]);

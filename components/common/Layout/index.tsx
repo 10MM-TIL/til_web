@@ -31,7 +31,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div css={styles.container}>
       {!isLogin && isModal && <LoginModal onModalOff={handleModalToggle} />}
-      {userData && <CategoryModal isOpen={userData.categoryId === null} />}
+      {userData && <CategoryModal isOpen={userData.categoryIdentifier === null} />}
       <Header onModalOn={handleModalToggle} />
       <main css={styles.mainContainer}>{children}</main>
     </div>

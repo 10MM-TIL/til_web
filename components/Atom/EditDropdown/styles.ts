@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { EditDropdownProps } from './types';
+import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 
 export const MoreButtonWrapper = styled.ul<{ moreButtonPositionCss: EditDropdownProps['moreButtonPositionCss'] }>`
   position: absolute;
@@ -27,7 +28,7 @@ export const MoreButtonWrapper = styled.ul<{ moreButtonPositionCss: EditDropdown
 
 export const EditDropdownWrapper = styled.div<{ editListPositionCss: EditDropdownProps['editListPositionCss'] }>`
   position: absolute;
-  z-index: 99;
+  z-index: ${Z_INDEX_LEVEL['DROPDOWN_WRAPPER']};
   display: flex;
   justify-content: center;
   flex-direction: column;
