@@ -16,7 +16,7 @@ const CheckboxLabel = ({ checked, text, onClick }: CheckboxLabelProps) => {
   };
   return (
     <CheckboxContainer onClick={handleClick}>
-      <Typo.Label2 color={FONT_COLOR.GRAY_3}>{text}</Typo.Label2>
+      <Typo.Label2 color={checked ? FONT_COLOR.GRAY_3 : FONT_COLOR.GRAY_2}>{text}</Typo.Label2>
       <Checkbox checked={checked} />
     </CheckboxContainer>
   );

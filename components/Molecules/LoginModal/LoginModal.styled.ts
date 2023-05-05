@@ -74,6 +74,7 @@ const googleBtn = css`
   padding: 14px 0;
   width: 328px;
   border-radius: 12px;
+  gap: 6px;
 
   ${mq('desktop')} {
     width: 450px;
