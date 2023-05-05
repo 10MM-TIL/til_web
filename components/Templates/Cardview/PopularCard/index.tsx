@@ -18,12 +18,10 @@ import { fetchRecommandPosts } from '@/apis/cardview';
 // 이달의 회고
 const PopularCard = ({
   device,
-  onClickTag,
   onClickContent,
   onClickUser,
 }: {
   device: device;
-  onClickTag: CardProps['onClickTag'];
   onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
@@ -80,7 +78,7 @@ const PopularCard = ({
                   content={recommandCard}
                   hasBadge={true}
                   onClickTag={onClickTag}
-                  onClickContent={() => onClickContent(recommandCard.url)}
+                  onClickContent={onClickContent}
                   onClickUser={onClickUser}
                 ></Card>
               </Styled.PopularCardItem>

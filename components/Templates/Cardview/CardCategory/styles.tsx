@@ -1,3 +1,4 @@
+import { mq } from '@/styles/mediaQuery';
 import styled from '@emotion/styled';
 
 export const CardviewContainer = styled.div`
@@ -7,7 +8,13 @@ export const CardviewContainer = styled.div`
 export const CategoryContainer = styled.section`
   display: flex;
   flex-direction: column;
-  /* grid-column: span 4 / auto; */
+  grid-column: span 1 / auto;
+  @media screen and (min-width: 780px) {
+    grid-column: span 6 / auto;
+  }
+  ${mq('desktop')} {
+    grid-column: span 6 / auto;
+  }
 `;
 export const CategoryHeader = styled.div`
   margin-bottom: 20px;

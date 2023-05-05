@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { categories, recommandPostList, allPostList } from '@/types/cardview';
+import { categories, recommandPostItem, allPostItem } from '@/types/cardview';
 type fetchCategoriesResponse = {
   categories: categories[];
 };
@@ -8,7 +8,7 @@ type fetchRecommandPostsRequest = {
   identifier: string;
 };
 type fetchRecommandPostsResponse = {
-  postList: recommandPostList[];
+  postList: recommandPostItem[];
   size: number;
 };
 
@@ -17,14 +17,15 @@ type fetchAllPostsRequest = {
   size: number;
   pageToken?: string;
 };
-type fetchAllPostsResponse = {
-  postList: allPostList[];
+export type fetchAllPostsResponse = {
+  postList: allPostItem[];
   size: number;
   nextPageToken: string;
 };
 
 // 카테고리별 포스트 리스트 요청
 export const fetchAllPosts = async (category: string, pageToken: string) => {
+  // console.log(pageToken);
   const params: fetchAllPostsRequest = pageToken
     ? { identifier: category, size: 3 * 5, pageToken }
     : { identifier: category, size: 3 * 5 };

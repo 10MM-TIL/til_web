@@ -23,11 +23,11 @@ const Card = ({
   onClickContent,
   onClickUser,
 }: CardProps): ReactElement => {
-  const [tagList, setTagList] = useState([category[content.category]]);
+  const [tagList, setTagList] = useState([content.category]);
 
   useEffect(() => {
-    if (hasBadge) setTagList([...tagList, '추천 회고']);
-    else setTagList(tagList.filter((tag) => tag !== '추천 회고'));
+    if (hasBadge) setTagList([...tagList, '#추천 회고']);
+    else setTagList(tagList.filter((tag) => tag !== '#추천 회고'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBadge]);
 
@@ -52,7 +52,8 @@ const Card = ({
           return (
             <TagWrapper key={tag} onClick={(e) => onClickTag(e, tag)}>
               <Typo.Label2 color='#22FFA2'>
-                {tag === '추천 회고' ? ' ' : ''}#{tag}
+                {tag === '#추천 회고' ? ' ' : ''}
+                {tag}
               </Typo.Label2>
             </TagWrapper>
           );

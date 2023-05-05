@@ -1,27 +1,31 @@
+import { CardContentProps } from '@/components/Atom/Card/types';
+
 export type categories = {
   identifier: string;
-  name: string;
+  name: CardContentProps['category'];
   selected?: boolean;
 };
 
-export type recommandPostList = {
-  categoryIdentifier: string;
-  createdAt: string;
-  description: string;
-  hitCount: number;
+export type recommandPostItem = {
   identifier: string;
+  userPath: string;
+  categoryIdentifier: string;
   title: string;
+  description: string;
   url: string;
-  userIdentifier: string;
+  createdAt: string;
+  hitCount: number;
+  userProfileSrc: string;
 };
 
-export type allPostList = {
-  categoryIdentifier: string;
-  createdAt: string;
-  description: string;
-  hitCount: number;
+export type allPostItem = {
   identifier: string;
+  userPath: string;
+  categoryIdentifier: string;
   title: string;
+  description: string;
   url: string;
-  userIdentifier: string;
+  createdAt: string;
+  hitCount: number;
+  userProfileSrc: string;
 };

@@ -18,13 +18,7 @@ const CardView = () => {
   const device = useResize();
 
   const onClickContent = useCallback((url: string = '') => {
-    console.log(url, '본문 클릭');
-    // setScrollY(window.scrollY);
-  }, []);
-
-  const onClickTag: CardProps['onClickTag'] = useCallback((e, tag) => {
-    console.log(`${tag} 태그 클릭`);
-    // setScrollY(window.scrollY);
+    window.open(url);
   }, []);
 
   const onClickUser = useCallback(() => {
@@ -41,18 +35,8 @@ const CardView = () => {
       css={{ paddingTop: '114px' }}
     >
       <CardCategory></CardCategory>
-      <PopularCard
-        device={device}
-        onClickContent={onClickContent}
-        onClickTag={onClickTag}
-        onClickUser={onClickUser}
-      ></PopularCard>
-      <AllCard
-        device={device}
-        onClickContent={onClickContent}
-        onClickTag={onClickTag}
-        onClickUser={onClickUser}
-      ></AllCard>
+      <PopularCard device={device} onClickContent={onClickContent} onClickUser={onClickUser}></PopularCard>
+      <AllCard device={device} onClickContent={onClickContent} onClickUser={onClickUser}></AllCard>
     </Layout.GridContainer>
   );
 };
