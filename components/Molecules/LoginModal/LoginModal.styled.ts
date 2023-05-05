@@ -1,4 +1,5 @@
 import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
+import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 import { mq } from '@/styles/mediaQuery';
 import { css } from '@emotion/react';
 
@@ -10,7 +11,7 @@ const outside = css`
   bottom: 0;
   overflow: hidden;
   background-color: rgba(25, 31, 40, 0.5);
-  z-index: 9999; // TODO Z-Index 정리
+  z-index: ${Z_INDEX_LEVEL['MODAL']}; // TODO Z-Index 정리
 
   ${mq('desktop')} {
     display: flex;

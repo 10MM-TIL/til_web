@@ -1,11 +1,13 @@
 import { POINT_COLOR } from '@/constants/color';
+import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 import { css } from '@emotion/react';
 
 const container = css`
   position: fixed;
-  z-index: 999; // TODO Z-Index
+  z-index: ${Z_INDEX_LEVEL['HEADER']}; // TODO Z-Index
   width: 100%;
   height: 80px;
+  backdrop-filter: blur(9.5px);
 `;
 
 const inner = ({ isMobile }: { isMobile: boolean }) => css`

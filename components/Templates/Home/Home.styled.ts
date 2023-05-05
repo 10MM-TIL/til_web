@@ -1,4 +1,6 @@
 import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
+import { Z_INDEX_LEVEL } from '@/constants/zIndex';
+import { mq } from '@/styles/mediaQuery';
 import { css } from '@emotion/react';
 
 const topContainer = css`
@@ -21,7 +23,7 @@ const topImageContainer = css`
 `;
 
 const topTextContainer = css`
-  z-index: 100; // TODO Z-Index 관련 정리
+  z-index: ${Z_INDEX_LEVEL['HOME_TEXT']}; // TODO Z-Index 관련 정리
   padding-top: 35px;
   text-align: center;
   display: flex;
@@ -30,8 +32,24 @@ const topTextContainer = css`
   gap: 46px;
 `;
 
+const desktopContainer = css`
+  ${mq('desktop')} {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+`;
+
 const container = css`
   padding: 84px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+
+  ${mq('desktop')} {
+    width: 780px;
+  }
 `;
 
 const textareaContainer = css`
@@ -52,7 +70,7 @@ const memoTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
 
   width: 90px;
   height: 41px;
-  z-index: ${selectedTab === 'MEMO' ? 10 : 5};
+  z-index: ${selectedTab === 'MEMO' ? Z_INDEX_LEVEL['TAB'] : Z_INDEX_LEVEL['TAB_HIDDEN']};
   display: flex;
   justify-content: center;
   padding: 11px 30px;
@@ -73,7 +91,7 @@ const reviewTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
 
   width: ${selectedTab === 'MEMO' ? '100px' : '90px'};
   height: ${selectedTab === 'MEMO' ? '40px' : '41px'};
-  z-index: ${selectedTab === 'MEMO' ? 5 : 10};
+  z-index: ${selectedTab === 'MEMO' ? Z_INDEX_LEVEL['TAB_HIDDEN'] : Z_INDEX_LEVEL['TAB']};
   display: flex;
   justify-content: center;
   padding: ${selectedTab === 'MEMO' ? '11px 30px 0 40px' : '11px 30px'};
@@ -84,7 +102,6 @@ const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   min-height: 216px;
   resize: none;
 
-  z-index: 100 !important;
   background-color: ${BACKGROUND_COLOR.NAVY_3};
   color: ${FONT_COLOR.WHITE};
   border-radius: 12px;
@@ -116,16 +133,66 @@ const textareaBottomContainer = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIE
   right: ${selectedTab === 'MEMO' ? '136px' : '26px'};
 `;
 
+const elementContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const elementTitle = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const titleRight = css`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+const iconContainer = css`
+  border: 1px solid ${FONT_COLOR.GRAY_2};
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
+
+const tempBox = css`
+  border-radius: 20px;
+  height: 334px;
+  background-color: ${BACKGROUND_COLOR.FIELD_10};
+`;
+
+const desktopOtherCard = css`
+  width: 284px;
+  padding-top: 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
 const styles = {
   topContainer,
   topImageContainer,
   topTextContainer,
+  desktopContainer,
   container,
   textareaContainer,
   memoTab,
   reviewTab,
   textarea,
   textareaBottomContainer,
+  elementContainer,
+  elementTitle,
+  titleRight,
+  iconContainer,
+  tempBox,
+  desktopOtherCard,
 };
 
 export default styles;
