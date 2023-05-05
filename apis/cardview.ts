@@ -33,7 +33,7 @@ export const fetchAllPosts = async (category: string, pageToken: string = '') =>
     const response: ServerResponse<fetchAllPostsResponse> = await instance.get('/post/category', {
       params,
     });
-    return response.data!;
+    return response.data;
   } catch (e: unknown) {
     throw e;
   }
@@ -46,16 +46,6 @@ export const fetchRecommandPosts = async (category: string) => {
     const response: ServerResponse<fetchRecommandPostsResponse> = await instance.get('/post/category/recommend', {
       params,
     });
-    return response.data;
-  } catch (e: unknown) {
-    throw e;
-  }
-};
-
-// 전체 카테고리 가져오기
-export const fetchCategories = async () => {
-  try {
-    const response = await instance.get<fetchCategoriesResponse>('/categories');
     return response.data;
   } catch (e: unknown) {
     throw e;

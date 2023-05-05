@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './styles';
 import * as CardView from '@/styles/cardview.module';
@@ -24,7 +23,10 @@ const PopularCard = ({
   onClickUser: CardProps['onClickUser'];
 }) => {
   const [categories, setCategories] = useRecoilState(categoryState);
-  const { data: recommandCard } = useRecommandPosts(findSelectedCategory(categories), categories.length !== 0);
+  const { data: recommandCard, isSuccess } = useRecommandPosts(
+    findSelectedCategory(categories),
+    !!findSelectedCategory(categories),
+  );
 
   return (
     <Styled.PopularCardViewContainer>
@@ -37,6 +39,7 @@ const PopularCard = ({
             <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
           </CardView.EmptyCard>
         ) : (
+          isSuccess &&
           recommandCard?.postList.map((recommandItem, index) => {
             return (
               <Styled.PopularCardItem key={`popular-${recommandItem.identifier}-${index}`}>

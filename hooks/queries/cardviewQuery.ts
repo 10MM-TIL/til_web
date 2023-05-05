@@ -7,16 +7,16 @@ export const useAllPosts = (categories: string) => {
     ({ pageParam = '' }) => fetchAllPosts(categories, pageParam),
     {
       getNextPageParam: (lastPage) => {
-        const { nextPageToken } = lastPage;
-        return nextPageToken === 'null' ? undefined : nextPageToken;
+        if (lastPage) {
+          const { nextPageToken } = lastPage;
+          return nextPageToken === 'null' ? undefined : nextPageToken;
+        }
+        return undefined;
       },
     },
   );
 };
 
-export const useRecommandPosts = (categories: string, enabled: boolean) =>
-  useQuery({
-    queryKey: ['recommand_card'],
-    queryFn: () => fetchRecommandPosts(categories),
-    enabled,
-  });
+export const useRecommandPosts = (categories: string, enabled: boolean) => {
+  return useQuery(['recommand_card', categories], () => fetchRecommandPosts(categories), { enabled });
+};
