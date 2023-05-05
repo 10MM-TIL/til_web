@@ -27,7 +27,9 @@
       "@/types/*": ["./types/*"],
       "@/stores/*": ["./stores/*"],
       "@/styles/*": ["./styles/*"],
-      "@/assets/*": ["./assets/*"]
+      "@/assets/*": ["./assets/*"],
+      "@/states/*": ["./states/*"],
+      "@/apis/*": ["./apis/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

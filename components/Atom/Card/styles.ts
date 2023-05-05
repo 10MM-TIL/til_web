@@ -12,9 +12,12 @@ export const CardContainer = styled.div<{ size: CardProps['size'] }>`
   color: ${FONT_COLOR.WHITE};
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 9px;
-  width: ${({ size }) => (size === 'sm' ? '284px' : '384px')};
-  height: ${({ size }) => (size === 'sm' ? '132px' : '170px')};
-  padding: ${({ size }) => (size === 'sm' ? '16px 23px 16px 20px' : '35px 40px')};
+  width: 100%;
+  height: 100%;
+  min-width: ${({ size }) => (size === 'sm' ? '284px' : size === 'mobile' ? '328px' : '384px')};
+  min-height: ${({ size }) => (size === 'sm' ? '132px' : '170px')};
+
+  padding: ${({ size }) => (size === 'sm' ? '16px 23px 16px 20px' : size === 'mobile' ? '35px' : '35px 40px')};
 
   &:hover {
     transition: all 0.15s ease 0s;
@@ -62,9 +65,9 @@ export const BadgeTop = styled.div<Pick<CardProps, 'size'>>`
   align-items: flex-end;
   justify-content: center;
   top: -1px;
-  right: ${({ size }) => (size === 'sm' ? '16px' : '20px')};
-  width: ${({ size }) => (size === 'sm' ? `${BadgeTopSmWidth}px` : `${BadgeTopLgWidth}px`)};
-  height: ${({ size }) => (size === 'sm' ? `${BadgeTopSmHeight}px` : `${BadgeTopLgHeight}px`)};
+  right: ${({ size }) => (size === 'sm' || size === 'mobile' ? '16px' : '20px')};
+  width: ${({ size }) => (size === 'sm' || size === 'mobile' ? `${BadgeTopSmWidth}px` : `${BadgeTopLgWidth}px`)};
+  height: ${({ size }) => (size === 'sm' || size === 'mobile' ? `${BadgeTopSmHeight}px` : `${BadgeTopLgHeight}px`)};
   background-color: ${POINT_COLOR.SAVE};
   &::after {
     content: '';
@@ -72,26 +75,31 @@ export const BadgeTop = styled.div<Pick<CardProps, 'size'>>`
 `;
 export const CrownIcon = styled.div<Pick<CardProps, 'size'>>`
   display: block;
-  width: ${({ size }) => (size === 'sm' ? '14' : '21.64')}px;
-  height: ${({ size }) => (size === 'sm' ? '14' : '21.39')}px;
-  margin-bottom: ${({ size }) => (size === 'sm' ? '3' : '4.58')}px;
+  width: ${({ size }) => (size === 'sm' || size === 'mobile' ? '14' : '21.64')}px;
+  height: ${({ size }) => (size === 'sm' || size === 'mobile' ? '14' : '21.39')}px;
+  margin-bottom: ${({ size }) => (size === 'sm' || size === 'mobile' ? '3' : '4.58')}px;
 `;
 
 // border에 1px이 존재해서 1px만큼 더위로 올려놔야함
 export const BadgeBottom = styled.div<Pick<CardProps, 'size'>>`
   position: absolute;
-  right: ${({ size }) => (size === 'sm' ? '16px' : '20px')};
-  top: ${({ size }) => (size === 'sm' ? `calc(${BadgeTopSmHeight}px - 1px)` : `calc(${BadgeTopLgHeight}px - 1px)`)};
+  right: ${({ size }) => (size === 'sm' || size === 'mobile' ? '16px' : '20px')};
+  top: ${({ size }) =>
+    size === 'sm' || size === 'mobile' ? `calc(${BadgeTopSmHeight}px - 1px)` : `calc(${BadgeTopLgHeight}px - 1px)`};
   width: 0;
   height: 0;
-  border-bottom: ${({ size }) => (size === 'sm' ? `${BadgeBottomSmHeight}px` : `${BadgeBottomLgHeight}px`)} solid
-    transparent;
-  border-top: ${({ size }) => (size === 'sm' ? `${BadgeBottomSmHeight}px` : `${BadgeBottomLgHeight}px`)} solid
-    ${POINT_COLOR.SAVE};
-  border-left: ${({ size }) => (size === 'sm' ? `${BadgeTopSmWidth / 2}px` : `${BadgeTopLgWidth / 2}px`)} solid
-    transparent;
-  border-right: ${({ size }) => (size === 'sm' ? `${BadgeTopSmWidth / 2}px` : `${BadgeTopLgWidth / 2}px`)} solid
-    transparent;
+  border-bottom: ${({ size }) =>
+      size === 'sm' || size === 'mobile' ? `${BadgeBottomSmHeight}px` : `${BadgeBottomLgHeight}px`}
+    solid transparent;
+  border-top: ${({ size }) =>
+      size === 'sm' || size === 'mobile' ? `${BadgeBottomSmHeight}px` : `${BadgeBottomLgHeight}px`}
+    solid ${POINT_COLOR.SAVE};
+  border-left: ${({ size }) =>
+      size === 'sm' || size === 'mobile' ? `${BadgeTopSmWidth / 2}px` : `${BadgeTopLgWidth / 2}px`}
+    solid transparent;
+  border-right: ${({ size }) =>
+      size === 'sm' || size === 'mobile' ? `${BadgeTopSmWidth / 2}px` : `${BadgeTopLgWidth / 2}px`}
+    solid transparent;
 `;
 
 export const CardInfoWrapper = styled.div`

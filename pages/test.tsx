@@ -6,6 +6,7 @@ import { BACKGROUND_COLOR } from '@/constants/color';
 
 import * as Typo from '@/components/Atom/Typography';
 import Toggle from '@/components/Toggle';
+import { Header } from '@/components/Atom/Header';
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
 import { GrassArea } from '@/components/Molecules/GrassArea';
 import { TextField } from '@/components/Atom/TextField';
@@ -73,41 +74,31 @@ const BLOG_DATA = [
 
 const Test: NextPage = () => {
   return (
-    <div
-      css={css`
-        max-width: 1180px;
-        padding: 0 23px;
-        margin: 0 auto;
-        background-color: ${BACKGROUND_COLOR.NAVY_1};
-      `}
-    >
-      <h1
+    <>
+      <Header isLogin={true}></Header>
+      <div
         css={css`
-          color: white;
-          font-size: 22px;
-          text-align: center;
-          padding-top: 30px;
+          background-color: ${BACKGROUND_COLOR.NAVY_1};
         `}
       >
-        컴포넌트를 위한 테스트 페이지입니다.
-      </h1>
-
-      <ProfilComponent />
-      <TypoComponent></TypoComponent>
-      <ToggleComponent></ToggleComponent>
-      <CertifiedBlogComponent></CertifiedBlogComponent>
-      <GrassAreaComponent></GrassAreaComponent>
-      <TextFieldComponent></TextFieldComponent>
-      <FieldRemindComponent></FieldRemindComponent>
-      <CardComponent></CardComponent>
-      <ButtonComponent></ButtonComponent>
-      <BoxLayoutTest></BoxLayoutTest>
-      <TimeLineComponent></TimeLineComponent>
-      <DropdownComponent></DropdownComponent>
-      <CheckboxComponent />
-      <BlogGroupComponent />
-      <ModalComponent />
-    </div>
+        <h1>컴포넌트를 위한 테스트 페이지입니다.</h1>
+        <ProfilComponent />
+        <TypoComponent></TypoComponent>
+        <ToggleComponent></ToggleComponent>
+        <CertifiedBlogComponent></CertifiedBlogComponent>
+        <GrassAreaComponent></GrassAreaComponent>
+        <TextFieldComponent></TextFieldComponent>
+        <FieldRemindComponent></FieldRemindComponent>
+        <CardComponent></CardComponent>
+        <ButtonComponent></ButtonComponent>
+        <BoxLayoutTest></BoxLayoutTest>
+        <TimeLineComponent></TimeLineComponent>
+        <DropdownComponent></DropdownComponent>
+        <CheckboxComponent />
+        <BlogGroupComponent />
+        <ModalComponent />
+      </div>
+    </>
   );
 };
 
@@ -149,6 +140,16 @@ const ProfilComponent = () => {
       />
     </div>
   );
+};
+
+const RadioComponent = () => {
+  const [selectedId, setSelectedId] = useState(1);
+
+  const handleRadioClick = (value: number) => {
+    setSelectedId(value);
+  };
+
+  return <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />;
 };
 
 const TypoComponent = () => {

@@ -1,3 +1,4 @@
+import { categories } from '@/types/cardview';
 export interface ServerResponse<T> {
   data?: T;
   status?: number;
@@ -22,8 +23,5 @@ export interface MyUserModel {
 }
 
 export interface CategoryModel {
-  categories: {
-    identifier: string;
-    name: string;
-  }[];
+  categories: categories[];
 }
