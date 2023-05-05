@@ -1,14 +1,10 @@
-import type { NextPage } from 'next';
 import { useCallback } from 'react';
 
 import { RowGap, ColGap, ColumnTemplate } from '@/styles/cardview.module';
 import * as Layout from '@/styles/layout.module';
 
-import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useResize } from '@/hooks/useResize';
-
-import { CardProps } from '@/components/Atom/Card';
-import axios from 'axios';
+import { useRouter } from 'next/router';
 import { CardCategory, PopularCard, AllCard } from '@/components/Templates/Cardview';
 
 // const API_URL = 'http://152.69.231.228:8080/v1';
@@ -16,28 +12,33 @@ import { CardCategory, PopularCard, AllCard } from '@/components/Templates/Cardv
 
 const CardView = () => {
   const device = useResize();
+  const router = useRouter();
 
   const onClickContent = useCallback((url: string = '') => {
     window.open(url);
   }, []);
 
-  const onClickUser = useCallback(() => {
-    console.log('user 클릭');
-    // setScrollY(window.scrollY);
-  }, []);
+  const onClickUser = useCallback(
+    (userpath: string = '') => {
+      router.push(`/${userpath}`);
+    },
+    [router],
+  );
 
   return (
-    <Layout.GridContainer
-      colGap={`${ColGap}px`}
-      rowGap={`${RowGap}px`}
-      tabletColums={`repeat(4, ${ColumnTemplate})`}
-      desktopColums={`repeat(6, ${ColumnTemplate})`}
-      css={{ paddingTop: '114px' }}
-    >
-      <CardCategory></CardCategory>
-      <PopularCard device={device} onClickContent={onClickContent} onClickUser={onClickUser}></PopularCard>
-      <AllCard device={device} onClickContent={onClickContent} onClickUser={onClickUser}></AllCard>
-    </Layout.GridContainer>
+    <Layout.Container>
+      <Layout.GridContainer
+        colGap={`${ColGap}px`}
+        rowGap={`${RowGap}px`}
+        tabletColums={`repeat(4, ${ColumnTemplate})`}
+        desktopColums={`repeat(6, ${ColumnTemplate})`}
+        css={{ paddingTop: '34px' }}
+      >
+        <CardCategory></CardCategory>
+        <PopularCard device={device} onClickContent={onClickContent} onClickUser={onClickUser}></PopularCard>
+        <AllCard device={device} onClickContent={onClickContent} onClickUser={onClickUser}></AllCard>
+      </Layout.GridContainer>
+    </Layout.Container>
   );
 };
 

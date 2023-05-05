@@ -11,7 +11,7 @@ export const useResize = () => {
   });
   const [device, setDevice] = useState<device>('desktop');
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setWindowSize({
       width: window.innerWidth,
     });

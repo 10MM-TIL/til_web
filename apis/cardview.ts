@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
+import instance from './instance';
+import { ServerResponse, SignInModel } from '../types';
 import { categories, recommandPostItem, allPostItem } from '@/types/cardview';
 type fetchCategoriesResponse = {
   categories: categories[];
@@ -24,16 +25,15 @@ export type fetchAllPostsResponse = {
 };
 
 // 카테고리별 포스트 리스트 요청
-export const fetchAllPosts = async (category: string, pageToken: string) => {
-  // console.log(pageToken);
+export const fetchAllPosts = async (category: string, pageToken: string = '') => {
   const params: fetchAllPostsRequest = pageToken
     ? { identifier: category, size: 3 * 5, pageToken }
     : { identifier: category, size: 3 * 5 };
   try {
-    const response = await axios.get<fetchAllPostsResponse>('/v1/post/category', {
+    const response: ServerResponse<fetchAllPostsResponse> = await instance.get('/post/category', {
       params,
     });
-    return response.data;
+    return response.data!;
   } catch (e: unknown) {
     throw e;
   }
@@ -43,7 +43,7 @@ export const fetchAllPosts = async (category: string, pageToken: string) => {
 export const fetchRecommandPosts = async (category: string) => {
   const params: fetchRecommandPostsRequest = { identifier: category };
   try {
-    const response = await axios.get<fetchRecommandPostsResponse>('/v1/post/category/recommend', {
+    const response: ServerResponse<fetchRecommandPostsResponse> = await instance.get('/post/category/recommend', {
       params,
     });
     return response.data;
@@ -55,7 +55,7 @@ export const fetchRecommandPosts = async (category: string) => {
 // 전체 카테고리 가져오기
 export const fetchCategories = async () => {
   try {
-    const response = await axios.get<fetchCategoriesResponse>('/v1/categories');
+    const response = await instance.get<fetchCategoriesResponse>('/categories');
     return response.data;
   } catch (e: unknown) {
     throw e;

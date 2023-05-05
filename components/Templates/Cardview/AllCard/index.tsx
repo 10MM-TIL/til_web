@@ -5,18 +5,15 @@ import * as CardView from '@/styles/cardview.module';
 
 import { FONT_COLOR } from '@/constants/color';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
-
 import { device } from '@/hooks/useResize';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
-import useLocalStorage from '@/hooks/useLocalStorage';
 
 import { Card, CardProps } from '@/components/Atom/Card';
 import { useRecoilState } from 'recoil';
-import { categoryState, allPostState } from '@/states/cardview';
+import { categoryState } from '@/states/cardview';
 import { formatDate } from '@/utils/utils';
 import { findSelectedCategory } from '@/utils/cardview';
-import { useAllPosts } from '@/hooks/queries/allPostQuery';
+import { useAllPosts } from '@/hooks/queries/cardviewQuery';
 
 // 전체 회고
 const AllCard = ({
@@ -31,43 +28,17 @@ const AllCard = ({
   const bottom = useRef(null);
   const [isEmpty, setIsEmpty] = useState(false);
   const [categories, setCategories] = useRecoilState(categoryState);
-  const [allPostContent, setAllPostState] = useRecoilState(allPostState);
   const { data: allPosts, fetchNextPage, isSuccess } = useAllPosts(findSelectedCategory(categories));
 
   useEffect(() => {
     if (isSuccess) {
-      const pageLastIdx = allPosts.pages.length - 1;
-      const allCardList = allPosts?.pages[pageLastIdx].postList;
-      setAllPostState((prev) => [
-        ...prev,
-        ...allCardList.map((postItem) => {
-          return {
-            identifier: postItem.identifier,
-            userPath: postItem.userPath,
-            category: categories.find((i) => i.identifier === postItem.categoryIdentifier)?.name!,
-            header: postItem.title,
-            body: postItem.description,
-            // img: 'require(`postItem.userProfileSrc`)',
-            img: require('@/assets/images/test.png'),
-            name: postItem.identifier,
-            date: formatDate(postItem.createdAt),
-            url: postItem.url,
-          };
-        }),
-      ]);
-      console.log(allPostContent);
+      setIsEmpty(allPosts.pages[0].postList.length === 0);
     }
-  }, [allPosts, categories, setAllPostState, isSuccess]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      setIsEmpty(allPostContent.length === 0);
-    }
-  }, [isSuccess, allPostContent]);
+  }, [isSuccess, allPosts]);
 
   const [observe, unobserve] = useIntersectionObserver((entry: IntersectionObserverEntry) => {
     if (entry.isIntersecting) {
-      if (!allPosts?.pages[allPosts.pages.length - 1].nextPageToken) return;
+      if (allPosts?.pages[allPosts.pages.length - 1].nextPageToken === 'null') return;
       fetchNextPage();
     }
   });
@@ -79,11 +50,6 @@ const AllCard = ({
       if (optionref) unobserve(optionref);
     };
   }, [observe, unobserve]);
-
-  const onClickTag: CardProps['onClickTag'] = useCallback((e, tag) => {
-    console.log(`${tag} 태그 클릭`);
-    // setScrollY(window.scrollY);
-  }, []);
 
   return (
     <>
@@ -97,20 +63,28 @@ const AllCard = ({
               <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
             </CardView.EmptyCard>
           ) : (
-            allPostContent.map((allCard, index) => {
-              return (
+            isSuccess &&
+            allPosts?.pages.map((allPost, index) =>
+              allPost.postList.map((allCard) => (
                 <Styled.AllCardItem key={`card-${allCard.identifier}-${index}`}>
                   <Card
-                    key={`card-${allCard.identifier}-${index}`}
                     size={device === 'desktop' ? 'lg' : 'mobile'}
-                    content={allCard}
-                    onClickTag={onClickTag}
-                    onClickContent={onClickContent}
-                    onClickUser={onClickUser}
+                    content={{
+                      category: categories.find((i) => i.identifier === allCard.categoryIdentifier)?.name!,
+                      header: allCard.title,
+                      body: allCard.description,
+                      img: require('@/assets/images/test.png'),
+                      name: allCard.userPath,
+                      date: formatDate(allCard.createdAt),
+                    }}
+                    url={allCard.url}
+                    userpath={allCard.userPath}
+                    onClickContent={() => onClickContent(allCard.url)}
+                    onClickUser={() => onClickUser(allCard.userPath)}
                   ></Card>
                 </Styled.AllCardItem>
-              );
-            })
+              )),
+            )
           )}
         </Styled.AllCardContent>
       </Styled.AllCardViewContainer>

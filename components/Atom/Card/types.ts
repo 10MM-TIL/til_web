@@ -13,9 +13,10 @@ export type CardProps = {
   size: 'sm' | 'lg' | 'mobile';
   hasBadge?: boolean;
   content: CardContentProps;
-  onClickTag: (event: MouseEvent, tag: (typeof category)[keyof typeof category]) => void;
   onClickContent: (url?: string) => void;
-  onClickUser: MouseEventHandler<HTMLDivElement>;
+  onClickUser: (userpath?: string) => void;
+  url: string;
+  userpath: string;
 };
 
 export type CardContentProps = {

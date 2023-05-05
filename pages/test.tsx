@@ -81,25 +81,24 @@ const Test: NextPage = () => {
           background-color: ${BACKGROUND_COLOR.NAVY_1};
         `}
       >
-        컴포넌트를 위한 테스트 페이지입니다.
-      </h1>
-
-      <ProfilComponent />
-      <TypoComponent></TypoComponent>
-      <ToggleComponent></ToggleComponent>
-      <CertifiedBlogComponent></CertifiedBlogComponent>
-      <GrassAreaComponent></GrassAreaComponent>
-      <TextFieldComponent></TextFieldComponent>
-      <FieldRemindComponent></FieldRemindComponent>
-      <CardComponent></CardComponent>
-      <ButtonComponent></ButtonComponent>
-      <BoxLayoutTest></BoxLayoutTest>
-      <TimeLineComponent></TimeLineComponent>
-      <DropdownComponent></DropdownComponent>
-      <CheckboxComponent />
-      <BlogGroupComponent />
-      <ModalComponent />
-    </div>
+        <h1>컴포넌트를 위한 테스트 페이지입니다.</h1>
+        <ProfilComponent />
+        <TypoComponent></TypoComponent>
+        <ToggleComponent></ToggleComponent>
+        <CertifiedBlogComponent></CertifiedBlogComponent>
+        <GrassAreaComponent></GrassAreaComponent>
+        <TextFieldComponent></TextFieldComponent>
+        <FieldRemindComponent></FieldRemindComponent>
+        <CardComponent></CardComponent>
+        <ButtonComponent></ButtonComponent>
+        <BoxLayoutTest></BoxLayoutTest>
+        <TimeLineComponent></TimeLineComponent>
+        <DropdownComponent></DropdownComponent>
+        <CheckboxComponent />
+        <BlogGroupComponent />
+        <ModalComponent />
+      </div>
+    </>
   );
 };
 

@@ -2,7 +2,7 @@ import { mq } from '@/styles/mediaQuery';
 import styled from '@emotion/styled';
 
 export const CardviewContainer = styled.div`
-  padding-top: 114px;
+  padding-top: 34px;
 `;
 
 export const CategoryContainer = styled.section`
