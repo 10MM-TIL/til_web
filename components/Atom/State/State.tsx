@@ -16,7 +16,7 @@ const State = ({ state }: StateProps) => {
       css={css`
         display: flex;
         align-items: center;
-        gap: 2px;
+        gap: 4px;
       `}
     >
       {state === 'checked' ? <IconCheckBig /> : state === 'saving' ? <IconSaving /> : <IconError />}
