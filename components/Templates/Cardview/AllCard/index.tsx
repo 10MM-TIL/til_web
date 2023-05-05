@@ -32,13 +32,13 @@ const AllCard = ({
 
   useEffect(() => {
     if (isSuccess) {
-      setIsEmpty(allPosts.pages[0].postList.length === 0);
+      setIsEmpty(allPosts.pages[0]?.postList.length === 0);
     }
   }, [isSuccess, allPosts]);
 
   const [observe, unobserve] = useIntersectionObserver((entry: IntersectionObserverEntry) => {
     if (entry.isIntersecting) {
-      if (allPosts?.pages[allPosts.pages.length - 1].nextPageToken === 'null') return;
+      if (allPosts && allPosts.pages[allPosts.pages.length - 1]?.nextPageToken === 'null') return;
       fetchNextPage();
     }
   });
@@ -65,7 +65,7 @@ const AllCard = ({
           ) : (
             isSuccess &&
             allPosts?.pages.map((allPost, index) =>
-              allPost.postList.map((allCard) => (
+              allPost?.postList.map((allCard) => (
                 <Styled.AllCardItem key={`card-${allCard.identifier}-${index}`}>
                   <Card
                     size={device === 'desktop' ? 'lg' : 'mobile'}

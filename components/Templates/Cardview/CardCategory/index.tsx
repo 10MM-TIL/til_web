@@ -2,13 +2,11 @@ import { useEffect } from 'react';
 import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './styles';
 import { FONT_COLOR } from '@/constants/color';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import RadioGroup from '@/components/Molecules/RadioGroup';
 import { useRecoilState } from 'recoil';
 import { categoryState } from '@/states/cardview';
-import { fetchCategories } from '@/apis/cardview';
-import { findSelectedCategory } from '@/utils/cardview';
 import { useCategories } from '@/hooks/queries/categoryQuery';
 
 // 카테고리 버튼
@@ -16,9 +14,7 @@ const CardCategory = () => {
   const queryClient = useQueryClient();
   const { data: category } = useCategories();
 
-  // const { data } = useQuery({ queryKey: ['categories'], queryFn: () => fetchCategories() });
   const [categories, setCategories] = useRecoilState(categoryState);
-
   // category 저장
   useEffect(() => {
     if (category?.data)
@@ -38,7 +34,6 @@ const CardCategory = () => {
           else return { ...category, selected: false };
         }),
       );
-      // queryClient.invalidateQueries(['all_category_card_infinite']);
     };
 
     return (
