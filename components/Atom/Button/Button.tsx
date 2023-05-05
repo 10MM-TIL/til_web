@@ -47,9 +47,10 @@ export const Button = ({
   svg,
   children,
   onClick,
+  ...props
 }: ButtonProps) => {
   return (
-    <Styled.ButtonWrapper types={size} backgroundColor={backgroundColor} onClick={onClick}>
+    <Styled.ButtonWrapper types={size} backgroundColor={backgroundColor} onClick={onClick} {...props}>
       <Styled.ButtonContent gap={gap}>
         {svg && svg}
         {children && children}

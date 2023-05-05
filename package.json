@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.10.4",
     "@tanstack/react-query": "^4.22.0",
     "axios": "^1.2.2",
+    "cookies-next": "^2.1.1",
     "date-fns": "^2.29.3",
     "env-cmd": "^10.1.0",
     "next": "13.1.1",

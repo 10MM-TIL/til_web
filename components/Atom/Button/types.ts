@@ -1,14 +1,14 @@
-import { CSSProperties, ReactNode } from 'react';
+import { ButtonHTMLAttributes, CSSProperties, ReactNode, MouseEventHandler } from 'react';
 import { buttonStyles } from './Button';
 
-export type ButtonProps = {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: TypeObjectKey;
   backgroundColor?: CSSProperties['backgroundColor'];
   gap?: CSSProperties['gap'];
   svg?: ReactNode;
   children?: ReactNode;
-  onClick: () => void;
-};
+  onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
+}
 export type TypeObjectKey = keyof typeof buttonStyles;
 type TypeObject = {
   [K in TypeObjectKey]: {

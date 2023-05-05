@@ -15,6 +15,7 @@ const nextConfig = {
     //     pathname: '/**',
     //   },
     // ],
+    domains: ['search.pstatic.net'],
   },
   async rewrites() {
     return [
@@ -33,6 +34,13 @@ const nextConfig = {
     });
     return config;
   },
+  trailingSlash: true,
+  rewrites: () => [
+    {
+      source: '/oauth2/v1/:path*', // url이 source에 해당될 경우
+      destination: 'https://www.googleapis.com/oauth2/v1/:path*', // destination으로 redirect
+    },
+  ],
 };
 
 module.exports = nextConfig;

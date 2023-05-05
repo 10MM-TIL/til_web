@@ -1,13 +1,8 @@
 export type CertifiedBlogProps = {
+  id: string;
   blogName: string;
-  blogType: blogType;
-  isDeleted: boolean;
-  onDeleteBlog: () => void;
-};
-
-export type blogType = 'GitHub' | 'Naver' | 'Tistory' | 'Velog' | 'Personal';
-export type ImageTypeObject = {
-  [K in blogType]: BlogImageObject;
+  onDeleteBlog: (id: string) => void;
+  setBlogUrl: (id: string, url: string) => void;
 };
 
 export type BlogImageObject = {

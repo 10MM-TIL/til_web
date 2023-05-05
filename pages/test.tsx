@@ -21,7 +21,12 @@ import { IconPlus } from '@/assets/svgs/IconPlus';
 import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
+import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import RadioGroup from '@/components/Molecules/RadioGroup';
+import ProfileIcon from '@/components/Molecules/ProfileIcon';
+import BlogGroup from '@/components/Molecules/BlogGroup';
+import Modal from '@/components/Atom/Modal';
+import AddBlog from '@/components/Atom/AddBlog';
 
 const DATA = [
   {
@@ -46,6 +51,27 @@ const DATA = [
   },
 ];
 
+const BLOG_DATA = [
+  {
+    url: 'https://www.naver.com',
+  },
+  {
+    url: 'https://www.tistory.com',
+  },
+  {
+    url: 'https://velog.io',
+  },
+  {
+    url: 'https://brunch.co.kr',
+  },
+  {
+    url: 'https://www.daum.net',
+  },
+  {
+    url: 'https://www.medium.com',
+  },
+];
+
 const Test: NextPage = () => {
   return (
     <>
@@ -55,38 +81,65 @@ const Test: NextPage = () => {
           background-color: ${BACKGROUND_COLOR.NAVY_1};
         `}
       >
-        <div
-          css={css`
-            max-width: 1180px;
-            padding: 0 23px;
-            margin: 0 auto;
-          `}
-        >
-          <h1
-            css={css`
-              color: white;
-              font-size: 22px;
-              text-align: center;
-              padding-top: 30px;
-            `}
-          >
-            컴포넌트를 위한 테스트 페이지입니다.
-          </h1>
-          <RadioComponent />
-          <TypoComponent></TypoComponent>
-          <ToggleComponent></ToggleComponent>
-          <CertifiedBlogComponent></CertifiedBlogComponent>
-          <GrassAreaComponent></GrassAreaComponent>
-          <TextFieldComponent></TextFieldComponent>
-          <FieldRemindComponent></FieldRemindComponent>
-          <CardComponent></CardComponent>
-          <ButtonComponent></ButtonComponent>
-          <BoxLayoutTest></BoxLayoutTest>
-          <TimeLineComponent></TimeLineComponent>
-          <DropdownComponent></DropdownComponent>
-        </div>
-      </div>
-    </>
+        컴포넌트를 위한 테스트 페이지입니다.
+      </h1>
+
+      <ProfilComponent />
+      <TypoComponent></TypoComponent>
+      <ToggleComponent></ToggleComponent>
+      <CertifiedBlogComponent></CertifiedBlogComponent>
+      <GrassAreaComponent></GrassAreaComponent>
+      <TextFieldComponent></TextFieldComponent>
+      <FieldRemindComponent></FieldRemindComponent>
+      <CardComponent></CardComponent>
+      <ButtonComponent></ButtonComponent>
+      <BoxLayoutTest></BoxLayoutTest>
+      <TimeLineComponent></TimeLineComponent>
+      <DropdownComponent></DropdownComponent>
+      <CheckboxComponent />
+      <BlogGroupComponent />
+      <ModalComponent />
+    </div>
+  );
+};
+
+const ProfilComponent = () => {
+  /**
+   * 저장 버튼 누를 때 url 던져줘야하는데 image 주소 필요 HOW?
+   */
+  const [id, setId] = useState(0);
+  const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
+
+  useEffect(() => {
+    if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
+  }, [id]);
+  return (
+    <div
+      css={css`
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      `}
+    >
+      <h1
+        css={css`
+          color: white;
+          text-align: center;
+          padding-top: 30px;
+          margin-bottom: 30px;
+        `}
+      >
+        <strong>프로필 아이콘</strong>
+      </h1>
+      <ProfileIcon
+        imgUrl={url}
+        editable={true}
+        onClick={(id) => {
+          setId(id);
+        }}
+      />
+    </div>
   );
 };
 
@@ -160,30 +213,56 @@ const ToggleComponent = () => {
       >
         <strong>Toggle 컴포넌트</strong>
       </h1>
-      <Toggle />;
     </div>
   );
 };
 
 const CertifiedBlogComponent = () => {
-  const [isDeleted1, setDeleted1] = useState(false);
-  const [isDeleted2, setDeleted2] = useState(false);
-  const handleDeleteButton1 = () => {
+  const [blogList, setBlogList] = useState([
+    {
+      id: '1',
+      url: 'github.exaple.com/example1',
+    },
+    {
+      id: '2',
+      url: 'github.exaple.com/example2',
+    },
+  ]);
+  const handleDeleteBlog = (id: string) => {
     // 특정 조건 이후 없어져야함
-    console.log('blog1 삭제 Post API 전송');
+    console.log('삭제 Post API 전송');
     setTimeout(() => {
-      console.log('blog1 삭제 완료');
-      setDeleted1(true);
+      console.log('삭제 완료');
+      setBlogList(
+        blogList.filter((blogItem) => {
+          if (blogItem.id !== id) return true;
+        }),
+      );
     }, 2000);
   };
-  const handleDeleteButton2 = () => {
-    // 특정 조건 이후 없어져야함
-    console.log('blog1 삭제 Post API  전송');
-    setTimeout(() => {
-      console.log('blog2 삭제 완료');
-      setDeleted2(true);
-    }, 2000);
+
+  const setBlog = (id: string, url: string) => {
+    setBlogList(
+      blogList.map((blogItem) => {
+        if (blogItem.id === id) return { ...blogItem, url };
+        else return { ...blogItem };
+      }),
+    );
   };
+  const getMaximumId = (list: Array<{ id: string; url: string }>) => {
+    return list.reduce((min, p) => (Number(p.id) > Number(min) ? p.id : min), list[0].id);
+  };
+  const handleAddBlog = () => {
+    if (blogList.length < 6) {
+      const maxId = parseInt(getMaximumId(blogList)) + 1;
+      setBlogList([...blogList, { id: String(maxId), url: '' }]);
+    }
+  };
+
+  useEffect(() => {
+    console.log('blogList', blogList);
+  }, [blogList]);
+
   return (
     <div
       css={css`
@@ -200,18 +279,18 @@ const CertifiedBlogComponent = () => {
       <h1>
         <strong>인증된 블로그 컴포넌트</strong>
       </h1>
-      <CertifiedBlog
-        blogName={'github.exaple.com/example1'}
-        blogType={'GitHub'}
-        isDeleted={isDeleted1}
-        onDeleteBlog={handleDeleteButton1}
-      />
-      <CertifiedBlog
-        blogName={'github.exaple.com/example2'}
-        blogType={'GitHub'}
-        isDeleted={isDeleted2}
-        onDeleteBlog={handleDeleteButton2}
-      />
+      <AddBlog onClick={handleAddBlog} />
+      {blogList.map((blogItem, index) => {
+        return (
+          <CertifiedBlog
+            key={blogItem.id}
+            id={blogItem.id}
+            blogName={blogItem.url}
+            onDeleteBlog={handleDeleteBlog}
+            setBlogUrl={setBlog}
+          />
+        );
+      })}
     </div>
   );
 };
@@ -455,25 +534,17 @@ const ButtonComponent = () => {
 
   const GoogleLoginButton = () => {
     return (
-      <Button
-        size='x-lg'
-        backgroundColor='#FFFFFF'
-        svg={<IconGoogle></IconGoogle>}
-        textChildren={<Typo.H1>Google 로그인</Typo.H1>}
-        gap={'16px'}
-      ></Button>
+      <Button size='x-lg' backgroundColor='#FFFFFF' svg={<IconGoogle></IconGoogle>} gap={'16px'}>
+        <Typo.H1>Google 로그인</Typo.H1>
+      </Button>
     );
   };
 
   const KakaoLoginButton = () => {
     return (
-      <Button
-        size='x-lg'
-        backgroundColor='#FDDC3F'
-        svg={<IconKakao></IconKakao>}
-        textChildren={<Typo.H1>카카오 로그인</Typo.H1>}
-        gap={'6px'}
-      ></Button>
+      <Button size='x-lg' backgroundColor='#FDDC3F' svg={<IconKakao></IconKakao>} gap={'6px'}>
+        <Typo.H1>카카오 로그인</Typo.H1>
+      </Button>
     );
   };
 
@@ -496,23 +567,17 @@ const ButtonComponent = () => {
 
   const GoogleLoginMButton = () => {
     return (
-      <Button
-        size='x-lg-m'
-        backgroundColor='#FFFFFF'
-        svg={<IconGoogle></IconGoogle>}
-        textChildren={<Typo.H1>Google 로그인</Typo.H1>}
-      ></Button>
+      <Button size='x-lg-m' backgroundColor='#FFFFFF' svg={<IconGoogle></IconGoogle>}>
+        <Typo.H1>Google 로그인</Typo.H1>
+      </Button>
     );
   };
 
   const KakaoLoginMButton = () => {
     return (
-      <Button
-        size='x-lg-m'
-        backgroundColor='#FDDC3F'
-        svg={<IconKakao></IconKakao>}
-        textChildren={<Typo.H1>카카오 로그인</Typo.H1>}
-      ></Button>
+      <Button size='x-lg-m' backgroundColor='#FDDC3F' svg={<IconKakao></IconKakao>}>
+        <Typo.H1>카카오 로그인</Typo.H1>
+      </Button>
     );
   };
 
@@ -573,7 +638,9 @@ const BoxLayoutTest = () => {
   const LinkComponent = () => {
     return (
       <BoxLayout title='새 탭에서 브릭로그 확인'>
-        <Button size='md' textChildren={<Typo.Label1>크롬 확장앱 다운</Typo.Label1>}></Button>
+        <Button size='md'>
+          <Typo.Label1>크롬 확장앱 다운</Typo.Label1>
+        </Button>
       </BoxLayout>
     );
   };
@@ -663,6 +730,45 @@ const TimeLineComponent = () => {
   );
 };
 
+const ModalComponent = () => {
+  const [open, setOpen] = useState(false);
+  const handleClick = useCallback(() => {
+    setOpen(true);
+  }, []);
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding-bottom: 50px;
+      `}
+    >
+      <h1>
+        <strong>Modal 컴포넌트</strong>
+      </h1>
+      <div
+        css={css`
+          max-width: 500px;
+        `}
+      >
+        {/* <Button onClick={handleClick}>열기</Button> */}
+        <button style={{ background: 'white' }} onClick={handleClick}>
+          열기
+        </button>
+        <Modal onClose={handleClose} closable={true} isOpen={open}>
+          <div>TEST</div>
+        </Modal>
+      </div>
+    </div>
+  );
+};
+
 const DropdownComponent = () => {
   const [optionList, setOptionList] = useState([
     { id: 'develop', name: '🤐 개발' },
@@ -697,4 +803,61 @@ const DropdownComponent = () => {
   );
 };
 
+const CheckboxComponent = () => {
+  const [checked, setChecked] = useState(false);
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding-bottom: 50px;
+      `}
+    >
+      <h1>
+        <strong>Checkbox 컴포넌트</strong>
+      </h1>
+      <div
+        css={css`
+          max-width: 500px;
+        `}
+      >
+        <CheckboxLabel
+          checked={checked}
+          onClick={() => setChecked(!checked)}
+          text='마케팅 활용 및 뉴스레터 수신 동의'
+        />
+        {/* <Dropdown optionList={optionList} /> */}
+      </div>
+    </div>
+  );
+};
+
+const BlogGroupComponent = () => {
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding-bottom: 50px;
+      `}
+    >
+      <h1>
+        <strong>BlogGroup 컴포넌트</strong>
+      </h1>
+      <div
+        css={css`
+          max-width: 500px;
+        `}
+      >
+        <BlogGroup data={BLOG_DATA} />
+      </div>
+    </div>
+  );
+};
 export default Test;
