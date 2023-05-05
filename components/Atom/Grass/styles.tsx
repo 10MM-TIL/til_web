@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { GrassStatus } from './types';
 import { POINT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
 import { mq } from '@/styles/mediaQuery';
+import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 
 export const GrassContainer = styled.div`
   display: flex;
@@ -56,7 +57,7 @@ export const GrassHoverContainer = styled.div<{ isHover: boolean }>`
 
   width: 101px;
   height: 48px;
-  z-index: 9999999;
+  z-index: ${Z_INDEX_LEVEL['GRASS_HOVER_CONTAINER']};
   box-shadow: rgb(0 0 0 / 20%) 1px 2px 10px;
   transition: opacity 0.2s cubic-bezier(0.23, 1, 0.32, 1) 0s, visibility 0.2s cubic-bezier(0.23, 1, 0.32, 1) 0s,
     transform 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s;

@@ -1,56 +1,46 @@
-import * as Typo from '@/components/Atom/Typography';
-import { css } from '@emotion/react';
-import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
+import { ChangeEventHandler, useState } from 'react';
 import { useResize } from '@/hooks/useResize';
-import { Button } from '@/components/Atom/Button';
-import { IconPlus } from '@/assets/svgs/IconPlus';
+
+import HomeTemplates from '@/components/Templates/Home';
 
 const HomePage = () => {
   const device = useResize();
 
+  const [selectedTab, setSelectedTab] = useState<'MEMO' | 'REVIEW'>('MEMO'); // * MEMO & REVIEW
+  const [typingState, setTypingState] = useState<'' | 'checked' | 'saving' | 'error'>('checked');
+
+  const [memoValue, setMemoValue] = useState('');
+  const [reviewValue, setReviewValue] = useState('');
+
+  const handleTabChange = (type: 'MEMO' | 'REVIEW') => {
+    setSelectedTab(type);
+  };
+
+  const handleMemoChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    setTypingState('saving');
+
+    // TODO 쓰로틀링 & 서버 API
+    setMemoValue(e.currentTarget.value);
+
+    setTimeout(() => {
+      setTypingState('checked');
+    }, 2000);
+  };
+
+  const handleReviewChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    setReviewValue(e.currentTarget.value);
+  };
+
   return (
-    <div
-      css={css`
-        display: flex;
-        justify-content: center;
-        position: relative;
-        padding-top: 38px;
-      `}
-    >
-      <div
-        css={css`
-          position: absolute;
-          width: 100%;
-          height: 300px;
-          left: 0;
-          top: 0;
-          background-image: url('/images/background.png');
-
-          background-position: center;
-        `}
-      ></div>
-
-      <div
-        css={css`
-          z-index: 2; // TODO Z-Index 관련 정리
-          padding-top: 35px;
-          text-align: center;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 46px;
-        `}
-      >
-        <Typo.Title lineHeight='150%' color={FONT_COLOR['WHITE']}>
-          꾸준한 회고와 기록을 통해 <br /> 매일 성장하세요
-        </Typo.Title>
-
-        <Button size={device === 'mobile' ? 'x-lg-m' : 'lg'} backgroundColor={BACKGROUND_COLOR.FIELD_10} gap={'6px'}>
-          <IconPlus width='20' height='20' fill={FONT_COLOR.GRAY_4} stroke={FONT_COLOR.GRAY_4} />
-          <Typo.H2 color={FONT_COLOR.GRAY_4}>새 탭을 열 때마다 브릭로그를 확인해보세요</Typo.H2>
-        </Button>
-      </div>
-    </div>
+    <HomeTemplates
+      selectedTab={selectedTab}
+      typingState={typingState}
+      memoValue={memoValue}
+      reviewValue={reviewValue}
+      onMemoChange={handleMemoChange}
+      onReviewChange={handleReviewChange}
+      onTabChange={handleTabChange}
+    />
   );
 };
 

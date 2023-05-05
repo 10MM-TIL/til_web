@@ -56,7 +56,32 @@ instance.interceptors.response.use(
       else alert('Server Error');
     }
 
-    const { config, response } = err;
+    if (err?.response?.status === 418 && typeof window !== 'undefined') {
+      const refreshToken = getCookie('refToken');
+
+      if (!refreshToken) {
+        logout();
+        return;
+      }
+
+      try {
+        // const res = await postAuthRenewAPI({
+        //   refreshToken: '' + refreshToken,
+        // });
+        // if (!res?.data?.accessToken) {
+        //   logout(true);
+        //   return;
+        // }
+        // const token = res.data.accessToken;
+        // setCookie('webudAccToken', token);
+        // instance.defaults.headers['user-auth'] = token;
+        // config.headers['user-auth'] = token;
+        // const { data } = await axios(config);
+        // return data;
+      } catch (err) {
+        logout(true);
+      }
+    }
 
     const e = err?.response?.data ?? {};
 
