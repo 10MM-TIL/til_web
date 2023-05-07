@@ -41,7 +41,7 @@ export const fetchAllPosts = async (category: string, pageToken: string = '') =>
 
 // 카테고리별 추천 포스트 리스트 요청
 export const fetchRecommandPosts = async (category: string) => {
-  const params: fetchRecommandPostsRequest = { identifier: category };
+  const params: fetchRecommandPostsRequest | null = category ? { identifier: category } : null;
   try {
     const response: ServerResponse<fetchRecommandPostsResponse> = await instance.get('/post/category/recommend', {
       params,

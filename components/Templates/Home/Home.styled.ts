@@ -129,8 +129,10 @@ const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
 
 const textareaBottomContainer = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   position: absolute;
-  bottom: ${selectedTab === 'MEMO' ? '16px' : '20px'};
-  right: ${selectedTab === 'MEMO' ? '136px' : '26px'};
+  bottom: 20px;
+  right: 26px;
+  /* bottom: ${selectedTab === 'MEMO' ? '16px' : '20px'}; */
+  /* right: ${selectedTab === 'MEMO' ? '136px' : '26px'}; */
 `;
 
 const elementContainer = css`
@@ -176,6 +178,18 @@ const desktopOtherCard = css`
   gap: 15px;
 `;
 
+const footer = css`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+const divider = css`
+  width: 1px;
+  height: 13px;
+  background-color: ${BACKGROUND_COLOR.FIELD_10};
+`;
+
 const styles = {
   topContainer,
   topImageContainer,
@@ -193,6 +207,8 @@ const styles = {
   iconContainer,
   tempBox,
   desktopOtherCard,
+  footer,
+  divider,
 };
 
 export default styles;

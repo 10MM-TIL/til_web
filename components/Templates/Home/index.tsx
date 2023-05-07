@@ -11,6 +11,7 @@ import styles from './Home.styled';
 import IconArrow from '@/assets/svgs/IconArrow';
 import Link from 'next/link';
 import { mq } from '@/styles/mediaQuery';
+import { useRecommandPosts } from '@/hooks/queries/cardviewQuery';
 
 interface HomeTemplatesProps {
   selectedTab: 'MEMO' | 'REVIEW';
@@ -33,6 +34,10 @@ const HomeTemplates = ({
   onTabChange,
 }: HomeTemplatesProps) => {
   const device = useResize();
+
+  const { data } = useRecommandPosts('', true);
+
+  console.log(data);
 
   return (
     <>
@@ -95,15 +100,30 @@ const HomeTemplates = ({
             <div css={styles.tempBox}>{/* 타임라인 컴포넌트! */}</div>
           </div>
           {device === 'mobile' && (
-            <div css={styles.elementContainer}>
-              <div css={styles.elementTitle}>
-                <Typo.H1 color='#D2D2D2'>다른 사람들의 카드</Typo.H1>
-                <Link href='/more'>
-                  <Typo.Body color={FONT_COLOR.GRAY_2}>더보기</Typo.Body>
-                </Link>
+            <>
+              <div css={styles.elementContainer}>
+                <div css={styles.elementTitle}>
+                  <Typo.H1 color='#D2D2D2'>다른 사람들의 카드</Typo.H1>
+                  <Link href='/more'>
+                    <Typo.Body color={FONT_COLOR.GRAY_2}>더보기</Typo.Body>
+                  </Link>
+                </div>
+                <div css={styles.tempBox}>{/* 다른 사람들의 카드 컴포넌트! */}</div>
               </div>
-              <div css={styles.tempBox}>{/* 다른 사람들의 카드 컴포넌트! */}</div>
-            </div>
+
+              <footer css={styles.footer}>
+                <Link
+                  href='https://www.plip.kr/pcc/c791921f-5dc3-4cb0-baac-55e48ee2e585/privacy-policy'
+                  target='_blank'
+                >
+                  <Typo.Body color={FONT_COLOR.GRAY_2}>개인정보처리방침</Typo.Body>
+                </Link>
+                <div css={styles.divider} />
+                <Link href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7' target='_blank'>
+                  <Typo.Body color={FONT_COLOR.GRAY_2}>서비스 이용 약관</Typo.Body>
+                </Link>
+              </footer>
+            </>
           )}
         </div>
         {device === 'desktop' && (
