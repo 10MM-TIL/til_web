@@ -2,6 +2,7 @@ import { devLogger } from '@/utils/system';
 import { getAuth, logout } from '@/utils/utils';
 import axios from 'axios';
 import { getCookie, setCookie } from 'cookies-next';
+import { postAuthRefreshAPI } from './auth';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -57,27 +58,33 @@ instance.interceptors.response.use(
     }
 
     if (err?.response?.status === 418 && typeof window !== 'undefined') {
+      const accessToken = getCookie('accToken');
       const refreshToken = getCookie('refToken');
 
-      if (!refreshToken) {
+      if (!accessToken || !refreshToken) {
+        alert('로그인 토큰이 만료되었습니다. 재 로그인을 해주세요');
+
         logout();
         return;
       }
 
       try {
-        // const res = await postAuthRenewAPI({
-        //   refreshToken: '' + refreshToken,
-        // });
-        // if (!res?.data?.accessToken) {
-        //   logout(true);
-        //   return;
-        // }
-        // const token = res.data.accessToken;
-        // setCookie('webudAccToken', token);
-        // instance.defaults.headers['user-auth'] = token;
-        // config.headers['user-auth'] = token;
-        // const { data } = await axios(config);
-        // return data;
+        const { config, response } = err;
+
+        const res = await postAuthRefreshAPI();
+
+        if (!res?.data?.accessToken || !res?.data?.refreshToken) {
+          logout(true);
+          return;
+        }
+        const token = res.data.accessToken;
+        setCookie('accToken', token);
+        setCookie('refToken', res.data.refreshToken);
+        instance.defaults.headers['Authorization'] = `Bearer ${token}`;
+
+        config.headers['Authorization'] = `Bearer ${token}`;
+        const { data } = await axios(config);
+        return data;
       } catch (err) {
         logout(true);
       }

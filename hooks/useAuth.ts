@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 import { AuthState } from '@/stores/authStateStore';
+import { postAuthRefreshAPI } from '@/apis/auth';
 
 const useAuth = () => {
   const setAuthState = useSetRecoilState(AuthState);
@@ -15,7 +16,7 @@ const useAuth = () => {
     } else {
       const refToken = getCookie('refToken');
       if (refToken) {
-        // TODO renew token API 호출
+        postAuthRefreshAPI();
       }
     }
   }, [isSignIn, setAuthState]);
