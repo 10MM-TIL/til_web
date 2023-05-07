@@ -18,12 +18,14 @@ export const putMyProfile = async ({
   introduction,
   categoryIdentifier,
   mailAgreement,
+  profileImgSrc,
 }: {
   name: string;
   path: string;
   introduction: string;
   categoryIdentifier: string;
   mailAgreement: boolean;
+  profileImgSrc: string;
 }) => {
   try {
     const res = await instance.put('/my/profile', {
@@ -32,6 +34,7 @@ export const putMyProfile = async ({
       introduction,
       categoryIdentifier,
       mailAgreement,
+      profileImgSrc,
     });
     return res;
   } catch (e) {

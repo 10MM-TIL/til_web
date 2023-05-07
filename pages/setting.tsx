@@ -26,7 +26,7 @@ import Toggle from '@/components/Toggle';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import AddBlog from '@/components/Atom/AddBlog';
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
-import { myBloglist } from '@/stores/user';
+import { myBloglist, myMailAgreement, myNotification } from '@/stores/user';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfile, putMyProfile, getMyNotification, putMyNotification, putMyBlog } from 'apis/setting';
@@ -50,35 +50,44 @@ const CategoryLayout = ({
   );
 };
 
-const NoticeLayout = ({ iteration, enable }: { iteration: string; enable: boolean }) => {
+const NoticeLayout = () => {
   const DATA = [
     { identifier: 'DAY', name: '매일' },
     { identifier: 'WEEK', name: '매주' },
     { identifier: 'MONTH', name: '매월' },
   ];
-  const [selectedId, setSelectedId] = useState(iteration);
-  const [isChecked, setIsChecked] = useState(false);
-  const [isOn, setIsOn] = useState(enable);
-  const handleRadioClick = (value: string) => {
-    setSelectedId(value);
+  const { enable, iteration } = useRecoilValue(myNotification);
+  const setNotification = useSetRecoilState(myNotification);
+  const [mailAgreement, setMailAgreement] = useRecoilState(myMailAgreement);
+
+  const handleRadioClick = (value: 'DAY' | 'WEEK' | 'MONTH') => {
+    setNotification({ iteration: value, enable });
   };
+  const handleToggleClick = () => {
+    setNotification({ enable: !enable, iteration });
+  };
+
   const handleCheckboxClick = useCallback(() => {
-    setIsChecked(!isChecked);
-  }, [isChecked]);
+    setMailAgreement(!mailAgreement);
+  }, [mailAgreement, setMailAgreement]);
 
   return (
     <div>
       <BoxLayout title='알림 설정'>
         <div style={{ display: 'flex', gap: '20px' }}>
-          <Toggle isOn={isOn} onIsOnToggle={() => setIsOn(!isOn)} />
+          <Toggle isOn={enable} onIsOnToggle={handleToggleClick} />
           <div>
-            <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />
+            <RadioGroup data={DATA} selectedId={iteration} onClick={handleRadioClick} />
           </div>
         </div>
       </BoxLayout>
       <div style={{ float: 'right', marginRight: '8px' }}>
         <div style={{ marginLeft: '68px' }}>
-          <CheckboxLabel text='마케팅 활용 및 뉴스레터 수신 동의' checked={isChecked} onClick={handleCheckboxClick} />
+          <CheckboxLabel
+            text='마케팅 활용 및 뉴스레터 수신 동의'
+            checked={mailAgreement}
+            onClick={handleCheckboxClick}
+          />
         </div>
         <Typo.Label2 color={FONT_COLOR.GRAY_2}>브릭로그와 관련된 유용한 정보를 받아보실 수 있습니다</Typo.Label2>
       </div>
@@ -182,12 +191,14 @@ const FooterLayout = () => {
 
 const Setting: NextPage = () => {
   const [myInfo, setMyInfo] = useState({});
-  const [noti, setNoti] = useState({});
+  const [noti, setNoti] = useRecoilState(myNotification);
+  const setMyMailAgreement = useSetRecoilState(myMailAgreement);
   const [blogList, setBlogList] = useRecoilState(myBloglist);
   const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
   const [id, setId] = useState(0);
   const { data: userProfile } = useQuery(['myProfile'], getMyProfile, {
     onSuccess: (data) => {
+      setMyMailAgreement(data.isMailAgreement);
       setMyInfo(data);
     },
     onError: () => {
@@ -207,10 +218,10 @@ const Setting: NextPage = () => {
     },
   });
 
-  // useEffect(() => {
-  //   console.log('myInfo', myInfo);
-  //   console.log('noti', noti);
-  // }, [myInfo, noti]);
+  useEffect(() => {
+    console.log('myInfo', myInfo);
+    console.log('noti', noti);
+  }, [myInfo, noti]);
   const queryClient = useQueryClient();
   const saveProfile = useMutation(putMyProfile, {
     onSuccess: () => {
@@ -242,38 +253,15 @@ const Setting: NextPage = () => {
   });
 
   const handleSave = () => {
-    // try {
-    //   await Promise.all([
-    //     saveProfile.mutate(
-    //       { ...myInfo, mailAgreement: false },
-    //       {
-    //         onSuccess: () => {
-    //           // 요청이 성공한 경우
-    //           console.log('onSuccess');
-    //         },
-    //         onError: (error) => {
-    //           // 요청에 에러가 발생된 경우
-    //           console.log('onError');
-    //         },
-    //         onSettled: () => {
-    //           // 요청이 성공하든, 에러가 발생되든 실행하고 싶은 경우
-    //           console.log('onSettled');
-    //         },
-    //       },
-    //     ), // 데이터 저장
-    //     saveNoti.mutate({ enable: true, iteration: 'WEEK' }),
-    //     saveBlog.mutate(
-    //       blogList.map((blog) => {
-    //         return { url: blog.url };
-    //       }),
-    //     ),
-    //   ]);
-    // } catch (e) {
-    //   console.log('Adsfasdfasd');
-    //   alert('저장 실패');
-    // }
     saveProfile.mutate(
-      { ...myInfo, mailAgreement: false },
+      {
+        categoryIdentifier: myInfo.categoryIdentifier,
+        introduction: myInfo.introduction,
+        name: myInfo.name,
+        path: myInfo.path,
+        profileImgSrc: 'https://raw.githubusercontent.com/Brick-log/til-server/main/default.png',
+        mailAgreement: false,
+      },
       {
         onSuccess: () => {
           // 요청이 성공한 경우
@@ -289,7 +277,7 @@ const Setting: NextPage = () => {
         },
       },
     ); // 데이터 저장
-    saveNoti.mutate({ enable: true, iteration: 'WEEK' });
+    saveNoti.mutate(noti);
     saveBlog.mutate(
       blogList.map((blog) => {
         return { url: blog.url };
@@ -358,7 +346,7 @@ const Setting: NextPage = () => {
         </ProfileContainer>
         <CheckContainer>
           <CategoryLayout selectedCategoryId={myInfo.categoryIdentifier} onClick={handleChangeCategory} />
-          <NoticeLayout iteration={noti.iteration} isOn={noti.enable} />
+          <NoticeLayout />
           <BlogLinkLayout />
           {/* <DownloadLayout /> */}
         </CheckContainer>
