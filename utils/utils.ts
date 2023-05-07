@@ -3,15 +3,15 @@ import { deleteCookie, getCookie } from 'cookies-next';
 
 export function getAuth() {
   if (typeof window !== undefined) {
-    // TODO GET COOKIE
+    const accessToken = getCookie('accToken');
     return {
-      // accessToken,
-      accessToken: '',
+      accessToken,
     };
   }
 
   return null;
 }
+
 export function logout(isReload?: boolean) {
   try {
     instance.defaults.headers['Authorization'] = null;
