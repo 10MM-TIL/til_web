@@ -30,7 +30,6 @@ export const ProfileContainer = styled.div`
 `;
 
 export const PhotoContainer = styled.div`
-  padding-left: 63px;
   ${mq('desktop')} {
     padding-left: 26px;
   }
@@ -40,7 +39,10 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 483px;
+  width: 100%;
+  ${mq('desktop')} {
+    width: 483px;
+  }
 `;
 
 export const CheckContainer = styled.div`
@@ -53,13 +55,15 @@ export const CheckContainer = styled.div`
 export const BlogLinkContainer = styled.div`
   max-width: 776px;
   min-height: 84px;
-
-  padding: 24px 40px 24px 44px;
+  padding: 16px;
   background: ${BACKGROUND_COLOR.NAVY_3};
   border-radius: 12px;
 
   div {
     word-break: keep-all;
+  }
+  ${mq('desktop')} {
+    padding: 24px 40px 24px 44px;
   }
 `;
 
@@ -68,13 +72,20 @@ export const BlogTitleContainer = styled.div`
   width: 100%;
   justify-content: space-between;
   height: 36px;
+  padding: 6px 12px;
   padding-bottom: 4px;
+  ${mq('desktop')} {
+    padding: 0;
+  }
 `;
 
 export const BlogLinkList = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 5px;
+  ${mq('desktop')} {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 export const SaveButtonContainer = styled.div`
@@ -84,5 +95,6 @@ export const SaveButtonContainer = styled.div`
 export const FooterContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding-bottom: 56px;
 `;

@@ -10,7 +10,7 @@ interface BlogGroupProps {
 const BlogGroup = ({ data }: BlogGroupProps) => {
   return (
     <BlogGroupContainter>
-      {data.map((value) => (
+      {data?.map((value) => (
         <a key={value.identifier} target='_blank' rel='noreferrer noopener' href={value.url}>
           <BlogIcon url={value.url} />
         </a>

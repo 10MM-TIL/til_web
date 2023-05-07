@@ -1,7 +1,6 @@
 // [user].tsx
-import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useState, useEffect, useCallback } from 'react';
+import type { GetServerSideProps, NextPage, NextPageContext } from 'next';
+import { useState, useEffect, useCallback, use } from 'react';
 import {
   MypageWrapper,
   MypageContainer,
@@ -23,19 +22,17 @@ import { TimeLine } from '@/components/Atom/TimeLine';
 import { IconTimeline } from '@/assets/svgs/IconTimeline';
 import BlogGroup from '@/components/Molecules/BlogGroup';
 import router from 'next/router';
-import { getMyProfile, getMyBlog, getMyTimeline, getMyGrass } from '@/pages/api/user';
+import { getUserProfile, getUserBlog, getUserTimeline, getUserGrass } from 'apis/user';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
-import { getMyProfileResponse } from '@/types/user';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { userInformation, myBloglist, myTimelineList } from '@/stores/user';
+import { getMyProfileResponse, getTimelineResponse } from '@/types/user';
+import { IconFloat } from '@/assets/svgs/IconFloat';
 
-const NameCategory = ({ name }: { name: string }) => {
-  const [isMe] = useState(true); // 추후 Recoil / reactQuery 로 변경하여 본인인지 여부 확인필요
+const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
     <InfoContainer>
       <InfoLeftArea>
         <Typo.H1 color={FONT_COLOR.WHITE}>{name}</Typo.H1>
-        <Typo.Label2 color={POINT_COLOR.MAIN}>#개발자</Typo.Label2>
+        <Typo.Label2 color={POINT_COLOR.MAIN}>{category}</Typo.Label2>
       </InfoLeftArea>
       {isMe ? (
         <InfoRightArea>
@@ -54,9 +51,7 @@ const SettingButton = () => {
   );
 };
 
-const Introduction = ({ introduction }: { introduction: string }) => {
-  const blogs = useRecoilValue(myBloglist);
-
+const Introduction = ({ introduction, blogs }: { introduction: string; blogs: any[] }) => {
   return (
     <IntroductionContainer>
       <Typo.Body color={FONT_COLOR.WHITE}>{introduction}</Typo.Body>
@@ -65,7 +60,7 @@ const Introduction = ({ introduction }: { introduction: string }) => {
   );
 };
 
-const TimelineComponent = () => {
+const TimelineComponent = ({ content }: {}) => {
   return (
     <div style={{ display: 'flex', gap: '15px', marginBottom: '-10px' }}>
       <IconTimeline />
@@ -76,77 +71,62 @@ const TimelineComponent = () => {
   );
 };
 
-const TimeLineArea = () => {
+const TimeLineArea = ({ timelineData, count }: { timelineData: getTimelineResponse[]; count: number }) => {
   return (
     <TimelineContainer>
       <TimelineTitleArea>
         <Typo.H1 color={FONT_COLOR.WHITE} style={{ paddingBottom: '16px' }}>
           타임라인
         </Typo.H1>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>개수</Typo.Body>
+        <Typo.Body color={FONT_COLOR.GRAY_2}>{count}개</Typo.Body>
       </TimelineTitleArea>
-
-      <TimelineComponent />
-      <TimelineComponent />
-      <TimelineComponent />
+      {timelineData.map((item) => {
+        return <TimelineComponent key={item.url} />;
+      })}
     </TimelineContainer>
   );
 };
 
-const Mypage: NextPage = () => {
-  const router = useRouter();
-  // console.log('router', router);
-  const path = router.query.user as string;
-  // console.log('path', path);
-  const [user, setUser] = useRecoilState(userInformation);
-  const [blogs, setBlogs] = useRecoilState(myBloglist);
-  const [timeline, setTimeLine] = useRecoilState(myTimelineList);
-  // const { data, status } = useQuery(['profile'], getMyProfile, { onSuccess: (data) => setUser(data) });
-  useQuery(['blog'], () => getMyBlog(path), {
-    onSuccess: (data) => setBlogs(data.blogs),
-  });
-  useQuery(['post'], () => getMyTimeline(data?.path, 10), {
-    onSuccess: (data) => setTimeLine(data.postList),
-  });
+const Mypage: NextPage = ({ path }: any) => {
+  const { data: userInfo } = useQuery(['PROFILE'], () => getUserProfile(path));
+  const { data: blogObject } = useQuery(['BLOGS'], () => getUserBlog(path));
+  const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, 10));
+  const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 0, 9999999999));
+  const { blogs } = blogObject ?? [];
+  const { size: postCount, postList } = postObject ?? { size: 0, postList: [] };
+  const { dateList: grass } = grassObject ?? [];
 
-  const [url, setUrl] = useState('');
-  const [id, setId] = useState(0);
-  const handleChangeProfile = useCallback((newId: number) => {
-    setId(newId);
-  }, []);
+  const [url, setUrl] = useState(require(`@/assets/images/default.png`) as string);
+  const [picid, setPicId] = useState(0);
+
   useEffect(() => {
-    if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
-  }, [id]);
+    if (picid > 0) setUrl(require(`@/assets/images/${picid}.png`) as string);
+  }, [picid]);
   return (
     <MypageWrapper>
       <MypageContainer>
         <IntroContainer>
-          <ProfileIcon
-            imgUrl={url}
-            onClick={(id) => {
-              handleChangeProfile(id);
-            }}
-          />
+          <ProfileIcon imgUrl={url} onClick={() => {}} />
           <TextContainer>
-            <NameCategory name={user.name} />
-            <Introduction introduction={user.introduction} />
+            <NameCategory isMe={userInfo?.isAuthorized} name={userInfo?.name} category={userInfo?.categoryName} />
+            <Introduction blogs={blogs} introduction={userInfo?.introduction} />
           </TextContainer>
         </IntroContainer>
-        <GrassArea title={`${user.name}의 기록`} />
-        <TimeLineArea />
+        <GrassArea title={`${userInfo?.name}의 기록`} />
+        <TimeLineArea count={postCount} timelineData={postList} />
       </MypageContainer>
+      <Button size='float' svg={<IconFloat />} />
     </MypageWrapper>
   );
 };
 
 export default Mypage;
 
-// export const getServerSideProps = async (context: any) => {
-//   const path = router.query.user as string;
-//   console.log('context,', context);
-//   console.log('getserverside', path);
-//   return { props: {} };
-// };
+export const getServerSideProps: GetServerSideProps = async (context: NextPageContext) => {
+  const { user: path } = context.query;
+
+  return { props: { path } };
+};
 
 // export const getStaticPaths = async () => {
 //   return {

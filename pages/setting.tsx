@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, ReactHTMLElement } from 'react';
 import type { NextPage } from 'next';
 import {
   EditpageWrapper,
@@ -13,7 +13,8 @@ import {
   FooterContainer,
   SaveButtonContainer,
 } from '@/styles/setting.module';
-import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
+import { FONT_COLOR } from '@/constants/color';
+import { useCategories } from '@/hooks/queries/categoryQuery';
 
 import * as Typo from '@/components/Atom/Typography';
 import { TextField } from '@/components/Atom/TextField';
@@ -25,54 +26,40 @@ import Toggle from '@/components/Toggle';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import AddBlog from '@/components/Atom/AddBlog';
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
-import { userInformation } from '@/stores/user';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { myBloglist } from '@/stores/user';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getMyProfile, putMyProfile, getMyNotification, putMyNotification, putMyBlog } from 'apis/setting';
+import { usePutMyProfile } from '@/hooks/queries/saveQuery';
+import { getUserBlog } from '@/apis/user';
 
-const CategoryLayout = () => {
-  const DATA = [
-    {
-      id: 1,
-      text: '#개발',
-    },
-    {
-      id: 2,
-      text: '#디자인',
-    },
-    {
-      id: 3,
-      text: '#기획',
-    },
-    {
-      id: 4,
-      text: '#마케팅',
-    },
-    {
-      id: 5,
-      text: '#기업/스타트업',
-    },
-  ];
-  const [selectedId, setSelectedId] = useState(1);
+const CategoryLayout = ({
+  selectedCategoryId,
+  onClick,
+}: {
+  selectedCategoryId: string;
+  onClick: (v: string) => {};
+}) => {
+  const { data: category } = useCategories();
+  const categoryData = category?.data;
 
-  const handleRadioClick = (value: number) => {
-    setSelectedId(value);
-  };
   return (
     <BoxLayout title='분야'>
-      <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />
+      <RadioGroup data={categoryData?.categories ?? []} selectedId={selectedCategoryId} onClick={onClick} />
     </BoxLayout>
   );
 };
 
-const NoticeLayout = () => {
+const NoticeLayout = ({ iteration, enable }: { iteration: string; enable: boolean }) => {
   const DATA = [
-    { id: 1, text: '매일' },
-    { id: 7, text: '매주' },
-    { id: 30, text: '매월' },
+    { identifier: 'DAY', name: '매일' },
+    { identifier: 'WEEK', name: '매주' },
+    { identifier: 'MONTH', name: '매월' },
   ];
-  const [selectedId, setSelectedId] = useState(1);
+  const [selectedId, setSelectedId] = useState(iteration);
   const [isChecked, setIsChecked] = useState(false);
-
-  const handleRadioClick = (value: number) => {
+  const [isOn, setIsOn] = useState(enable);
+  const handleRadioClick = (value: string) => {
     setSelectedId(value);
   };
   const handleCheckboxClick = useCallback(() => {
@@ -83,7 +70,7 @@ const NoticeLayout = () => {
     <div>
       <BoxLayout title='알림 설정'>
         <div style={{ display: 'flex', gap: '20px' }}>
-          <Toggle />
+          <Toggle isOn={isOn} onIsOnToggle={() => setIsOn(!isOn)} />
           <div>
             <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />
           </div>
@@ -100,39 +87,28 @@ const NoticeLayout = () => {
 };
 
 const BlogLinkLayout = () => {
-  const [blogList, setBlogList] = useState([
-    {
-      id: '1',
-      url: 'naver.exaple.com/example1',
-    },
-  ]);
+  const [blogList, setBlogList] = useRecoilState(myBloglist);
   const handleDeleteBlog = (id: string) => {
-    // 특정 조건 이후 없어져야함
-    console.log('삭제 Post API 전송');
-    setTimeout(() => {
-      console.log('삭제 완료');
-      setBlogList(
-        blogList.filter((blogItem) => {
-          if (blogItem.id !== id) return true;
-        }),
-      );
-    }, 2000);
+    setBlogList(
+      blogList.filter((blogItem) => {
+        if (blogItem.identifier !== id) return true;
+      }),
+    );
   };
   const setBlog = (id: string, url: string) => {
     setBlogList(
       blogList.map((blogItem) => {
-        if (blogItem.id === id) return { ...blogItem, url };
+        if (blogItem.identifier === id) return { ...blogItem, url };
         else return { ...blogItem };
       }),
     );
   };
-  const getMaximumId = (list: Array<{ id: string; url: string }>) => {
-    return list.reduce((min, p) => (Number(p.id) > Number(min) ? p.id : min), list[0].id);
-  };
+  // const getMaximumId = (list: Array<{ id: string; url: string }>) => {
+  //   return list.reduce((min, p) => (Number(p.id) > Number(min) ? p.id : min), list[0].id);
+  // };
   const handleAddBlog = () => {
     if (blogList.length < 6) {
-      const maxId = parseInt(getMaximumId(blogList)) + 1;
-      setBlogList([...blogList, { id: String(maxId), url: '' }]);
+      setBlogList([...blogList, { identifier: Math.random().toString(36).substring(2, 11), url: '' }]);
     }
   };
   return (
@@ -143,20 +119,22 @@ const BlogLinkLayout = () => {
       </BlogTitleContainer>
       <div>
         <BlogLinkList>
-          {blogList
-            .slice()
-            .reverse()
-            .map((blogItem, index) => {
-              return (
-                <CertifiedBlog
-                  key={blogItem.id}
-                  id={blogItem.id}
-                  blogName={blogItem.url}
-                  onDeleteBlog={handleDeleteBlog}
-                  setBlogUrl={setBlog}
-                />
-              );
-            })}
+          {blogList.length > 0
+            ? blogList
+                .slice()
+                .reverse()
+                .map((blogItem) => {
+                  return (
+                    <CertifiedBlog
+                      key={blogItem.identifier}
+                      id={blogItem.identifier}
+                      blogName={blogItem.url}
+                      onDeleteBlog={handleDeleteBlog}
+                      setBlogUrl={setBlog}
+                    />
+                  );
+                })
+            : null}
         </BlogLinkList>
       </div>
     </BlogLinkContainer>
@@ -171,10 +149,12 @@ const DownloadLayout = () => {
   );
 };
 
-const SaveLayout = () => {
+const SaveLayout = ({ onClick }: any) => {
   return (
     <SaveButtonContainer>
-      <Button size='lg'>저장하기</Button>
+      <Button size='lg' onClick={onClick}>
+        저장하기
+      </Button>
     </SaveButtonContainer>
   );
 };
@@ -183,8 +163,16 @@ const FooterLayout = () => {
   return (
     <FooterContainer>
       <span style={{ display: 'flex', gap: '42px' }}>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>개인정보처리방침</Typo.Body>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>서비스 이용 약관</Typo.Body>
+        <a
+          href='https://www.plip.kr/pcc/c791921f-5dc3-4cb0-baac-55e48ee2e585/privacy-policy'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <Typo.Body color={FONT_COLOR.GRAY_2}>개인정보처리방침</Typo.Body>
+        </a>
+        <a href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7' target='_blank' rel='noopener noreferrer'>
+          <Typo.Body color={FONT_COLOR.GRAY_2}>서비스 이용 약관</Typo.Body>
+        </a>
         <Typo.Body color={FONT_COLOR.GRAY_2}>회원탈퇴</Typo.Body>
       </span>
       <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
@@ -193,12 +181,146 @@ const FooterLayout = () => {
 };
 
 const Setting: NextPage = () => {
+  const [myInfo, setMyInfo] = useState({});
+  const [noti, setNoti] = useState({});
+  const [blogList, setBlogList] = useRecoilState(myBloglist);
   const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
   const [id, setId] = useState(0);
-  const [user, setUser] = useRecoilState(userInformation);
-  console.log('user', user);
+  const { data: userProfile } = useQuery(['myProfile'], getMyProfile, {
+    onSuccess: (data) => {
+      setMyInfo(data);
+    },
+    onError: () => {
+      alert('error');
+    },
+  });
+  useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
+    enabled: !!userProfile,
+    onSuccess: (data) => {
+      console.log(data);
+      setBlogList(data.blogs);
+    },
+  });
+  useQuery(['myNoti'], getMyNotification, {
+    onSuccess: (data) => {
+      setNoti(data);
+    },
+  });
+
+  // useEffect(() => {
+  //   console.log('myInfo', myInfo);
+  //   console.log('noti', noti);
+  // }, [myInfo, noti]);
+  const queryClient = useQueryClient();
+  const saveProfile = useMutation(putMyProfile, {
+    onSuccess: () => {
+      // 요청이 성공한 경우
+      console.log('onSuccess');
+      queryClient.invalidateQueries(['putProfile']); // queryKey 유효성 제거
+    },
+    // onError: () => {
+    //   alert('저장에 실패했습니다. 다시 시도해주세요');
+    // },
+  });
+  const saveNoti = useMutation(putMyNotification, {
+    onSuccess: () => {
+      console.log('onSuccess');
+      queryClient.invalidateQueries(['putNoti']);
+    },
+    // onError: () => {
+    //   alert('저장에 실패했습니다. 다시 시도해주세요');
+    // },
+  });
+  const saveBlog = useMutation(putMyBlog, {
+    onSuccess: () => {
+      console.log('onSuccess');
+      queryClient.invalidateQueries(['putBlog']);
+    },
+    // onError: () => {
+    //   alert('저장에 실패했습니다. 다시 시도해주세요');
+    // },
+  });
+
+  const handleSave = () => {
+    // try {
+    //   await Promise.all([
+    //     saveProfile.mutate(
+    //       { ...myInfo, mailAgreement: false },
+    //       {
+    //         onSuccess: () => {
+    //           // 요청이 성공한 경우
+    //           console.log('onSuccess');
+    //         },
+    //         onError: (error) => {
+    //           // 요청에 에러가 발생된 경우
+    //           console.log('onError');
+    //         },
+    //         onSettled: () => {
+    //           // 요청이 성공하든, 에러가 발생되든 실행하고 싶은 경우
+    //           console.log('onSettled');
+    //         },
+    //       },
+    //     ), // 데이터 저장
+    //     saveNoti.mutate({ enable: true, iteration: 'WEEK' }),
+    //     saveBlog.mutate(
+    //       blogList.map((blog) => {
+    //         return { url: blog.url };
+    //       }),
+    //     ),
+    //   ]);
+    // } catch (e) {
+    //   console.log('Adsfasdfasd');
+    //   alert('저장 실패');
+    // }
+    saveProfile.mutate(
+      { ...myInfo, mailAgreement: false },
+      {
+        onSuccess: () => {
+          // 요청이 성공한 경우
+          console.log('onSuccess');
+        },
+        onError: (error) => {
+          // 요청에 에러가 발생된 경우
+          console.log('onError');
+        },
+        onSettled: () => {
+          // 요청이 성공하든, 에러가 발생되든 실행하고 싶은 경우
+          console.log('onSettled');
+        },
+      },
+    ); // 데이터 저장
+    saveNoti.mutate({ enable: true, iteration: 'WEEK' });
+    saveBlog.mutate(
+      blogList.map((blog) => {
+        return { url: blog.url };
+      }),
+    );
+  };
+
+  const handleChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setMyInfo((prev) => {
+      return { ...prev, name: e.target.value };
+    });
+  }, []);
+
+  const handleChangePath = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setMyInfo((prev) => {
+      return { ...prev, path: e.target.value };
+    });
+  }, []);
+  const handleChangeIntroduction = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setMyInfo((prev) => {
+      return { ...prev, introduction: e.target.value };
+    });
+  }, []);
   const handleChangeProfile = useCallback((newId: number) => {
     setId(newId);
+  }, []);
+
+  const handleChangeCategory = useCallback((value: string) => {
+    setMyInfo((prev) => {
+      return { ...prev, categoryIdentifier: value };
+    });
   }, []);
   useEffect(() => {
     if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
@@ -221,22 +343,26 @@ const Setting: NextPage = () => {
               title='URL 주소 설정'
               isInput={true}
               useFixedString={true}
-              inputValue={user.path}
+              inputValue={myInfo.path}
               useCopy={true}
-              onChange={() => {}}
-              // onChange={(e) => setUser(prev => }}
+              onChange={handleChangePath}
             />
-            <TextField title='이름' isInput={true} inputValue={'이름테스트(상태로변경)'} onChange={() => {}} />
-            <TextField title={'소개'} isInput={false} inputValue={'소개테스트'} onChange={() => {}} />
+            <TextField title='이름' isInput={true} inputValue={myInfo.name} onChange={handleChangeName} />
+            <TextField
+              title={'소개'}
+              isInput={false}
+              inputValue={myInfo.introduction}
+              onChange={handleChangeIntroduction}
+            />
           </InputContainer>
         </ProfileContainer>
         <CheckContainer>
-          <CategoryLayout />
-          <NoticeLayout />
+          <CategoryLayout selectedCategoryId={myInfo.categoryIdentifier} onClick={handleChangeCategory} />
+          <NoticeLayout iteration={noti.iteration} isOn={noti.enable} />
           <BlogLinkLayout />
-          <DownloadLayout />
+          {/* <DownloadLayout /> */}
         </CheckContainer>
-        <SaveLayout />
+        <SaveLayout onClick={handleSave} />
         <FooterLayout />
       </EditpageContainer>
     </EditpageWrapper>

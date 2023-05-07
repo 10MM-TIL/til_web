@@ -3,11 +3,23 @@ export interface getMyProfileResponse {
   path: string;
   profileImgSrc: string;
   introduction: string;
-  categoryId: string;
+  categoryIdentifier: string;
+  categoryName: string;
   isAuthorized: boolean;
 }
 
 export interface getBlogResponse {
   identifier: string;
   url: string;
+}
+
+export interface getTimelineResponse {
+  identifier: string;
+  userPath: string;
+  categoryIdentifier: string;
+  title: string;
+  description: string;
+  url: string;
+  createdAt: string;
+  hitCount: number;
 }
