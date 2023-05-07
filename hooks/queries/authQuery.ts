@@ -11,16 +11,12 @@ export const useAuthLogin = () => {
     onSuccess: ({ data }) => {
       if (!data?.refreshToken) return;
 
-      setCookie('refToken', data.refreshToken, {
-        maxAge: 60 * 60 * 24 * 7, // * 1주일
-      });
+      setCookie('refToken', data.refreshToken);
 
       if (!data?.accessToken) return;
 
       instance.defaults.headers['Authorization'] = `Bearer ${data.accessToken}`;
-      setCookie('accToken', data.accessToken, {
-        maxAge: 60 * 60 * 24, // * 1일
-      });
+      setCookie('accToken', data.accessToken);
 
       router.push('/'); // TODO 로그인 후 같은 페이지 새로 고침 (다듬어야 하는지 체크)
     },
