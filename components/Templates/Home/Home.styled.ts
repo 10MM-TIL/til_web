@@ -164,11 +164,7 @@ const iconContainer = css`
   cursor: pointer;
 `;
 
-const tempBox = css`
-  border-radius: 20px;
-  height: 334px;
-  background-color: ${BACKGROUND_COLOR.FIELD_10};
-`;
+const tempBox = css``;
 
 const desktopOtherCard = css`
   width: 284px;
