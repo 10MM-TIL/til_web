@@ -2,9 +2,10 @@ import { ChangeEventHandler, useState } from 'react';
 import { useResize } from '@/hooks/useResize';
 
 import HomeTemplates from '@/components/Templates/Home';
+import { useRouter } from 'next/router';
 
 const HomePage = () => {
-  const device = useResize();
+  const router = useRouter();
 
   const [selectedTab, setSelectedTab] = useState<'MEMO' | 'REVIEW'>('MEMO'); // * MEMO & REVIEW
   const [typingState, setTypingState] = useState<'' | 'checked' | 'saving' | 'error'>('checked');
@@ -31,6 +32,14 @@ const HomePage = () => {
     setReviewValue(e.currentTarget.value);
   };
 
+  const handleClickContent = (url: string = '') => {
+    window.open(url);
+  };
+
+  const handleClickUser = (userpath: string = '') => {
+    router.push(`/${userpath}`);
+  };
+
   return (
     <HomeTemplates
       selectedTab={selectedTab}
@@ -40,6 +49,8 @@ const HomePage = () => {
       onMemoChange={handleMemoChange}
       onReviewChange={handleReviewChange}
       onTabChange={handleTabChange}
+      onClickContent={handleClickContent}
+      onClickUser={handleClickUser}
     />
   );
 };
