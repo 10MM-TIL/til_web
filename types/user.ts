@@ -18,7 +18,7 @@ export interface getTimelineResponse {
   userPath: string;
   categoryIdentifier: string;
   title: string;
-  description: string;
+  summary: string;
   url: string;
   createdAt: string;
   hitCount: number;

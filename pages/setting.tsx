@@ -192,7 +192,7 @@ const FooterLayout = () => {
 const Setting: NextPage = () => {
   const [myInfo, setMyInfo] = useState({});
   const [noti, setNoti] = useRecoilState(myNotification);
-  const setMyMailAgreement = useSetRecoilState(myMailAgreement);
+  const [mailAgreement, setMyMailAgreement] = useRecoilState(myMailAgreement);
   const [blogList, setBlogList] = useRecoilState(myBloglist);
   const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
   const [id, setId] = useState(0);
@@ -260,7 +260,7 @@ const Setting: NextPage = () => {
         name: myInfo.name,
         path: myInfo.path,
         profileImgSrc: 'https://raw.githubusercontent.com/Brick-log/til-server/main/default.png',
-        mailAgreement: false,
+        mailAgreement: mailAgreement,
       },
       {
         onSuccess: () => {

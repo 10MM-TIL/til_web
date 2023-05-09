@@ -22,10 +22,11 @@ import { TimeLine } from '@/components/Atom/TimeLine';
 import { IconTimeline } from '@/assets/svgs/IconTimeline';
 import BlogGroup from '@/components/Molecules/BlogGroup';
 import router from 'next/router';
-import { getUserProfile, getUserBlog, getUserTimeline, getUserGrass } from 'apis/user';
-import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import { getUserProfile, getUserBlog, getUserTimeline, getUserGrass, putEditTimeline, deleteTimeline } from 'apis/user';
+import { dehydrate, QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfileResponse, getTimelineResponse } from '@/types/user';
 import { IconFloat } from '@/assets/svgs/IconFloat';
+import { formatDate } from '@/utils/utils';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -60,12 +61,49 @@ const Introduction = ({ introduction, blogs }: { introduction: string; blogs: an
   );
 };
 
-const TimelineComponent = ({ content }: {}) => {
+const TimelineComponent = ({
+  content,
+  postIdentifier,
+}: {
+  content: { date: string; title: string; desc: string; url: string };
+  postIdentifier: string;
+}) => {
+  const { title: originalTitle, desc: originalSummary } = content;
+  const queryClient = useQueryClient();
+  const editTimeline = useMutation(putEditTimeline, {
+    onSuccess: () => {
+      console.log('onSuccess');
+    },
+    onSettled: () => queryClient.invalidateQueries(['POST'], { refetchInactive: true }),
+  });
+  const removeTimeline = useMutation(deleteTimeline, {
+    onSuccess: () => {
+      console.log('onSuccess');
+    },
+    onSettled: () => queryClient.invalidateQueries(['POST'], { refetchInactive: true }),
+  });
+  const updateTimeline = (content: { title: string; desc: string; createdAt: number }) => {
+    editTimeline.mutate({
+      postIdentifier: postIdentifier,
+      editedContent: {
+        title: content.title,
+        summary: content.desc,
+        createdAt: Date.now() / 1000,
+      },
+    });
+  };
+  const handleDeleteContent = () => {
+    removeTimeline.mutate({ postIdentifier: postIdentifier });
+  };
   return (
     <div style={{ display: 'flex', gap: '15px', marginBottom: '-10px' }}>
       <IconTimeline />
       <div style={{ width: '100%', marginTop: '5px' }}>
-        <TimeLine />
+        <TimeLine
+          content={content}
+          onSaveAllContent={(newValue) => updateTimeline(newValue)}
+          onDeleteContent={handleDeleteContent}
+        />
       </div>
     </div>
   );
@@ -81,7 +119,13 @@ const TimeLineArea = ({ timelineData, count }: { timelineData: getTimelineRespon
         <Typo.Body color={FONT_COLOR.GRAY_2}>{count}개</Typo.Body>
       </TimelineTitleArea>
       {timelineData.map((item) => {
-        return <TimelineComponent key={item.url} />;
+        const content = {
+          title: item.title,
+          date: formatDate(item.createdAt),
+          url: item.url,
+          desc: item.summary,
+        };
+        return <TimelineComponent key={item.identifier} content={content} postIdentifier={item.identifier} />;
       })}
     </TimelineContainer>
   );
@@ -90,11 +134,11 @@ const TimeLineArea = ({ timelineData, count }: { timelineData: getTimelineRespon
 const Mypage: NextPage = ({ path }: any) => {
   const { data: userInfo } = useQuery(['PROFILE'], () => getUserProfile(path));
   const { data: blogObject } = useQuery(['BLOGS'], () => getUserBlog(path));
-  const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, 10));
+  const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, 50));
   const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 0, 9999999999));
   const { blogs } = blogObject ?? [];
-  const { size: postCount, postList } = postObject ?? { size: 0, postList: [] };
-  const { dateList: grass } = grassObject ?? [];
+  const { size: postCount, posts } = postObject ?? { size: 0, posts: [] };
+  const { metas: grass } = grassObject ?? [];
 
   const [url, setUrl] = useState(require(`@/assets/images/default.png`) as string);
   const [picid, setPicId] = useState(0);
@@ -113,7 +157,7 @@ const Mypage: NextPage = ({ path }: any) => {
           </TextContainer>
         </IntroContainer>
         <GrassArea title={`${userInfo?.name}의 기록`} />
-        <TimeLineArea count={postCount} timelineData={postList} />
+        <TimeLineArea count={postCount} timelineData={posts} />
       </MypageContainer>
       <Button size='float' svg={<IconFloat />} />
     </MypageWrapper>

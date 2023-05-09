@@ -47,3 +47,32 @@ export const getUserGrass = async (path: string, from: number, to: number) => {
     throw e;
   }
 };
+
+export const putEditTimeline = async ({
+  postIdentifier,
+  editedContent,
+}: {
+  postIdentifier: string;
+  editedContent: {};
+}) => {
+  try {
+    const params = { ...editedContent };
+    const res = await instance.put(`/post/${postIdentifier}`, { ...editedContent });
+
+    return res;
+  } catch (e) {
+    devError('putEditTimelineAPI error', e);
+    throw e;
+  }
+};
+
+export const deleteTimeline = async ({ postIdentifier }: { postIdentifier: string }) => {
+  try {
+    const res = await instance.delete(`/post/${postIdentifier}`);
+
+    return res;
+  } catch (e) {
+    devError('deleteTimelineAPI error', e);
+    throw e;
+  }
+};
