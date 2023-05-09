@@ -21,7 +21,7 @@ interface CategoryModalProps {
 const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
   const device = useResize();
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState('0ec30e71-38ba-4837-8804-f0e1180c5bf1');
+  const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [isAlertAgree, setIsAlertAgree] = useState(true);
   const [frequency, setFrequency] = useState('');
   const [isReceiveAgree, setIsReceiveAgree] = useState(true);
@@ -41,9 +41,18 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    if (selectedCategoryId === '') {
+      alert('분야를 선택해주세요');
+      return;
+    }
+
+    if (isAlertAgree && frequency === '') {
+      alert('알림 주기를 선택해주세요');
+      return;
+    }
 
     await categoryMutate({ categoryIdentifier: selectedCategoryId, mailAgreement: isReceiveAgree });
-    await notificationMutate({ enable: isAlertAgree, iteration: frequency });
+    await notificationMutate({ enable: isAlertAgree, iteration: frequency === '' ? 'NONE' : frequency });
   };
 
   return (
@@ -72,9 +81,9 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
             <div css={styles.alertRadioRow}>
               <RadioGroup
                 data={[
-                  { identifier: 'every-month', name: '매달' },
-                  { identifier: 'every-week', name: '매주' },
-                  { identifier: 'every-day', name: '매일' },
+                  { identifier: 'MONTH', name: '매달' },
+                  { identifier: 'WEEK', name: '매주' },
+                  { identifier: 'DAY', name: '매일' },
                 ]}
                 selectedId={frequency}
                 onClick={(value) => {

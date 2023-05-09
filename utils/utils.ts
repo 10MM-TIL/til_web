@@ -16,6 +16,8 @@ export function logout(isReload?: boolean) {
   try {
     instance.defaults.headers['Authorization'] = null;
     // TODO DELETE COOKIE
+    deleteCookie('accToken');
+    deleteCookie('refToken');
   } catch (error) {
     throw error;
   } finally {
