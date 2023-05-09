@@ -11,7 +11,6 @@ export const useMyProfileOnboarding = () => {
   const queryClient = useQueryClient();
   return useMutation(postMyProfileOnboardingAPI, {
     onSuccess: () => {
-      alert('선택 정보가 저장되었습니다.');
       queryClient.invalidateQueries(['MY_USER']);
     },
   });

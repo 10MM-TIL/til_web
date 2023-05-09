@@ -51,8 +51,8 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
       return;
     }
 
-    // await categoryMutate({ categoryIdentifier: selectedCategoryId, mailAgreement: isReceiveAgree });
-    await notificationMutate({ enable: isAlertAgree, iteration: frequency });
+    await categoryMutate({ categoryIdentifier: selectedCategoryId, mailAgreement: isReceiveAgree });
+    await notificationMutate({ enable: isAlertAgree, iteration: frequency === '' ? 'NONE' : frequency });
   };
 
   return (
