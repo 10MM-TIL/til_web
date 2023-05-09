@@ -18,7 +18,7 @@ export interface MyUserModel {
   categoryIdentifier?: string;
   categoryName?: string;
   introduction: string;
-  isAuthorized: boolean;
+  isMailAgreement: boolean;
   name: string;
   path: string;
   profileImgSrc: string;
