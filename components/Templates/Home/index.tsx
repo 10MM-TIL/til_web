@@ -12,12 +12,13 @@ import IconArrow from '@/assets/svgs/IconArrow';
 import Link from 'next/link';
 import { mq } from '@/styles/mediaQuery';
 import { useRecommandPosts } from '@/hooks/queries/cardviewQuery';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { Card } from '@/components/Atom/Card';
 import { formatDate } from '@/utils/utils';
 import { useRouter } from 'next/router';
 import { useCategories } from '@/hooks/queries/categoryQuery';
+import { LoginModalState } from '@/stores/modalStateStore';
 
 interface HomeTemplatesProps {
   selectedTab: 'MEMO' | 'REVIEW';
@@ -47,6 +48,7 @@ const HomeTemplates = ({
   const device = useResize();
 
   const { isLogin } = useRecoilValue(AuthState);
+  const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
 
   const { data: cardData } = useRecommandPosts('', true);
   const { data: categoryData } = useCategories();
@@ -84,6 +86,12 @@ const HomeTemplates = ({
                 value={selectedTab === 'MEMO' ? memoValue : reviewValue}
                 css={styles.textarea({ selectedTab })}
                 onChange={selectedTab === 'MEMO' ? onMemoChange : onReviewChange}
+                onClick={(e) => {
+                  if (!isLogin) {
+                    e.currentTarget.blur();
+                    setIsLoginModalOpen({ isLoginModalOpen: true });
+                  }
+                }}
               />
 
               <div css={styles.textareaBottomContainer({ selectedTab })}>
@@ -137,7 +145,7 @@ const HomeTemplates = ({
                         content={{
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
-                          body: recommandItem.description,
+                          body: recommandItem.summary,
                           img: require('@/assets/images/test.png') as string,
                           name: recommandItem.userPath,
                           date: formatDate(recommandItem.createdAt),
@@ -176,7 +184,34 @@ const HomeTemplates = ({
                 <Typo.Body color={FONT_COLOR.GRAY_2}>더보기</Typo.Body>
               </Link>
             </div>
-            <div css={styles.tempBox}>{/* 다른 사람들의 카드 컴포넌트! */}</div>
+            <div css={styles.tempBox}>
+              {/* 다른 사람들의 카드 컴포넌트! */}
+              {cardData?.posts?.length === 0 ? (
+                <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
+              ) : (
+                <>
+                  {cardData?.posts.map((recommandItem, index) => (
+                    <Card
+                      key={recommandItem.createdAt + index}
+                      size={'sm'}
+                      content={{
+                        category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
+                        header: recommandItem.title,
+                        body: recommandItem.summary,
+                        img: require('@/assets/images/test.png') as string,
+                        name: recommandItem.userPath,
+                        date: formatDate(recommandItem.createdAt),
+                      }}
+                      hasBadge={true}
+                      url={recommandItem.url}
+                      userpath={recommandItem.userPath}
+                      onClickContent={() => onClickContent(recommandItem.url)}
+                      onClickUser={() => onClickUser(recommandItem.userPath)}
+                    />
+                  ))}
+                </>
+              )}
+            </div>
           </div>
         )}
       </div>
