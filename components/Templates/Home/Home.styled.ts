@@ -97,6 +97,12 @@ const reviewTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   padding: ${selectedTab === 'MEMO' ? '11px 30px 0 40px' : '11px 30px'};
 `;
 
+const reviewGuide = css`
+  position: absolute;
+  top: -36px;
+  right: 0;
+`;
+
 const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   width: 100%;
   min-height: 216px;
@@ -195,6 +201,7 @@ const styles = {
   textareaContainer,
   memoTab,
   reviewTab,
+  reviewGuide,
   textarea,
   textareaBottomContainer,
   elementContainer,

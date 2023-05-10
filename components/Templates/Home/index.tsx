@@ -44,7 +44,6 @@ const HomeTemplates = ({
   onClickContent,
   onClickUser,
 }: HomeTemplatesProps) => {
-  const router = useRouter();
   const device = useResize();
 
   const { isLogin } = useRecoilValue(AuthState);
@@ -81,6 +80,17 @@ const HomeTemplates = ({
               <div css={styles.reviewTab({ selectedTab })} onClick={() => onTabChange('REVIEW')}>
                 <Typo.H1 color={selectedTab === 'MEMO' ? '#636C78' : FONT_COLOR.WHITE}>회고</Typo.H1>
               </div>
+
+              {selectedTab === 'REVIEW' && (
+                <Link
+                  href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7'
+                  target='_blank'
+                  css={styles.reviewGuide}
+                >
+                  <Typo.Label2 color={FONT_COLOR.GRAY_1}>본인 작성 콘텐츠만 작성 가능</Typo.Label2>
+                </Link>
+              )}
+
               <textarea
                 placeholder='잊지 말아야 할 것들을 메모해보세요.'
                 value={selectedTab === 'MEMO' ? memoValue : reviewValue}
