@@ -5,6 +5,7 @@ import * as Styled from './styles';
 import { TimeLineProps } from './types';
 import { EditDropdown, EditDropdownProps } from '@/components/Atom/EditDropdown';
 import { POINT_COLOR, FONT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
+import BlogIcon from '@/components/Atom/BlogIcon';
 
 // [TODO] 최대 글자수 지정 필요
 const TITLE_MAX_LENGTH = 30;
@@ -74,7 +75,7 @@ const TimeLineTitleInput = memo(function TimeLineTitleInput({
         disabled={!!error}
       ></Styled.TimeLineTitleInput>
       <Typo.Label2 color={FONT_COLOR.GRAY_2}>
-        {titleFocus ? `${title.length} / ${titleRef.current?.maxLength}` : ''}
+        {titleFocus ? `${title?.length} / ${titleRef.current?.maxLength}` : ''}
       </Typo.Label2>
     </Styled.TimeLineTitleWrapper>
   );
@@ -106,7 +107,7 @@ const TimeLineDescInput = memo(function TimeLineDescInput({
         disabled={!!error}
       ></Styled.TimeLineDescInput>
       <Typo.Label2 color={FONT_COLOR.GRAY_2}>
-        {descFocus ? `${desc.length} / ${descRef.current?.maxLength}` : ''}
+        {descFocus ? `${desc?.length} / ${descRef.current?.maxLength}` : ''}
       </Typo.Label2>
     </Styled.TimeLineDescWrapper>
   );
@@ -117,7 +118,7 @@ const TimeLine = ({
     date: '',
     title: '',
     desc: '',
-    img: '',
+    url: '',
   },
   onDeleteContent,
   onSaveAllContent,
@@ -160,7 +161,7 @@ const TimeLine = ({
   const onSaveTimeLine = async () => {
     // 추후 API 요청 추가 필요
     try {
-      await onSaveAllContent(timeLineContent);
+      onSaveAllContent(timeLineContent);
     } catch (err) {
       setError('오류가 발생했습니다.');
     } finally {
@@ -201,7 +202,12 @@ const TimeLine = ({
         ></EditDropdown>
       )}
       <TimeLineDate date={timeLineContent?.date}></TimeLineDate>
-      <Styled.TimeLineContent>
+      <Styled.TimeLineContent
+        isEdit={isEdit}
+        onClick={() => {
+          if (!isEdit) window.open(content.url);
+        }}
+      >
         <div>
           {isEdit ? (
             <Styled.TimeLineInputWrapper>
@@ -229,7 +235,7 @@ const TimeLine = ({
             </>
           )}
         </div>
-        <TimeLineImage src={timeLineContent?.img as string} />
+        <BlogIcon url={timeLineContent?.url} />
       </Styled.TimeLineContent>
     </Styled.TimeLineContainer>
   );

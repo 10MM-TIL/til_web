@@ -20,12 +20,12 @@ export const TimeLineContainer = styled.div`
   }
 `;
 
-export const TimeLineContent = styled.div`
+export const TimeLineContent = styled.div<{ isEdit: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-
+  cursor: ${(props) => (props.isEdit ? `default` : `pointer`)};
   // input max-width, min-width 적용
   > div:first-of-type {
     max-width: 410px;
