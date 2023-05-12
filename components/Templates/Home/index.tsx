@@ -92,7 +92,9 @@ const HomeTemplates = ({
               )}
 
               <textarea
-                placeholder='잊지 말아야 할 것들을 메모해보세요.'
+                placeholder={
+                  selectedTab === 'MEMO' ? '잊지 말아야 할 것들을 메모해보세요.' : 'https://bricklog.io/your-post'
+                }
                 value={selectedTab === 'MEMO' ? memoValue : reviewValue}
                 css={styles.textarea({ selectedTab })}
                 onChange={selectedTab === 'MEMO' ? onMemoChange : onReviewChange}
@@ -125,12 +127,12 @@ const HomeTemplates = ({
                 </div>
               </div>
             </div>
-            <div css={styles.tempBox}>{/* 잔디 컴포넌트! */}</div>
+            <div>{/* 잔디 컴포넌트! */}</div>
           </div>
           {isLogin && (
             <div css={styles.elementContainer}>
               <Typo.H1 color='#D2D2D2'>타임라인</Typo.H1>
-              <div css={styles.tempBox}>{/* 타임라인 컴포넌트! */}</div>
+              <div>{/* 타임라인 컴포넌트! */}</div>
             </div>
           )}
 
@@ -194,7 +196,7 @@ const HomeTemplates = ({
                 <Typo.Body color={FONT_COLOR.GRAY_2}>더보기</Typo.Body>
               </Link>
             </div>
-            <div css={styles.tempBox}>
+            <div css={styles.otherCardContainer}>
               {/* 다른 사람들의 카드 컴포넌트! */}
               {cardData?.posts?.length === 0 ? (
                 <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>

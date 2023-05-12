@@ -170,7 +170,11 @@ const iconContainer = css`
   cursor: pointer;
 `;
 
-const tempBox = css``;
+const otherCardContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
 
 const desktopOtherCard = css`
   width: 284px;
@@ -208,7 +212,7 @@ const styles = {
   elementTitle,
   titleRight,
   iconContainer,
-  tempBox,
+  otherCardContainer,
   desktopOtherCard,
   footer,
   divider,
