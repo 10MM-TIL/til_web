@@ -9,7 +9,7 @@ type fetchRecommandPostsRequest = {
   identifier: string;
 };
 type fetchRecommandPostsResponse = {
-  postList: recommandPostItem[];
+  posts: recommandPostItem[];
   size: number;
 };
 
@@ -19,7 +19,7 @@ type fetchAllPostsRequest = {
   pageToken?: string;
 };
 export type fetchAllPostsResponse = {
-  postList: allPostItem[];
+  posts: allPostItem[];
   size: number;
   nextPageToken: string;
 };

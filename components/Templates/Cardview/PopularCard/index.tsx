@@ -33,14 +33,14 @@ const PopularCard = ({
       <Styled.PopularCardHeader>
         <Typo.H1 color={FONT_COLOR.WHITE}>이번주의 회고</Typo.H1>
       </Styled.PopularCardHeader>
-      <Styled.PopularCardContent isEmpty={recommandCard?.postList.length === 0}>
-        {recommandCard?.postList.length === 0 ? (
+      <Styled.PopularCardContent isEmpty={recommandCard?.posts.length === 0}>
+        {recommandCard?.posts.length === 0 ? (
           <CardView.EmptyCard>
             <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
           </CardView.EmptyCard>
         ) : (
           isSuccess &&
-          recommandCard?.postList.map((recommandItem, index) => {
+          recommandCard?.posts.map((recommandItem, index) => {
             return (
               <Styled.PopularCardItem key={`popular-${recommandItem.identifier}-${index}`}>
                 <Card
