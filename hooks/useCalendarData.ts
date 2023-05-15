@@ -1,4 +1,4 @@
-import { GrassData, GrassCellInfo, GrassCalendarArray } from '@/components/Grass';
+import { GrassData, GrassCellInfo, GrassCalendarArray } from '@/components/Atom/Grass';
 import { startOfMonth, getDay, getDaysInMonth, format } from 'date-fns';
 import { useEffect, useState, Dispatch, SetStateAction, useCallback } from 'react';
 export type monthYearData = {

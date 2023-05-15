@@ -28,7 +28,7 @@ const Modal = ({ closable = true, isOpen = true, onClose, children }: ModalProps
           <ModalContainer>
             {closable ? (
               <CloseButton onClick={handleCloseModal}>
-                <IconX />
+                <IconX onClick={() => {}} />
               </CloseButton>
             ) : null}
             {children}

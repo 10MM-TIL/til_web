@@ -7,4 +7,7 @@ declare global {
       NEXT_PUBLIC_MODE: 'dev' | 'prod';
     }
   }
+  interface Window {
+    Kakao: any;
+  }
 }

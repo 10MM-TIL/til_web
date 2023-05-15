@@ -18,7 +18,7 @@ export const CertifiedBlog = ({ id, blogName, onDeleteBlog, setBlogUrl }: Certif
           <InputField value={blogName} onChange={(e) => handleChangeBlogUrl(e)} />
         </CertifiedBlogName>
         <DeleteButton onClick={() => onDeleteBlog(id)}>
-          <IconX />
+          <IconX onClick={() => onDeleteBlog(id)} />
         </DeleteButton>
       </CertifiedBlogContainer>
     </>
