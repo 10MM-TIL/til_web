@@ -28,7 +28,7 @@ const HomePage = () => {
     }, 2000);
   };
 
-  const handleReviewChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+  const handleReviewChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setReviewValue(e.currentTarget.value);
   };
 

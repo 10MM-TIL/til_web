@@ -103,7 +103,7 @@ const reviewGuide = css`
   right: 0;
 `;
 
-const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
+const textarea = css`
   width: 100%;
   min-height: 216px;
   resize: none;
@@ -114,7 +114,7 @@ const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   border-top-left-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.06);
 
-  padding: ${selectedTab === 'MEMO' ? '28px 24px 40px' : '28px 28px 20px'};
+  padding: 28px 24px 40px;
 
   white-space: pre-wrap;
 

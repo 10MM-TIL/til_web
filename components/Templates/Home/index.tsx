@@ -28,7 +28,7 @@ interface HomeTemplatesProps {
 
   onTabChange: (type: 'MEMO' | 'REVIEW') => void;
   onMemoChange: ChangeEventHandler<HTMLTextAreaElement>;
-  onReviewChange: ChangeEventHandler<HTMLTextAreaElement>;
+  onReviewChange: ChangeEventHandler<HTMLInputElement>;
   onClickContent: (url?: string) => void;
   onClickUser: (userpath?: string) => void;
 }
@@ -90,21 +90,70 @@ const HomeTemplates = ({
                   <Typo.Label2 color={FONT_COLOR.GRAY_1}>본인 작성 콘텐츠만 작성 가능</Typo.Label2>
                 </Link>
               )}
+              {selectedTab === 'MEMO' ? (
+                <textarea
+                  placeholder={'잊지 말아야 할 것들을 메모해보세요.'}
+                  value={memoValue}
+                  css={styles.textarea}
+                  onChange={onMemoChange}
+                  onClick={(e) => {
+                    if (!isLogin) {
+                      e.currentTarget.blur();
+                      setIsLoginModalOpen({ isLoginModalOpen: true });
+                    }
+                  }}
+                />
+              ) : (
+                <div
+                  css={css`
+                    width: 100%;
+                    min-height: 216px;
+                    background-color: ${BACKGROUND_COLOR.NAVY_3};
+                    color: ${FONT_COLOR.WHITE};
 
-              <textarea
-                placeholder={
-                  selectedTab === 'MEMO' ? '잊지 말아야 할 것들을 메모해보세요.' : 'https://bricklog.io/your-post'
-                }
-                value={selectedTab === 'MEMO' ? memoValue : reviewValue}
-                css={styles.textarea({ selectedTab })}
-                onChange={selectedTab === 'MEMO' ? onMemoChange : onReviewChange}
-                onClick={(e) => {
-                  if (!isLogin) {
-                    e.currentTarget.blur();
-                    setIsLoginModalOpen({ isLoginModalOpen: true });
-                  }
-                }}
-              />
+                    border-radius: 12px;
+                    border-top-left-radius: 0;
+                    border: 1px solid rgba(255, 255, 255, 0.06);
+                    padding: 28px 20px 20px;
+                  `}
+                >
+                  <div
+                    css={css`
+                      padding-bottom: 12px;
+                      border-bottom: 1px solid ${BACKGROUND_COLOR.NAVY_4};
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                    `}
+                  >
+                    <input
+                      type='text'
+                      value={reviewValue}
+                      onChange={onReviewChange}
+                      css={css`
+                        background-color: ${BACKGROUND_COLOR.NAVY_4};
+                        border-radius: 6px;
+                        height: 28px;
+                        flex: 1;
+                      `}
+                    />
+                    <button
+                      css={css`
+                        background-color: ${BACKGROUND_COLOR.FIELD_10};
+                        width: 76px;
+                        height: 36px;
+                        color: ${FONT_COLOR.GRAY_2};
+                        font-weight: 600;
+                        font-size: 13px;
+                        line-height: 15px;
+                        border-radius: 8px;
+                      `}
+                    >
+                      불러오기
+                    </button>
+                  </div>
+                </div>
+              )}
 
               <div css={styles.textareaBottomContainer({ selectedTab })}>
                 {selectedTab === 'MEMO' ? (
