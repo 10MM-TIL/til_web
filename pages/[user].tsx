@@ -1,6 +1,6 @@
 // [user].tsx
 import type { GetServerSideProps, NextPage, NextPageContext } from 'next';
-import { useState, useEffect, useCallback, use } from 'react';
+import { useState, useEffect, useCallback, use, useRef } from 'react';
 import {
   MypageWrapper,
   MypageContainer,
@@ -27,6 +27,8 @@ import { dehydrate, QueryClient, useMutation, useQuery, useQueryClient } from '@
 import { getMyProfileResponse, getTimelineResponse } from '@/types/user';
 import { IconFloat } from '@/assets/svgs/IconFloat';
 import { formatDate } from '@/utils/utils';
+import { useMyAllTimeline } from '@/hooks/queries/timelineQuery';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -68,7 +70,7 @@ const TimelineComponent = ({
   content: { date: string; title: string; desc: string; url: string };
   postIdentifier: string;
 }) => {
-  const { title: originalTitle, desc: originalSummary } = content;
+  const { title: originalTitle, desc: originalSummary, date: originalDate } = content;
   const queryClient = useQueryClient();
   const editTimeline = useMutation(putEditTimeline, {
     onSuccess: () => {
@@ -88,7 +90,7 @@ const TimelineComponent = ({
       editedContent: {
         title: content.title,
         summary: content.desc,
-        createdAt: Date.now() / 1000,
+        createdAt: Date.parse(originalDate) / 1000,
       },
     });
   };
@@ -100,7 +102,7 @@ const TimelineComponent = ({
       <IconTimeline />
       <div style={{ width: '100%', marginTop: '5px' }}>
         <TimeLine
-          content={content}
+          content={{ ...content, date: formatDate(originalDate) }}
           onSaveAllContent={(newValue) => updateTimeline(newValue)}
           onDeleteContent={handleDeleteContent}
         />
@@ -109,16 +111,52 @@ const TimelineComponent = ({
   );
 };
 
-const TimeLineArea = ({ timelineData, count }: { timelineData: getTimelineResponse[]; count: number }) => {
+const TimeLineArea = ({ path }: { path: string }) => {
+  const bottomDiv = useRef(null);
+  const [totalSize, setTotalSize] = useState(0);
+  const { data: postObject, fetchNextPage, isSuccess } = useMyAllTimeline(path);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setTotalSize(postObject.pages[0]?.size);
+    }
+  }, [isSuccess, postObject]);
+
+  const [observe, unobserve] = useIntersectionObserver((entry: IntersectionObserverEntry) => {
+    if (entry.isIntersecting) {
+      if (postObject && postObject.pages[postObject.pages.length - 1]?.nextPageToken === 'null') return;
+      fetchNextPage();
+    }
+  });
+
+  useEffect(() => {
+    const optionRef = bottomDiv.current;
+    if (optionRef) observe(optionRef);
+    return () => {
+      if (optionRef) unobserve(optionRef);
+    };
+  }, [observe, unobserve]);
+
   return (
     <TimelineContainer>
       <TimelineTitleArea>
         <Typo.H1 color={FONT_COLOR.WHITE} style={{ paddingBottom: '16px' }}>
           타임라인
         </Typo.H1>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>{count}개</Typo.Body>
+        <Typo.Body color={FONT_COLOR.GRAY_2}>{totalSize}개</Typo.Body>
       </TimelineTitleArea>
-      {timelineData.map((item) => {
+      {postObject?.pages?.map((pages) =>
+        pages?.posts?.map((item) => {
+          const content = {
+            title: item.title,
+            date: item.createdAt,
+            url: item.url,
+            desc: item.summary,
+          };
+          return <TimelineComponent key={item.identifier} content={content} postIdentifier={item.identifier} />;
+        }),
+      )}
+      {/* {timelineData.map((item) => {
         const content = {
           title: item.title,
           date: formatDate(item.createdAt),
@@ -126,7 +164,8 @@ const TimeLineArea = ({ timelineData, count }: { timelineData: getTimelineRespon
           desc: item.summary,
         };
         return <TimelineComponent key={item.identifier} content={content} postIdentifier={item.identifier} />;
-      })}
+      })} */}
+      <div ref={bottomDiv} />
     </TimelineContainer>
   );
 };
@@ -134,10 +173,11 @@ const TimeLineArea = ({ timelineData, count }: { timelineData: getTimelineRespon
 const Mypage: NextPage = ({ path }: any) => {
   const { data: userInfo } = useQuery(['PROFILE'], () => getUserProfile(path));
   const { data: blogObject } = useQuery(['BLOGS'], () => getUserBlog(path));
-  const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, 50));
+  // const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, ));
   const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 0, 9999999999));
   const { blogs } = blogObject ?? [];
-  const { size: postCount, posts } = postObject ?? { size: 0, posts: [] };
+
+  // const { size: postCount, posts } = postObject ?? { size: 0, posts: [] };
   const { metas: grass } = grassObject ?? [];
 
   const [url, setUrl] = useState(require(`@/assets/images/default.png`) as string);
@@ -157,7 +197,7 @@ const Mypage: NextPage = ({ path }: any) => {
           </TextContainer>
         </IntroContainer>
         <GrassArea title={`${userInfo?.name}의 기록`} />
-        <TimeLineArea count={postCount} timelineData={posts} />
+        <TimeLineArea path={path} />
       </MypageContainer>
       <Button size='float' svg={<IconFloat />} />
     </MypageWrapper>
