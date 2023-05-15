@@ -32,7 +32,7 @@ const AllCard = ({
 
   useEffect(() => {
     if (isSuccess) {
-      setIsEmpty(allPosts.pages[0]?.postList.length === 0);
+      setIsEmpty(allPosts.pages[0]?.posts.length === 0);
     }
   }, [isSuccess, allPosts]);
 
@@ -65,7 +65,7 @@ const AllCard = ({
           ) : (
             isSuccess &&
             allPosts?.pages.map((allPost, index) =>
-              allPost?.postList.map((allCard) => (
+              allPost?.posts.map((allCard) => (
                 <Styled.AllCardItem key={`card-${allCard.identifier}-${index}`}>
                   <Card
                     size={device === 'desktop' ? 'lg' : 'mobile'}
