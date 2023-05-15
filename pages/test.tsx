@@ -17,7 +17,6 @@ import { IconFloat } from '@/assets/svgs/IconFloat';
 import { IconGoogle } from '@/assets/svgs/IconGoogle';
 import { IconKakao } from '@/assets/svgs/IconKakao';
 import { IconPlus } from '@/assets/svgs/IconPlus';
-
 import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
@@ -27,6 +26,8 @@ import ProfileIcon from '@/components/Molecules/ProfileIcon';
 import BlogGroup from '@/components/Molecules/BlogGroup';
 import Modal from '@/components/Atom/Modal';
 import AddBlog from '@/components/Atom/AddBlog';
+import ToastMessage from '@/components/ToastMessage';
+import useToast from '@/hooks/useToast';
 
 const DATA = [
   {
@@ -97,6 +98,7 @@ const Test: NextPage = () => {
         <CheckboxComponent />
         <BlogGroupComponent />
         <ModalComponent />
+        <ToastComponent />
       </div>
     </>
   );
@@ -723,6 +725,60 @@ const TimeLineComponent = () => {
           `}
         >
           <TimeLine content={timelineContent} onSaveAllContent={onSaveAllContent} onDeleteContent={onDeleteContent} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ToastComponent = () => {
+  const { isOpen, showToast, text } = useToast();
+  const handleClick = () => {
+    showToast(
+      <>
+        <IconKakao />
+        <Typo.H1 color='blue'>저장</Typo.H1>
+      </>,
+    );
+  };
+
+  return (
+    <div
+      css={css`
+        max-width: 1200px;
+        padding: 30px;
+      `}
+    >
+      <div
+        css={css`
+          max-width: 745px;
+          min-width: 305px;
+          margin: 0 auto;
+          padding: 40px 0 40px 0;
+        `}
+      >
+        <h1
+          css={css`
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+          `}
+        >
+          <strong>ToastMessage 컴포넌트</strong>
+        </h1>
+        <div
+          css={css`
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+          `}
+        >
+          <Button size='md' onClick={handleClick}>
+            <Typo.Label1>toast message</Typo.Label1>
+          </Button>
+          {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
         </div>
       </div>
     </div>
