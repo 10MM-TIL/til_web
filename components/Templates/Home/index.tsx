@@ -126,11 +126,11 @@ const HomeTemplates = ({
                   </Link>
                 </div>
 
-                {cardData?.postList.length === 0 ? (
+                {cardData?.posts.length === 0 ? (
                   <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
                 ) : (
                   <>
-                    {cardData?.postList.map((recommandItem, index) => (
+                    {cardData?.posts.map((recommandItem, index) => (
                       <Card
                         key={recommandItem.createdAt + index}
                         size={'mobile'}
