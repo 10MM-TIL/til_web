@@ -201,7 +201,7 @@ const HomeTemplates = ({
                   <>
                     {cardData?.posts.map((recommandItem, index) => (
                       <Card
-                        key={recommandItem.createdAt + index}
+                        key={recommandItem.createdAt + index + 'mobile'}
                         size={'mobile'}
                         content={{
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
@@ -253,7 +253,7 @@ const HomeTemplates = ({
                 <>
                   {cardData?.posts.map((recommandItem, index) => (
                     <Card
-                      key={recommandItem.createdAt + index}
+                      key={recommandItem.createdAt + index + 'desktop'}
                       size={'sm'}
                       content={{
                         category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,

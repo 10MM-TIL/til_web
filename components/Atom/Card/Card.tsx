@@ -50,9 +50,9 @@ const Card = ({
     <CardContainer size={size}>
       {hasBadge ? <Badge /> : null}
       <CardHeader>
-        {tagList.map((tag) => {
+        {tagList.map((tag, idx) => {
           return (
-            <TagWrapper key={tag}>
+            <TagWrapper key={tag + idx}>
               <Typo.Label2 color='#22FFA2'>
                 {tag === '#추천 회고' ? ' ' : ''}
                 {tag}
