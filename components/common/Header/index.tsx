@@ -8,21 +8,19 @@ import styles from './Header.styled';
 
 import * as Typo from '@/components/Atom/Typography';
 import { FONT_COLOR } from '@/constants/color';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { useMyUser } from '@/hooks/queries/profileQuery';
 import { mq } from '@/styles/mediaQuery';
 import IconApps from '@/assets/svgs/IconApps';
 import Image from 'next/image';
+import { LoginModalState } from '@/stores/modalStateStore';
 
-interface HeaderProps {
-  onModalOn: (flag: boolean) => void;
-}
-
-const Header = ({ onModalOn }: HeaderProps) => {
+const Header = () => {
   const device = useResize();
 
   const { isLogin } = useRecoilValue(AuthState);
+  const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
 
   const { data } = useMyUser({ isLogin });
   const userData = data?.data;
@@ -70,7 +68,7 @@ const Header = ({ onModalOn }: HeaderProps) => {
             )} */}
           </div>
         ) : (
-          <button css={styles.btn} onClick={() => onModalOn(true)}>
+          <button css={styles.btn} onClick={() => setIsLoginModalOpen({ isLoginModalOpen: true })}>
             로그인
           </button>
         )}
