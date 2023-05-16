@@ -6,7 +6,6 @@ import { BACKGROUND_COLOR } from '@/constants/color';
 
 import * as Typo from '@/components/Atom/Typography';
 import Toggle from '@/components/Toggle';
-import { Header } from '@/components/Atom/Header';
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
 import { GrassArea } from '@/components/Molecules/GrassArea';
 import { TextField } from '@/components/Atom/TextField';
@@ -76,7 +75,6 @@ const BLOG_DATA = [
 const Test: NextPage = () => {
   return (
     <>
-      <Header isLogin={true}></Header>
       <div
         css={css`
           background-color: ${BACKGROUND_COLOR.NAVY_1};
@@ -151,7 +149,7 @@ const RadioComponent = () => {
     setSelectedId(value);
   };
 
-  return <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />;
+  // return <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />;
 };
 
 const TypoComponent = () => {
@@ -450,7 +448,7 @@ const FieldRemindComponent = () => {
 
 const CardComponent = () => {
   const [testCardContent, setTestCardContent] = useState<CardProps['content']>({
-    category: 'develop',
+    category: '#개발',
     header: 'hackerrank - Nested Lists',
     body: 'Given the names and grades for each 123123123123123',
     img: require('@/assets/images/test.png') as string,
@@ -459,12 +457,6 @@ const CardComponent = () => {
   });
 
   const [badge, setBadge] = useState(true);
-  const onClickTag = useCallback(
-    (): CardProps['onClickTag'] => (e, tag) => {
-      console.log(`${tag} 태그 클릭`);
-    },
-    [],
-  );
 
   const onClickContent = useCallback(() => {
     () => {
@@ -500,18 +492,20 @@ const CardComponent = () => {
         size='sm'
         content={testCardContent}
         hasBadge={true}
-        onClickTag={onClickTag}
         onClickContent={onClickContent}
         onClickUser={onClickUser}
+        userpath=''
+        url=''
       ></Card>
 
       <Card
         size='lg'
         content={testCardContent}
         hasBadge={badge}
-        onClickTag={onClickTag}
         onClickContent={onClickContent}
         onClickUser={onClickUser}
+        userpath=''
+        url=''
       ></Card>
       <button
         onClick={() => setBadge(!badge)}
@@ -668,7 +662,7 @@ const TimeLineComponent = () => {
     date: '2023.01.07',
     title: 'TIL 커뮤니케이션 123123123123123123',
     desc: 'TIL (커뮤니케이션 방법과 CEO의 한마디디디디디디디',
-    img: require('../assets/images/test.png'),
+    url: '',
   });
 
   const onSaveAllContent = useCallback((timeLineContentParams: TimeLineContentProps): Promise<void> => {
