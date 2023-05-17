@@ -10,28 +10,35 @@ env:
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: dev
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source code.
         uses: actions/checkout@v2
+
       - name: Check Node v
         run: node -v
+
       - name: Install Dependencies
-        run: npm install --frozen-lockfile
+        run: npm install
+
       - name: Build
         run: npm build
+
       - name: zip create # S3에 올릴 zip 파일 생성. (빌드한 프로젝트를 압축)
         run: zip -qq -r ./test-build.zip . # 파일명은 자유, 대신 아래 workflow에 적을 파일명과 동일하게 맞춰줄 것.
         shell: bash
+
       - name: Configure AWS credentials # aws 인증 확인.
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
+
       - name: Upload to S3
         run: |
-          aws s3 cp --region ap-northeast-2 ./test-build.zip s3://dev_til_web_pipline/test-build.zip
+          aws s3 cp --region ap-northeast-2 ./test-build.zip s3://$S3_BUCKET_NAME/test-build.zip
+
       - name: Deploy
         run: aws deploy create-deployment
           --deployment-config-name CodeDeployDefault.AllAtOnce \
