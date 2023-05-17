@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: zip create
-        run: zip -qq -r ./test-build.zip .
+        run: zip -qq -r ./test-build.zip . -x "node_modules/*"
         shell: bash
 
       - name: Configure AWS credentials
@@ -39,7 +39,8 @@ jobs:
         run: aws s3 cp --region ap-northeast-2 ./test-build.zip s3://$S3_BUCKET_NAME/test-build.zip
 
       - name: Deploy
-        run: aws deploy create-deployment
+        run: |
+          aws deploy create-deployment \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
           --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
