@@ -4,6 +4,11 @@ files:
   - source: /
     destination: /home/ubuntu/deploy
     overwrite: yes
+permissions:
+  - object: /home/ubuntu/deploy
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
 hooks:
   ApplicationStart:
     - location: deploy.sh
