@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: zip create
-        run: zip -qq -r ./test-build.zip . -x "node_modules/*"
+        run: zip -qq -r ./test-build.zip .
         shell: bash
 
       - name: Configure AWS credentials
