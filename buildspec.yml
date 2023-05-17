@@ -1,8 +1,6 @@
 version: 0.2 # 임의의 버전 이름
 phases:
   install:
-    runtime-versions:
-      nodejs: 16
     commands:
       - npm install
   build:
