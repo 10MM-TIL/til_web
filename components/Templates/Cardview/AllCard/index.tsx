@@ -72,7 +72,7 @@ const AllCard = ({
                     content={{
                       category: categories.find((i) => i.identifier === allCard.categoryIdentifier)?.name!,
                       header: allCard.title,
-                      body: allCard.description,
+                      body: allCard.summary,
                       img: require('@/assets/images/test.png'),
                       name: allCard.userPath,
                       date: formatDate(allCard.createdAt),
