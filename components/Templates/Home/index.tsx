@@ -12,12 +12,13 @@ import IconArrow from '@/assets/svgs/IconArrow';
 import Link from 'next/link';
 import { mq } from '@/styles/mediaQuery';
 import { useRecommandPosts } from '@/hooks/queries/cardviewQuery';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { Card } from '@/components/Atom/Card';
 import { formatDate } from '@/utils/utils';
 import { useRouter } from 'next/router';
 import { useCategories } from '@/hooks/queries/categoryQuery';
+import { LoginModalState } from '@/stores/modalStateStore';
 
 interface HomeTemplatesProps {
   selectedTab: 'MEMO' | 'REVIEW';
@@ -27,7 +28,7 @@ interface HomeTemplatesProps {
 
   onTabChange: (type: 'MEMO' | 'REVIEW') => void;
   onMemoChange: ChangeEventHandler<HTMLTextAreaElement>;
-  onReviewChange: ChangeEventHandler<HTMLTextAreaElement>;
+  onReviewChange: ChangeEventHandler<HTMLInputElement>;
   onClickContent: (url?: string) => void;
   onClickUser: (userpath?: string) => void;
 }
@@ -43,10 +44,10 @@ const HomeTemplates = ({
   onClickContent,
   onClickUser,
 }: HomeTemplatesProps) => {
-  const router = useRouter();
   const device = useResize();
 
   const { isLogin } = useRecoilValue(AuthState);
+  const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
 
   const { data: cardData } = useRecommandPosts('', true);
   const { data: categoryData } = useCategories();
@@ -79,12 +80,80 @@ const HomeTemplates = ({
               <div css={styles.reviewTab({ selectedTab })} onClick={() => onTabChange('REVIEW')}>
                 <Typo.H1 color={selectedTab === 'MEMO' ? '#636C78' : FONT_COLOR.WHITE}>회고</Typo.H1>
               </div>
-              <textarea
-                placeholder='잊지 말아야 할 것들을 메모해보세요.'
-                value={selectedTab === 'MEMO' ? memoValue : reviewValue}
-                css={styles.textarea({ selectedTab })}
-                onChange={selectedTab === 'MEMO' ? onMemoChange : onReviewChange}
-              />
+
+              {selectedTab === 'REVIEW' && (
+                <Link
+                  href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7'
+                  target='_blank'
+                  css={styles.reviewGuide}
+                >
+                  <Typo.Label2 color={FONT_COLOR.GRAY_1}>본인 작성 콘텐츠만 작성 가능</Typo.Label2>
+                </Link>
+              )}
+              {selectedTab === 'MEMO' ? (
+                <textarea
+                  placeholder={'잊지 말아야 할 것들을 메모해보세요.'}
+                  value={memoValue}
+                  css={styles.textarea}
+                  onChange={onMemoChange}
+                  onClick={(e) => {
+                    if (!isLogin) {
+                      e.currentTarget.blur();
+                      setIsLoginModalOpen({ isLoginModalOpen: true });
+                    }
+                  }}
+                />
+              ) : (
+                <div
+                  css={css`
+                    width: 100%;
+                    min-height: 216px;
+                    background-color: ${BACKGROUND_COLOR.NAVY_3};
+                    color: ${FONT_COLOR.WHITE};
+
+                    border-radius: 12px;
+                    border-top-left-radius: 0;
+                    border: 1px solid rgba(255, 255, 255, 0.06);
+                    padding: 28px 20px 20px;
+                  `}
+                >
+                  <div
+                    css={css`
+                      padding-bottom: 12px;
+                      border-bottom: 1px solid ${BACKGROUND_COLOR.NAVY_4};
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                    `}
+                  >
+                    <input
+                      type='text'
+                      value={reviewValue}
+                      onChange={onReviewChange}
+                      css={css`
+                        background-color: ${BACKGROUND_COLOR.NAVY_4};
+                        border-radius: 6px;
+                        height: 28px;
+                        flex: 1;
+                      `}
+                    />
+                    <button
+                      css={css`
+                        background-color: ${BACKGROUND_COLOR.FIELD_10};
+                        width: 76px;
+                        height: 36px;
+                        color: ${FONT_COLOR.GRAY_2};
+                        font-weight: 600;
+                        font-size: 13px;
+                        line-height: 15px;
+                        border-radius: 8px;
+                      `}
+                    >
+                      불러오기
+                    </button>
+                  </div>
+                </div>
+              )}
 
               <div css={styles.textareaBottomContainer({ selectedTab })}>
                 {selectedTab === 'MEMO' ? (
@@ -107,12 +176,12 @@ const HomeTemplates = ({
                 </div>
               </div>
             </div>
-            <div css={styles.tempBox}>{/* 잔디 컴포넌트! */}</div>
+            <div>{/* 잔디 컴포넌트! */}</div>
           </div>
           {isLogin && (
             <div css={styles.elementContainer}>
               <Typo.H1 color='#D2D2D2'>타임라인</Typo.H1>
-              <div css={styles.tempBox}>{/* 타임라인 컴포넌트! */}</div>
+              <div>{/* 타임라인 컴포넌트! */}</div>
             </div>
           )}
 
@@ -126,18 +195,18 @@ const HomeTemplates = ({
                   </Link>
                 </div>
 
-                {cardData?.postList.length === 0 ? (
+                {cardData?.posts.length === 0 ? (
                   <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
                 ) : (
                   <>
-                    {cardData?.postList.map((recommandItem, index) => (
+                    {cardData?.posts.map((recommandItem, index) => (
                       <Card
-                        key={recommandItem.createdAt + index}
+                        key={recommandItem.createdAt + index + 'mobile'}
                         size={'mobile'}
                         content={{
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
-                          body: recommandItem.description,
+                          body: recommandItem.summary,
                           img: require('@/assets/images/test.png') as string,
                           name: recommandItem.userPath,
                           date: formatDate(recommandItem.createdAt),
@@ -176,7 +245,34 @@ const HomeTemplates = ({
                 <Typo.Body color={FONT_COLOR.GRAY_2}>더보기</Typo.Body>
               </Link>
             </div>
-            <div css={styles.tempBox}>{/* 다른 사람들의 카드 컴포넌트! */}</div>
+            <div css={styles.otherCardContainer}>
+              {/* 다른 사람들의 카드 컴포넌트! */}
+              {cardData?.posts?.length === 0 ? (
+                <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
+              ) : (
+                <>
+                  {cardData?.posts.map((recommandItem, index) => (
+                    <Card
+                      key={recommandItem.createdAt + index + 'desktop'}
+                      size={'sm'}
+                      content={{
+                        category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
+                        header: recommandItem.title,
+                        body: recommandItem.summary,
+                        img: require('@/assets/images/test.png') as string,
+                        name: recommandItem.userPath,
+                        date: formatDate(recommandItem.createdAt),
+                      }}
+                      hasBadge={true}
+                      url={recommandItem.url}
+                      userpath={recommandItem.userPath}
+                      onClickContent={() => onClickContent(recommandItem.url)}
+                      onClickUser={() => onClickUser(recommandItem.userPath)}
+                    />
+                  ))}
+                </>
+              )}
+            </div>
           </div>
         )}
       </div>

@@ -11,11 +11,11 @@ export type recommandPostItem = {
   userPath: string;
   categoryIdentifier: string;
   title: string;
-  description: string;
+  summary: string;
   url: string;
   createdAt: string;
   hitCount: number;
-  userProfileSrc: string;
+  profileImgSrc: string;
 };
 
 export type allPostItem = {
@@ -23,9 +23,9 @@ export type allPostItem = {
   userPath: string;
   categoryIdentifier: string;
   title: string;
-  description: string;
+  summary: string;
   url: string;
   createdAt: string;
   hitCount: number;
-  userProfileSrc: string;
+  profileImgSrc: string;
 };

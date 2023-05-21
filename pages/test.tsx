@@ -6,7 +6,6 @@ import { BACKGROUND_COLOR } from '@/constants/color';
 
 import * as Typo from '@/components/Atom/Typography';
 import Toggle from '@/components/Toggle';
-import { Header } from '@/components/Atom/Header';
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
 import { GrassArea } from '@/components/Molecules/GrassArea';
 import { TextField } from '@/components/Atom/TextField';
@@ -17,7 +16,6 @@ import { IconFloat } from '@/assets/svgs/IconFloat';
 import { IconGoogle } from '@/assets/svgs/IconGoogle';
 import { IconKakao } from '@/assets/svgs/IconKakao';
 import { IconPlus } from '@/assets/svgs/IconPlus';
-
 import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { TimeLine, TimeLineContentProps } from '@/components/Atom/TimeLine';
 import { Dropdown } from '@/components/Atom/Dropdown';
@@ -27,6 +25,8 @@ import ProfileIcon from '@/components/Molecules/ProfileIcon';
 import BlogGroup from '@/components/Molecules/BlogGroup';
 import Modal from '@/components/Atom/Modal';
 import AddBlog from '@/components/Atom/AddBlog';
+import ToastMessage from '@/components/ToastMessage';
+import useToast from '@/hooks/useToast';
 
 const DATA = [
   {
@@ -75,7 +75,6 @@ const BLOG_DATA = [
 const Test: NextPage = () => {
   return (
     <>
-      <Header isLogin={true}></Header>
       <div
         css={css`
           background-color: ${BACKGROUND_COLOR.NAVY_1};
@@ -97,6 +96,7 @@ const Test: NextPage = () => {
         <CheckboxComponent />
         <BlogGroupComponent />
         <ModalComponent />
+        <ToastComponent />
       </div>
     </>
   );
@@ -149,7 +149,7 @@ const RadioComponent = () => {
     setSelectedId(value);
   };
 
-  return <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />;
+  // return <RadioGroup data={DATA} selectedId={selectedId} onClick={handleRadioClick} />;
 };
 
 const TypoComponent = () => {
@@ -448,7 +448,7 @@ const FieldRemindComponent = () => {
 
 const CardComponent = () => {
   const [testCardContent, setTestCardContent] = useState<CardProps['content']>({
-    category: 'develop',
+    category: '#개발',
     header: 'hackerrank - Nested Lists',
     body: 'Given the names and grades for each 123123123123123',
     img: require('@/assets/images/test.png') as string,
@@ -457,12 +457,6 @@ const CardComponent = () => {
   });
 
   const [badge, setBadge] = useState(true);
-  const onClickTag = useCallback(
-    (): CardProps['onClickTag'] => (e, tag) => {
-      console.log(`${tag} 태그 클릭`);
-    },
-    [],
-  );
 
   const onClickContent = useCallback(() => {
     () => {
@@ -498,18 +492,20 @@ const CardComponent = () => {
         size='sm'
         content={testCardContent}
         hasBadge={true}
-        onClickTag={onClickTag}
         onClickContent={onClickContent}
         onClickUser={onClickUser}
+        userpath=''
+        url=''
       ></Card>
 
       <Card
         size='lg'
         content={testCardContent}
         hasBadge={badge}
-        onClickTag={onClickTag}
         onClickContent={onClickContent}
         onClickUser={onClickUser}
+        userpath=''
+        url=''
       ></Card>
       <button
         onClick={() => setBadge(!badge)}
@@ -666,7 +662,7 @@ const TimeLineComponent = () => {
     date: '2023.01.07',
     title: 'TIL 커뮤니케이션 123123123123123123',
     desc: 'TIL (커뮤니케이션 방법과 CEO의 한마디디디디디디디',
-    img: require('../assets/images/test.png'),
+    url: '',
   });
 
   const onSaveAllContent = useCallback((timeLineContentParams: TimeLineContentProps): Promise<void> => {
@@ -723,6 +719,60 @@ const TimeLineComponent = () => {
           `}
         >
           <TimeLine content={timelineContent} onSaveAllContent={onSaveAllContent} onDeleteContent={onDeleteContent} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ToastComponent = () => {
+  const { isOpen, showToast, text } = useToast();
+  const handleClick = () => {
+    showToast(
+      <>
+        <IconKakao />
+        <Typo.H1 color='blue'>저장</Typo.H1>
+      </>,
+    );
+  };
+
+  return (
+    <div
+      css={css`
+        max-width: 1200px;
+        padding: 30px;
+      `}
+    >
+      <div
+        css={css`
+          max-width: 745px;
+          min-width: 305px;
+          margin: 0 auto;
+          padding: 40px 0 40px 0;
+        `}
+      >
+        <h1
+          css={css`
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+          `}
+        >
+          <strong>ToastMessage 컴포넌트</strong>
+        </h1>
+        <div
+          css={css`
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+          `}
+        >
+          <Button size='md' onClick={handleClick}>
+            <Typo.Label1>toast message</Typo.Label1>
+          </Button>
+          {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
         </div>
       </div>
     </div>

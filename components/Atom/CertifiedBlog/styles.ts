@@ -29,8 +29,6 @@ export const DeleteButton = styled.button`
 export const InputField = styled.input`
   position: relative;
   display: inline-block;
-  width: 100%;
-  /* width: ${({ fixedWidth }) => `calc(100% - ${fixedWidth + 2}px)`}; */
   height: 24px;
   background: transparent;
   border: none;
