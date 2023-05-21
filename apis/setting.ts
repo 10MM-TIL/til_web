@@ -73,9 +73,9 @@ export const putMyNotification = async ({
   }
 };
 
-export const putMyBlog = async (infoList: { url: string }[]) => {
+export const putMyBlog = async (blogs: { url: string }[]) => {
   try {
-    const res = await instance.put('/blogs', { infoList });
+    const res = await instance.put('/blogs', { blogs });
 
     return res;
   } catch (e) {

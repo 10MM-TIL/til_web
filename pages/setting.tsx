@@ -25,6 +25,8 @@ import RadioGroup from '@/components/Molecules/RadioGroup';
 import Toggle from '@/components/Toggle';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import AddBlog from '@/components/Atom/AddBlog';
+import ToastMessage from '@/components/ToastMessage';
+
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
 import { myBloglist, myMailAgreement, myNotification } from '@/stores/user';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -32,6 +34,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfile, putMyProfile, getMyNotification, putMyNotification, putMyBlog } from 'apis/setting';
 import { usePutMyProfile } from '@/hooks/queries/saveQuery';
 import { getUserBlog } from '@/apis/user';
+import useToast from '@/hooks/useToast';
+import IconCheckBig from '@/assets/svgs/IconCheckBig';
 
 const CategoryLayout = ({
   selectedCategoryId,
@@ -196,6 +200,8 @@ const Setting: NextPage = () => {
   const [blogList, setBlogList] = useRecoilState(myBloglist);
   const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
   const [id, setId] = useState(0);
+  const [isChangeInput, setIsChangeInput] = useState(false);
+  const { isOpen, showToast, text } = useToast();
   const { data: userProfile } = useQuery(['myProfile'], getMyProfile, {
     onSuccess: (data) => {
       setMyMailAgreement(data.isMailAgreement);
@@ -218,10 +224,6 @@ const Setting: NextPage = () => {
     },
   });
 
-  useEffect(() => {
-    console.log('myInfo', myInfo);
-    console.log('noti', noti);
-  }, [myInfo, noti]);
   const queryClient = useQueryClient();
   const saveProfile = useMutation(putMyProfile, {
     onSuccess: () => {
@@ -282,21 +284,48 @@ const Setting: NextPage = () => {
       blogList.map((blog) => {
         return { url: blog.url };
       }),
+      {
+        onSuccess: () => {
+          showToast(
+            <>
+              <IconCheckBig />
+              <Typo.H1 color={FONT_COLOR.WHITE}>저장이 완료되었습니다</Typo.H1>
+            </>,
+          );
+        },
+        onError: () => alert('저장에 실패하였습니다. 다시 시도해주세요'),
+      },
     );
+    setIsChangeInput(false);
   };
 
   const handleChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setMyInfo((prev) => {
-      return { ...prev, name: e.target.value };
-    });
+    const nameValue = e.target.value;
+    const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
+    if (!nameReg.test(nameValue)) {
+      setIsChangeInput(true);
+      setMyInfo((prev) => {
+        return { ...prev, name: nameValue };
+      });
+    } else {
+      alert('이름은 한글, 영어, 숫자로만 설정할 수 있어요.');
+    }
   }, []);
 
   const handleChangePath = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setMyInfo((prev) => {
-      return { ...prev, path: e.target.value };
-    });
+    const pathValue = e.target.value;
+    const pathReg = /[^a-zA-Z0-9-]/gi;
+    if (!pathReg.test(pathValue)) {
+      setIsChangeInput(true);
+      setMyInfo((prev) => {
+        return { ...prev, path: pathValue };
+      });
+    } else {
+      alert('URL 주소는 영어, 숫자, 하이픈(-)으로만 설정할 수 있어요.');
+    }
   }, []);
   const handleChangeIntroduction = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChangeInput(true);
     setMyInfo((prev) => {
       return { ...prev, introduction: e.target.value };
     });
@@ -313,6 +342,7 @@ const Setting: NextPage = () => {
   useEffect(() => {
     if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
   }, [id]);
+
   return (
     <EditpageWrapper>
       <EditpageContainer>
@@ -353,6 +383,7 @@ const Setting: NextPage = () => {
         <SaveLayout onClick={handleSave} />
         <FooterLayout />
       </EditpageContainer>
+      {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
     </EditpageWrapper>
   );
 };

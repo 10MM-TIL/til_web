@@ -4,7 +4,7 @@ export const IconTimeline = () => {
       <g filter='url(#filter0_d_938_13557)'>
         <circle cx='10.2381' cy='10.2381' r='5.2381' fill='#22FFA2' />
       </g>
-      <line x1='10.4883' y1='10' x2='10.4883' y2='127' stroke='url(#paint0_linear_938_13557)' stroke-width='2.5' />
+      <line x1='10.4883' y1='10' x2='10.4883' y2='127' stroke='url(#paint0_linear_938_13557)' strokeWidth='2.5' />
       <defs>
         <filter
           id='filter0_d_938_13557'
@@ -13,9 +13,9 @@ export const IconTimeline = () => {
           width='20.4766'
           height='20.4761'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
-          <feFlood flood-opacity='0' result='BackgroundImageFix' />
+          <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feColorMatrix
             in='SourceAlpha'
             type='matrix'
@@ -37,9 +37,9 @@ export const IconTimeline = () => {
           y2='12.7529'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stop-color='#00A8A8' stop-opacity='0.15' />
-          <stop offset='0.0001' stop-color='#00A8A8' stop-opacity='0.15' />
-          <stop offset='1' stop-color='#22FFA2' />
+          <stop stopColor='#00A8A8' stopOpacity='0.15' />
+          <stop offset='0.0001' stopColor='#00A8A8' stopOpacity='0.15' />
+          <stop offset='1' stopColor='#22FFA2' />
         </linearGradient>
       </defs>
     </svg>
