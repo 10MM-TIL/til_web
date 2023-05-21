@@ -1,6 +1,6 @@
 // [user].tsx
-import type { GetServerSideProps, NextPage, NextPageContext } from 'next';
-import { useState, useEffect, useCallback, use, useRef } from 'react';
+import type { NextPage, NextPageContext } from 'next';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   MypageWrapper,
   MypageContainer,
