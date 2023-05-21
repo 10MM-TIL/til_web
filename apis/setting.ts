@@ -54,13 +54,7 @@ export const getMyNotification = async () => {
   }
 };
 
-export const putMyNotification = async ({
-  enable,
-  iteration,
-}: {
-  enable: boolean;
-  iteration: 'DAY' | 'WEEK' | 'MONTH';
-}) => {
+export const putMyNotification = async ({ enable, iteration }: { enable: boolean; iteration: string }) => {
   try {
     const res = await instance.put(`/my/notification`, {
       enable,

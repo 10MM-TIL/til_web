@@ -76,13 +76,14 @@ const TimelineComponent = ({
     onSuccess: () => {
       console.log('onSuccess');
     },
-    onSettled: () => queryClient.invalidateQueries(['POST'], { refetchInactive: true }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['POST'] }),
   });
   const removeTimeline = useMutation(deleteTimeline, {
     onSuccess: () => {
       console.log('onSuccess');
     },
-    onSettled: () => queryClient.invalidateQueries(['POST'], { refetchInactive: true }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['POST'] }),
+    // onSettled: () => queryClient.invalidateQueries(['POST'], { refetchInactive: true }),
   });
   const updateTimeline = (content: { title: string; desc: string; createdAt: number }) => {
     editTimeline.mutate({
@@ -103,7 +104,7 @@ const TimelineComponent = ({
       <div style={{ width: '100%', marginTop: '5px' }}>
         <TimeLine
           content={{ ...content, date: formatDate(originalDate) }}
-          onSaveAllContent={(newValue) => updateTimeline(newValue)}
+          onSaveAllContent={(newValue) => updateTimeline(newValue as any)}
           onDeleteContent={handleDeleteContent}
         />
       </div>
@@ -146,7 +147,7 @@ const TimeLineArea = ({ path }: { path: string }) => {
         <Typo.Body color={FONT_COLOR.GRAY_2}>{totalSize}개</Typo.Body>
       </TimelineTitleArea>
       {postObject?.pages?.map((pages) =>
-        pages?.posts?.map((item) => {
+        pages?.posts?.map((item: any) => {
           const content = {
             title: item.title,
             date: item.createdAt,
@@ -206,7 +207,7 @@ const Mypage: NextPage = ({ path }: any) => {
 
 export default Mypage;
 
-export const getServerSideProps: GetServerSideProps = async (context: NextPageContext) => {
+export const getServerSideProps: any = async (context: NextPageContext) => {
   const { user: path } = context.query;
 
   return { props: { path } };

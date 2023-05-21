@@ -8,7 +8,7 @@ export const myBloglist = atom<getBlogResponse[]>({
 
 interface notificationType {
   enable: boolean;
-  iteration: 'DAY' | 'WEEK' | 'MONTH';
+  iteration: string;
 }
 
 export const myNotification = atom<notificationType>({

@@ -42,7 +42,7 @@ const CategoryLayout = ({
   onClick,
 }: {
   selectedCategoryId: string;
-  onClick: (v: string) => {};
+  onClick: (v: string) => void;
 }) => {
   const { data: category } = useCategories();
   const categoryData = category?.data;
@@ -64,7 +64,7 @@ const NoticeLayout = () => {
   const setNotification = useSetRecoilState(myNotification);
   const [mailAgreement, setMailAgreement] = useRecoilState(myMailAgreement);
 
-  const handleRadioClick = (value: 'DAY' | 'WEEK' | 'MONTH') => {
+  const handleRadioClick = (value: string) => {
     setNotification({ iteration: value, enable });
   };
   const handleToggleClick = () => {
@@ -194,7 +194,7 @@ const FooterLayout = () => {
 };
 
 const Setting: NextPage = () => {
-  const [myInfo, setMyInfo] = useState({});
+  const [myInfo, setMyInfo] = useState<any>({});
   const [noti, setNoti] = useRecoilState(myNotification);
   const [mailAgreement, setMyMailAgreement] = useRecoilState(myMailAgreement);
   const [blogList, setBlogList] = useRecoilState(myBloglist);
@@ -304,7 +304,7 @@ const Setting: NextPage = () => {
     const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
     if (!nameReg.test(nameValue)) {
       setIsChangeInput(true);
-      setMyInfo((prev) => {
+      setMyInfo((prev: any) => {
         return { ...prev, name: nameValue };
       });
     } else {
@@ -317,16 +317,16 @@ const Setting: NextPage = () => {
     const pathReg = /[^a-zA-Z0-9-]/gi;
     if (!pathReg.test(pathValue)) {
       setIsChangeInput(true);
-      setMyInfo((prev) => {
+      setMyInfo((prev: any) => {
         return { ...prev, path: pathValue };
       });
     } else {
       alert('URL 주소는 영어, 숫자, 하이픈(-)으로만 설정할 수 있어요.');
     }
   }, []);
-  const handleChangeIntroduction = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeIntroduction = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setIsChangeInput(true);
-    setMyInfo((prev) => {
+    setMyInfo((prev: any) => {
       return { ...prev, introduction: e.target.value };
     });
   }, []);
@@ -335,7 +335,7 @@ const Setting: NextPage = () => {
   }, []);
 
   const handleChangeCategory = useCallback((value: string) => {
-    setMyInfo((prev) => {
+    setMyInfo((prev: any) => {
       return { ...prev, categoryIdentifier: value };
     });
   }, []);
@@ -367,7 +367,7 @@ const Setting: NextPage = () => {
             />
             <TextField title='이름' isInput={true} inputValue={myInfo.name} onChange={handleChangeName} />
             <TextField
-              title={'소개'}
+              title='소개'
               isInput={false}
               inputValue={myInfo.introduction}
               onChange={handleChangeIntroduction}
