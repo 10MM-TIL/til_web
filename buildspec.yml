@@ -1,0 +1,16 @@
+version: 0.2 # 임의의 버전 이름
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Installing dependency...
+      - npm install
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling the Node.js code
+      - npm run build
+artifacts: # CodeBuild의 output artifacts를 지정합니다.
+  files:
+    - '**/*'

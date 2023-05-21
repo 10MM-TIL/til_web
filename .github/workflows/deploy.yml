@@ -1,0 +1,47 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  S3_BUCKET_NAME: til-web-dev
+  CODE_DEPLOY_APPLICATION_NAME: til_web
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: dev
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code.
+        uses: actions/checkout@v3
+
+      - name: Check Node v
+        run: node -v
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: zip create
+        run: zip -qq -r --symlinks  ./test-build.zip .
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./test-build.zip s3://$S3_BUCKET_NAME/test-build.zip
+
+      - name: Deploy
+        run: |
+          aws deploy create-deployment \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --s3-location bucket=$S3_BUCKET_NAME,key=test-build.zip,bundleType=zip
