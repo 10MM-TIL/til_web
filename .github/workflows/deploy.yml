@@ -10,6 +10,7 @@ env:
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: dev
 jobs:
   build:
+    environment: develop
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code.
