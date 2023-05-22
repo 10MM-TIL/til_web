@@ -89,7 +89,10 @@ export const BlogLinkList = styled.div`
 `;
 
 export const SaveButtonContainer = styled.div`
-  padding: 40px 163px;
+  padding-top: 14px;
+  ${mq('desktop')} {
+    padding: 40px 163px;
+  }
 `;
 
 export const FooterContainer = styled.div`
