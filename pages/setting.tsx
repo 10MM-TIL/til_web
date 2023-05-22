@@ -15,6 +15,7 @@ import {
 } from '@/styles/setting.module';
 import { FONT_COLOR } from '@/constants/color';
 import { useCategories } from '@/hooks/queries/categoryQuery';
+import { useResize } from '@/hooks/useResize';
 
 import * as Typo from '@/components/Atom/Typography';
 import { TextField } from '@/components/Atom/TextField';
@@ -163,9 +164,10 @@ const DownloadLayout = () => {
 };
 
 const SaveLayout = ({ onClick }: any) => {
+  const device = useResize();
   return (
     <SaveButtonContainer>
-      <Button size='lg' onClick={onClick}>
+      <Button size={device === 'desktop' ? 'lg' : 'x-lg-m'} onClick={onClick}>
         저장하기
       </Button>
     </SaveButtonContainer>
@@ -202,6 +204,7 @@ const Setting: NextPage = () => {
   const [id, setId] = useState(0);
   const [isChangeInput, setIsChangeInput] = useState(false);
   const { isOpen, showToast, text } = useToast();
+
   const { data: userProfile } = useQuery(['myProfile'], getMyProfile, {
     onSuccess: (data) => {
       setMyMailAgreement(data.isMailAgreement);
@@ -254,49 +257,43 @@ const Setting: NextPage = () => {
     // },
   });
 
-  const handleSave = () => {
-    saveProfile.mutate(
-      {
-        categoryIdentifier: myInfo.categoryIdentifier,
-        introduction: myInfo.introduction,
-        name: myInfo.name,
-        path: myInfo.path,
-        profileImgSrc: 'https://raw.githubusercontent.com/Brick-log/til-server/main/default.png',
-        mailAgreement: mailAgreement,
-      },
-      {
-        onSuccess: () => {
-          // 요청이 성공한 경우
-          console.log('onSuccess');
+  const handleSave = async () => {
+    const promises = [
+      saveProfile.mutate(
+        {
+          categoryIdentifier: myInfo.categoryIdentifier,
+          introduction: myInfo.introduction,
+          name: myInfo.name,
+          path: myInfo.path,
+          profileImgSrc: 'https://raw.githubusercontent.com/Brick-log/til-server/main/default.png',
+          mailAgreement: mailAgreement,
         },
-        onError: (error) => {
-          // 요청에 에러가 발생된 경우
-          console.log('onError');
+        {
+          onError: () => {
+            alert('중복된 URL 주소가 있습니다. 다른 URL 주소를 설정해주세요.');
+          },
         },
-        onSettled: () => {
-          // 요청이 성공하든, 에러가 발생되든 실행하고 싶은 경우
-          console.log('onSettled');
-        },
-      },
-    ); // 데이터 저장
-    saveNoti.mutate(noti);
-    saveBlog.mutate(
-      blogList.map((blog) => {
-        return { url: blog.url };
-      }),
-      {
-        onSuccess: () => {
-          showToast(
-            <>
-              <IconCheckBig />
-              <Typo.H1 color={FONT_COLOR.WHITE}>저장이 완료되었습니다</Typo.H1>
-            </>,
-          );
-        },
-        onError: () => alert('저장에 실패하였습니다. 다시 시도해주세요'),
-      },
-    );
-    setIsChangeInput(false);
+      ),
+      saveNoti.mutate(noti),
+      saveBlog.mutate(
+        blogList.map((blog) => {
+          return { url: blog.url };
+        }),
+      ),
+    ];
+
+    try {
+      await Promise.all(promises).then((res) => {
+        showToast(
+          <>
+            <IconCheckBig />
+            <Typo.H1 color={FONT_COLOR.WHITE}>저장이 완료되었습니다</Typo.H1>
+          </>,
+        );
+      });
+    } catch (error) {
+      alert('저장에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   const handleChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
