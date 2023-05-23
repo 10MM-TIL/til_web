@@ -1,5 +1,6 @@
 export type GrassAreaProps = {
   title: string;
+  onClick: (value: string) => void;
 };
 
 // key 이름 수정 필요할듯?
