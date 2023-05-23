@@ -4,6 +4,7 @@ import { CardProps } from './types';
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
 export const CardContainer = styled.div<{ size: CardProps['size'] }>`
+  cursor: pointer;
   position: relative;
   display: flex;
   justify-content: center;
@@ -46,6 +47,24 @@ export const CardBodyDesc = styled.div`
     white-space: nowrap;
     text-overflow: ellipsis;
     word-break: break-all;
+  }
+`;
+export const CardUserProfile = styled.div`
+  margin-right: 8px;
+  transition: all 0.3s ease;
+  > span {
+    ::after {
+      content: '';
+      width: auto;
+      height: 1px;
+      display: block;
+      background: ${FONT_COLOR.GRAY_3};
+      transition: 0.2s;
+      opacity: 0;
+    }
+    :hover:after {
+      opacity: 1;
+    }
   }
 `;
 
@@ -110,8 +129,5 @@ export const CardInfoWrapper = styled.div`
   > img {
     border-radius: 47.5px;
     margin-right: 6px;
-  }
-  > div:nth-of-type(2) {
-    margin-right: 8px;
   }
 `;
