@@ -24,9 +24,9 @@ export const getUserBlog = async (path: string) => {
   }
 };
 
-export const getUserTimeline = async (path: string, pageToken: string = '') => {
+export const getUserTimeline = async (path: string, pageToken: string = '', from?: number, to?: number) => {
   try {
-    const params = pageToken ? { size: 5, pageToken } : { size: 5 };
+    const params = pageToken ? { size: 5, pageToken, from, to } : { size: 5, from, to };
     const res = await instance.get(`/post/user/${path}`, { params });
     return res.data;
   } catch (e) {
