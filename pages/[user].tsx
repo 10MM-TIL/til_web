@@ -121,6 +121,7 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
   const bottomDiv = useRef(null);
   const [totalSize, setTotalSize] = useState(0);
   const { data: postObject, fetchNextPage, isSuccess } = useMyAllTimeline(path);
+  const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
 
   useEffect(() => {
     if (isSuccess) {
@@ -149,7 +150,16 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
         <Typo.H1 color={FONT_COLOR.WHITE} style={{ paddingBottom: '16px' }}>
           타임라인
         </Typo.H1>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>{totalSize}개</Typo.Body>
+        <Typo.Body
+          color={FONT_COLOR.GRAY_2}
+          onClick={() => {
+            if (clickedDate !== '') {
+              setClickedDate('');
+            }
+          }}
+        >
+          {clickedDate !== '' ? `전체보기` : `${totalSize}개`}
+        </Typo.Body>
       </TimelineTitleArea>
       {postObject?.pages?.map((pages) =>
         pages?.posts?.map((item: any) => {
