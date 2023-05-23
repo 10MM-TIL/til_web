@@ -29,6 +29,8 @@ import { IconFloat } from '@/assets/svgs/IconFloat';
 import { formatDate } from '@/utils/utils';
 import { useMyAllTimeline } from '@/hooks/queries/timelineQuery';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+import { useRecoilState } from 'recoil';
+import { clickedGrassDate } from '@/stores/user';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -66,9 +68,11 @@ const Introduction = ({ introduction, blogs }: { introduction: string; blogs: an
 const TimelineComponent = ({
   content,
   postIdentifier,
+  changable,
 }: {
   content: { date: string; title: string; desc: string; url: string };
   postIdentifier: string;
+  changable: boolean;
 }) => {
   const { title: originalTitle, desc: originalSummary, date: originalDate } = content;
   const queryClient = useQueryClient();
@@ -106,13 +110,14 @@ const TimelineComponent = ({
           content={{ ...content, date: formatDate(originalDate) }}
           onSaveAllContent={(newValue) => updateTimeline(newValue as any)}
           onDeleteContent={handleDeleteContent}
+          changable={changable}
         />
       </div>
     </div>
   );
 };
 
-const TimeLineArea = ({ path }: { path: string }) => {
+const TimeLineArea = ({ path, changable }: { path: string; changable: boolean }) => {
   const bottomDiv = useRef(null);
   const [totalSize, setTotalSize] = useState(0);
   const { data: postObject, fetchNextPage, isSuccess } = useMyAllTimeline(path);
@@ -154,7 +159,14 @@ const TimeLineArea = ({ path }: { path: string }) => {
             url: item.url,
             desc: item.summary,
           };
-          return <TimelineComponent key={item.identifier} content={content} postIdentifier={item.identifier} />;
+          return (
+            <TimelineComponent
+              key={item.identifier}
+              content={content}
+              postIdentifier={item.identifier}
+              changable={changable}
+            />
+          );
         }),
       )}
       {/* {timelineData.map((item) => {
@@ -182,11 +194,16 @@ const Mypage: NextPage = ({ path }: any) => {
   const { metas: grass } = grassObject ?? [];
 
   const [url, setUrl] = useState(require(`@/assets/images/default.png`) as string);
+  const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
   const [picid, setPicId] = useState(0);
 
   useEffect(() => {
     if (picid > 0) setUrl(require(`@/assets/images/${picid}.png`) as string);
   }, [picid]);
+
+  useEffect(() => {
+    console.log('ttt', clickedDate);
+  }, [clickedDate]);
   return (
     <MypageWrapper>
       <MypageContainer>
@@ -197,8 +214,13 @@ const Mypage: NextPage = ({ path }: any) => {
             <Introduction blogs={blogs} introduction={userInfo?.introduction} />
           </TextContainer>
         </IntroContainer>
-        <GrassArea title={`${userInfo?.name}의 기록`} />
-        <TimeLineArea path={path} />
+        <GrassArea
+          title={`${userInfo?.name}의 기록`}
+          onClick={(value) => {
+            setClickedDate(value);
+          }}
+        />
+        <TimeLineArea path={path} changable={userInfo?.isAuthorized} />
       </MypageContainer>
       <Button size='float' svg={<IconFloat />} />
     </MypageWrapper>

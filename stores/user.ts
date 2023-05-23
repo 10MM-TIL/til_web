@@ -20,3 +20,8 @@ export const myMailAgreement = atom<boolean>({
   key: 'myMailAgreement',
   default: false,
 });
+
+export const clickedGrassDate = atom<string>({
+  key: 'clickedGrassDate',
+  default: '',
+});

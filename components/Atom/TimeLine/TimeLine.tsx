@@ -124,6 +124,7 @@ const TimeLine = ({
   onSaveAllContent,
   moreButtonPositionCss,
   editListPositionCss,
+  changable,
 }: TimeLineProps): ReactElement => {
   const moreButtonRef = useRef<HTMLUListElement>(null);
   const [timeLineContent, setTimeLineContent] = useState(content);
@@ -192,14 +193,16 @@ const TimeLine = ({
       {isEdit ? (
         <EditStatusButton onSaveTimeLine={onSaveTimeLine} onCancelTimeLine={onCancelTimeLine} />
       ) : (
-        <EditDropdown
-          editList={editList}
-          isOpen={isDropdownOpen}
-          moreButtonRef={moreButtonRef}
-          onCloseDropdown={toggleOpen}
-          moreButtonPositionCss={moreButtonPositionCss}
-          editListPositionCss={editListPositionCss}
-        ></EditDropdown>
+        changable && (
+          <EditDropdown
+            editList={editList}
+            isOpen={isDropdownOpen}
+            moreButtonRef={moreButtonRef}
+            onCloseDropdown={toggleOpen}
+            moreButtonPositionCss={moreButtonPositionCss}
+            editListPositionCss={editListPositionCss}
+          ></EditDropdown>
+        )
       )}
       <TimeLineDate date={timeLineContent?.date}></TimeLineDate>
       <Styled.TimeLineContent

@@ -53,7 +53,7 @@ const MonthGrass = ({
   return <Grass date={date} GrassData={GrassData} onClickCell={onClickCell} />;
 };
 
-export const GrassArea = ({ title }: GrassAreaProps) => {
+export const GrassArea = ({ title, onClick }: GrassAreaProps) => {
   // 추후 잔디의 데이터를 받아오면 수정이 필요함
 
   const [stackBrick, setStackBrick] = useState<GrassStackedData>({
@@ -86,11 +86,15 @@ export const GrassArea = ({ title }: GrassAreaProps) => {
   }, [yearMonthArr]);
 
   // 현재월 + 5 (4니까 다음이동할때 애니메이션이 동작안함 > 이유 몰?루?)
-  const clickCellTest = useCallback((date: string) => {
-    // 데이터 조정은 여기서 수행
-    // setGrassData();
-    console.log(`클릭한 날짜 정보: ${date}`);
-  }, []);
+  const clickCellTest = useCallback(
+    (date: string) => {
+      // 데이터 조정은 여기서 수행
+      // setGrassData();
+      onClick(date);
+      console.log(`클릭한 날짜 정보: ${date}`);
+    },
+    [onClick],
+  );
 
   // 다음 슬라이드 클릭
   const clickNextSlide = () => {
