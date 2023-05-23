@@ -1,16 +1,6 @@
 import { ReactElement, useEffect, useState, memo, useCallback } from 'react';
 import Image from 'next/image';
-import {
-  CardContainer,
-  CardHeader,
-  CardInfoWrapper,
-  CardBodyContent,
-  CardBodyDesc,
-  TagWrapper,
-  BadgeTop,
-  BadgeBottom,
-  CrownIcon,
-} from './styles';
+import * as Styled from './styles';
 import * as Typo from '@/components/Atom/Typography';
 import { IconCrown } from '@/assets/svgs/IconCrown';
 import { CardProps, category } from './types';
@@ -36,53 +26,54 @@ const Card = ({
   const Badge = () => {
     return (
       <>
-        <BadgeTop size={size}>
-          <CrownIcon size={size}>
+        <Styled.BadgeTop size={size}>
+          <Styled.CrownIcon size={size}>
             <IconCrown></IconCrown>
-          </CrownIcon>
-        </BadgeTop>
-        <BadgeBottom size={size}></BadgeBottom>
+          </Styled.CrownIcon>
+        </Styled.BadgeTop>
+        <Styled.BadgeBottom size={size}></Styled.BadgeBottom>
       </>
     );
   };
 
   return (
-    <CardContainer size={size}>
+    <Styled.CardContainer size={size} onClick={() => onClickContent(url)}>
       {hasBadge ? <Badge /> : null}
-      <CardHeader>
+      <Styled.CardHeader>
         {tagList.map((tag, idx) => {
           return (
-            <TagWrapper key={tag + idx}>
+            <Styled.TagWrapper key={tag + idx}>
               <Typo.Label2 color='#22FFA2'>
                 {tag === '#추천 회고' ? ' ' : ''}
                 {tag}
               </Typo.Label2>
-            </TagWrapper>
+            </Styled.TagWrapper>
           );
         })}
-      </CardHeader>
-      <CardBodyContent onClick={() => onClickContent(url)}>
+      </Styled.CardHeader>
+      <Styled.CardBodyContent>
         <div>
           <Typo.H2 color='#DADFE6'>{content?.header}</Typo.H2>
         </div>
-        <CardBodyDesc>
+        <Styled.CardBodyDesc>
           <Typo.Body color='#636C78'>{content?.body}</Typo.Body>
-        </CardBodyDesc>
-      </CardBodyContent>
-      <CardInfoWrapper onClick={() => onClickUser(userpath)}>
+        </Styled.CardBodyDesc>
+      </Styled.CardBodyContent>
+      <Styled.CardInfoWrapper
+        onClick={(e) => {
+          e.stopPropagation();
+          onClickUser(userpath);
+        }}
+      >
         <Image src={content?.img as string} alt='test' width={19} height={19} />
-        <div
-          css={css`
-            margin-right: 8px;
-          `}
-        >
+        <Styled.CardUserProfile>
           <Typo.Label1 color='#C5CAD0'>{content?.name}</Typo.Label1>
-        </div>
+        </Styled.CardUserProfile>
         <div>
           <Typo.Label1 color='#636C78'>{content?.date}</Typo.Label1>
         </div>
-      </CardInfoWrapper>
-    </CardContainer>
+      </Styled.CardInfoWrapper>
+    </Styled.CardContainer>
   );
 };
 
