@@ -48,7 +48,7 @@ const PopularCard = ({
                   content={{
                     category: categories.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                     header: recommandItem.title,
-                    body: recommandItem.description,
+                    body: recommandItem.summary,
                     img: require('@/assets/images/test.png') as string,
                     name: recommandItem.userPath,
                     date: formatDate(recommandItem.createdAt),

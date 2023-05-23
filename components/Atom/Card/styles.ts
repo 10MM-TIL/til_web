@@ -13,9 +13,8 @@ export const CardContainer = styled.div<{ size: CardProps['size'] }>`
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 9px;
   width: 100%;
-  height: 100%;
   min-width: ${({ size }) => (size === 'sm' ? '284px' : size === 'mobile' ? '328px' : '384px')};
-  min-height: ${({ size }) => (size === 'sm' ? '132px' : '170px')};
+  height: ${({ size }) => (size === 'sm' ? '132px' : '170px')};
 
   padding: ${({ size }) => (size === 'sm' ? '16px 23px 16px 20px' : size === 'mobile' ? '35px' : '35px 40px')};
 

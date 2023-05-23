@@ -97,7 +97,13 @@ const reviewTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   padding: ${selectedTab === 'MEMO' ? '11px 30px 0 40px' : '11px 30px'};
 `;
 
-const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
+const reviewGuide = css`
+  position: absolute;
+  top: -36px;
+  right: 0;
+`;
+
+const textarea = css`
   width: 100%;
   min-height: 216px;
   resize: none;
@@ -108,7 +114,7 @@ const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   border-top-left-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.06);
 
-  padding: ${selectedTab === 'MEMO' ? '28px 24px 40px' : '28px 28px 20px'};
+  padding: 28px 24px 40px;
 
   white-space: pre-wrap;
 
@@ -164,7 +170,11 @@ const iconContainer = css`
   cursor: pointer;
 `;
 
-const tempBox = css``;
+const otherCardContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
 
 const desktopOtherCard = css`
   width: 284px;
@@ -195,13 +205,14 @@ const styles = {
   textareaContainer,
   memoTab,
   reviewTab,
+  reviewGuide,
   textarea,
   textareaBottomContainer,
   elementContainer,
   elementTitle,
   titleRight,
   iconContainer,
-  tempBox,
+  otherCardContainer,
   desktopOtherCard,
   footer,
   divider,
