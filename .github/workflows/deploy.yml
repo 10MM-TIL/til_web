@@ -37,22 +37,37 @@ jobs:
           NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI }}
           NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_PW: ${{ secrets.NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_PW }}
 
+      - name: Cache node modules
+        # 그걸 제공하는 Action도 있네요? 갖다 쓰겠습니다.
+        uses: actions/cache@v2
+        # 해당 step을 대표하는 id를 설정할 수도 있어요.
+        # 해당 값은 뒤의 step에서 사용해볼게요.
+        id: cache
+        with:
+          # node_modules라는 폴더를 검사하여
+          path: node_modules
+          # 아래 키값으로 cache가 돼있는지 확인합니다.
+          key: npm-packages-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
 
       - name: Build
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/build-test" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/build-test" ]; then
             npm run build
-          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
             npm run build:dev
+          fi
 
       - name: zip create
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/build-test" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/build-test" ]; then
             zip -qq -r --symlinks  ./til-dev.zip .
-          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
             zip -qq -r --symlinks  ./til-prod.zip .
+          fi
         shell: bash
 
       - name: Configure AWS credentials
@@ -64,10 +79,11 @@ jobs:
 
       - name: Upload to S3
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/build-test" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/build-test" ]; then
             aws s3 cp --region ap-northeast-2 ./til-dev.zip s3://$S3_BUCKET_NAME/til-dev.zip
-          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
             aws s3 cp --region ap-northeast-2 ./til-prod.zip s3://$S3_BUCKET_NAME/til-prod.zip
+          fi
 
       - name: Deploy For Development
         if: github.ref == 'refs/heads/build-test'
