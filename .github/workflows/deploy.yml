@@ -11,12 +11,16 @@ env:
   CODE_DEPLOY_APPLICATION_NAME: til_web
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_DEV: til_fe_dev
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_PROD: til_fe_prod
+  
 jobs:
   build:
     environment:
       name: ${{ github.ref == 'refs/heads/build-test' && 'develop' || 'Production' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check Environment Name
+        run: echo "Environment Name: ${{ env.ENV_NAME }}"
+
       - name: Checkout source code.
         uses: actions/checkout@v3
 
