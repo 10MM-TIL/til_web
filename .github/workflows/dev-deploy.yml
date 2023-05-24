@@ -14,6 +14,13 @@ jobs:
     environment: develop
     runs-on: ubuntu-latest
     steps:
+      - name: Set Environment Name
+        id: set_environment
+        run: echo "::set-output name=environment_name::${{ github.event_name }}"
+
+      - name: Check Environment Name
+        run: echo "Environment Name: ${{ needs.build.steps.set_environment.outputs.environment_name }}"
+      
       - name: Checkout source code.
         uses: actions/checkout@v3
 
