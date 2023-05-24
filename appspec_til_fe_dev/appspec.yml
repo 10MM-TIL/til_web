@@ -11,8 +11,6 @@ permissions:
     mode: 755
 hooks:
   ApplicationStart:
-    - location: deploy.sh
+    - location: deploy-dev.sh
       timeout: 300
       runas: ubuntu
-      env:
-        DEPLOYMENT_GROUP_NAME: '{{DEPLOYMENT_GROUP_NAME}}'

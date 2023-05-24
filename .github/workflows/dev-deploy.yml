@@ -36,8 +36,6 @@ jobs:
 
       - name: Cache node modules
         uses: actions/cache@v3
-        # 해당 step을 대표하는 id를 설정할 수도 있어요.
-        # 해당 값은 뒤의 step에서 사용해볼게요.
         id: cache
         with:
           # node_modules라는 폴더를 검사하여
