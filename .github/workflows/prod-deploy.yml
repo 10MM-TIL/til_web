@@ -2,18 +2,15 @@ name: Deploy
 on:
   push:
     branches:
-      - develop
       - main
-      - build-test
 
 env:
   S3_BUCKET_NAME: til-web
   CODE_DEPLOY_APPLICATION_NAME: til_web
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_DEV: til_fe_dev
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_PROD: til_fe_prod
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: til_fe_prod
 jobs:
   build:
-    environment: ${{ github.ref == 'refs/heads/build-test' && 'develop' || 'Production' }}
+    environment: Production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code.
@@ -53,19 +50,11 @@ jobs:
 
       - name: Build
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/build-test" ]; then
-            npm run build
-          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            npm run build:dev
-          fi
+          npm run build
 
       - name: zip create
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/build-test" ]; then
-            zip -qq -r --symlinks  ./til-dev.zip .
-          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            zip -qq -r --symlinks  ./til-prod.zip .
-          fi
+          zip -qq -r --symlinks  ./til-prod.zip .
         shell: bash
 
       - name: Configure AWS credentials
@@ -77,26 +66,12 @@ jobs:
 
       - name: Upload to S3
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/build-test" ]; then
-            aws s3 cp --region ap-northeast-2 ./til-dev.zip s3://$S3_BUCKET_NAME/til-dev.zip
-          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            aws s3 cp --region ap-northeast-2 ./til-prod.zip s3://$S3_BUCKET_NAME/til-prod.zip
-          fi
-
-      - name: Deploy For Development
-        if: github.ref == 'refs/heads/build-test'
-        run: |
-          aws deploy create-deployment \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_DEV }} \
-          --s3-location bucket=$S3_BUCKET_NAME,key=til-dev.zip,bundleType=zip
+          aws s3 cp --region ap-northeast-2 ./til-prod.zip s3://$S3_BUCKET_NAME/til-prod.zip
 
       - name: Deploy For Production
-        if: github.ref == 'refs/heads/main'
         run: |
           aws deploy create-deployment \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_PROD }} \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
           --s3-location bucket=$S3_BUCKET_NAME,key=til-prod.zip,bundleType=zip
