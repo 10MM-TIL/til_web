@@ -3,14 +3,17 @@ on:
   push:
     branches:
       - develop
+      - main
 
 env:
-  S3_BUCKET_NAME: til-web-dev
+  S3_BUCKET_NAME: til-web
   CODE_DEPLOY_APPLICATION_NAME: til_web
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: dev
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_DEV: til_fe_dev
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_PROD: til_fe_prod
 jobs:
   build:
-    environment: develop
+    environment:
+      name: ${{ github.ref == 'refs/heads/develop' && 'develop' || 'Production' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code.
@@ -20,13 +23,28 @@ jobs:
         run: node -v
 
       - name: Generate Environment Variables File for Development
+        if: github.ref == 'refs/heads/develop'
         run: |
           echo "NEXT_PUBLIC_MODE=$NEXT_PUBLIC_MODE" >> .env.development
           echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env.development
           echo "NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_ID=$NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_ID" >> .env.development
           echo "NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI=$NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI" >> .env.development
           echo "NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_PW=$NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_PW" >> .env.development
+        env:
+          NEXT_PUBLIC_MODE: ${{ secrets.NEXT_PUBLIC_MODE }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_ID }}
+          NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI }}
+          NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_PW: ${{ secrets.NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_PW }}
 
+      - name: Generate Environment Variables File for Production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "NEXT_PUBLIC_MODE=$NEXT_PUBLIC_MODE" >> .env.production
+          echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env.production
+          echo "NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_ID=$NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_ID" >> .env.production
+          echo "NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI=$NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI" >> .env.production
+          echo "NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_PW=$NEXT_PUBLIC_GOOGLE_LOGIN_CLIENT_PW" >> .env.production
         env:
           NEXT_PUBLIC_MODE: ${{ secrets.NEXT_PUBLIC_MODE }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
@@ -38,10 +56,18 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build
+        run: |
+          if [ ${{ github.ref }} = 'refs/heads/develop' ]; then
+            npm run build
+          elif [ ${{ github.ref }} = 'refs/heads/main' ]; then
+            npm run build:dev
 
       - name: zip create
-        run: zip -qq -r --symlinks  ./test-build.zip .
+        run: |
+          if [ ${{ github.ref }} = 'refs/heads/develop' ]; then
+            zip -qq -r --symlinks  ./til-dev.zip .
+          elif [ ${{ github.ref }} = 'refs/heads/main' ]; then
+            zip -qq -r --symlinks  ./til-prod.zip .
         shell: bash
 
       - name: Configure AWS credentials
@@ -52,12 +78,26 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./test-build.zip s3://$S3_BUCKET_NAME/test-build.zip
+        run: |
+          if [ ${{ github.ref }} = 'refs/heads/develop' ]; then
+            aws s3 cp --region ap-northeast-2 ./til-dev.zip s3://$S3_BUCKET_NAME/til-dev.zip
+          elif [ ${{ github.ref }} = 'refs/heads/main' ]; then
+            aws s3 cp --region ap-northeast-2 ./til-prod.zip s3://$S3_BUCKET_NAME/til-prod.zip
 
-      - name: Deploy
+      - name: Deploy For Development
+        if: github.ref == 'refs/heads/develop'
         run: |
           aws deploy create-deployment \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-          --s3-location bucket=$S3_BUCKET_NAME,key=test-build.zip,bundleType=zip
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_DEV }} \
+          --s3-location bucket=$S3_BUCKET_NAME,key=til-dev.zip,bundleType=zip
+
+      - name: Deploy For Production
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          aws deploy create-deployment \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME_PROD }} \
+          --s3-location bucket=$S3_BUCKET_NAME,key=til-prod.zip,bundleType=zip
