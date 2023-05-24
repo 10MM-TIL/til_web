@@ -14,3 +14,5 @@ hooks:
     - location: deploy.sh
       timeout: 300
       runas: ubuntu
+      env:
+        DEPLOYMENT_GROUP_NAME: '{{DEPLOYMENT_GROUP_NAME}}'
