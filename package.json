@@ -9,6 +9,8 @@
     "build:dev": "env-cmd -f .env.development next build",
     "start": "next start",
     "start:dev": "env-cmd -f .env.development next start",
+    "pm2:dev": "env-cmd -f .env.development pm2 reload ecosystem.config.js --only til-dev --env development",
+    "pm2:prod": "env-cmd -f .env.production pm2 reload ecosystem.config.js --only til-dev --env production",
     "lint": "next lint"
   },
   "dependencies": {
