@@ -10,8 +10,8 @@ permissions:
     group: ubuntu
     mode: 755
 hooks:
-  AfterInstall:
-    -location: after_install.sh
+  BeforeInstall:
+    - location: after_install.sh
       timeout: 500
       runas: ubuntu
   ApplicationStart:
