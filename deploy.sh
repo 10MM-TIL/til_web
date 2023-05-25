@@ -19,7 +19,6 @@ if [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_prod" ]; then
   	echo "til-product 프로세스가 실행되지 않았습니다."
 	sudo npm run pm2:start:prod
   fi
-    
 elif [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_dev" ]; then
   cd "$REPOSITORY"
   sudo npm install &&
