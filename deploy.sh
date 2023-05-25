@@ -1,13 +1,13 @@
 #!/bin/bash
 
 REPOSITORY=/home/ubuntu/deploy
-DEPLOYMENT_GROUP_NAME="${DEPLOYMENT_GROUP_NAME}"
+REPOSITORY_PROD=/home/ubuntu/prod
 
-cd "$REPOSITORY"
 echo "DEPLOYMENT_GROUP_NAME: $DEPLOYMENT_GROUP_NAME"
 
-sudo npm install &&
-if [ "$DEPLOYMENT_GROUP_NAME" = "til_fe_prod" ]; then
+if [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_prod" ]; then
+  cd "$REPOSITORY_PROD"
+  sudo npm install &&
   # production 환경인 경우에 대한 처리
   pm2 describe til-product > /dev/null
   if [ $? -eq 0 ]; then
@@ -20,7 +20,9 @@ if [ "$DEPLOYMENT_GROUP_NAME" = "til_fe_prod" ]; then
 	sudo npm run pm2:start:prod
   fi
     
-elif [ "$DEPLOYMENT_GROUP_NAME" = "til_fe_dev" ]; then
+elif [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_dev" ]; then
+  cd "$REPOSITORY"
+  sudo npm install &&
   pm2 describe til-dev > /dev/null
   if [ $? -eq 0 ]; then
 	# 실행 중인 경우
