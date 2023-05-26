@@ -1,6 +1,6 @@
 import Modal from '@/components/Atom/Modal';
 import RadioGroup from '@/components/Molecules/RadioGroup';
-import Toggle from '@/components/Toggle';
+import Toggle from '@/components/Atom/Toggle';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import { Button } from '@/components/Atom/Button';
 
