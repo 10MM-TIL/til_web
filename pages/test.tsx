@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { BACKGROUND_COLOR } from '@/constants/color';
 
 import * as Typo from '@/components/Atom/Typography';
-import Toggle from '@/components/Toggle';
+import Toggle from '@/components/Atom/Toggle';
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
 import { GrassArea } from '@/components/Molecules/GrassArea';
 import { TextField } from '@/components/Atom/TextField';
@@ -71,7 +71,6 @@ const BLOG_DATA = [
     url: 'https://www.medium.com',
   },
 ];
-
 const Test: NextPage = () => {
   return (
     <>

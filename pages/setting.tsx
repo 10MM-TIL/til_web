@@ -23,7 +23,7 @@ import ProfileIcon from '@/components/Molecules/ProfileIcon';
 import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { Button } from '@/components/Atom/Button';
 import RadioGroup from '@/components/Molecules/RadioGroup';
-import Toggle from '@/components/Toggle';
+import Toggle from '@/components/Atom/Toggle';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import AddBlog from '@/components/Atom/AddBlog';
 import ToastMessage from '@/components/ToastMessage';

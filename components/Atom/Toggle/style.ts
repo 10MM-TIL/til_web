@@ -3,6 +3,7 @@ import { POINT_COLOR } from '@/constants/color';
 
 const ToggleContainer = styled.div`
   display: flex;
+  position: relative;
   justify-content: space-around;
   padding: 10px 12px 10px 12px;
   gap: 8px;
