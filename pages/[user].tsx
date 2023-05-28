@@ -12,6 +12,7 @@ import {
   IntroductionContainer,
   TimelineContainer,
   TimelineTitleArea,
+  FloatingContainer,
 } from '@/styles/mypage.module';
 import ProfileIcon from '@/components/Molecules/ProfileIcon';
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
@@ -23,7 +24,7 @@ import { IconTimeline } from '@/assets/svgs/IconTimeline';
 import BlogGroup from '@/components/Molecules/BlogGroup';
 import router from 'next/router';
 import { getUserProfile, getUserBlog, getUserTimeline, getUserGrass, putEditTimeline, deleteTimeline } from 'apis/user';
-import { dehydrate, QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfileResponse, getTimelineResponse } from '@/types/user';
 import { IconFloat } from '@/assets/svgs/IconFloat';
 import { formatDate } from '@/utils/utils';
@@ -31,6 +32,7 @@ import { useMyAllTimeline } from '@/hooks/queries/timelineQuery';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { useRecoilState } from 'recoil';
 import { clickedGrassDate } from '@/stores/user';
+import IconRequest from '@/assets/svgs/IconRequest';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -194,6 +196,7 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
 };
 
 const Mypage: NextPage = ({ path }: any) => {
+  console.log('PATH : ', path);
   const { data: userInfo } = useQuery(['PROFILE'], () => getUserProfile(path));
   const { data: blogObject } = useQuery(['BLOGS'], () => getUserBlog(path));
   // const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, ));
@@ -232,25 +235,37 @@ const Mypage: NextPage = ({ path }: any) => {
         />
         <TimeLineArea path={path} changable={userInfo?.isAuthorized} />
       </MypageContainer>
-      <Button size='float' svg={<IconFloat />} />
+      <FloatingContainer>
+        <Button size='float' svg={<IconRequest />} />
+      </FloatingContainer>
     </MypageWrapper>
   );
 };
 
 export default Mypage;
 
-export const getServerSideProps: any = async (context: NextPageContext) => {
-  const { user: path } = context.query;
+// export const getServerSideProps: any = async (context: NextPageContext) => {
+//   const { user: path } = context.query;
 
-  return { props: { path } };
+//   return { props: { path } };
+// };
+
+export const getStaticPaths = async () => {
+  return {
+    paths: [{ params: { user: 'sjpark' } }],
+    // paths: [],
+    fallback: true,
+  };
 };
 
-// export const getStaticPaths = async () => {
-//   return {
-//     paths: [{ params: { user: 'duck' } }],
-//     fallback: true,
-//   };
-// };
+export const getStaticProps = async (context: any) => {
+  const { params } = context;
+  const path = params.user;
+  console.log(params);
+  return {
+    props: { path: path },
+  };
+};
 
 // export const getStaticProps = async (context: any) => {
 //   const queryClient = new QueryClient();
