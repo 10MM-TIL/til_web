@@ -78,3 +78,13 @@ export const TimelineTitleArea = styled.div`
   justify-content: space-between;
   padding: 36px 12px 0px 12px;
 `;
+
+export const FloatingContainer = styled.div`
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  ${mq('desktop')} {
+    bottom: 58px;
+    right: 69px;
+  }
+`;
