@@ -218,17 +218,66 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
   );
 };
 
+const GrassContainer = ({
+  path,
+  title,
+  onClick,
+}: {
+  path: string;
+  title: string;
+  onClick: (value: string) => void;
+}) => {
+  const [base, setBase] = useState(0);
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth() + base, 1); // FROM 현재 날짜 기준 1일 (5월 1일)
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 5 + base, 1); // TO 현재 날짜 기준 +5달 (10월 1일)
+  const fromSeconds = Math.round(firstDay.valueOf() / 1000);
+  const toSeconds = Math.round(lastDay.valueOf() / 1000);
+
+  const firstMonth = firstDay.getMonth() + 1;
+  console.log('firstDay.getMonth', firstMonth);
+  // firstDay 달을 잡고
+  // meta 로 받은 데이터를 map 돌면서 Date 처리 해서 같은 달인지 체크
+  // 같은 달이면 [base+1] index에 Push
+  //
+  const { data: grassObject } = useQuery(['GRASS', path, fromSeconds, toSeconds], () =>
+    getUserGrass(path, fromSeconds, toSeconds),
+  );
+  const dateList = grassObject?.metas || [];
+  const stack = { 1: [], 2: [], 3: [], 4: [], 5: [] };
+  dateList.forEach((item: any) => {
+    const temp = new Date(item);
+    temp.setHours(0, 0, 0);
+    stack[temp.getMonth() + 1 - firstMonth + 1].push(temp.toString());
+  });
+  console.log('stack', stack);
+  const handleClickNext = () => {
+    setBase((prev) => prev + 1);
+  };
+  const handleClickPrev = () => {
+    setBase((prev) => prev - 1);
+  };
+  return (
+    <GrassArea
+      title={title}
+      onClick={onClick}
+      onClickNext={handleClickNext}
+      onClickPrev={handleClickPrev}
+      data={stack}
+    />
+  );
+};
+
 const User: NextPage = ({ path }: any) => {
-  console.log('PATH : ', path);
   const { data: userInfo } = useQuery(['PROFILE', path], () => getUserProfile(path));
   const { data: blogObject } = useQuery(['BLOGS', path], () => getUserBlog(path));
   // const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, ));
   // const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 1685545200, 1688915199));
-  const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 0, 9998137200));
+  // const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 0, 9998137200));
   const { blogs } = blogObject ?? [];
 
   // const { size: postCount, posts } = postObject ?? { size: 0, posts: [] };
-  const { metas: grass } = grassObject ?? [];
+  // const { metas: grass } = grassObject ?? [];
 
   const [url, setUrl] = useState(require(`@/assets/images/default.png`) as string);
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
@@ -248,7 +297,8 @@ const User: NextPage = ({ path }: any) => {
             <Introduction blogs={blogs} introduction={userInfo?.introduction} />
           </TextContainer>
         </IntroContainer>
-        <GrassArea
+        <GrassContainer
+          path={path}
           title={`${userInfo?.name}의 기록`}
           onClick={(value) => {
             setClickedDate(value);
