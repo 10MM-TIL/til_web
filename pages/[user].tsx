@@ -257,7 +257,7 @@ const User: NextPage = ({ path }: any) => {
         <TimeLineArea path={path} changable={userInfo?.isAuthorized} />
       </MypageContainer>
       <FloatingContainer>
-        <Button size='float' svg={<IconRequest />} />
+        <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />
       </FloatingContainer>
     </MypageWrapper>
   );
