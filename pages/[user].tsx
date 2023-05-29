@@ -33,6 +33,7 @@ import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { useRecoilState } from 'recoil';
 import { clickedGrassDate } from '@/stores/user';
 import IconRequest from '@/assets/svgs/IconRequest';
+import { GrassStackedData } from '@/components/Molecules/GrassArea/types';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -235,7 +236,7 @@ const GrassContainer = ({
   const toSeconds = Math.round(lastDay.valueOf() / 1000);
 
   const firstMonth = firstDay.getMonth() + 1;
-  console.log('firstDay.getMonth', firstMonth);
+  // console.log('firstDay.getMonth', firstMonth);
   // firstDay 달을 잡고
   // meta 로 받은 데이터를 map 돌면서 Date 처리 해서 같은 달인지 체크
   // 같은 달이면 [base+1] index에 Push
@@ -244,13 +245,15 @@ const GrassContainer = ({
     getUserGrass(path, fromSeconds, toSeconds),
   );
   const dateList = grassObject?.metas || [];
-  const stack = { 1: [], 2: [], 3: [], 4: [], 5: [] };
-  dateList.forEach((item: any) => {
+  const stack: GrassStackedData = { '1': [], '2': [], '3': [], '4': [], '5': [] };
+  dateList?.forEach((item: any) => {
     const temp = new Date(item);
     temp.setHours(0, 0, 0);
-    stack[temp.getMonth() + 1 - firstMonth + 1].push(temp.toString());
+    // console.log(`firstMonth :${firstMonth} // temp.getMonth :${temp.getMonth() + 1}`);
+    const index = String((temp.getMonth() + 1 - firstMonth + 1 + 12) % 12) as '1' | '2' | '3' | '4' | '5';
+
+    stack[index].push(temp.toString());
   });
-  console.log('stack', stack);
   const handleClickNext = () => {
     setBase((prev) => prev + 1);
   };
@@ -271,18 +274,12 @@ const GrassContainer = ({
 const User: NextPage = ({ path }: any) => {
   const { data: userInfo } = useQuery(['PROFILE', path], () => getUserProfile(path));
   const { data: blogObject } = useQuery(['BLOGS', path], () => getUserBlog(path));
-  // const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, ));
-  // const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 1685545200, 1688915199));
-  // const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 0, 9998137200));
-  const { blogs } = blogObject ?? [];
 
-  // const { size: postCount, posts } = postObject ?? { size: 0, posts: [] };
-  // const { metas: grass } = grassObject ?? [];
+  const { blogs } = blogObject ?? [];
 
   const [url, setUrl] = useState(require(`@/assets/images/default.png`) as string);
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
   const [picid, setPicId] = useState(0);
-
   useEffect(() => {
     if (picid > 0) setUrl(require(`@/assets/images/${picid}.png`) as string);
   }, [picid]);
