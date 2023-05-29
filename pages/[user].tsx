@@ -195,12 +195,13 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
   );
 };
 
-const Mypage: NextPage = ({ path }: any) => {
+const User: NextPage = ({ path }: any) => {
   console.log('PATH : ', path);
   const { data: userInfo } = useQuery(['PROFILE'], () => getUserProfile(path));
   const { data: blogObject } = useQuery(['BLOGS'], () => getUserBlog(path));
   // const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, ));
-  const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 0, 9999999999));
+  // const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 1685545200, 1688915199));
+  const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 1682866800, 1688137200));
   const { blogs } = blogObject ?? [];
 
   // const { size: postCount, posts } = postObject ?? { size: 0, posts: [] };
@@ -217,6 +218,7 @@ const Mypage: NextPage = ({ path }: any) => {
   useEffect(() => {
     console.log('ttt', clickedDate);
   }, [clickedDate]);
+
   return (
     <MypageWrapper>
       <MypageContainer>
@@ -242,30 +244,30 @@ const Mypage: NextPage = ({ path }: any) => {
   );
 };
 
-export default Mypage;
+export default User;
 
-// export const getServerSideProps: any = async (context: NextPageContext) => {
-//   const { user: path } = context.query;
+export const getServerSideProps: any = async (context: NextPageContext) => {
+  const { user: path } = context.query;
 
-//   return { props: { path } };
+  return { props: { path } };
+};
+
+// export const getStaticPaths = async () => {
+//   return {
+//     paths: [{ params: { user: 'sjpark' } }],
+//     // paths: [],
+//     fallback: true,
+//   };
 // };
 
-export const getStaticPaths = async () => {
-  return {
-    paths: [{ params: { user: 'sjpark' } }],
-    // paths: [],
-    fallback: true,
-  };
-};
-
-export const getStaticProps = async (context: any) => {
-  const { params } = context;
-  const path = params.user;
-  console.log(params);
-  return {
-    props: { path: path },
-  };
-};
+// export const getStaticProps = async (context: any) => {
+//   const { params } = context;
+//   const path = params.user;
+//   console.log(params);
+//   return {
+//     props: { path: path },
+//   };
+// };
 
 // export const getStaticProps = async (context: any) => {
 //   const queryClient = new QueryClient();
