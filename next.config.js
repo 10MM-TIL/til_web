@@ -33,6 +33,7 @@ const nextConfig = {
       destination: 'https://www.googleapis.com/oauth2/v1/:path*', // destination으로 redirect
     },
   ],
+  assetPrefix: '.',
 };
 
 module.exports = nextConfig;
