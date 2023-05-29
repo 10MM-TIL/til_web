@@ -157,7 +157,7 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
     const toSeconds = Math.round(clickDay.valueOf() / 1000) + 86400;
     // console.log('clickDay', Math.round(clickDay.valueOf() / 1000));
     console.log(clickDay);
-    getTimeline();
+    if (clickedDate !== '') getTimeline();
   }, [clickedDate, path]);
 
   return (
