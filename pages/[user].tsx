@@ -33,6 +33,7 @@ import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { useRecoilState } from 'recoil';
 import { clickedGrassDate } from '@/stores/user';
 import IconRequest from '@/assets/svgs/IconRequest';
+import { GrassStackedData } from '@/components/Molecules/GrassArea/types';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -124,6 +125,7 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
   const [totalSize, setTotalSize] = useState(0);
   const { data: postObject, fetchNextPage, isSuccess } = useMyAllTimeline(path);
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
+  const [timelineData, setTimelineData] = useState([]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -146,6 +148,19 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
     };
   }, [observe, unobserve]);
 
+  useEffect(() => {
+    const getTimeline = async () => {
+      const res = await getUserTimeline(path, '', fromSeconds, toSeconds);
+      setTimelineData(res?.posts);
+    };
+    const clickDay = new Date(clickedDate);
+    const fromSeconds = Math.round(clickDay.valueOf() / 1000);
+    const toSeconds = Math.round(clickDay.valueOf() / 1000) + 86400;
+    // console.log('clickDay', Math.round(clickDay.valueOf() / 1000));
+    console.log(clickDay);
+    if (clickedDate !== '') getTimeline();
+  }, [clickedDate, path]);
+
   return (
     <TimelineContainer>
       <TimelineTitleArea>
@@ -159,65 +174,115 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
               setClickedDate('');
             }
           }}
+          style={clickedDate !== '' ? { cursor: 'pointer' } : {}}
         >
           {clickedDate !== '' ? `전체보기` : `${totalSize}개`}
         </Typo.Body>
       </TimelineTitleArea>
-      {postObject?.pages?.map((pages) =>
-        pages?.posts?.map((item: any) => {
-          const content = {
-            title: item.title,
-            date: item.createdAt,
-            url: item.url,
-            desc: item.summary,
-          };
-          return (
-            <TimelineComponent
-              key={item.identifier}
-              content={content}
-              postIdentifier={item.identifier}
-              changable={changable}
-            />
-          );
-        }),
-      )}
-      {/* {timelineData.map((item) => {
-        const content = {
-          title: item.title,
-          date: formatDate(item.createdAt),
-          url: item.url,
-          desc: item.summary,
-        };
-        return <TimelineComponent key={item.identifier} content={content} postIdentifier={item.identifier} />;
-      })} */}
+      {clickedDate === ''
+        ? postObject?.pages?.map((pages) =>
+            pages?.posts?.map((item: any) => {
+              const content = {
+                title: item.title,
+                date: item.createdAt,
+                url: item.url,
+                desc: item.summary,
+              };
+              return (
+                <TimelineComponent
+                  key={item.identifier}
+                  content={content}
+                  postIdentifier={item.identifier}
+                  changable={changable}
+                />
+              );
+            }),
+          )
+        : timelineData.map((item: any) => {
+            const content = {
+              title: item.title,
+              date: item.createdAt,
+              url: item.url,
+              desc: item.summary,
+            };
+            return (
+              <TimelineComponent
+                key={item.identifier}
+                content={content}
+                postIdentifier={item.identifier}
+                changable={changable}
+              />
+            );
+          })}
       <div ref={bottomDiv} />
     </TimelineContainer>
   );
 };
 
-const User: NextPage = ({ path }: any) => {
-  console.log('PATH : ', path);
-  const { data: userInfo } = useQuery(['PROFILE'], () => getUserProfile(path));
-  const { data: blogObject } = useQuery(['BLOGS'], () => getUserBlog(path));
-  // const { data: postObject } = useQuery(['POST'], () => getUserTimeline(path, ));
-  // const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 1685545200, 1688915199));
-  const { data: grassObject } = useQuery(['GRASS'], () => getUserGrass(path, 1682866800, 1688137200));
-  const { blogs } = blogObject ?? [];
+const GrassContainer = ({
+  path,
+  title,
+  onClick,
+}: {
+  path: string;
+  title: string;
+  onClick: (value: string) => void;
+}) => {
+  const [base, setBase] = useState(0);
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth() + base, 1); // FROM 현재 날짜 기준 1일 (5월 1일)
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 5 + base, 1); // TO 현재 날짜 기준 +5달 (10월 1일)
+  const fromSeconds = Math.round(firstDay.valueOf() / 1000);
+  const toSeconds = Math.round(lastDay.valueOf() / 1000);
 
-  // const { size: postCount, posts } = postObject ?? { size: 0, posts: [] };
-  const { metas: grass } = grassObject ?? [];
+  const firstMonth = firstDay.getMonth() + 1;
+  // console.log('firstDay.getMonth', firstMonth);
+  // firstDay 달을 잡고
+  // meta 로 받은 데이터를 map 돌면서 Date 처리 해서 같은 달인지 체크
+  // 같은 달이면 [base+1] index에 Push
+  //
+  const { data: grassObject } = useQuery(['GRASS', path, fromSeconds, toSeconds], () =>
+    getUserGrass(path, fromSeconds, toSeconds),
+  );
+  const dateList = grassObject?.metas || [];
+  const stack: GrassStackedData = { '1': [], '2': [], '3': [], '4': [], '5': [] };
+  dateList?.forEach((item: any) => {
+    const temp = new Date(item);
+    temp.setHours(0, 0, 0);
+    // console.log(`firstMonth :${firstMonth} // temp.getMonth :${temp.getMonth() + 1}`);
+    const index = String((temp.getMonth() + 1 - firstMonth + 1 + 12) % 12) as '1' | '2' | '3' | '4' | '5';
+
+    stack[index].push(temp.toString());
+  });
+  const handleClickNext = () => {
+    setBase((prev) => prev + 1);
+  };
+  const handleClickPrev = () => {
+    setBase((prev) => prev - 1);
+  };
+  return (
+    <GrassArea
+      title={title}
+      onClick={onClick}
+      onClickNext={handleClickNext}
+      onClickPrev={handleClickPrev}
+      data={stack}
+    />
+  );
+};
+
+const User: NextPage = ({ path }: any) => {
+  const { data: userInfo } = useQuery(['PROFILE', path], () => getUserProfile(path));
+  const { data: blogObject } = useQuery(['BLOGS', path], () => getUserBlog(path));
+
+  const { blogs } = blogObject ?? [];
 
   const [url, setUrl] = useState(require(`@/assets/images/default.png`) as string);
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
   const [picid, setPicId] = useState(0);
-
   useEffect(() => {
     if (picid > 0) setUrl(require(`@/assets/images/${picid}.png`) as string);
   }, [picid]);
-
-  useEffect(() => {
-    console.log('ttt', clickedDate);
-  }, [clickedDate]);
 
   return (
     <MypageWrapper>
@@ -229,7 +294,8 @@ const User: NextPage = ({ path }: any) => {
             <Introduction blogs={blogs} introduction={userInfo?.introduction} />
           </TextContainer>
         </IntroContainer>
-        <GrassArea
+        <GrassContainer
+          path={path}
           title={`${userInfo?.name}의 기록`}
           onClick={(value) => {
             setClickedDate(value);
@@ -238,7 +304,7 @@ const User: NextPage = ({ path }: any) => {
         <TimeLineArea path={path} changable={userInfo?.isAuthorized} />
       </MypageContainer>
       <FloatingContainer>
-        <Button size='float' svg={<IconRequest />} />
+        <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />
       </FloatingContainer>
     </MypageWrapper>
   );

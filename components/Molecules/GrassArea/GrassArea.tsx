@@ -53,16 +53,18 @@ const MonthGrass = ({
   return <Grass date={date} GrassData={GrassData} onClickCell={onClickCell} />;
 };
 
-export const GrassArea = ({ title, onClick }: GrassAreaProps) => {
+export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: GrassAreaProps) => {
   // 추후 잔디의 데이터를 받아오면 수정이 필요함
-
-  const [stackBrick, setStackBrick] = useState<GrassStackedData>({
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-  });
+  const [stackBrick, setStackBrick] = useState<GrassStackedData>(data);
+  // console.log('stackBrick', stackBrick);
+  // console.log('data', data);
+  // const [stackBrick, setStackBrick] = useState<GrassStackedData>({
+  //   1: ['Sun May 14 2023 00:00:00 GMT+0900 (한국 표준시)'],
+  //   2: [],
+  //   3: [],
+  //   4: ['Sat Aug 26 2023 00:00:00 GMT+0900 (한국 표준시)'],
+  //   5: [],
+  // });
 
   const [nowYear, setNowYear] = useState(getYear(new Date()));
   const [nowMonth, setNowMonth] = useState(getMonth(new Date()) + 1);
@@ -73,17 +75,19 @@ export const GrassArea = ({ title, onClick }: GrassAreaProps) => {
   );
   const [swiper, setSwiper] = useState<SwiperCore | null>(null);
   const prependNumber = useRef(1); // virtual Index
-
-  // TODO 수정 필요! 현재는 매번 랜덤한 값이 들어와 이동할때마다 바뀜
   useEffect(() => {
-    // 추가 후 삭제 해서 두번 실행됌
-    yearMonthArr.forEach((i, index) => {
-      setStackBrick((prev) => ({
-        ...prev,
-        [index + 1]: addRandomDateToKey(i.year, i.month),
-      }));
-    });
-  }, [yearMonthArr]);
+    setStackBrick(data);
+  }, [data]);
+  // TODO 수정 필요! 현재는 매번 랜덤한 값이 들어와 이동할때마다 바뀜
+  // useEffect(() => {
+  //   // 추가 후 삭제 해서 두번 실행됌
+  //   yearMonthArr.forEach((i, index) => {
+  //     setStackBrick((prev) => ({
+  //       ...prev,
+  //       [index + 1]: addRandomDateToKey(i.year, i.month),
+  //     }));
+  //   });
+  // }, [yearMonthArr]);
 
   // 현재월 + 5 (4니까 다음이동할때 애니메이션이 동작안함 > 이유 몰?루?)
   const clickCellTest = useCallback(
@@ -98,6 +102,7 @@ export const GrassArea = ({ title, onClick }: GrassAreaProps) => {
 
   // 다음 슬라이드 클릭
   const clickNextSlide = () => {
+    onClickNext();
     if (swiper?.isEnd) {
       appendGrassSlide();
       // !! setTimeout으로 했는데 이거 해결방법이 필요함.. 방법 I Don't No
@@ -142,6 +147,7 @@ export const GrassArea = ({ title, onClick }: GrassAreaProps) => {
 
   // 이전 슬라이드 클릭
   const clickPrevSlide = () => {
+    onClickPrev();
     if (swiper?.isBeginning) {
       prependGrassSlide();
       setTimeout(() => {
