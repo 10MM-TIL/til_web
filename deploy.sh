@@ -3,12 +3,12 @@
 REPOSITORY=/home/ubuntu/deploy
 REPOSITORY_PROD=/home/ubuntu/prod
 
-echo "DEPLOYMENT_GROUP_NAME: $DEPLOYMENT_GROUP_NAME"
+echo "DEPLOYMENT_GROUP_NAME: ${DEPLOYMENT_GROUP_NAME}"
 
-if [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_prod" ]; then
-  ecgho "운영 서버 배포"
+if [ "${DEPLOYMENT_GROUP_NAME}" == "til_fe_prod" ]; then
+  echo "운영 서버 배포"
 
-  cd "$REPOSITORY_PROD"
+  cd "${REPOSITORY_PROD}"
   sudo npm install &&
   # production 환경인 경우에 대한 처리
   pm2 describe til-product > /dev/null
@@ -21,10 +21,10 @@ if [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_prod" ]; then
   	echo "til-product 프로세스가 실행되지 않았습니다."
 	sudo npm run pm2:start:prod
   fi
-elif [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_dev" ]; then
-  ecgho "개발 서버 배포"
-  
-  cd "$REPOSITORY"
+elif [ "${DEPLOYMENT_GROUP_NAME}" == "til_fe_dev" ]; then
+  echo "개발 서버 배포"
+
+  cd "${REPOSITORY}"
   sudo npm install &&
   pm2 describe til-dev > /dev/null
   if [ $? -eq 0 ]; then
