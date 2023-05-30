@@ -25,7 +25,7 @@ const useGoogleLogin = () => {
       setIsLoading(true);
 
       await mutateAsync(
-        { token, type: 'GOOGLE' },
+        { token, type: 'GOOGLE', query: router.asPath.split('?')[1] },
         {
           onSettled: () => setIsLoading(false),
         },
