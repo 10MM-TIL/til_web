@@ -6,6 +6,8 @@ REPOSITORY_PROD=/home/ubuntu/prod
 echo "DEPLOYMENT_GROUP_NAME: $DEPLOYMENT_GROUP_NAME"
 
 if [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_prod" ]; then
+  ecgho "운영 서버 배포"
+
   cd "$REPOSITORY_PROD"
   sudo npm install &&
   # production 환경인 경우에 대한 처리
@@ -20,6 +22,8 @@ if [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_prod" ]; then
 	sudo npm run pm2:start:prod
   fi
 elif [ "$DEPLOYMENT_GROUP_NAME" == "til_fe_dev" ]; then
+  ecgho "개발 서버 배포"
+  
   cd "$REPOSITORY"
   sudo npm install &&
   pm2 describe til-dev > /dev/null
