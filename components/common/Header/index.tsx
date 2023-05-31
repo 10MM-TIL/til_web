@@ -51,7 +51,7 @@ const Header = () => {
             `}
           >
             {device === 'mobile' && (
-              <Link href='/mypage'>
+              <Link href='/[user]' as={`/${path}`}>
                 <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
               </Link>
             )}

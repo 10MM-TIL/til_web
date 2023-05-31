@@ -312,28 +312,28 @@ const User: NextPage = ({ path }: any) => {
 
 export default User;
 
-export const getServerSideProps: any = async (context: NextPageContext) => {
-  const { user: path } = context.query;
+// export const getServerSideProps: any = async (context: NextPageContext) => {
+//   const { user: path } = context.query;
 
-  return { props: { path } };
+//   return { props: { path } };
+// };
+
+export const getStaticPaths = async () => {
+  return {
+    paths: [{ params: { user: 'sjpark' } }],
+    // paths: [],
+    fallback: true,
+  };
 };
 
-// export const getStaticPaths = async () => {
-//   return {
-//     paths: [{ params: { user: 'sjpark' } }],
-//     // paths: [],
-//     fallback: true,
-//   };
-// };
-
-// export const getStaticProps = async (context: any) => {
-//   const { params } = context;
-//   const path = params.user;
-//   console.log(params);
-//   return {
-//     props: { path: path },
-//   };
-// };
+export const getStaticProps = async (context: any) => {
+  const { params } = context;
+  const path = params.user;
+  console.log(params);
+  return {
+    props: { path: path },
+  };
+};
 
 // export const getStaticProps = async (context: any) => {
 //   const queryClient = new QueryClient();
