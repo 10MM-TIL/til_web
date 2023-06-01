@@ -3,7 +3,7 @@ module.exports = {
     {
       /* 개발 환경용 서버 */
       name: 'til-dev',
-      cwd: '/home/ubuntu/deploy',
+      cwd: './',
       script: 'node_modules/next/dist/bin/next',
       args: 'start',
       instances: 1, // 단일 쓰레드
@@ -17,7 +17,7 @@ module.exports = {
     {
       /* 배포 환경용 서버 */
       name: 'til-product',
-      cwd: '/home/ubuntu/prod',
+      cwd: './',
       script: 'node_modules/next/dist/bin/next',
       args: 'start',
       instances: -1, // 클러스터 모드
