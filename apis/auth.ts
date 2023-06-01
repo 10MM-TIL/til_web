@@ -4,9 +4,8 @@ import instance from './instance';
 import { getCookie } from 'cookies-next';
 import { logout } from '@/utils/utils';
 
-export const postAuthLoginAPI = async ({ token, type, query }: { token: string; type: string; query: string }) => {
+export const postAuthLoginAPI = async ({ token, type }: { token: string; type: string }) => {
   try {
-    console.log(query);
     const res: ServerResponse<SignInModel> = await instance.post('/auth/login', {
       token,
       type,
