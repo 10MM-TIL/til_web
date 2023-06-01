@@ -1,4 +1,4 @@
-import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
+import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 import { mq } from '@/styles/mediaQuery';
 import { css } from '@emotion/react';
@@ -133,6 +133,46 @@ const textarea = css`
   }
 `;
 
+const reviewContainer = css`
+  width: 100%;
+  min-height: 216px;
+  background-color: ${BACKGROUND_COLOR.NAVY_3};
+  color: ${FONT_COLOR.WHITE};
+
+  border-radius: 12px;
+  border-top-left-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 28px 20px 20px;
+`;
+
+const reviewInputContainer = css`
+  padding-bottom: 12px;
+  border-bottom: 1px solid ${BACKGROUND_COLOR.NAVY_4};
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const reviewInput = css`
+  background-color: ${BACKGROUND_COLOR.NAVY_4};
+  border-radius: 6px;
+  height: 28px;
+  flex: 1;
+  color: ${FONT_COLOR.WHITE};
+  padding: 6px 12px;
+`;
+
+const reviewLoadBtn = ({ isEnable }: { isEnable: boolean }) => css`
+  background-color: ${isEnable ? POINT_COLOR.MAIN : BACKGROUND_COLOR.FIELD_10};
+  width: 76px;
+  height: 36px;
+  color: ${isEnable ? FONT_COLOR.GRAY_1 : FONT_COLOR.GRAY_2};
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 15px;
+  border-radius: 8px;
+`;
+
 const textareaBottomContainer = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   position: absolute;
   bottom: 20px;
@@ -207,6 +247,10 @@ const styles = {
   reviewTab,
   reviewGuide,
   textarea,
+  reviewContainer,
+  reviewInputContainer,
+  reviewInput,
+  reviewLoadBtn,
   textareaBottomContainer,
   elementContainer,
   elementTitle,
