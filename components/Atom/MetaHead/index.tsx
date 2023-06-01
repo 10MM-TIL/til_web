@@ -22,8 +22,7 @@ const defaultMetaContents: MetaContents = {
 const MetaHead = ({ metaContents }: { metaContents: MetaContents }) => {
   const { image, desc, title, keyword } = { ...defaultMetaContents, ...metaContents };
 
-  // ! dev를 어떤 기준으로 나눌것인가?
-  const websiteUrl = 'https://dev.bricklog.io';
+  const websiteUrl = process.env.NEXT_PUBLIC_MODE === 'dev' ? 'https://dev.bricklog.io' : 'https://bricklog.io';
   // https://dev.bricklog.io/images/meta/plan_meta.png
   const ImageUrl = `${websiteUrl}/images/meta${image}`;
   return (
