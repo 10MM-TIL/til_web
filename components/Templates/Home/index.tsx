@@ -24,11 +24,13 @@ interface HomeTemplatesProps {
   selectedTab: 'MEMO' | 'REVIEW';
   typingState: '' | 'checked' | 'saving' | 'error';
   memoValue: string;
-  reviewValue: string;
+  url: string;
+  isValidUrl: boolean;
 
   onTabChange: (type: 'MEMO' | 'REVIEW') => void;
   onMemoChange: ChangeEventHandler<HTMLTextAreaElement>;
-  onReviewChange: ChangeEventHandler<HTMLInputElement>;
+  onUrlChange: ChangeEventHandler<HTMLInputElement>;
+  onUrlCheck: () => void;
   onClickContent: (url?: string) => void;
   onClickUser: (userpath?: string) => void;
 }
@@ -37,12 +39,14 @@ const HomeTemplates = ({
   selectedTab,
   typingState,
   memoValue,
-  reviewValue,
+  url,
   onMemoChange,
-  onReviewChange,
+  onUrlChange,
+  onUrlCheck,
   onTabChange,
   onClickContent,
   onClickUser,
+  isValidUrl,
 }: HomeTemplatesProps) => {
   const device = useResize();
 
@@ -104,51 +108,10 @@ const HomeTemplates = ({
                   }}
                 />
               ) : (
-                <div
-                  css={css`
-                    width: 100%;
-                    min-height: 216px;
-                    background-color: ${BACKGROUND_COLOR.NAVY_3};
-                    color: ${FONT_COLOR.WHITE};
-
-                    border-radius: 12px;
-                    border-top-left-radius: 0;
-                    border: 1px solid rgba(255, 255, 255, 0.06);
-                    padding: 28px 20px 20px;
-                  `}
-                >
-                  <div
-                    css={css`
-                      padding-bottom: 12px;
-                      border-bottom: 1px solid ${BACKGROUND_COLOR.NAVY_4};
-                      display: flex;
-                      align-items: center;
-                      gap: 12px;
-                    `}
-                  >
-                    <input
-                      type='text'
-                      value={reviewValue}
-                      onChange={onReviewChange}
-                      css={css`
-                        background-color: ${BACKGROUND_COLOR.NAVY_4};
-                        border-radius: 6px;
-                        height: 28px;
-                        flex: 1;
-                      `}
-                    />
-                    <button
-                      css={css`
-                        background-color: ${BACKGROUND_COLOR.FIELD_10};
-                        width: 76px;
-                        height: 36px;
-                        color: ${FONT_COLOR.GRAY_2};
-                        font-weight: 600;
-                        font-size: 13px;
-                        line-height: 15px;
-                        border-radius: 8px;
-                      `}
-                    >
+                <div css={styles.reviewContainer}>
+                  <div css={styles.reviewInputContainer}>
+                    <input type='text' value={url} onChange={onUrlChange} css={styles.reviewInput} />
+                    <button type='button' css={styles.reviewLoadBtn({ isEnable: url.length > 0 })} onClick={onUrlCheck}>
                       불러오기
                     </button>
                   </div>
@@ -158,9 +121,9 @@ const HomeTemplates = ({
               <div css={styles.textareaBottomContainer({ selectedTab })}>
                 {selectedTab === 'MEMO' ? (
                   typingState !== '' && <State state={typingState} />
-                ) : (
+                ) : isValidUrl ? (
                   <Button size='sm'>등록</Button>
-                )}
+                ) : null}
               </div>
             </div>
           </div>

@@ -9,6 +9,7 @@ export const postAuthLoginAPI = async ({ token, type }: { token: string; type: s
     const res: ServerResponse<SignInModel> = await instance.post('/auth/login', {
       token,
       type,
+      redirectUrl: `${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI}`,
     });
 
     return res;
