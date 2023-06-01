@@ -11,6 +11,7 @@ import { categoryState } from '@/states/cardview';
 import { formatDate } from '@/utils/utils';
 import { findSelectedCategory } from '@/utils/cardview';
 import { useRecommandPosts } from '@/hooks/queries/cardviewQuery';
+import { useRouter } from 'next/router';
 
 // 이달의 회고
 const PopularCard = ({

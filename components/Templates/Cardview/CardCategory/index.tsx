@@ -3,28 +3,36 @@ import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './styles';
 import { FONT_COLOR } from '@/constants/color';
 import { useQueryClient } from '@tanstack/react-query';
+import { category as CATEGORY, CategoryKeys } from '@/components/Atom/Card/types';
 
 import RadioGroup from '@/components/Molecules/RadioGroup';
 import { useRecoilState } from 'recoil';
 import { categoryState } from '@/states/cardview';
 import { useCategories } from '@/hooks/queries/categoryQuery';
+import { useRouter } from 'next/router';
+import { findKeyByValue, findSelectedCategory } from '@/utils/cardview';
 
 // 카테고리 버튼
 const CardCategory = () => {
   const queryClient = useQueryClient();
-  const { data: category } = useCategories();
-
   const [categories, setCategories] = useRecoilState(categoryState);
+
+  const { data: category } = useCategories();
+  const router = useRouter();
+  const { category: queryCategory } = router.query as { category: CategoryKeys | undefined };
+
   // category 저장
   useEffect(() => {
-    if (category?.data)
+    if (category?.data) {
       setCategories(
         category.data.categories.map((category, index) => {
-          if (index === 0) return { ...category, selected: true };
+          if (queryCategory ? category.name === CATEGORY[queryCategory] : index === 0)
+            return { ...category, selected: true };
           else return { ...category, selected: false };
         }),
       );
-  }, [category, setCategories]);
+    }
+  }, [category, setCategories, queryCategory]);
 
   const RadioComponent = () => {
     const handleRadioClick = (value: string) => {
@@ -34,6 +42,10 @@ const CardCategory = () => {
           else return { ...category, selected: false };
         }),
       );
+
+      router.push({
+        query: { category: findKeyByValue(categories.filter((c) => c.identifier === value)[0].name) },
+      });
     };
 
     return (
