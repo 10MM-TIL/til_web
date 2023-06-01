@@ -7,10 +7,11 @@ import { device } from '@/hooks/useResize';
 
 import { Card, CardProps } from '@/components/Atom/Card';
 import { useRecoilState } from 'recoil';
-import { categoryState } from '@/states/cardview';
+import { categoryState } from '@/stores/cardviewStateStore';
 import { formatDate } from '@/utils/utils';
 import { findSelectedCategory } from '@/utils/cardview';
 import { useRecommandPosts } from '@/hooks/queries/cardviewQuery';
+import { useRouter } from 'next/router';
 
 // 이달의 회고
 const PopularCard = ({

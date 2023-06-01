@@ -4,7 +4,6 @@ import { Layout } from '@/components/common';
 import { RecoilEnv, RecoilRoot } from 'recoil';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
 // react-query
 const queryClient = new QueryClient({
   defaultOptions: {

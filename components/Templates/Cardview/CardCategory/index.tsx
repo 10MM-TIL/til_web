@@ -3,28 +3,35 @@ import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './styles';
 import { FONT_COLOR } from '@/constants/color';
 import { useQueryClient } from '@tanstack/react-query';
+import { category as CATEGORY, CategoryKeys } from '@/components/Atom/Card/types';
 
 import RadioGroup from '@/components/Molecules/RadioGroup';
 import { useRecoilState } from 'recoil';
-import { categoryState } from '@/states/cardview';
+import { categoryState } from '@/stores/cardviewStateStore';
 import { useCategories } from '@/hooks/queries/categoryQuery';
+import { useRouter } from 'next/router';
+import { findKeyByValue, findSelectedCategory } from '@/utils/cardview';
 
+export type CardViewPageProps = { category: CategoryKeys | undefined };
 // 카테고리 버튼
-const CardCategory = () => {
+const CardCategory = ({ category }: CardViewPageProps) => {
   const queryClient = useQueryClient();
-  const { data: category } = useCategories();
-
   const [categories, setCategories] = useRecoilState(categoryState);
+
+  const { data: categoryData } = useCategories();
+  const router = useRouter();
+
   // category 저장
   useEffect(() => {
-    if (category?.data)
+    if (categoryData?.data) {
       setCategories(
-        category.data.categories.map((category, index) => {
-          if (index === 0) return { ...category, selected: true };
-          else return { ...category, selected: false };
+        categoryData.data.categories.map((cat, index) => {
+          if (category ? cat.name === CATEGORY[category] : index === 0) return { ...cat, selected: true };
+          else return { ...cat, selected: false };
         }),
       );
-  }, [category, setCategories]);
+    }
+  }, [categoryData, setCategories, category]);
 
   const RadioComponent = () => {
     const handleRadioClick = (value: string) => {
@@ -34,6 +41,10 @@ const CardCategory = () => {
           else return { ...category, selected: false };
         }),
       );
+
+      router.push({
+        query: { category: findKeyByValue(categories.filter((c) => c.identifier === value)[0].name) },
+      });
     };
 
     return (

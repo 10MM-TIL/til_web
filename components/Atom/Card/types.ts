@@ -8,6 +8,8 @@ export const category = {
   startup: '#기업/스타트업',
   recomand: '#추천 회고',
 } as const;
+export type CategoryKeys = keyof typeof category;
+export type CategoryValues = (typeof category)[CategoryKeys];
 
 export type CardProps = {
   size: 'sm' | 'lg' | 'mobile';
