@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-
 import * as Typo from '@/components/Atom/Typography';
 import { Button } from '@/components/Atom/Button';
 import { useResize } from '@/hooks/useResize';

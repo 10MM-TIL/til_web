@@ -26,6 +26,11 @@ const Header = () => {
   const userData = data?.data;
   const path = userData?.path;
 
+  const handleModalOpen = () => {
+    console.log('login btn click');
+    setIsLoginModalOpen({ isLoginModalOpen: true });
+  };
+
   return (
     <header css={styles.container}>
       <div css={styles.inner({ isMobile: device === 'mobile' })}>
@@ -69,7 +74,7 @@ const Header = () => {
             )} */}
           </div>
         ) : (
-          <button css={styles.btn} onClick={() => setIsLoginModalOpen({ isLoginModalOpen: true })}>
+          <button css={styles.btn} onClick={handleModalOpen}>
             로그인
           </button>
         )}
