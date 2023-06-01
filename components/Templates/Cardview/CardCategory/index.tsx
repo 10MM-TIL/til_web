@@ -7,32 +7,31 @@ import { category as CATEGORY, CategoryKeys } from '@/components/Atom/Card/types
 
 import RadioGroup from '@/components/Molecules/RadioGroup';
 import { useRecoilState } from 'recoil';
-import { categoryState } from '@/states/cardview';
+import { categoryState } from '@/stores/cardviewStateStore';
 import { useCategories } from '@/hooks/queries/categoryQuery';
 import { useRouter } from 'next/router';
 import { findKeyByValue, findSelectedCategory } from '@/utils/cardview';
 
+export type CardViewPageProps = { category: CategoryKeys | undefined };
 // 카테고리 버튼
-const CardCategory = () => {
+const CardCategory = ({ category }: CardViewPageProps) => {
   const queryClient = useQueryClient();
   const [categories, setCategories] = useRecoilState(categoryState);
 
-  const { data: category } = useCategories();
+  const { data: categoryData } = useCategories();
   const router = useRouter();
-  const { category: queryCategory } = router.query as { category: CategoryKeys | undefined };
 
   // category 저장
   useEffect(() => {
-    if (category?.data) {
+    if (categoryData?.data) {
       setCategories(
-        category.data.categories.map((category, index) => {
-          if (queryCategory ? category.name === CATEGORY[queryCategory] : index === 0)
-            return { ...category, selected: true };
-          else return { ...category, selected: false };
+        categoryData.data.categories.map((cat, index) => {
+          if (category ? cat.name === CATEGORY[category] : index === 0) return { ...cat, selected: true };
+          else return { ...cat, selected: false };
         }),
       );
     }
-  }, [category, setCategories, queryCategory]);
+  }, [categoryData, setCategories, category]);
 
   const RadioComponent = () => {
     const handleRadioClick = (value: string) => {
