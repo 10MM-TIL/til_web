@@ -21,8 +21,6 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // TODO Recoil install 후 RecoilRoot로 감싸주기
-
   // ! Next.js + Recoil.js ISSUE 대응
   RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
