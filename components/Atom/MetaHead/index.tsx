@@ -2,7 +2,13 @@ import Head from 'next/head';
 import React, { ReactElement } from 'react';
 
 export type MetaContents = {
-  image?: '/images/default_meta.png' | '/images/design_meta.png' | '/images/develop_meta.png' | '/images/plan_meta.png';
+  image?:
+    | '/images/default_meta.png'
+    | '/images/design_meta.png'
+    | '/images/develop_meta.png'
+    | '/images/plan_meta.png'
+    | '/images/startup_meta.png'
+    | '/images/market_meta.png';
   desc?: string;
   title?: string;
   keyword?: string;
@@ -16,6 +22,8 @@ const defaultMetaContents: MetaContents = {
 const MetaHead = ({ metaContents }: { metaContents: MetaContents }) => {
   const { image, desc, title, keyword } = { ...defaultMetaContents, ...metaContents };
 
+  // https://dev.bricklog.io/images/meta/plan_meta.png
+  const ImageUrl = `${location.origin}/images/meta/${image}`;
   return (
     <>
       <Head>
@@ -33,12 +41,12 @@ const MetaHead = ({ metaContents }: { metaContents: MetaContents }) => {
 
         <meta property='og:type' content='website' />
         <meta property='og:title' content={title} />
-        <meta property='og:image' content={image} />
+        <meta property='og:image' content={ImageUrl} />
         <meta property='og:description' content={desc} />
 
         <meta name='twitter:card' content='summary_large_image' />
         <meta name='twitter:title' content={title} />
-        <meta name='twitter:image' content={image} />
+        <meta name='twitter:image' content={ImageUrl} />
         <meta name='twitter:description' content={desc}></meta>
         <link rel='shortcut icon' type='image/x-icon' href='/bricklog.ico' sizes='16' />
       </Head>

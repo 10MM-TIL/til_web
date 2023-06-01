@@ -31,8 +31,8 @@ const Layout = ({ children }: LayoutProps) => {
     if (curCategory === 'develop') return '/images/develop_meta.png';
     else if (curCategory === 'design') return '/images/design_meta.png';
     else if (curCategory === 'planning') return '/images/plan_meta.png';
-    // else if (curCategory === 'marketing') return '/images/default_meta.png';
-    // else if (curCategory === 'startup') return '/images/default_meta.png';
+    else if (curCategory === 'marketing') return '/images/market_meta.png';
+    else if (curCategory === 'startup') return '/images/startup_meta.png';
     else return '/images/default_meta.png';
   };
 
