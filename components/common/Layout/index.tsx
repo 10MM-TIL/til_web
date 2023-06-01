@@ -28,12 +28,12 @@ const Layout = ({ children }: LayoutProps) => {
   const userData = data?.data;
 
   const setMetaImage = (): MetaContents['image'] => {
-    if (curCategory === 'develop') return '/images/develop_meta.png';
-    else if (curCategory === 'design') return '/images/design_meta.png';
-    else if (curCategory === 'planning') return '/images/plan_meta.png';
-    // else if (curCategory === 'marketing') return '/images/default_meta.png';
-    // else if (curCategory === 'startup') return '/images/default_meta.png';
-    else return '/images/default_meta.png';
+    if (curCategory === 'develop') return '/develop_meta.png';
+    else if (curCategory === 'design') return '/design_meta.png';
+    else if (curCategory === 'planning') return '/plan_meta.png';
+    else if (curCategory === 'marketing') return '/market_meta.png';
+    else if (curCategory === 'startup') return '/startup_meta.png';
+    else return '/default_meta.png';
   };
 
   return (
