@@ -25,7 +25,8 @@ elif [ "${DEPLOYMENT_GROUP_NAME}" == "til_fe_dev" ]; then
   echo "개발 서버 배포"
   cd "${REPOSITORY}"
   sudo npm install
-
+  
+  pm2 delete til-dev
   pm2 describe til-dev > /dev/null
   if [ $? -eq 0 ]; then
 	  # 실행 중인 경우

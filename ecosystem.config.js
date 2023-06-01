@@ -4,7 +4,8 @@ module.exports = {
       /* 개발 환경용 서버 */
       name: 'til-dev',
       cwd: './',
-      script: 'npm run start:dev',
+      script: 'npm',
+      args: 'run start:dev',
       instances: 1, // 단일 쓰레드
       autorestart: false,
       watch: false,
