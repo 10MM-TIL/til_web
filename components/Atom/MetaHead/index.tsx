@@ -25,7 +25,7 @@ const MetaHead = ({ metaContents }: { metaContents: MetaContents }) => {
   // ! dev를 어떤 기준으로 나눌것인가?
   const websiteUrl = 'https://dev.bricklog.io';
   // https://dev.bricklog.io/images/meta/plan_meta.png
-  const ImageUrl = `${websiteUrl}/images/meta/${image}`;
+  const ImageUrl = `${websiteUrl}/images/meta${image}`;
   return (
     <>
       <Head>
