@@ -17,6 +17,7 @@ import { formatDate } from '@/utils/utils';
 import { useRouter } from 'next/router';
 import { useCategories } from '@/hooks/queries/categoryQuery';
 import { LoginModalState } from '@/stores/modalStateStore';
+import { TimeLine } from '@/components/Atom/TimeLine';
 
 interface HomeTemplatesProps {
   selectedTab: 'MEMO' | 'REVIEW';
@@ -109,20 +110,31 @@ const HomeTemplates = ({
                 <div css={styles.reviewContainer}>
                   <div css={styles.reviewInputContainer}>
                     <input type='text' value={url} onChange={onUrlChange} css={styles.reviewInput} />
-                    <button type='button' css={styles.reviewLoadBtn({ isEnable: url.length > 0 })} onClick={onUrlCheck}>
+                    <button
+                      type='button'
+                      css={styles.reviewLoadBtn({ isEnable: url.length > 0 && !isValidUrl })}
+                      onClick={onUrlCheck}
+                    >
                       불러오기
                     </button>
                   </div>
+                  {isValidUrl && (
+                    <div>
+                      <TimeLine
+                        changable
+                        onDeleteContent={() => console.log(1)}
+                        onSaveAllContent={() => console.log(2)}
+                      />
+                      <Button size='sm'>등록</Button>
+                    </div>
+                  )}
                 </div>
               )}
-
-              <div css={styles.textareaBottomContainer({ selectedTab })}>
-                {selectedTab === 'MEMO' ? (
-                  typingState !== '' && <State state={typingState} />
-                ) : isValidUrl ? (
-                  <Button size='sm'>등록</Button>
-                ) : null}
-              </div>
+              {selectedTab === 'MEMO' && memoValue.length > 0 && (
+                <div css={styles.textareaBottomContainer({ selectedTab })}>
+                  {typingState !== '' && <State state={typingState} />}
+                </div>
+              )}
             </div>
           </div>
           <div css={styles.elementContainer}>

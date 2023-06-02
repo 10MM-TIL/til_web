@@ -48,13 +48,15 @@ const HomePage = () => {
 
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUrl(e.currentTarget.value);
+    setIsValidUrl(false);
   };
 
   const handleUrlCheck = () => {
     uploadRequestMutate(
       { url },
       {
-        onSuccess: () => {
+        onSuccess: (res) => {
+          console.log(res);
           // TODO 미리보기 박스 제공 & 등록 버튼 활성화
           setIsValidUrl(true);
         },
