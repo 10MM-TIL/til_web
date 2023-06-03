@@ -9,7 +9,7 @@ import styles from './Home.styled';
 import IconArrow from '@/assets/svgs/IconArrow';
 import Link from 'next/link';
 import { mq } from '@/styles/mediaQuery';
-import { useRecommandPosts } from '@/hooks/queries/cardviewQuery';
+import { useAllPosts, useRecommandPosts } from '@/hooks/queries/cardviewQuery';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { Card } from '@/components/Atom/Card';
@@ -52,14 +52,17 @@ const HomeTemplates = ({
   const { isLogin } = useRecoilValue(AuthState);
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
 
+  const { data: postsData } = useAllPosts();
+
   const { data: cardData } = useRecommandPosts('', true);
+
   const { data: categoryData } = useCategories();
 
   const categories = categoryData?.data?.categories;
 
   return (
-    <>
-      <div css={styles.topContainer}>
+    <div css={styles.wrapper}>
+      {/* <div css={styles.topContainer}>
         <div css={styles.topImageContainer} />
 
         <div css={styles.topTextContainer}>
@@ -72,7 +75,7 @@ const HomeTemplates = ({
             <Typo.H2 color={FONT_COLOR.GRAY_4}>새 탭을 열 때마다 브릭로그를 확인해보세요</Typo.H2>
           </Button>
         </div>
-      </div>
+      </div> */}
       <div css={styles.desktopContainer}>
         <div css={styles.container}>
           <div>
@@ -191,6 +194,26 @@ const HomeTemplates = ({
                         onClickUser={() => onClickUser(recommandItem.userPath)}
                       />
                     ))}
+                    {postsData?.pages &&
+                      postsData?.pages[0]?.posts?.slice(0, 3)?.map((post, idx) => (
+                        <div key={post?.createdAt + idx + 'desktop'}>
+                          <Card
+                            size={'sm'}
+                            content={{
+                              category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
+                              header: post.title,
+                              body: post.summary,
+                              img: require('@/assets/images/test.png') as string,
+                              name: post.userPath,
+                              date: formatDate(post.createdAt),
+                            }}
+                            url={post.url}
+                            userpath={post.userPath}
+                            onClickContent={() => onClickContent(post.url)}
+                            onClickUser={() => onClickUser(post.userPath)}
+                          />
+                        </div>
+                      ))}
                   </>
                 )}
               </div>
@@ -225,31 +248,52 @@ const HomeTemplates = ({
               ) : (
                 <>
                   {cardData?.posts.map((recommandItem, index) => (
-                    <Card
-                      key={recommandItem.createdAt + index + 'desktop'}
-                      size={'sm'}
-                      content={{
-                        category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
-                        header: recommandItem.title,
-                        body: recommandItem.summary,
-                        img: require('@/assets/images/test.png') as string,
-                        name: recommandItem.userPath,
-                        date: formatDate(recommandItem.createdAt),
-                      }}
-                      hasBadge={true}
-                      url={recommandItem.url}
-                      userpath={recommandItem.userPath}
-                      onClickContent={() => onClickContent(recommandItem.url)}
-                      onClickUser={() => onClickUser(recommandItem.userPath)}
-                    />
+                    <div key={recommandItem.createdAt + index + 'desktop'}>
+                      <Card
+                        size={'sm'}
+                        content={{
+                          category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
+                          header: recommandItem.title,
+                          body: recommandItem.summary,
+                          img: require('@/assets/images/test.png') as string,
+                          name: recommandItem.userPath,
+                          date: formatDate(recommandItem.createdAt),
+                        }}
+                        hasBadge={true}
+                        url={recommandItem.url}
+                        userpath={recommandItem.userPath}
+                        onClickContent={() => onClickContent(recommandItem.url)}
+                        onClickUser={() => onClickUser(recommandItem.userPath)}
+                      />
+                    </div>
                   ))}
+                  {postsData?.pages &&
+                    postsData?.pages[0]?.posts?.slice(0, 3)?.map((post, idx) => (
+                      <div key={post?.createdAt + idx + 'desktop'}>
+                        <Card
+                          size={'sm'}
+                          content={{
+                            category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
+                            header: post.title,
+                            body: post.summary,
+                            img: require('@/assets/images/test.png') as string,
+                            name: post.userPath,
+                            date: formatDate(post.createdAt),
+                          }}
+                          url={post.url}
+                          userpath={post.userPath}
+                          onClickContent={() => onClickContent(post.url)}
+                          onClickUser={() => onClickUser(post.userPath)}
+                        />
+                      </div>
+                    ))}
                 </>
               )}
             </div>
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
