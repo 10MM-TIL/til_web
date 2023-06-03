@@ -217,7 +217,6 @@ const Setting: NextPage = () => {
   useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
     enabled: !!userProfile,
     onSuccess: (data) => {
-      console.log(data);
       setBlogList(data.blogs);
     },
   });
@@ -258,8 +257,21 @@ const Setting: NextPage = () => {
   });
 
   const handleSave = async () => {
+    const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
+    const pathReg = /[^a-zA-Z0-9-]/gi;
+    const nameValue = myInfo.name;
+    const pathValue = myInfo.path;
+    if (nameReg.test(nameValue)) {
+      alert('이름은 한글, 영어, 숫자로만 설정할 수 있어요.');
+      return;
+    }
+    if (pathReg.test(pathValue)) {
+      alert('URL 주소는 영어, 숫자, 하이픈(-)으로만 설정할 수 있어요.');
+      return;
+    }
+
     const promises = [
-      saveProfile.mutate(
+      saveProfile.mutateAsync(
         {
           categoryIdentifier: myInfo.categoryIdentifier,
           introduction: myInfo.introduction,
@@ -274,20 +286,19 @@ const Setting: NextPage = () => {
           },
         },
       ),
-      saveNoti.mutate(noti),
-      saveBlog.mutate(
+      saveNoti.mutateAsync(noti),
+      saveBlog.mutateAsync(
         blogList.map((blog) => {
           return { url: blog.url };
         }),
       ),
     ];
-
     try {
       await Promise.all(promises).then((res) => {
         showToast(
           <>
             <IconCheckBig />
-            <Typo.H1 color={FONT_COLOR.WHITE}>저장이 완료되었습니다</Typo.H1>
+            <Typo.H1 color={FONT_COLOR.WHITE}>저장 완료!</Typo.H1>
           </>,
         );
       });
@@ -298,28 +309,18 @@ const Setting: NextPage = () => {
 
   const handleChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const nameValue = e.target.value;
-    const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
-    if (!nameReg.test(nameValue)) {
-      setIsChangeInput(true);
-      setMyInfo((prev: any) => {
-        return { ...prev, name: nameValue };
-      });
-    } else {
-      alert('이름은 한글, 영어, 숫자로만 설정할 수 있어요.');
-    }
+    setIsChangeInput(true);
+    setMyInfo((prev: any) => {
+      return { ...prev, name: nameValue };
+    });
   }, []);
 
   const handleChangePath = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const pathValue = e.target.value;
-    const pathReg = /[^a-zA-Z0-9-]/gi;
-    if (!pathReg.test(pathValue)) {
-      setIsChangeInput(true);
-      setMyInfo((prev: any) => {
-        return { ...prev, path: pathValue };
-      });
-    } else {
-      alert('URL 주소는 영어, 숫자, 하이픈(-)으로만 설정할 수 있어요.');
-    }
+    setIsChangeInput(true);
+    setMyInfo((prev: any) => {
+      return { ...prev, path: pathValue };
+    });
   }, []);
   const handleChangeIntroduction = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setIsChangeInput(true);
