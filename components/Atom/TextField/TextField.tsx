@@ -6,6 +6,9 @@ import { TextFieldProps } from './types';
 import { FONT_COLOR } from '@/constants/color';
 import { IconCopy } from '@/assets/svgs/IconCopy';
 import useCopyClipBoard from '@/hooks/useCopyClipBoard';
+import ToastMessage from '@/components/ToastMessage';
+import useToast from '@/hooks/useToast';
+import IconCheckBig from '@/assets/svgs/IconCheckBig';
 
 const DOMAIN = 'bricklog.kr/';
 const TextField = ({
@@ -24,6 +27,7 @@ const TextField = ({
   const fixedStringRef = useRef<HTMLParagraphElement>(null);
   const [fixedStringWidth, setFixedStringWidth] = useState(0);
   const [isCopy, onCopy] = useCopyClipBoard();
+  const { isOpen, showToast, text } = useToast();
 
   // focus 시 focus이벤트가 발생해 toggleFocus() 실행됌
   const toggleFocus = useCallback(() => setFocus((prevFocus) => !prevFocus), []);
@@ -76,6 +80,12 @@ const TextField = ({
     const copyUrl = (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       onCopy(`${DOMAIN}${inputValue}`);
+      showToast(
+        <>
+          <IconCheckBig />
+          <Typo.H1 color={FONT_COLOR.WHITE}>복사 완료!</Typo.H1>
+        </>,
+      );
     };
     // mouseDown 이벤트로 처리해야 blur 이벤트보다 먼저 처리된다.
     return (
@@ -127,6 +137,7 @@ const TextField = ({
         </Typo.Label2>
       </Style.TextFieldLength>
       {useCopy ? <TextFieldCopyIcon></TextFieldCopyIcon> : null}
+      {isOpen && <ToastMessage isOpen={isCopy}>{text}</ToastMessage>}
     </Style.TextFieldContainer>
   );
 };
