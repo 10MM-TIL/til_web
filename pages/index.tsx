@@ -16,6 +16,9 @@ const HomePage = () => {
   const [url, setUrl] = useState('');
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const [isValidUrl, setIsValidUrl] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDiscription] = useState('');
+  const [date, setDate] = useState(new Date());
 
   const { data } = useMyDraft();
   const { mutateAsync: memoMutate } = useMyDraftSync();

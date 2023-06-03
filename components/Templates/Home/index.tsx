@@ -112,7 +112,18 @@ const HomeTemplates = ({
               ) : (
                 <div css={styles.reviewContainer}>
                   <div css={styles.reviewInputContainer}>
-                    <input type='text' value={url} onChange={onUrlChange} css={styles.reviewInput} />
+                    <input
+                      type='text'
+                      value={url}
+                      onChange={onUrlChange}
+                      css={styles.reviewInput}
+                      onClick={(e) => {
+                        if (!isLogin) {
+                          e.currentTarget.blur();
+                          setIsLoginModalOpen({ isLoginModalOpen: true });
+                        }
+                      }}
+                    />
                     <button
                       type='button'
                       css={styles.reviewLoadBtn({ isEnable: url.length > 0 && !isValidUrl })}
