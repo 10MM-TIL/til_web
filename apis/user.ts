@@ -9,7 +9,7 @@ export const getUserProfile = async (path: string) => {
     return res.data;
   } catch (e) {
     devError('getUserProfilAPI error', e);
-    throw e;
+    // throw e;
   }
 };
 

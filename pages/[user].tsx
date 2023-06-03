@@ -312,39 +312,32 @@ const User: NextPage = ({ path }: any) => {
 
 export default User;
 
-// export const getServerSideProps: any = async (context: NextPageContext) => {
-//   const { user: path } = context.query;
+export const getServerSideProps: any = async (context: NextPageContext) => {
+  const path = context.query?.user as string;
+  const data = await getUserProfile(path); // getUserProfile API 를 통해 값 먼저 가져옴
 
-//   return { props: { path } };
+  if (!data) {
+    return {
+      notFound: true, // 404 page 로 이동
+    };
+  }
+
+  return { props: { path } };
+};
+
+// export const getStaticPaths = async () => {
+//   return {
+//     paths: [{ params: { user: 'sjpark' } }],
+//     // paths: [],
+//     fallback: true,
+//   };
 // };
 
-export const getStaticPaths = async () => {
-  return {
-    paths: [{ params: { user: 'sjpark' } }],
-    // paths: [],
-    fallback: true,
-  };
-};
-
-export const getStaticProps = async (context: any) => {
-  const { params } = context;
-  const path = params.user;
-  console.log(params);
-  return {
-    props: { path: path },
-  };
-};
-
 // export const getStaticProps = async (context: any) => {
-//   const queryClient = new QueryClient();
-//   console.log('context', context);
-//   await queryClient.prefetchQuery(['profile'], getMyProfile);
-//   await queryClient.prefetchQuery(['blog'], () => getMyBlog(context.params?.name));
-//   await queryClient.prefetchQuery(['post'], () => getMyTimeline(context.params?.name, 10));
-//   await queryClient.prefetchQuery(['grass'], () => getMyGrass(context.name, 1, 12));
+//   const { params } = context;
+//   const path = params.user;
+//   console.log(params);
 //   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
+//     props: { path: path },
 //   };
 // };
