@@ -3,6 +3,10 @@ import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 import { mq } from '@/styles/mediaQuery';
 import { css } from '@emotion/react';
 
+const wrapper = css`
+  padding-bottom: 32px;
+`;
+
 const topContainer = css`
   display: flex;
   justify-content: center;
@@ -57,6 +61,7 @@ const textareaContainer = css`
 `;
 
 const memoTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
+  cursor: pointer;
   position: absolute;
   top: -40px;
   left: 0;
@@ -77,6 +82,7 @@ const memoTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
 `;
 
 const reviewTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
+  cursor: pointer;
   position: absolute;
   top: -40px;
   left: ${selectedTab === 'MEMO' ? '72px' : '78px'};
@@ -237,6 +243,7 @@ const divider = css`
 `;
 
 const styles = {
+  wrapper,
   topContainer,
   topImageContainer,
   topTextContainer,

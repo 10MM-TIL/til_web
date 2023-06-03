@@ -16,6 +16,9 @@ const HomePage = () => {
   const [url, setUrl] = useState('');
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const [isValidUrl, setIsValidUrl] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDiscription] = useState('');
+  const [date, setDate] = useState(new Date());
 
   const { data } = useMyDraft();
   const { mutateAsync: memoMutate } = useMyDraftSync();
@@ -48,13 +51,15 @@ const HomePage = () => {
 
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUrl(e.currentTarget.value);
+    setIsValidUrl(false);
   };
 
   const handleUrlCheck = () => {
     uploadRequestMutate(
       { url },
       {
-        onSuccess: () => {
+        onSuccess: (res) => {
+          console.log(res);
           // TODO 미리보기 박스 제공 & 등록 버튼 활성화
           setIsValidUrl(true);
         },
