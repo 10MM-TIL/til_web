@@ -37,6 +37,9 @@ import { usePutMyProfile } from '@/hooks/queries/saveQuery';
 import { getUserBlog } from '@/apis/user';
 import useToast from '@/hooks/useToast';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
+import { logout } from '@/utils/utils';
+import { getCookie } from 'cookies-next';
+import LoginModal from '@/components/Molecules/LoginModal';
 
 const CategoryLayout = ({
   selectedCategoryId,
@@ -172,6 +175,10 @@ const SaveLayout = ({ onClick }: any) => {
 };
 
 const FooterLayout = () => {
+  const clickLogout = () => {
+    logout(true);
+  };
+
   return (
     <FooterContainer>
       <span style={{ display: 'flex', gap: '42px' }}>
@@ -187,7 +194,9 @@ const FooterLayout = () => {
         </a>
         <Typo.Body color={FONT_COLOR.GRAY_2}>회원탈퇴</Typo.Body>
       </span>
-      <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
+      <a style={{ cursor: 'pointer' }} onClick={clickLogout}>
+        <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
+      </a>
     </FooterContainer>
   );
 };
@@ -201,14 +210,11 @@ const Setting: NextPage = () => {
   const [id, setId] = useState(0);
   const [isChangeInput, setIsChangeInput] = useState(false);
   const { isOpen, showToast, text } = useToast();
-
+  const accessToken = getCookie('accToken');
   const { data: userProfile } = useQuery(['myProfile'], getMyProfile, {
     onSuccess: (data) => {
       setMyMailAgreement(data.isMailAgreement);
       setMyInfo(data);
-    },
-    onError: () => {
-      alert('error');
     },
   });
   useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
@@ -347,47 +353,50 @@ const Setting: NextPage = () => {
   }, [id]);
 
   return (
-    <EditpageWrapper>
-      <EditpageContainer>
-        <ProfileContainer>
-          <PhotoContainer>
-            <ProfileIcon
-              editable={true}
-              imgUrl={url}
-              onClick={(id) => {
-                handleChangeProfile(id);
-              }}
-            />
-          </PhotoContainer>
-          <InputContainer>
-            <TextField
-              title='URL 주소 설정'
-              isInput={true}
-              useFixedString={true}
-              inputValue={myInfo.path}
-              useCopy={true}
-              onChange={handleChangePath}
-            />
-            <TextField title='이름' isInput={true} inputValue={myInfo.name} onChange={handleChangeName} />
-            <TextField
-              title='소개'
-              isInput={false}
-              inputValue={myInfo.introduction}
-              onChange={handleChangeIntroduction}
-            />
-          </InputContainer>
-        </ProfileContainer>
-        <CheckContainer>
-          <CategoryLayout selectedCategoryId={myInfo.categoryIdentifier} onClick={handleChangeCategory} />
-          <NoticeLayout />
-          <BlogLinkLayout />
-          {/* <DownloadLayout /> */}
-        </CheckContainer>
-        <SaveLayout onClick={handleSave} />
-        <FooterLayout />
-      </EditpageContainer>
-      {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
-    </EditpageWrapper>
+    <>
+      <EditpageWrapper>
+        <EditpageContainer>
+          <ProfileContainer>
+            <PhotoContainer>
+              <ProfileIcon
+                editable={true}
+                imgUrl={url}
+                onClick={(id) => {
+                  handleChangeProfile(id);
+                }}
+              />
+            </PhotoContainer>
+            <InputContainer>
+              <TextField
+                title='URL 주소 설정'
+                isInput={true}
+                useFixedString={true}
+                inputValue={myInfo.path}
+                useCopy={true}
+                onChange={handleChangePath}
+              />
+              <TextField title='이름' isInput={true} inputValue={myInfo.name} onChange={handleChangeName} />
+              <TextField
+                title='소개'
+                isInput={false}
+                inputValue={myInfo.introduction}
+                onChange={handleChangeIntroduction}
+              />
+            </InputContainer>
+          </ProfileContainer>
+          <CheckContainer>
+            <CategoryLayout selectedCategoryId={myInfo.categoryIdentifier} onClick={handleChangeCategory} />
+            <NoticeLayout />
+            <BlogLinkLayout />
+            {/* <DownloadLayout /> */}
+          </CheckContainer>
+          <SaveLayout onClick={handleSave} />
+          <FooterLayout />
+        </EditpageContainer>
+        {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
+      </EditpageWrapper>
+      {!accessToken && <LoginModal />}
+    </>
   );
 };
 
