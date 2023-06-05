@@ -213,7 +213,7 @@ const Setting: NextPage = () => {
   const accessToken = getCookie('accToken');
   const { data: userProfile } = useQuery(['myProfile'], getMyProfile, {
     onSuccess: (data) => {
-      setMyMailAgreement(data.isMailAgreement);
+      setMyMailAgreement(data.mailAgreement);
       setMyInfo(data);
     },
   });

@@ -34,6 +34,7 @@ import { useRecoilState } from 'recoil';
 import { clickedGrassDate } from '@/stores/user';
 import IconRequest from '@/assets/svgs/IconRequest';
 import { GrassStackedData } from '@/components/Molecules/GrassArea/types';
+import Link from 'next/link';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -53,9 +54,11 @@ const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; c
 
 const SettingButton = () => {
   return (
-    <Button size='md' backgroundColor={BACKGROUND_COLOR.FIELD_10} onClick={() => router.push('/setting')}>
-      <Typo.Label1 color={FONT_COLOR.WHITE}>계정설정</Typo.Label1>
-    </Button>
+    <Link href='/setting'>
+      <Button size='md' backgroundColor={BACKGROUND_COLOR.FIELD_10}>
+        <Typo.Label1 color={FONT_COLOR.WHITE}>계정설정</Typo.Label1>
+      </Button>
+    </Link>
   );
 };
 
