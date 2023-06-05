@@ -277,11 +277,11 @@ const User: NextPage = ({ path }: any) => {
 
   const { blogs } = blogObject ?? [];
 
-  const [url, setUrl] = useState(require(`@/assets/images/default.png`) as string);
+  const [url, setUrl] = useState(require(`@/assets/images/profile/default.png`) as string);
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
   const [picid, setPicId] = useState(0);
   useEffect(() => {
-    if (picid > 0) setUrl(require(`@/assets/images/${picid}.png`) as string);
+    if (picid > 0) setUrl(require(`@/assets/images/profile/${picid}.png`) as string);
   }, [picid]);
 
   return (

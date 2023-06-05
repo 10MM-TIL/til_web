@@ -106,10 +106,10 @@ const ProfilComponent = () => {
    * 저장 버튼 누를 때 url 던져줘야하는데 image 주소 필요 HOW?
    */
   const [id, setId] = useState(0);
-  const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
+  const [url, setUrl] = useState(require('@/assets/images/profile/default.png') as string);
 
   useEffect(() => {
-    if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
+    if (id > 0) setUrl(require(`@/assets/images/profile/${id}.png`) as string);
   }, [id]);
   return (
     <div

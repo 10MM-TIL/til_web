@@ -78,14 +78,14 @@ const NoticeLayout = () => {
 
   return (
     <div>
-      <BoxLayout title='알림 설정'>
+      {/* <BoxLayout title='알림 설정'>
         <div style={{ display: 'flex', gap: '20px' }}>
           <Toggle isOn={enable} onIsOnToggle={handleToggleClick} />
           <div>
             <RadioGroup data={DATA} selectedId={iteration} onClick={handleRadioClick} />
           </div>
         </div>
-      </BoxLayout>
+      </BoxLayout> */}
       <div style={{ float: 'right', marginRight: '8px' }}>
         <div style={{ marginLeft: '68px' }}>
           <CheckboxLabel
@@ -117,9 +117,6 @@ const BlogLinkLayout = () => {
       }),
     );
   };
-  // const getMaximumId = (list: Array<{ id: string; url: string }>) => {
-  //   return list.reduce((min, p) => (Number(p.id) > Number(min) ? p.id : min), list[0].id);
-  // };
   const handleAddBlog = () => {
     if (blogList.length < 6) {
       setBlogList([...blogList, { identifier: Math.random().toString(36).substring(2, 11), url: '' }]);
@@ -197,10 +194,10 @@ const FooterLayout = () => {
 
 const Setting: NextPage = () => {
   const [myInfo, setMyInfo] = useState<any>({});
-  const [noti, setNoti] = useRecoilState(myNotification);
+  // const [noti, setNoti] = useRecoilState(myNotification);
   const [mailAgreement, setMyMailAgreement] = useRecoilState(myMailAgreement);
   const [blogList, setBlogList] = useRecoilState(myBloglist);
-  const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
+  const [url, setUrl] = useState(require('@/assets/images/profile/default.png') as string);
   const [id, setId] = useState(0);
   const [isChangeInput, setIsChangeInput] = useState(false);
   const { isOpen, showToast, text } = useToast();
@@ -220,11 +217,11 @@ const Setting: NextPage = () => {
       setBlogList(data.blogs);
     },
   });
-  useQuery(['myNoti'], getMyNotification, {
-    onSuccess: (data) => {
-      setNoti(data);
-    },
-  });
+  // useQuery(['myNoti'], getMyNotification, {
+  //   onSuccess: (data) => {
+  //     setNoti(data);
+  //   },
+  // });
 
   const queryClient = useQueryClient();
   const saveProfile = useMutation(putMyProfile, {
@@ -237,24 +234,24 @@ const Setting: NextPage = () => {
     //   alert('저장에 실패했습니다. 다시 시도해주세요');
     // },
   });
-  const saveNoti = useMutation(putMyNotification, {
-    onSuccess: () => {
-      console.log('onSuccess');
-      queryClient.invalidateQueries(['putNoti']);
-    },
-    // onError: () => {
-    //   alert('저장에 실패했습니다. 다시 시도해주세요');
-    // },
-  });
-  const saveBlog = useMutation(putMyBlog, {
-    onSuccess: () => {
-      console.log('onSuccess');
-      queryClient.invalidateQueries(['putBlog']);
-    },
-    // onError: () => {
-    //   alert('저장에 실패했습니다. 다시 시도해주세요');
-    // },
-  });
+  // const saveNoti = useMutation(putMyNotification, {
+  //   onSuccess: () => {
+  //     console.log('onSuccess');
+  //     queryClient.invalidateQueries(['putNoti']);
+  //   },
+  //   // onError: () => {
+  //   //   alert('저장에 실패했습니다. 다시 시도해주세요');
+  //   // },
+  // });
+  // const saveBlog = useMutation(putMyBlog, {
+  //   onSuccess: () => {
+  //     console.log('onSuccess');
+  //     queryClient.invalidateQueries(['putBlog']);
+  //   },
+  //   // onError: () => {
+  //   //   alert('저장에 실패했습니다. 다시 시도해주세요');
+  //   // },
+  // });
 
   const handleSave = async () => {
     const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
@@ -269,6 +266,14 @@ const Setting: NextPage = () => {
       alert('URL 주소는 영어, 숫자, 하이픈(-)으로만 설정할 수 있어요.');
       return;
     }
+    if (nameValue === '') {
+      alert('이름을 입력해주세요.');
+      return;
+    }
+    if (pathValue === '') {
+      alert('URL 주소를 입력해주세요.');
+      return;
+    }
 
     const promises = [
       saveProfile.mutateAsync(
@@ -279,18 +284,18 @@ const Setting: NextPage = () => {
           path: myInfo.path,
           profileImgSrc: 'https://raw.githubusercontent.com/Brick-log/til-server/main/default.png',
           mailAgreement: mailAgreement,
+          blogs: blogList.map((blog) => {
+            const { url } = blog;
+            if (url.includes('https://') || url.includes('http://')) {
+              return { url };
+            } else return { url: `https://${url}` };
+          }),
         },
         {
           onError: () => {
             alert('중복된 URL 주소가 있습니다. 다른 URL 주소를 설정해주세요.');
           },
         },
-      ),
-      saveNoti.mutateAsync(noti),
-      saveBlog.mutateAsync(
-        blogList.map((blog) => {
-          return { url: blog.url };
-        }),
       ),
     ];
     try {
@@ -338,7 +343,7 @@ const Setting: NextPage = () => {
     });
   }, []);
   useEffect(() => {
-    if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
+    if (id > 0) setUrl(require(`@/assets/images/profile/${id}.png`) as string);
   }, [id]);
 
   return (

@@ -19,6 +19,7 @@ export const putMyProfile = async ({
   categoryIdentifier,
   mailAgreement,
   profileImgSrc,
+  blogs,
 }: {
   name: string;
   path: string;
@@ -26,6 +27,7 @@ export const putMyProfile = async ({
   categoryIdentifier: string;
   mailAgreement: boolean;
   profileImgSrc: string;
+  blogs: Array<{ url: string }>;
 }) => {
   try {
     const res = await instance.put('/my/profile', {
@@ -35,6 +37,7 @@ export const putMyProfile = async ({
       categoryIdentifier,
       mailAgreement,
       profileImgSrc,
+      blogs,
     });
     return res;
   } catch (e) {
