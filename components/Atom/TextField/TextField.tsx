@@ -10,7 +10,7 @@ import ToastMessage from '@/components/ToastMessage';
 import useToast from '@/hooks/useToast';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 
-const DOMAIN = 'bricklog.kr/';
+const DOMAIN = 'bricklog.kr/@';
 const TextField = ({
   title,
   isInput,

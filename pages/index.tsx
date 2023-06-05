@@ -72,7 +72,7 @@ const HomePage = () => {
   };
 
   const handleClickUser = (userpath: string = '') => {
-    router.push(`/${userpath}`);
+    router.push(`/@${userpath}`);
   };
 
   useEffect(() => {
