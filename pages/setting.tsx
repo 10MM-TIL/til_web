@@ -206,7 +206,8 @@ const Setting: NextPage = () => {
   // const [noti, setNoti] = useRecoilState(myNotification);
   const [mailAgreement, setMyMailAgreement] = useRecoilState(myMailAgreement);
   const [blogList, setBlogList] = useRecoilState(myBloglist);
-  const [imgUrl, setImgUrl] = useState('');
+  // const [imgUrl, setImgUrl] = useState('');
+  const [url, setUrl] = useState(require('@/assets/images/profile/default.png') as string);
 
   const websiteUrl = process.env.NEXT_PUBLIC_MODE === 'dev' ? 'https://dev.bricklog.io' : 'https://bricklog.io';
 
@@ -218,7 +219,7 @@ const Setting: NextPage = () => {
     onSuccess: (data) => {
       setMyMailAgreement(data.mailAgreement);
       setMyInfo(data);
-      setImgUrl(data?.profileImgSrc);
+      // setImgUrl(data?.profileImgSrc);
     },
   });
   useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
@@ -292,7 +293,7 @@ const Setting: NextPage = () => {
           introduction: myInfo.introduction,
           name: myInfo.name,
           path: myInfo.path,
-          profileImgSrc: imgUrl,
+          profileImgSrc: 'https://raw.githubusercontent.com/Brick-log/til-server/main/default.png',
           mailAgreement: mailAgreement,
           blogs: blogList.map((blog) => {
             const { url } = blog;
@@ -353,8 +354,9 @@ const Setting: NextPage = () => {
     });
   }, []);
   useEffect(() => {
-    if (id > 0) setImgUrl(`${websiteUrl}/images/profile/${id}`);
-  }, [id, websiteUrl]);
+    // if (id > 0) setImgUrl(`${websiteUrl}/images/profile/${id}`);
+    if (id > 0) setUrl(require(`@/assets/images/profile/${id}.png`) as string);
+  }, [id]);
 
   return (
     <>
@@ -364,7 +366,7 @@ const Setting: NextPage = () => {
             <PhotoContainer>
               <ProfileIcon
                 editable={true}
-                imgUrl={imgUrl}
+                imgUrl={url}
                 onClick={(id) => {
                   handleChangeProfile(id);
                 }}
