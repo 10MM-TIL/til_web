@@ -30,7 +30,7 @@ import { IconFloat } from '@/assets/svgs/IconFloat';
 import { formatDate } from '@/utils/utils';
 import { useMyAllTimeline } from '@/hooks/queries/timelineQuery';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { clickedGrassDate } from '@/stores/user';
 import IconRequest from '@/assets/svgs/IconRequest';
 import { GrassStackedData } from '@/components/Molecules/GrassArea/types';
@@ -280,18 +280,13 @@ const User: NextPage = ({ path }: any) => {
 
   const { blogs } = blogObject ?? [];
 
-  const [url, setUrl] = useState(require(`@/assets/images/profile/default.png`) as string);
-  const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
-  const [picid, setPicId] = useState(0);
-  useEffect(() => {
-    if (picid > 0) setUrl(require(`@/assets/images/profile/${picid}.png`) as string);
-  }, [picid]);
+  const setClickedDate = useSetRecoilState(clickedGrassDate);
 
   return (
     <MypageWrapper>
       <MypageContainer>
         <IntroContainer>
-          <ProfileIcon imgUrl={url} onClick={() => {}} />
+          <ProfileIcon imgUrl={userInfo?.profileImgSrc} />
           <TextContainer>
             <NameCategory isMe={userInfo?.isAuthorized} name={userInfo?.name} category={userInfo?.categoryName} />
             <Introduction blogs={blogs} introduction={userInfo?.introduction} />
