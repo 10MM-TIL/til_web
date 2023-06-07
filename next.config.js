@@ -6,7 +6,6 @@ const nextConfig = {
     emotion: true,
   },
   images: {
-    domains: ['search.pstatic.net'],
     // remotePatterns: [
     //   {
     //     protocol: 'https',
@@ -15,7 +14,7 @@ const nextConfig = {
     //     pathname: '/**',
     //   },
     // ],
-    domains: ['search.pstatic.net', 'raw.githubusercontent.com'],
+    domains: ['search.pstatic.net', 'raw.githubusercontent.com', 'dev.bricklog.io', 'bricklog.io'],
   },
   webpack: (config) => {
     // 아래를 추가합니다.
