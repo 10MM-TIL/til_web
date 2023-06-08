@@ -139,14 +139,16 @@ const HomeTemplates = ({
                     </button>
                   </div>
                   {isValidUrl && (
-                    <div>
+                    <div css={styles.timelineContainer}>
                       <TimeLine
                         content={{ title, desc: summary, date: '', url }}
                         changable
                         onDeleteContent={() => console.log(1)}
                         onSaveAllContent={() => console.log(2)}
                       />
-                      <Button size='sm'>등록</Button>
+                      <div css={styles.timelineSubmitBtnContainer}>
+                        <Button size='sm'>등록</Button>
+                      </div>
                     </div>
                   )}
                 </div>

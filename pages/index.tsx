@@ -19,7 +19,7 @@ const HomePage = () => {
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [identifier, setIdentifier] = useState('');
-  const [date, setDate] = useState<Date | string>(new Date());
+  const [date, setDate] = useState<string>('');
 
   const { data } = useMyDraft();
   const { mutateAsync: memoMutate } = useMyDraftSync();
@@ -63,12 +63,13 @@ const HomePage = () => {
           console.log(res);
           // TODO 미리보기 박스 제공 & 등록 버튼 활성화
           setIsValidUrl(true);
-          setTitle(res?.data?.title);
-          setSummary(res?.data?.summary);
+          setTitle(res?.data?.title?.substring(0, 30));
+          setSummary(res?.data?.summary?.substring(0, 100));
           setIdentifier(res?.data?.identifier);
         },
         onError: (err) => {
           console.log(err);
+          setDate('날짜를 입력해주세요.');
         },
       },
     );

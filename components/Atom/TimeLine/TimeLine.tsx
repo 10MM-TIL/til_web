@@ -9,7 +9,7 @@ import BlogIcon from '@/components/Atom/BlogIcon';
 
 // [TODO] 최대 글자수 지정 필요
 const TITLE_MAX_LENGTH = 30;
-const DESC_MAX_LENGTH = 50;
+const DESC_MAX_LENGTH = 100;
 
 // 수정 클릭시 뜨는 '저장' | '취소' 버튼
 const EditStatusButton = memo(function EditStatusButton({
