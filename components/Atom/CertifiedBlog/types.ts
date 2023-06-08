@@ -1,6 +1,7 @@
 export type CertifiedBlogProps = {
   id: string;
   blogName: string;
+  placeholder?: string;
   onDeleteBlog: (id: string) => void;
   setBlogUrl: (id: string, url: string) => void;
 };

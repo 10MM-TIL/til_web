@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { BACKGROUND_COLOR } from '@/constants/color';
 import { mq } from './mediaQuery';
+import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 
 export const MypageWrapper = styled.div`
   background-color: ${BACKGROUND_COLOR.NAVY_1};
@@ -10,7 +11,7 @@ export const MypageWrapper = styled.div`
 export const MypageContainer = styled.div`
   max-width: 328px;
   margin: 0 auto;
-  padding-top: 134px;
+  padding-top: 54px;
   ${mq('desktop')} {
     max-width: 781px;
   }
@@ -22,6 +23,7 @@ export const IntroContainer = styled.div`
   ${mq('desktop')} {
     gap: 89px;
   }
+  padding-bottom: 54px;
 `;
 
 export const InfoContainer = styled.div`
@@ -61,7 +63,7 @@ export const IntroductionContainer = styled.div`
   min-height: 22px;
   width: 209px;
   // 피그마 상 잔디의 글자와의 padding 이 62px로 되어있음(잔디 내 패팅 10px존재)
-  padding-bottom: 52px;
+  /* padding-bottom: 52px; */
 
   ${mq('desktop')} {
     width: 492px;
@@ -84,6 +86,7 @@ export const FloatingContainer = styled.div`
   position: fixed;
   bottom: 12px;
   right: 12px;
+  z-index: ${Z_INDEX_LEVEL.MODAL};
   ${mq('desktop')} {
     bottom: 58px;
     right: 69px;
