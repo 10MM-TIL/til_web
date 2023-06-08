@@ -294,12 +294,14 @@ const Setting: NextPage = () => {
           path: myInfo.path,
           profileImgSrc: imgUrl,
           mailAgreement: mailAgreement,
-          blogs: blogList.map((blog) => {
-            const { url } = blog;
-            if (url.includes('https://') || url.includes('http://')) {
-              return { url };
-            } else return { url: `https://${url}` };
-          }),
+          blogs: blogList
+            .filter((item) => item?.url !== '')
+            .map((blog) => {
+              const { url } = blog;
+              if (url.includes('https://') || url.includes('http://')) {
+                return { url };
+              } else return { url: `https://${url}` };
+            }),
         },
         {
           onError: () => {
