@@ -27,7 +27,6 @@ const Header = () => {
   const path = userData?.path;
 
   const handleModalOpen = () => {
-    console.log('login btn click');
     setIsLoginModalOpen({ isLoginModalOpen: true });
   };
 

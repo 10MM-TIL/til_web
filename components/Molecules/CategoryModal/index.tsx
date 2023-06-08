@@ -21,21 +21,21 @@ interface CategoryModalProps {
 const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
   const device = useResize();
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState('');
-  const [isAlertAgree, setIsAlertAgree] = useState(true);
-  const [frequency, setFrequency] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState('0ec30e71-38ba-4837-8804-f0e1180c5bf1');
+  // const [isAlertAgree, setIsAlertAgree] = useState(true);
+  // const [frequency, setFrequency] = useState('');
   const [isReceiveAgree, setIsReceiveAgree] = useState(true);
 
   const { data: category } = useCategories();
   const { mutateAsync: categoryMutate } = useMyProfileOnboarding();
-  const { mutateAsync: notificationMutate } = useUpdateMyNotification();
+  // const { mutateAsync: notificationMutate } = useUpdateMyNotification();
 
   const categoryData = category?.data;
 
-  const handleIsAlertAgreeToggle = () => {
-    isAlertAgree && setFrequency('');
-    setIsAlertAgree((prev) => !prev);
-  };
+  // const handleIsAlertAgreeToggle = () => {
+  //   isAlertAgree && setFrequency('');
+  //   setIsAlertAgree((prev) => !prev);
+  // };
 
   const handleIsReceiveAgreeToggle = () => setIsReceiveAgree((prev) => !prev);
 
@@ -46,13 +46,13 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
       return;
     }
 
-    if (isAlertAgree && frequency === '') {
-      alert('알림 주기를 선택해주세요');
-      return;
-    }
+    // if (isAlertAgree && frequency === '') {
+    //   alert('알림 주기를 선택해주세요');
+    //   return;
+    // }
 
     await categoryMutate({ categoryIdentifier: selectedCategoryId, mailAgreement: isReceiveAgree });
-    await notificationMutate({ enable: isAlertAgree, iteration: frequency === '' ? 'NONE' : frequency });
+    // await notificationMutate({ enable: isAlertAgree, iteration: frequency === '' ? 'NONE' : frequency });
   };
 
   return (
@@ -74,7 +74,7 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
             />
           </div>
         </div>
-        <div css={styles.alertContainer}>
+        {/* <div css={styles.alertContainer}>
           <Typo.H1 color={FONT_COLOR.WHITE}>알림설정</Typo.H1>
           <div css={styles.alertRadioContainer}>
             <Toggle isOn={isAlertAgree} onIsOnToggle={handleIsAlertAgreeToggle} />
@@ -92,7 +92,7 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
         <div css={styles.agreeContainer}>
           <CheckboxLabel
             text='마케팅 활용 및 뉴스레터 수신 동의'

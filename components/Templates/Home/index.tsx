@@ -25,6 +25,9 @@ interface HomeTemplatesProps {
   memoValue: string;
   url: string;
   isValidUrl: boolean;
+  title: string;
+  summary: string;
+  identifier: string;
 
   onTabChange: (type: 'MEMO' | 'REVIEW') => void;
   onMemoChange: ChangeEventHandler<HTMLTextAreaElement>;
@@ -39,13 +42,16 @@ const HomeTemplates = ({
   typingState,
   memoValue,
   url,
+  isValidUrl,
+  title,
+  summary,
+  identifier,
   onMemoChange,
   onUrlChange,
   onUrlCheck,
   onTabChange,
   onClickContent,
   onClickUser,
-  isValidUrl,
 }: HomeTemplatesProps) => {
   const device = useResize();
 
@@ -135,6 +141,7 @@ const HomeTemplates = ({
                   {isValidUrl && (
                     <div>
                       <TimeLine
+                        content={{ title, desc: summary, date: '', url }}
                         changable
                         onDeleteContent={() => console.log(1)}
                         onSaveAllContent={() => console.log(2)}

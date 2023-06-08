@@ -17,8 +17,9 @@ const HomePage = () => {
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const [isValidUrl, setIsValidUrl] = useState(false);
   const [title, setTitle] = useState('');
-  const [description, setDiscription] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [summary, setSummary] = useState('');
+  const [identifier, setIdentifier] = useState('');
+  const [date, setDate] = useState<Date | string>(new Date());
 
   const { data } = useMyDraft();
   const { mutateAsync: memoMutate } = useMyDraftSync();
@@ -62,6 +63,12 @@ const HomePage = () => {
           console.log(res);
           // TODO 미리보기 박스 제공 & 등록 버튼 활성화
           setIsValidUrl(true);
+          setTitle(res?.data?.title);
+          setSummary(res?.data?.summary);
+          setIdentifier(res?.data?.identifier);
+        },
+        onError: (err) => {
+          console.log(err);
         },
       },
     );
@@ -86,6 +93,9 @@ const HomePage = () => {
       memoValue={memoValue}
       url={url}
       isValidUrl={isValidUrl}
+      title={title}
+      summary={summary}
+      identifier={identifier}
       onMemoChange={handleMemoChange}
       onUrlChange={handleUrlChange}
       onUrlCheck={handleUrlCheck}
