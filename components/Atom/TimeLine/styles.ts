@@ -12,25 +12,27 @@ export const TimeLineContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 110px;
-  background: ${BACKGROUND_COLOR.NAVY_3};
+  background: ${BACKGROUND_COLOR.NAVY_4};
   border-radius: 6px;
   padding: 20px 16px 12px 24px;
-  ${mq('desktop')} {
-    padding: 20px 36px 12px 24px;
-  }
 `;
 
 export const TimeLineContent = styled.div<{ isEdit: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 44px;
   width: 100%;
   cursor: ${(props) => (props.isEdit ? `default` : `pointer`)};
   // input max-width, min-width 적용
   > div:first-of-type {
-    max-width: 410px;
     min-width: 180px;
+    max-width: calc(100% - 80px);
+
     flex-grow: 1;
+    ${mq('desktop')} {
+      max-width: 100%;
+    }
   }
 `;
 export const TimeLineDate = styled.div`
@@ -49,7 +51,6 @@ export const TimeLineCancelButton = styled.button`
 `;
 
 const timeLineBodyCss = ({ width }: { width: CSSProperties['width'] }) => css`
-  width: 180px;
   cursor: pointer;
   p,
   H1,

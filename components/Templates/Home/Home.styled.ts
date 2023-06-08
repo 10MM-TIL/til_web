@@ -179,6 +179,26 @@ const reviewLoadBtn = ({ isEnable }: { isEnable: boolean }) => css`
   border-radius: 8px;
 `;
 
+const timelineContainer = css`
+  padding: 10px 0;
+  ${mq('desktop')} {
+    gap: 12px;
+    display: flex;
+  }
+`;
+
+const timelineSubmitBtnContainer = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 6px;
+
+  ${mq('desktop')} {
+    margin-top: 0;
+    align-items: flex-end;
+  }
+`;
+
 const textareaBottomContainer = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   position: absolute;
   bottom: 20px;
@@ -258,6 +278,8 @@ const styles = {
   reviewInputContainer,
   reviewInput,
   reviewLoadBtn,
+  timelineContainer,
+  timelineSubmitBtnContainer,
   textareaBottomContainer,
   elementContainer,
   elementTitle,
