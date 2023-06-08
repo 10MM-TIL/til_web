@@ -19,7 +19,7 @@ const HomePage = () => {
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [identifier, setIdentifier] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date | string>(new Date());
 
   const { data } = useMyDraft();
   const { mutateAsync: memoMutate } = useMyDraftSync();
