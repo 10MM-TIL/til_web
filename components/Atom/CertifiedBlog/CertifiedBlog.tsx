@@ -5,7 +5,13 @@ import { IconX } from '@/assets/svgs/iconX';
 
 import BlogIcon from '@/components/Atom/BlogIcon';
 
-export const CertifiedBlog = ({ id, blogName, onDeleteBlog, setBlogUrl }: CertifiedBlogProps): ReactElement => {
+export const CertifiedBlog = ({
+  id,
+  blogName,
+  onDeleteBlog,
+  setBlogUrl,
+  placeholder = '',
+}: CertifiedBlogProps): ReactElement => {
   const handleChangeBlogUrl = (e: ChangeEvent<HTMLInputElement>) => {
     setBlogUrl(id, e.target.value);
   };
@@ -15,7 +21,7 @@ export const CertifiedBlog = ({ id, blogName, onDeleteBlog, setBlogUrl }: Certif
       <CertifiedBlogContainer>
         <BlogIcon url={blogName} />
         <CertifiedBlogName>
-          <InputField value={blogName} onChange={(e) => handleChangeBlogUrl(e)} />
+          <InputField value={blogName} onChange={(e) => handleChangeBlogUrl(e)} placeholder={placeholder} />
         </CertifiedBlogName>
         <DeleteButton onClick={() => onDeleteBlog(id)}>
           <IconX onClick={() => onDeleteBlog(id)} />

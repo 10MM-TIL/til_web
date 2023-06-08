@@ -145,6 +145,7 @@ const BlogLinkLayout = () => {
                       blogName={blogItem.url}
                       onDeleteBlog={handleDeleteBlog}
                       setBlogUrl={setBlog}
+                      placeholder='https://your-blog.com'
                     />
                   );
                 })
