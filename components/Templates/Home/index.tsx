@@ -113,7 +113,7 @@ const HomeTemplates = ({
                   target='_blank'
                   css={styles.reviewGuide}
                 >
-                  <Typo.Label2 color={FONT_COLOR.GRAY_1}>본인 작성 콘텐츠만 작성 가능</Typo.Label2>
+                  <Typo.Label2 color={FONT_COLOR.GRAY_1}>본인의 콘텐츠만 등록해 주세요.</Typo.Label2>
                 </Link>
               )}
               {selectedTab === 'MEMO' ? (
@@ -179,14 +179,14 @@ const HomeTemplates = ({
                           <div css={styles.timelineInputContainer}>
                             <input
                               ref={titleRef}
-                              placeholder='제목을 입력해주세요'
+                              placeholder='불러온 글의 제목을 작성해주세요.'
                               maxLength={30}
                               value={title}
                               css={styles.timelineTitleInput}
                               onChange={onTitleChange}
                             />
                             <input
-                              placeholder='요약을 입력해주세요'
+                              placeholder='불러온 글을 설명해주세요.'
                               maxLength={100}
                               value={summary}
                               css={styles.timelineSummaryInput}
