@@ -196,6 +196,10 @@ const timeline = css`
   padding: 12px 24px;
   background-color: ${BACKGROUND_COLOR.NAVY_4};
   border-radius: 6px;
+
+  ${mq('desktop')} {
+    flex: 1;
+  }
 `;
 
 const timelineLeftArea = css`
