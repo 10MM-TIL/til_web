@@ -187,6 +187,72 @@ const timelineContainer = css`
   }
 `;
 
+const timeline = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 44px;
+  min-width: 312px;
+  padding: 12px 24px;
+  background-color: ${BACKGROUND_COLOR.NAVY_4};
+  border-radius: 6px;
+`;
+
+const timelineLeftArea = css`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+`;
+
+const timelineCalendar = css`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+`;
+
+const timelineInputContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const timelineTitleInput = css`
+  width: 100%;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 2px solid ${BACKGROUND_COLOR.FIELD_10};
+  background-color: transparent;
+  color: ${FONT_COLOR.WHITE};
+  padding-bottom: 4px;
+  outline: none;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 22px;
+
+  &:focus {
+    border-bottom: 2px solid ${FONT_COLOR.WHITE};
+  }
+`;
+
+const timelineSummaryInput = css`
+  width: 100%;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 2px solid ${BACKGROUND_COLOR.FIELD_10};
+  background-color: transparent;
+  color: ${FONT_COLOR.WHITE};
+  padding: 2px 0;
+  outline: none;
+
+  &:focus {
+    border-bottom: 2px solid ${FONT_COLOR.WHITE};
+  }
+`;
+
 const timelineSubmitBtnContainer = css`
   display: flex;
   align-items: center;
@@ -279,6 +345,12 @@ const styles = {
   reviewInput,
   reviewLoadBtn,
   timelineContainer,
+  timeline,
+  timelineLeftArea,
+  timelineCalendar,
+  timelineInputContainer,
+  timelineTitleInput,
+  timelineSummaryInput,
   timelineSubmitBtnContainer,
   textareaBottomContainer,
   elementContainer,
