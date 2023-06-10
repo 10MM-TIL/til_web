@@ -25,7 +25,7 @@ const nextConfig = {
     });
     return config;
   },
-  trailingSlash: true,
+  trailingSlash: false,
   rewrites: () => [
     {
       source: '/oauth2/v1/:path*', // url이 source에 해당될 경우
