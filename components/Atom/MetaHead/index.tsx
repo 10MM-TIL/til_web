@@ -30,7 +30,7 @@ const MetaHead = ({ metaContents }: { metaContents: MetaContents }) => {
       <Head>
         <title>{title}</title>
         <meta charSet='utf-8' />
-        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
         <meta name='HandheldFriendly' content='True' />
         <meta name='MoblieOptimized' content='320' />
         <meta

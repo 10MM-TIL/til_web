@@ -312,16 +312,16 @@ export default User;
 
 export const getServerSideProps: any = async (context: NextPageContext) => {
   const path = context.query?.user as string;
-  const apiPath = path.slice(1); // @ 떼고 api 콜
-  const data = await getUserProfile(apiPath); // getUserProfile API 를 통해 값 먼저 가져옴
+  // const apiPath = path.slice(1); // @ 떼고 api 콜
+  const data = await getUserProfile(path); // getUserProfile API 를 통해 값 먼저 가져옴
 
-  if (!data || path.at(0) !== '@') {
+  if (!data) {
     return {
       notFound: true, // 404 page 로 이동
     };
   }
 
-  return { props: { path: apiPath } };
+  return { props: { path } };
 };
 
 // export const getStaticPaths = async () => {
