@@ -1,6 +1,6 @@
 // [user].tsx
 import type { NextPage, NextPageContext } from 'next';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   MypageWrapper,
   MypageContainer,
@@ -36,6 +36,7 @@ import IconRequest from '@/assets/svgs/IconRequest';
 import { GrassStackedData } from '@/components/Molecules/GrassArea/types';
 import Link from 'next/link';
 import Custom404 from './404';
+import Spinner from '@/components/Atom/Spinner';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -278,9 +279,24 @@ const GrassContainer = ({
 const User: NextPage = () => {
   const router = useRouter();
   const urlPath = (router.query?.user as string) || '';
+  const { isReady, isFallback } = router;
   const path = urlPath.slice(1);
 
-  const { data: userInfo } = useQuery(['PROFILE', path], () => getUserProfile(path));
+  const { data: userInfo } = useQuery(['PROFILE', path], () => getUserProfile(path), {
+    enabled: !!isReady,
+  });
+
+  // useEffect(() => {
+  //   console.log('userInfo', userInfo);
+  //   console.log(`isReady : ${isReady}, isFallback : ${isFallback}`);
+  // }, [isFallback, isReady]);
+
+  const isError = useMemo(() => !userInfo || urlPath.at(0) !== '@', [urlPath, userInfo]);
+  const onLoading = useMemo(() => isReady === false && isFallback === false, [isFallback, isReady]);
+  // useEffect(() => {
+  //   console.log('isError', isError);
+  //   console.log('onLoading', onLoading);
+  // }, [isError, onLoading]);
 
   const { data: blogObject } = useQuery(['BLOGS', path], () => getUserBlog(path));
 
@@ -288,7 +304,9 @@ const User: NextPage = () => {
 
   const setClickedDate = useSetRecoilState(clickedGrassDate);
 
-  return (
+  return isError ? (
+    <Custom404 isReady={onLoading} />
+  ) : (
     <MypageWrapper>
       <MypageContainer>
         <IntroContainer>
@@ -316,19 +334,19 @@ const User: NextPage = () => {
 
 export default User;
 
-export const getServerSideProps: any = async (context: NextPageContext) => {
-  const path = context.query?.user as string;
-  const apiPath = path.slice(1); // @ 떼고 api 콜
-  const data = await getUserProfile(apiPath); // getUserProfile API 를 통해 값 먼저 가져옴
+// export const getServerSideProps: any = async (context: NextPageContext) => {
+//   const path = context.query?.user as string;
+//   const apiPath = path.slice(1); // @ 떼고 api 콜
+//   const data = await getUserProfile(apiPath); // getUserProfile API 를 통해 값 먼저 가져옴
 
-  if (!data || path.at(0) !== '@') {
-    return {
-      notFound: true, // 404 page 로 이동
-    };
-  }
+//   if (!data || path.at(0) !== '@') {
+//     return {
+//       notFound: true, // 404 page 로 이동
+//     };
+//   }
 
-  return { props: { path: apiPath } };
-};
+//   return { props: { path: apiPath } };
+// };
 
 // export const getStaticPaths = async () => {
 //   return {
