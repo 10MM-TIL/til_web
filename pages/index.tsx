@@ -3,7 +3,7 @@ import { ChangeEventHandler, SyntheticEvent, useEffect, useRef, useState } from 
 import HomeTemplates from '@/components/Templates/Home';
 import { useRouter } from 'next/router';
 import { useMyDraft, useMyDraftSync } from '@/hooks/queries/draftQuery';
-import { usePostUploadRequest } from '@/hooks/queries/postQuery';
+import { usePostUploadConfirm, usePostUploadRequest } from '@/hooks/queries/postQuery';
 import { format } from 'date-fns';
 
 const HomePage = () => {
@@ -25,6 +25,7 @@ const HomePage = () => {
   const { data } = useMyDraft();
   const { mutateAsync: memoMutate } = useMyDraftSync();
   const { mutateAsync: uploadRequestMutate } = usePostUploadRequest();
+  const { mutateAsync: uploadConfirmMutate } = usePostUploadConfirm();
 
   const handleTabChange = (type: 'MEMO' | 'REVIEW') => {
     setSelectedTab(type);
@@ -94,6 +95,11 @@ const HomePage = () => {
     setSummary(e.currentTarget.value);
   };
 
+  const handleUrlConfirm = async () => {
+    // TODO 입력 필드 검증
+    await uploadConfirmMutate({ url, title, summary, createdAt: date.replace(/\./gi, '-') });
+  };
+
   const handleClickContent = (url: string = '') => {
     window.open(url);
   };
@@ -124,6 +130,7 @@ const HomePage = () => {
       onDateChange={handleDateChange}
       onTitleChange={handleTitleChange}
       onSummaryChange={handleSummaryChange}
+      onUrlConfirm={handleUrlConfirm}
       onTabChange={handleTabChange}
       onClickContent={handleClickContent}
       onClickUser={handleClickUser}
