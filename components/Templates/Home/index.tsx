@@ -42,6 +42,7 @@ interface HomeTemplatesProps {
   onDateChange: (date: Date | null, event: SyntheticEvent<any, Event> | undefined) => void;
   onTitleChange: ChangeEventHandler<HTMLInputElement>;
   onSummaryChange: ChangeEventHandler<HTMLInputElement>;
+  onUrlConfirm: () => void;
   onClickContent: (url?: string) => void;
   onClickUser: (userpath?: string) => void;
 }
@@ -63,6 +64,7 @@ const HomeTemplates = ({
   onDateChange,
   onTitleChange,
   onSummaryChange,
+  onUrlConfirm,
   onTabChange,
   onClickContent,
   onClickUser,
@@ -200,7 +202,9 @@ const HomeTemplates = ({
                         </div>
                       </div>
                       <div css={styles.timelineSubmitBtnContainer}>
-                        <Button size='sm'>등록</Button>
+                        <Button size='sm' onClick={onUrlConfirm}>
+                          등록
+                        </Button>
                       </div>
                     </div>
                   )}
