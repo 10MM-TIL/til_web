@@ -22,7 +22,7 @@ import { GrassArea } from '@/components/Molecules/GrassArea';
 import { TimeLine } from '@/components/Atom/TimeLine';
 import { IconTimeline } from '@/assets/svgs/IconTimeline';
 import BlogGroup from '@/components/Molecules/BlogGroup';
-import router from 'next/router';
+import router, { useRouter } from 'next/router';
 import { getUserProfile, getUserBlog, getUserTimeline, getUserGrass, putEditTimeline, deleteTimeline } from 'apis/user';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfileResponse, getTimelineResponse } from '@/types/user';
@@ -35,6 +35,7 @@ import { clickedGrassDate } from '@/stores/user';
 import IconRequest from '@/assets/svgs/IconRequest';
 import { GrassStackedData } from '@/components/Molecules/GrassArea/types';
 import Link from 'next/link';
+import Custom404 from './404';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -274,8 +275,13 @@ const GrassContainer = ({
   );
 };
 
-const User: NextPage = ({ path }: any) => {
+const User: NextPage = () => {
+  const router = useRouter();
+  const urlPath = (router.query?.user as string) || '';
+  const path = urlPath.slice(1);
+
   const { data: userInfo } = useQuery(['PROFILE', path], () => getUserProfile(path));
+
   const { data: blogObject } = useQuery(['BLOGS', path], () => getUserBlog(path));
 
   const { blogs } = blogObject ?? [];
