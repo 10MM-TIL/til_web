@@ -68,6 +68,9 @@ const HomePage = () => {
         onSuccess: (res) => {
           console.log(res);
           // TODO 미리보기 박스 제공 & 등록 버튼 활성화
+          if (res?.data.createdAt) {
+            setDate(format(new Date(res.data.createdAt), 'yyyy.MM.dd'));
+          }
           setIsValidUrl(true);
           setTitle(res?.data?.title?.substring(0, 30));
           setSummary(res?.data?.summary?.substring(0, 100));
@@ -97,7 +100,41 @@ const HomePage = () => {
 
   const handleUrlConfirm = async () => {
     // TODO 입력 필드 검증
-    await uploadConfirmMutate({ url, title, summary, createdAt: date.replace(/\./gi, '-') });
+    if (!isValidUrl || url === '') {
+      alert('유효한 url을 입력해주세요.');
+      return;
+    }
+
+    if (title === '' || title.replace(/\s/, '').length === 0) {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+
+    if (summary === '' || summary.replace(/\s/, '').length === 0) {
+      alert('요약을 입력해주세요.');
+      return;
+    }
+
+    if (date === '') {
+      alert('날짜를 입력해주세요.');
+      return;
+    }
+
+    if (new Date(date).getTime() > new Date().getTime()) {
+      alert('미래 날짜는 입력이 불가능합니다.');
+      return;
+    }
+    await uploadConfirmMutate(
+      { url, title, summary, createdAt: date.replace(/\./gi, '-') },
+      {
+        onSuccess: () => {
+          // TODO TOAST
+        },
+        onError: () => {
+          // TODO ALERT
+        },
+      },
+    );
   };
 
   const handleClickContent = (url: string = '') => {
