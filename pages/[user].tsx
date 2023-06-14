@@ -128,7 +128,7 @@ const TimelineComponent = ({
 const TimeLineArea = ({ path, changable }: { path: string; changable: boolean }) => {
   const bottomDiv = useRef(null);
   const [totalSize, setTotalSize] = useState(0);
-  const { data: postObject, fetchNextPage, isSuccess } = useMyAllTimeline(path);
+  const { data: postObject, fetchNextPage, isSuccess, refetch } = useMyAllTimeline(path);
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
   const [timelineData, setTimelineData] = useState([]);
 
@@ -152,6 +152,10 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
       if (optionRef) unobserve(optionRef);
     };
   }, [observe, unobserve]);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   useEffect(() => {
     const getTimeline = async () => {
@@ -246,7 +250,7 @@ const GrassContainer = ({
   // meta 로 받은 데이터를 map 돌면서 Date 처리 해서 같은 달인지 체크
   // 같은 달이면 [base+1] index에 Push
   //
-  const { data: grassObject } = useQuery(['GRASS', path, fromSeconds, toSeconds], () =>
+  const { data: grassObject, refetch } = useQuery(['GRASS', path, fromSeconds, toSeconds], () =>
     getUserGrass(path, fromSeconds, toSeconds),
   );
   const dateList = grassObject?.metas || [];
@@ -265,6 +269,10 @@ const GrassContainer = ({
   const handleClickPrev = () => {
     setBase((prev) => prev - 1);
   };
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   return (
     <GrassArea
       title={title}
@@ -282,7 +290,7 @@ const User: NextPage = () => {
   const { isReady, isFallback } = router;
   const path = urlPath.slice(1);
 
-  const { data: userInfo } = useQuery(['PROFILE', path], () => getUserProfile(path), {
+  const { data: userInfo, refetch: profileRefetch } = useQuery(['PROFILE', path], () => getUserProfile(path), {
     enabled: !!isReady,
   });
 
@@ -298,11 +306,16 @@ const User: NextPage = () => {
   //   console.log('onLoading', onLoading);
   // }, [isError, onLoading]);
 
-  const { data: blogObject } = useQuery(['BLOGS', path], () => getUserBlog(path));
+  const { data: blogObject, refetch: blogRefetch } = useQuery(['BLOGS', path], () => getUserBlog(path));
 
   const { blogs } = blogObject ?? [];
 
   const setClickedDate = useSetRecoilState(clickedGrassDate);
+
+  useEffect(() => {
+    blogRefetch();
+    profileRefetch();
+  }, [profileRefetch, blogRefetch]);
 
   return isError ? (
     <Custom404 isReady={onLoading} />

@@ -40,6 +40,7 @@ import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import { logout } from '@/utils/utils';
 import { getCookie } from 'cookies-next';
 import LoginModal from '@/components/Molecules/LoginModal';
+import { useRouter } from 'next/router';
 
 const CategoryLayout = ({
   selectedCategoryId,
@@ -213,9 +214,10 @@ const Setting: NextPage = () => {
 
   const [id, setId] = useState(0);
   const [isChangeInput, setIsChangeInput] = useState(false);
-  const { isOpen, showToast, text } = useToast();
   const accessToken = getCookie('accToken');
-  const { data: userProfile } = useQuery(['myProfile'], getMyProfile, {
+  const router = useRouter();
+
+  const { data: userProfile, refetch } = useQuery(['myProfile'], getMyProfile, {
     onSuccess: (data) => {
       setMyMailAgreement(data.mailAgreement);
       setMyInfo(data);
@@ -313,12 +315,7 @@ const Setting: NextPage = () => {
     ];
     try {
       await Promise.all(promises).then((res) => {
-        showToast(
-          <>
-            <IconCheckBig />
-            <Typo.H1 color={FONT_COLOR.WHITE}>저장 완료!</Typo.H1>
-          </>,
-        );
+        router.push(`/@${myInfo.path}`);
       });
     } catch (error) {
       alert('저장에 실패했습니다. 다시 시도해주세요.');
@@ -358,6 +355,10 @@ const Setting: NextPage = () => {
   useEffect(() => {
     if (id > 0) setImgUrl(`${websiteUrl}/images/profile/${id}.png`);
   }, [id, websiteUrl]);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <>
@@ -400,7 +401,6 @@ const Setting: NextPage = () => {
           <SaveLayout onClick={handleSave} />
           <FooterLayout />
         </EditpageContainer>
-        {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
       </EditpageWrapper>
       {!accessToken && <LoginModal />}
     </>
