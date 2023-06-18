@@ -10,18 +10,7 @@ import Icon404 from '@/assets/svgs/Icon404';
 import Spinner from '@/components/Atom/Spinner';
 import styles from '@/components/Molecules/OAuthLoading/OAuthLoading.styled';
 
-const Loading = () => {
-  return (
-    <div css={styles.loadingContainer}>
-      <div css={styles.spinnerContainer}>
-        <Spinner size='46px' />
-        <Typo.Body color={FONT_COLOR.WHITE}>Loading ... </Typo.Body>
-      </div>
-    </div>
-  );
-};
-
-const Custom404 = ({ isReady }: { isReady: boolean }) => {
+const Custom404 = () => {
   const device = useResize();
   const errorText = `앗, 페이지를 찾을 수 없습니다.\n입력한 주소를 다시 확인해 주세요.`;
   const router = useRouter();
@@ -29,9 +18,7 @@ const Custom404 = ({ isReady }: { isReady: boolean }) => {
     router.push('/');
   }, [router]);
 
-  return isReady ? (
-    <Loading />
-  ) : (
+  return (
     <>
       <Custom404Wrapper>
         <ImageContainer>
