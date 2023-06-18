@@ -57,7 +57,7 @@ const setDateArrayForGrass = (year: number, month: number, stackedDate?: string[
 // ];
 
 const setCurrentFourthDate = (year: number, month: number): monthYearData[] => {
-  const currentFourthArray = Array.from({ length: 5 }, (_, i) => {
+  const currentFourthArray = Array.from({ length: 4 }, (_, i) => {
     if (month + i <= 12) {
       return {
         year,

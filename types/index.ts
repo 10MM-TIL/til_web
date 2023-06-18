@@ -22,6 +22,8 @@ export interface MyUserModel {
   name: string;
   path: string;
   profileImgSrc: string;
+  email: string;
+  oauthType: string;
 }
 
 export interface CategoryModel {
