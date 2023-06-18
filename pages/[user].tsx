@@ -37,6 +37,7 @@ import { GrassStackedData } from '@/components/Molecules/GrassArea/types';
 import Link from 'next/link';
 import Custom404 from './404';
 import Spinner from '@/components/Atom/Spinner';
+import styles from '@/components/Molecules/OAuthLoading/OAuthLoading.styled';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -284,27 +285,34 @@ const GrassContainer = ({
   );
 };
 
+const Loading = () => {
+  return (
+    <div css={styles.loadingContainer}>
+      <div css={styles.spinnerContainer}>
+        <Spinner size='46px' />
+        <Typo.Body color={FONT_COLOR.WHITE}>Loading ... </Typo.Body>
+      </div>
+    </div>
+  );
+};
+
 const User: NextPage = () => {
   const router = useRouter();
   const urlPath = (router.query?.user as string) || '';
-  const { isReady, isFallback } = router;
+  const { isReady } = router;
   const path = urlPath.slice(1);
 
-  const { data: userInfo, refetch: profileRefetch } = useQuery(['PROFILE', path], () => getUserProfile(path), {
+  const {
+    data: userInfo,
+    refetch: profileRefetch,
+    isLoading,
+    isSuccess,
+  } = useQuery(['PROFILE', path], () => getUserProfile(path), {
     enabled: !!isReady,
   });
-
-  // useEffect(() => {
-  //   console.log('userInfo', userInfo);
-  //   console.log(`isReady : ${isReady}, isFallback : ${isFallback}`);
-  // }, [isFallback, isReady]);
-
-  const isError = useMemo(() => !userInfo || urlPath.at(0) !== '@', [urlPath, userInfo]);
-  const onLoading = useMemo(() => isReady === false && isFallback === false, [isFallback, isReady]);
-  // useEffect(() => {
-  //   console.log('isError', isError);
-  //   console.log('onLoading', onLoading);
-  // }, [isError, onLoading]);
+  useEffect(() => {
+    console.log('OUT urlPath', urlPath);
+  }, [urlPath]);
 
   const { data: blogObject, refetch: blogRefetch } = useQuery(['BLOGS', path], () => getUserBlog(path));
 
@@ -317,9 +325,9 @@ const User: NextPage = () => {
     profileRefetch();
   }, [profileRefetch, blogRefetch]);
 
-  return isError ? (
-    <Custom404 isReady={onLoading} />
-  ) : (
+  return isLoading ? (
+    <Loading />
+  ) : !(!isSuccess || urlPath.at(0) !== '@') ? (
     <MypageWrapper>
       <MypageContainer>
         <IntroContainer>
@@ -342,6 +350,8 @@ const User: NextPage = () => {
         <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />
       </FloatingContainer>
     </MypageWrapper>
+  ) : (
+    <Custom404 />
   );
 };
 

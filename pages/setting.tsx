@@ -29,7 +29,7 @@ import AddBlog from '@/components/Atom/AddBlog';
 import ToastMessage from '@/components/ToastMessage';
 
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
-import { myBloglist, myMailAgreement, myNotification } from '@/stores/user';
+import { myBloglist, myMailAgreement, myNotification, myOauthEmail } from '@/stores/user';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfile, putMyProfile, getMyNotification, putMyNotification, putMyBlog } from 'apis/setting';
@@ -177,13 +177,14 @@ const SaveLayout = ({ onClick }: any) => {
 };
 
 const FooterLayout = () => {
+  const email = useRecoilValue(myOauthEmail);
   const clickLogout = () => {
     logout(true);
   };
 
   return (
     <FooterContainer>
-      <span style={{ display: 'flex', gap: '42px' }}>
+      <span style={{ display: 'flex', gap: '34px' }}>
         <a
           href='https://www.plip.kr/pcc/c791921f-5dc3-4cb0-baac-55e48ee2e585/privacy-policy'
           target='_blank'
@@ -194,11 +195,16 @@ const FooterLayout = () => {
         <a href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7' target='_blank' rel='noopener noreferrer'>
           <Typo.Body color={FONT_COLOR.GRAY_2}>서비스 이용 약관</Typo.Body>
         </a>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>회원탈퇴</Typo.Body>
+        <a href='https://tally.so/r/w5bNJd' target='_blank' rel='noopener noreferrer'>
+          <Typo.Body color={FONT_COLOR.GRAY_2}>회원탈퇴</Typo.Body>
+        </a>
       </span>
-      <a style={{ cursor: 'pointer' }} onClick={clickLogout}>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
-      </a>
+      <span style={{ display: 'flex', gap: '16px' }}>
+        <Typo.Body color={FONT_COLOR.GRAY_1}>{email} 계정으로 로그인됨</Typo.Body>
+        <a style={{ cursor: 'pointer' }} onClick={clickLogout}>
+          <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
+        </a>
+      </span>
     </FooterContainer>
   );
 };
@@ -208,6 +214,7 @@ const Setting: NextPage = () => {
   // const [noti, setNoti] = useRecoilState(myNotification);
   const [mailAgreement, setMyMailAgreement] = useRecoilState(myMailAgreement);
   const [blogList, setBlogList] = useRecoilState(myBloglist);
+  const setOauthEmail = useSetRecoilState(myOauthEmail);
   const [imgUrl, setImgUrl] = useState('');
 
   const websiteUrl = process.env.NEXT_PUBLIC_MODE === 'dev' ? 'https://dev.bricklog.io' : 'https://bricklog.io';
@@ -222,6 +229,7 @@ const Setting: NextPage = () => {
       setMyMailAgreement(data.mailAgreement);
       setMyInfo(data);
       setImgUrl(data?.profileImgSrc);
+      setOauthEmail(data?.email);
     },
   });
   useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
@@ -294,6 +302,10 @@ const Setting: NextPage = () => {
       switch (customError?.errorCode) {
         case 'INVALID_ARGUMENT':
           alert('유효한 URL이 아닙니다. 입력한 링크 URL을 확인하세요.');
+          break;
+        case 'USER_MODIFY_FAIL':
+          alert('중복된 URL 주소가 있습니다. 다른 URL 주소를 설정해주세요.');
+          break;
       }
     }
   };

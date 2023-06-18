@@ -15,11 +15,9 @@ import { mq } from '@/styles/mediaQuery';
 import IconApps from '@/assets/svgs/IconApps';
 import Image from 'next/image';
 import { LoginModalState } from '@/stores/modalStateStore';
-import { useRouter } from 'next/router';
 
 const Header = () => {
   const device = useResize();
-  const router = useRouter();
 
   const { isLogin } = useRecoilValue(AuthState);
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
@@ -27,8 +25,6 @@ const Header = () => {
   const { data } = useMyUser({ isLogin });
   const userData = data?.data;
   const path = userData?.path;
-  const email = userData?.email;
-  const currentPath = router.pathname;
 
   const handleModalOpen = () => {
     setIsLoginModalOpen({ isLoginModalOpen: true });
@@ -63,9 +59,6 @@ const Header = () => {
                 <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
               </Link>
             )}
-            {currentPath === '/setting' ? (
-              <Typo.H1 color={FONT_COLOR.GRAY_2}>{email} 계정으로 로그인 됨</Typo.H1>
-            ) : null}
             <IconApps />
             {/* {userData && (
               <Image
