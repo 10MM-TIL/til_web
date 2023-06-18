@@ -243,28 +243,7 @@ const Setting: NextPage = () => {
       console.log('onSuccess');
       queryClient.invalidateQueries(['putProfile']); // queryKey 유효성 제거
     },
-    // onError: () => {
-    //   alert('저장에 실패했습니다. 다시 시도해주세요');
-    // },
   });
-  // const saveNoti = useMutation(putMyNotification, {
-  //   onSuccess: () => {
-  //     console.log('onSuccess');
-  //     queryClient.invalidateQueries(['putNoti']);
-  //   },
-  //   // onError: () => {
-  //   //   alert('저장에 실패했습니다. 다시 시도해주세요');
-  //   // },
-  // });
-  // const saveBlog = useMutation(putMyBlog, {
-  //   onSuccess: () => {
-  //     console.log('onSuccess');
-  //     queryClient.invalidateQueries(['putBlog']);
-  //   },
-  //   // onError: () => {
-  //   //   alert('저장에 실패했습니다. 다시 시도해주세요');
-  //   // },
-  // });
 
   const handleSave = async () => {
     const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
@@ -289,36 +268,33 @@ const Setting: NextPage = () => {
     }
 
     const promises = [
-      saveProfile.mutateAsync(
-        {
-          categoryIdentifier: myInfo.categoryIdentifier,
-          introduction: myInfo.introduction,
-          name: myInfo.name,
-          path: myInfo.path,
-          profileImgSrc: imgUrl,
-          mailAgreement: mailAgreement,
-          blogs: blogList
-            .filter((item) => item?.url !== '')
-            .map((blog) => {
-              const { url } = blog;
-              if (url.includes('https://') || url.includes('http://')) {
-                return { url };
-              } else return { url: `https://${url}` };
-            }),
-        },
-        {
-          onError: () => {
-            alert('중복된 URL 주소가 있습니다. 다른 URL 주소를 설정해주세요.');
-          },
-        },
-      ),
+      saveProfile.mutateAsync({
+        categoryIdentifier: myInfo.categoryIdentifier,
+        introduction: myInfo.introduction,
+        name: myInfo.name,
+        path: myInfo.path,
+        profileImgSrc: imgUrl,
+        mailAgreement: mailAgreement,
+        blogs: blogList
+          .filter((item) => item?.url !== '')
+          .map((blog) => {
+            const { url } = blog;
+            if (url.includes('https://') || url.includes('http://')) {
+              return { url };
+            } else return { url: `https://${url}` };
+          }),
+      }),
     ];
     try {
       await Promise.all(promises).then((res) => {
         router.push(`/@${myInfo.path}`);
       });
     } catch (error) {
-      alert('저장에 실패했습니다. 다시 시도해주세요.');
+      const customError = error as { description: string; errorCode: string };
+      switch (customError?.errorCode) {
+        case 'INVALID_ARGUMENT':
+          alert('유효한 URL이 아닙니다. 입력한 링크 URL을 확인하세요.');
+      }
     }
   };
 
