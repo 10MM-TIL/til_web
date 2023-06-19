@@ -89,14 +89,13 @@ const TimelineComponent = ({
     onSuccess: () => {
       console.log('onSuccess');
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['POST'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
   });
   const removeTimeline = useMutation(deleteTimeline, {
     onSuccess: () => {
       console.log('onSuccess');
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['POST'] }),
-    // onSettled: () => queryClient.invalidateQueries(['POST'], { refetchInactive: true }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
   });
   const updateTimeline = (content: { title: string; desc: string; createdAt: number }) => {
     editTimeline.mutate({
@@ -310,9 +309,6 @@ const User: NextPage = () => {
   } = useQuery(['PROFILE', path], () => getUserProfile(path), {
     enabled: !!isReady,
   });
-  useEffect(() => {
-    console.log('OUT urlPath', urlPath);
-  }, [urlPath]);
 
   const { data: blogObject, refetch: blogRefetch } = useQuery(['BLOGS', path], () => getUserBlog(path));
 
