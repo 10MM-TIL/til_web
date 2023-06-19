@@ -260,7 +260,7 @@ const HomeTemplates = ({
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
                           body: recommandItem.summary,
-                          img: require('@/assets/images/test.png') as string,
+                          img: recommandItem.profileImgSrc,
                           name: recommandItem.userPath,
                           date: formatDate(recommandItem.createdAt),
                         }}
@@ -280,7 +280,7 @@ const HomeTemplates = ({
                               category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
                               header: post.title,
                               body: post.summary,
-                              img: require('@/assets/images/test.png') as string,
+                              img: post.profileImgSrc,
                               name: post.userPath,
                               date: formatDate(post.createdAt),
                             }}
@@ -332,7 +332,7 @@ const HomeTemplates = ({
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
                           body: recommandItem.summary,
-                          img: require('@/assets/images/test.png') as string,
+                          img: recommandItem.profileImgSrc,
                           name: recommandItem.userPath,
                           date: formatDate(recommandItem.createdAt),
                         }}
@@ -353,7 +353,7 @@ const HomeTemplates = ({
                             category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
                             header: post.title,
                             body: post.summary,
-                            img: require('@/assets/images/test.png') as string,
+                            img: post.profileImgSrc,
                             name: post.userPath,
                             date: formatDate(post.createdAt),
                           }}
