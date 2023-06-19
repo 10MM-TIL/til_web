@@ -25,7 +25,7 @@ const ProfileIcon = ({ imgUrl, editable = false, onClick }: ProfileIconProps) =>
   }, []);
 
   const handleClickOk = useCallback(() => {
-    onClick(selectdId);
+    if (onClick) onClick(selectdId);
     setIsModalOpen(false);
   }, [onClick, selectdId]);
 

@@ -25,7 +25,7 @@ export type fetchAllPostsResponse = {
 };
 
 // 카테고리별 포스트 리스트 요청
-export const fetchAllPosts = async (category: string, pageToken: string = '') => {
+export const fetchAllPosts = async (category?: string, pageToken: string = '') => {
   const params: fetchAllPostsRequest = pageToken
     ? { identifier: category, size: 3 * 5, pageToken }
     : { identifier: category, size: 3 * 5 };

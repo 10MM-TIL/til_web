@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - develop
+      - build-test
 
 env:
   S3_BUCKET_NAME: til-web

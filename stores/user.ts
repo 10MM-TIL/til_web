@@ -25,3 +25,8 @@ export const clickedGrassDate = atom<string>({
   key: 'clickedGrassDate',
   default: '',
 });
+
+export const myOauthEmail = atom<string>({
+  key: 'myOauthEmail',
+  default: '',
+});

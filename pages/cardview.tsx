@@ -28,7 +28,7 @@ const CardView = ({ category }: CardViewPageProps) => {
 
   const onClickUser = useCallback(
     (userpath: string = '') => {
-      router.push(`/${userpath}`);
+      router.push(`/@${userpath}`);
     },
     [router],
   );

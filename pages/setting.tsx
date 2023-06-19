@@ -29,7 +29,7 @@ import AddBlog from '@/components/Atom/AddBlog';
 import ToastMessage from '@/components/ToastMessage';
 
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
-import { myBloglist, myMailAgreement, myNotification } from '@/stores/user';
+import { myBloglist, myMailAgreement, myNotification, myOauthEmail } from '@/stores/user';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfile, putMyProfile, getMyNotification, putMyNotification, putMyBlog } from 'apis/setting';
@@ -37,6 +37,10 @@ import { usePutMyProfile } from '@/hooks/queries/saveQuery';
 import { getUserBlog } from '@/apis/user';
 import useToast from '@/hooks/useToast';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
+import { logout } from '@/utils/utils';
+import { getCookie } from 'cookies-next';
+import LoginModal from '@/components/Molecules/LoginModal';
+import { useRouter } from 'next/router';
 
 const CategoryLayout = ({
   selectedCategoryId,
@@ -78,14 +82,14 @@ const NoticeLayout = () => {
 
   return (
     <div>
-      <BoxLayout title='알림 설정'>
+      {/* <BoxLayout title='알림 설정'>
         <div style={{ display: 'flex', gap: '20px' }}>
           <Toggle isOn={enable} onIsOnToggle={handleToggleClick} />
           <div>
             <RadioGroup data={DATA} selectedId={iteration} onClick={handleRadioClick} />
           </div>
         </div>
-      </BoxLayout>
+      </BoxLayout> */}
       <div style={{ float: 'right', marginRight: '8px' }}>
         <div style={{ marginLeft: '68px' }}>
           <CheckboxLabel
@@ -117,9 +121,6 @@ const BlogLinkLayout = () => {
       }),
     );
   };
-  // const getMaximumId = (list: Array<{ id: string; url: string }>) => {
-  //   return list.reduce((min, p) => (Number(p.id) > Number(min) ? p.id : min), list[0].id);
-  // };
   const handleAddBlog = () => {
     if (blogList.length < 6) {
       setBlogList([...blogList, { identifier: Math.random().toString(36).substring(2, 11), url: '' }]);
@@ -145,6 +146,7 @@ const BlogLinkLayout = () => {
                       blogName={blogItem.url}
                       onDeleteBlog={handleDeleteBlog}
                       setBlogUrl={setBlog}
+                      placeholder='https://your-blog.com'
                     />
                   );
                 })
@@ -175,9 +177,14 @@ const SaveLayout = ({ onClick }: any) => {
 };
 
 const FooterLayout = () => {
+  const email = useRecoilValue(myOauthEmail);
+  const clickLogout = () => {
+    logout(true);
+  };
+
   return (
     <FooterContainer>
-      <span style={{ display: 'flex', gap: '42px' }}>
+      <span style={{ display: 'flex', gap: '34px' }}>
         <a
           href='https://www.plip.kr/pcc/c791921f-5dc3-4cb0-baac-55e48ee2e585/privacy-policy'
           target='_blank'
@@ -188,44 +195,54 @@ const FooterLayout = () => {
         <a href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7' target='_blank' rel='noopener noreferrer'>
           <Typo.Body color={FONT_COLOR.GRAY_2}>서비스 이용 약관</Typo.Body>
         </a>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>회원탈퇴</Typo.Body>
+        <a href='https://tally.so/r/w5bNJd' target='_blank' rel='noopener noreferrer'>
+          <Typo.Body color={FONT_COLOR.GRAY_2}>회원탈퇴</Typo.Body>
+        </a>
       </span>
-      <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
+      <span style={{ display: 'flex', gap: '16px' }}>
+        <Typo.Body color={FONT_COLOR.GRAY_1}>{email} 계정으로 로그인됨</Typo.Body>
+        <a style={{ cursor: 'pointer' }} onClick={clickLogout}>
+          <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
+        </a>
+      </span>
     </FooterContainer>
   );
 };
 
 const Setting: NextPage = () => {
   const [myInfo, setMyInfo] = useState<any>({});
-  const [noti, setNoti] = useRecoilState(myNotification);
+  // const [noti, setNoti] = useRecoilState(myNotification);
   const [mailAgreement, setMyMailAgreement] = useRecoilState(myMailAgreement);
   const [blogList, setBlogList] = useRecoilState(myBloglist);
-  const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
+  const setOauthEmail = useSetRecoilState(myOauthEmail);
+  const [imgUrl, setImgUrl] = useState('');
+
+  const websiteUrl = process.env.NEXT_PUBLIC_MODE === 'dev' ? 'https://dev.bricklog.io' : 'https://bricklog.io';
+
   const [id, setId] = useState(0);
   const [isChangeInput, setIsChangeInput] = useState(false);
-  const { isOpen, showToast, text } = useToast();
+  const accessToken = getCookie('accToken');
+  const router = useRouter();
 
-  const { data: userProfile } = useQuery(['myProfile'], getMyProfile, {
+  const { data: userProfile, refetch } = useQuery(['myProfile'], getMyProfile, {
     onSuccess: (data) => {
-      setMyMailAgreement(data.isMailAgreement);
+      setMyMailAgreement(data.mailAgreement);
       setMyInfo(data);
-    },
-    onError: () => {
-      alert('error');
+      setImgUrl(data?.profileImgSrc);
+      setOauthEmail(data?.email);
     },
   });
   useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
     enabled: !!userProfile,
     onSuccess: (data) => {
-      console.log(data);
       setBlogList(data.blogs);
     },
   });
-  useQuery(['myNoti'], getMyNotification, {
-    onSuccess: (data) => {
-      setNoti(data);
-    },
-  });
+  // useQuery(['myNoti'], getMyNotification, {
+  //   onSuccess: (data) => {
+  //     setNoti(data);
+  //   },
+  // });
 
   const queryClient = useQueryClient();
   const saveProfile = useMutation(putMyProfile, {
@@ -234,92 +251,79 @@ const Setting: NextPage = () => {
       console.log('onSuccess');
       queryClient.invalidateQueries(['putProfile']); // queryKey 유효성 제거
     },
-    // onError: () => {
-    //   alert('저장에 실패했습니다. 다시 시도해주세요');
-    // },
-  });
-  const saveNoti = useMutation(putMyNotification, {
-    onSuccess: () => {
-      console.log('onSuccess');
-      queryClient.invalidateQueries(['putNoti']);
-    },
-    // onError: () => {
-    //   alert('저장에 실패했습니다. 다시 시도해주세요');
-    // },
-  });
-  const saveBlog = useMutation(putMyBlog, {
-    onSuccess: () => {
-      console.log('onSuccess');
-      queryClient.invalidateQueries(['putBlog']);
-    },
-    // onError: () => {
-    //   alert('저장에 실패했습니다. 다시 시도해주세요');
-    // },
   });
 
   const handleSave = async () => {
-    const promises = [
-      saveProfile.mutate(
-        {
-          categoryIdentifier: myInfo.categoryIdentifier,
-          introduction: myInfo.introduction,
-          name: myInfo.name,
-          path: myInfo.path,
-          profileImgSrc: 'https://raw.githubusercontent.com/Brick-log/til-server/main/default.png',
-          mailAgreement: mailAgreement,
-        },
-        {
-          onError: () => {
-            alert('중복된 URL 주소가 있습니다. 다른 URL 주소를 설정해주세요.');
-          },
-        },
-      ),
-      saveNoti.mutate(noti),
-      saveBlog.mutate(
-        blogList.map((blog) => {
-          return { url: blog.url };
-        }),
-      ),
-    ];
+    const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
+    const pathReg = /[^a-zA-Z0-9-]/gi;
+    const nameValue = myInfo.name;
+    const pathValue = myInfo.path;
+    if (nameReg.test(nameValue)) {
+      alert('이름은 한글, 영어, 숫자로만 설정할 수 있어요.');
+      return;
+    }
+    if (pathReg.test(pathValue)) {
+      alert('URL 주소는 영어, 숫자, 하이픈(-)으로만 설정할 수 있어요.');
+      return;
+    }
+    if (nameValue === '') {
+      alert('이름을 입력해주세요.');
+      return;
+    }
+    if (pathValue === '') {
+      alert('URL 주소를 입력해주세요.');
+      return;
+    }
 
+    const promises = [
+      saveProfile.mutateAsync({
+        categoryIdentifier: myInfo.categoryIdentifier,
+        introduction: myInfo.introduction,
+        name: myInfo.name,
+        path: myInfo.path,
+        profileImgSrc: imgUrl,
+        mailAgreement: mailAgreement,
+        blogs: blogList
+          .filter((item) => item?.url !== '')
+          .map((blog) => {
+            const { url } = blog;
+            if (url.includes('https://') || url.includes('http://')) {
+              return { url };
+            } else return { url: `https://${url}` };
+          }),
+      }),
+    ];
     try {
       await Promise.all(promises).then((res) => {
-        showToast(
-          <>
-            <IconCheckBig />
-            <Typo.H1 color={FONT_COLOR.WHITE}>저장이 완료되었습니다</Typo.H1>
-          </>,
-        );
+        router.push(`/@${myInfo.path}`);
       });
     } catch (error) {
-      alert('저장에 실패했습니다. 다시 시도해주세요.');
+      const customError = error as { description: string; errorCode: string };
+      switch (customError?.errorCode) {
+        case 'INVALID_ARGUMENT':
+          alert('유효한 URL이 아닙니다. 입력한 링크 URL을 확인하세요.');
+          break;
+        case 'USER_MODIFY_FAIL':
+          alert('중복된 URL 주소가 있습니다. 다른 URL 주소를 설정해주세요.');
+          break;
+      }
     }
   };
 
   const handleChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const nameValue = e.target.value;
-    const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
-    if (!nameReg.test(nameValue)) {
-      setIsChangeInput(true);
-      setMyInfo((prev: any) => {
-        return { ...prev, name: nameValue };
-      });
-    } else {
-      alert('이름은 한글, 영어, 숫자로만 설정할 수 있어요.');
-    }
+    setIsChangeInput(true);
+    setMyInfo((prev: any) => {
+      return { ...prev, name: nameValue };
+    });
   }, []);
 
   const handleChangePath = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const pathValue = e.target.value;
-    const pathReg = /[^a-zA-Z0-9-]/gi;
-    if (!pathReg.test(pathValue)) {
-      setIsChangeInput(true);
-      setMyInfo((prev: any) => {
-        return { ...prev, path: pathValue };
-      });
-    } else {
-      alert('URL 주소는 영어, 숫자, 하이픈(-)으로만 설정할 수 있어요.');
-    }
+    setIsChangeInput(true);
+    setMyInfo((prev: any) => {
+      return { ...prev, path: pathValue };
+    });
   }, []);
   const handleChangeIntroduction = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setIsChangeInput(true);
@@ -337,51 +341,57 @@ const Setting: NextPage = () => {
     });
   }, []);
   useEffect(() => {
-    if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
-  }, [id]);
+    if (id > 0) setImgUrl(`${websiteUrl}/images/profile/${id}.png`);
+  }, [id, websiteUrl]);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
-    <EditpageWrapper>
-      <EditpageContainer>
-        <ProfileContainer>
-          <PhotoContainer>
-            <ProfileIcon
-              editable={true}
-              imgUrl={url}
-              onClick={(id) => {
-                handleChangeProfile(id);
-              }}
-            />
-          </PhotoContainer>
-          <InputContainer>
-            <TextField
-              title='URL 주소 설정'
-              isInput={true}
-              useFixedString={true}
-              inputValue={myInfo.path}
-              useCopy={true}
-              onChange={handleChangePath}
-            />
-            <TextField title='이름' isInput={true} inputValue={myInfo.name} onChange={handleChangeName} />
-            <TextField
-              title='소개'
-              isInput={false}
-              inputValue={myInfo.introduction}
-              onChange={handleChangeIntroduction}
-            />
-          </InputContainer>
-        </ProfileContainer>
-        <CheckContainer>
-          <CategoryLayout selectedCategoryId={myInfo.categoryIdentifier} onClick={handleChangeCategory} />
-          <NoticeLayout />
-          <BlogLinkLayout />
-          {/* <DownloadLayout /> */}
-        </CheckContainer>
-        <SaveLayout onClick={handleSave} />
-        <FooterLayout />
-      </EditpageContainer>
-      {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
-    </EditpageWrapper>
+    <>
+      <EditpageWrapper>
+        <EditpageContainer>
+          <ProfileContainer>
+            <PhotoContainer>
+              <ProfileIcon
+                editable={true}
+                imgUrl={imgUrl}
+                onClick={(id) => {
+                  handleChangeProfile(id);
+                }}
+              />
+            </PhotoContainer>
+            <InputContainer>
+              <TextField
+                title='URL 주소 설정'
+                isInput={true}
+                useFixedString={true}
+                inputValue={myInfo.path}
+                useCopy={true}
+                onChange={handleChangePath}
+              />
+              <TextField title='이름' isInput={true} inputValue={myInfo.name} onChange={handleChangeName} />
+              <TextField
+                title='소개'
+                isInput={false}
+                inputValue={myInfo.introduction}
+                onChange={handleChangeIntroduction}
+              />
+            </InputContainer>
+          </ProfileContainer>
+          <CheckContainer>
+            <CategoryLayout selectedCategoryId={myInfo.categoryIdentifier} onClick={handleChangeCategory} />
+            <NoticeLayout />
+            <BlogLinkLayout />
+            {/* <DownloadLayout /> */}
+          </CheckContainer>
+          <SaveLayout onClick={handleSave} />
+          <FooterLayout />
+        </EditpageContainer>
+      </EditpageWrapper>
+      {!accessToken && <LoginModal />}
+    </>
   );
 };
 
