@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { CardProps } from './types';
-
+import { mq } from '@/styles/mediaQuery';
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
 export const CardContainer = styled.div<{ size: CardProps['size'] }>`
@@ -29,7 +29,13 @@ export const CardContainer = styled.div<{ size: CardProps['size'] }>`
 export const CardBodyContent = styled.div`
   cursor: pointer;
 `;
-
+export const CardTitle = styled.div`
+  > h2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;
 export const TagWrapper = styled.div`
   display: inline;
   cursor: pointer;
@@ -41,17 +47,16 @@ export const CardHeader = styled.div`
 `;
 
 export const CardBodyDesc = styled.div`
-  width: 241px;
   > p {
     overflow: hidden;
-    white-space: nowrap;
     text-overflow: ellipsis;
-    word-break: break-all;
+    white-space: nowrap;
   }
 `;
 export const CardUserProfile = styled.div`
   margin-right: 8px;
   transition: all 0.3s ease;
+
   > span {
     ::after {
       content: '';

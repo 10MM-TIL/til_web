@@ -7,14 +7,14 @@ const nextConfig = {
   },
   images: {
     domains: ['search.pstatic.net'],
-    // remotePatterns: [
-    //   {
-    //     protocol: 'https',
-    //     hostname: 'api.surfit.io',
-    //     port: '',
-    //     pathname: '/**',
-    //   },
-    // ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'dev.bricklog.io',
+        port: '',
+        pathname: '/**',
+      },
+    ],
     domains: ['search.pstatic.net', 'raw.githubusercontent.com'],
   },
   webpack: (config) => {

@@ -50,7 +50,7 @@ const PopularCard = ({
                     category: categories.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                     header: recommandItem.title,
                     body: recommandItem.summary,
-                    img: require('@/assets/images/test.png') as string,
+                    img: recommandItem.profileImgSrc,
                     name: recommandItem.userPath,
                     date: formatDate(recommandItem.createdAt),
                   }}

@@ -52,9 +52,9 @@ const Card = ({
         })}
       </Styled.CardHeader>
       <Styled.CardBodyContent>
-        <div>
+        <Styled.CardTitle>
           <Typo.H2 color='#DADFE6'>{content?.header}</Typo.H2>
-        </div>
+        </Styled.CardTitle>
         <Styled.CardBodyDesc>
           <Typo.Body color='#636C78'>{content?.body}</Typo.Body>
         </Styled.CardBodyDesc>
@@ -65,7 +65,7 @@ const Card = ({
           onClickUser(userpath);
         }}
       >
-        <Image src={content?.img as string} alt='test' width={19} height={19} />
+        <Image src={content?.img || ''} alt='profileImg' width={19} height={19} />
         <Styled.CardUserProfile>
           <Typo.Label1 color='#C5CAD0'>{content?.name}</Typo.Label1>
         </Styled.CardUserProfile>

@@ -23,7 +23,7 @@ const MetaHead = ({ metaContents }: { metaContents: MetaContents }) => {
         <meta charSet='utf-8' />
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
         <meta name='HandheldFriendly' content='True' />
-        <meta name='MoblieOptimized' content='320' />
+        <meta name='MobileOptimized' content='320' />
         <meta
           name='viewport'
           content='user-scalable=no, maximum-scale=1.0, minimum-scale=1.0, width=device-width, initial-scale=1.0'
