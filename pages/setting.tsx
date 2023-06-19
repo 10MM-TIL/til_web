@@ -26,7 +26,6 @@ import RadioGroup from '@/components/Molecules/RadioGroup';
 import Toggle from '@/components/Atom/Toggle';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import AddBlog from '@/components/Atom/AddBlog';
-import ToastMessage from '@/components/ToastMessage';
 
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
 import { myBloglist, myMailAgreement, myNotification, myOauthEmail } from '@/stores/user';
@@ -35,7 +34,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfile, putMyProfile, getMyNotification, putMyNotification, putMyBlog } from 'apis/setting';
 import { usePutMyProfile } from '@/hooks/queries/saveQuery';
 import { getUserBlog } from '@/apis/user';
-import useToast from '@/hooks/useToast';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import { logout } from '@/utils/utils';
 import { getCookie } from 'cookies-next';
@@ -200,7 +198,7 @@ const FooterLayout = () => {
         </a>
       </span>
       <span style={{ display: 'flex', gap: '16px' }}>
-        <Typo.Body color={FONT_COLOR.GRAY_1}>{email} 계정으로 로그인됨</Typo.Body>
+        <Typo.Body color={FONT_COLOR.GRAY_1}>로그인 계정 {email}</Typo.Body>
         <a style={{ cursor: 'pointer' }} onClick={clickLogout}>
           <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
         </a>
@@ -249,7 +247,7 @@ const Setting: NextPage = () => {
     onSuccess: () => {
       // 요청이 성공한 경우
       console.log('onSuccess');
-      queryClient.invalidateQueries(['putProfile']); // queryKey 유효성 제거
+      queryClient.invalidateQueries(['MY_USER']); // queryKey 유효성 제거
     },
   });
 
@@ -306,6 +304,8 @@ const Setting: NextPage = () => {
         case 'USER_MODIFY_FAIL':
           alert('중복된 URL 주소가 있습니다. 다른 URL 주소를 설정해주세요.');
           break;
+        default:
+          alert('저장에 실패했습니다. 다시 시도해주세요.');
       }
     }
   };
