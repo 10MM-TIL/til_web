@@ -168,7 +168,7 @@ const SaveLayout = ({ onClick }: any) => {
   return (
     <SaveButtonContainer>
       <Button size={device === 'desktop' ? 'lg' : 'x-lg-m'} onClick={onClick}>
-        저장하기
+        <Typo.H2>저장하기</Typo.H2>
       </Button>
     </SaveButtonContainer>
   );
