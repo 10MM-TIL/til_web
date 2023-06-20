@@ -91,6 +91,7 @@ export const BlogLinkList = styled.div`
 
 export const SaveButtonContainer = styled.div`
   padding-top: 14px;
+  padding-bottom: 48px;
   ${mq('desktop')} {
     padding: 40px 163px;
   }

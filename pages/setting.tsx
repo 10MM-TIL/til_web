@@ -168,7 +168,7 @@ const SaveLayout = ({ onClick }: any) => {
   return (
     <SaveButtonContainer>
       <Button size={device === 'desktop' ? 'lg' : 'x-lg-m'} onClick={onClick}>
-        저장하기
+        <Typo.H2>저장하기</Typo.H2>
       </Button>
     </SaveButtonContainer>
   );
@@ -230,7 +230,7 @@ const Setting: NextPage = () => {
       setOauthEmail(data?.email);
     },
   });
-  useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
+  const { refetch: blogRefetch } = useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
     enabled: !!userProfile,
     onSuccess: (data) => {
       setBlogList(data.blogs);
@@ -346,7 +346,8 @@ const Setting: NextPage = () => {
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+    blogRefetch();
+  }, [refetch, blogRefetch]);
 
   return (
     <>
@@ -369,9 +370,16 @@ const Setting: NextPage = () => {
                 useFixedString={true}
                 inputValue={myInfo.path}
                 useCopy={true}
+                maxLength={20}
                 onChange={handleChangePath}
               />
-              <TextField title='이름' isInput={true} inputValue={myInfo.name} onChange={handleChangeName} />
+              <TextField
+                title='이름'
+                isInput={true}
+                inputValue={myInfo.name}
+                maxLength={20}
+                onChange={handleChangeName}
+              />
               <TextField
                 title='소개'
                 isInput={false}
