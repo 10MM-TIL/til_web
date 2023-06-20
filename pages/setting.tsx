@@ -230,7 +230,7 @@ const Setting: NextPage = () => {
       setOauthEmail(data?.email);
     },
   });
-  useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
+  const { refetch: blogRefetch } = useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
     enabled: !!userProfile,
     onSuccess: (data) => {
       setBlogList(data.blogs);
@@ -346,7 +346,8 @@ const Setting: NextPage = () => {
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+    blogRefetch();
+  }, [refetch, blogRefetch]);
 
   return (
     <>
