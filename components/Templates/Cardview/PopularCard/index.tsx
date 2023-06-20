@@ -51,7 +51,7 @@ const PopularCard = ({
                     header: recommandItem.title,
                     body: recommandItem.summary,
                     img: recommandItem.profileImgSrc,
-                    name: recommandItem.userPath,
+                    name: recommandItem.userName,
                     date: formatDate(recommandItem.createdAt),
                   }}
                   hasBadge={true}

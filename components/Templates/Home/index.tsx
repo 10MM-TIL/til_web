@@ -261,7 +261,7 @@ const HomeTemplates = ({
                           header: recommandItem.title,
                           body: recommandItem.summary,
                           img: recommandItem.profileImgSrc,
-                          name: recommandItem.userPath,
+                          name: recommandItem.userName,
                           date: formatDate(recommandItem.createdAt),
                         }}
                         hasBadge={true}
@@ -281,7 +281,7 @@ const HomeTemplates = ({
                               header: post.title,
                               body: post.summary,
                               img: post.profileImgSrc,
-                              name: post.userPath,
+                              name: post.userName,
                               date: formatDate(post.createdAt),
                             }}
                             url={post.url}
@@ -333,7 +333,7 @@ const HomeTemplates = ({
                           header: recommandItem.title,
                           body: recommandItem.summary,
                           img: recommandItem.profileImgSrc,
-                          name: recommandItem.userPath,
+                          name: recommandItem.userName,
                           date: formatDate(recommandItem.createdAt),
                         }}
                         hasBadge={true}
@@ -354,7 +354,7 @@ const HomeTemplates = ({
                             header: post.title,
                             body: post.summary,
                             img: post.profileImgSrc,
-                            name: post.userPath,
+                            name: post.userName,
                             date: formatDate(post.createdAt),
                           }}
                           url={post.url}

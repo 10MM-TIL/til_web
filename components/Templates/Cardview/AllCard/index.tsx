@@ -74,7 +74,7 @@ const AllCard = ({
                       header: allCard.title,
                       body: allCard.summary,
                       img: allCard.profileImgSrc,
-                      name: allCard.userPath,
+                      name: allCard.userName,
                       date: formatDate(allCard.createdAt),
                     }}
                     url={allCard.url}
