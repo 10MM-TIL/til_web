@@ -370,9 +370,16 @@ const Setting: NextPage = () => {
                 useFixedString={true}
                 inputValue={myInfo.path}
                 useCopy={true}
+                maxLength={20}
                 onChange={handleChangePath}
               />
-              <TextField title='이름' isInput={true} inputValue={myInfo.name} onChange={handleChangeName} />
+              <TextField
+                title='이름'
+                isInput={true}
+                inputValue={myInfo.name}
+                maxLength={20}
+                onChange={handleChangeName}
+              />
               <TextField
                 title='소개'
                 isInput={false}
