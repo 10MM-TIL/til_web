@@ -39,6 +39,8 @@ import { logout } from '@/utils/utils';
 import { getCookie } from 'cookies-next';
 import LoginModal from '@/components/Molecules/LoginModal';
 import { useRouter } from 'next/router';
+import { AuthState } from '@/stores/authStateStore';
+import { LoginModalState } from '@/stores/modalStateStore';
 
 const CategoryLayout = ({
   selectedCategoryId,
@@ -177,7 +179,8 @@ const SaveLayout = ({ onClick }: any) => {
 const FooterLayout = () => {
   const email = useRecoilValue(myOauthEmail);
   const clickLogout = () => {
-    logout(true);
+    logout(false);
+    location.replace('/');
   };
 
   return (
