@@ -80,7 +80,7 @@ const Test: NextPage = () => {
         `}
       >
         <h1>컴포넌트를 위한 테스트 페이지입니다.</h1>
-        <ProfilComponent />
+        {/* <ProfilComponent /> */}
         <TypoComponent></TypoComponent>
         <ToggleComponent></ToggleComponent>
         <CertifiedBlogComponent></CertifiedBlogComponent>
@@ -106,7 +106,7 @@ const ProfilComponent = () => {
    * 저장 버튼 누를 때 url 던져줘야하는데 image 주소 필요 HOW?
    */
   const [id, setId] = useState(0);
-  const [url, setUrl] = useState(require('@/assets/images/profile/default.png') as string);
+  // const [url, setUrl] = useState(require('@/assets/images/profile/default.png') as string);
 
   useEffect(() => {
     if (id > 0) setUrl(require(`@/assets/images/profile/${id}.png`) as string);
