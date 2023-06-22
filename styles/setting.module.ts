@@ -11,7 +11,7 @@ export const EditpageWrapper = styled.div`
 export const EditpageContainer = styled.div`
   max-width: 328px;
   margin: 0 auto;
-  padding-top: 134px;
+  padding-top: 54px;
   ${mq('desktop')} {
     max-width: 781px;
   }
@@ -32,6 +32,7 @@ export const ProfileContainer = styled.div`
 export const PhotoContainer = styled.div`
   ${mq('desktop')} {
     padding-left: 26px;
+    align-self: flex-start;
   }
 `;
 
@@ -90,6 +91,7 @@ export const BlogLinkList = styled.div`
 
 export const SaveButtonContainer = styled.div`
   padding-top: 14px;
+  padding-bottom: 48px;
   ${mq('desktop')} {
     padding: 40px 163px;
   }

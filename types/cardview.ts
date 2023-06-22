@@ -16,6 +16,7 @@ export type recommandPostItem = {
   createdAt: string;
   hitCount: number;
   profileImgSrc: string;
+  userName: string;
 };
 
 export type allPostItem = {
@@ -28,4 +29,5 @@ export type allPostItem = {
   createdAt: string;
   hitCount: number;
   profileImgSrc: string;
+  userName: string;
 };

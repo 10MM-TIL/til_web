@@ -6,6 +6,9 @@ import { Custom404Wrapper, ImageContainer, TextContainer } from '@/styles/404.mo
 import { Button } from '@/components/Atom/Button';
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
+import Icon404 from '@/assets/svgs/Icon404';
+import Spinner from '@/components/Atom/Spinner';
+import styles from '@/components/Molecules/OAuthLoading/OAuthLoading.styled';
 
 const Custom404 = () => {
   const device = useResize();
@@ -19,7 +22,7 @@ const Custom404 = () => {
     <>
       <Custom404Wrapper>
         <ImageContainer>
-          <Image alt='404' src={require('@/assets/images/404ERROR.png')} />
+          <Icon404 isDesktop={device === 'desktop'} />
         </ImageContainer>
         <TextContainer>
           {device === 'desktop' ? (

@@ -15,7 +15,7 @@ export const getPostUserPathMetaAPI = async ({ path }: { path: string }) => {
 export const postPostUploadRequestAPI = async ({ url }: { url: string }) => {
   try {
     const res = await instance.post(`/post/upload/request`, { url });
-    console.log(res);
+
     return res;
   } catch (e) {
     devError('postPostUploadRequestAPI error ', e);
@@ -24,19 +24,19 @@ export const postPostUploadRequestAPI = async ({ url }: { url: string }) => {
 };
 
 export const postPostUploadConfirmAPI = async ({
-  identifier,
+  url,
   title,
   summary,
   createdAt,
 }: {
-  identifier: string;
+  url: string;
   title: string;
   summary: string;
   createdAt: string;
 }) => {
   try {
-    const res = await instance.post(`/post/upload/confirm`, { identifier, title, summary, createdAt });
-
+    const res = await instance.post(`/post/upload/confirm`, { url, title, summary, createdAt });
+    console.log(res);
     return res;
   } catch (e) {
     devError('postPostUploadConfirmAPI error ', e);

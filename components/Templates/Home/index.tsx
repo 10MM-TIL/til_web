@@ -1,35 +1,48 @@
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 import * as Typo from '@/components/Atom/Typography';
 import { Button } from '@/components/Atom/Button';
 import { useResize } from '@/hooks/useResize';
-import { IconPlus } from '@/assets/svgs/IconPlus';
-import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
-import { ChangeEventHandler, useCallback } from 'react';
+import { FONT_COLOR } from '@/constants/color';
+import { ChangeEventHandler, RefObject, SyntheticEvent, useState } from 'react';
 import State from '@/components/Atom/State';
 import styles from './Home.styled';
 import IconArrow from '@/assets/svgs/IconArrow';
 import Link from 'next/link';
-import { mq } from '@/styles/mediaQuery';
 import { useAllPosts, useRecommandPosts } from '@/hooks/queries/cardviewQuery';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { Card } from '@/components/Atom/Card';
 import { formatDate } from '@/utils/utils';
-import { useRouter } from 'next/router';
 import { useCategories } from '@/hooks/queries/categoryQuery';
 import { LoginModalState } from '@/stores/modalStateStore';
 import { TimeLine } from '@/components/Atom/TimeLine';
+import Spinner from '@/components/Atom/Spinner';
+import BlogIcon from '@/components/Atom/BlogIcon';
+import { IconCalendar } from '@/assets/svgs/IconCalendar';
+import { ko } from 'date-fns/locale';
 
 interface HomeTemplatesProps {
   selectedTab: 'MEMO' | 'REVIEW';
   typingState: '' | 'checked' | 'saving' | 'error';
+  isUrlLoading: boolean;
   memoValue: string;
   url: string;
   isValidUrl: boolean;
+  date: string;
+  title: string;
+  summary: string;
+  titleRef: RefObject<HTMLInputElement>;
 
   onTabChange: (type: 'MEMO' | 'REVIEW') => void;
   onMemoChange: ChangeEventHandler<HTMLTextAreaElement>;
   onUrlChange: ChangeEventHandler<HTMLInputElement>;
   onUrlCheck: () => void;
+  onDateChange: (date: Date | null, event: SyntheticEvent<any, Event> | undefined) => void;
+  onTitleChange: ChangeEventHandler<HTMLInputElement>;
+  onSummaryChange: ChangeEventHandler<HTMLInputElement>;
+  onUrlConfirm: () => void;
   onClickContent: (url?: string) => void;
   onClickUser: (userpath?: string) => void;
 }
@@ -37,15 +50,24 @@ interface HomeTemplatesProps {
 const HomeTemplates = ({
   selectedTab,
   typingState,
+  isUrlLoading,
   memoValue,
   url,
+  isValidUrl,
+  date,
+  title,
+  summary,
+  titleRef,
   onMemoChange,
   onUrlChange,
   onUrlCheck,
+  onDateChange,
+  onTitleChange,
+  onSummaryChange,
+  onUrlConfirm,
   onTabChange,
   onClickContent,
   onClickUser,
-  isValidUrl,
 }: HomeTemplatesProps) => {
   const device = useResize();
 
@@ -93,7 +115,7 @@ const HomeTemplates = ({
                   target='_blank'
                   css={styles.reviewGuide}
                 >
-                  <Typo.Label2 color={FONT_COLOR.GRAY_1}>본인 작성 콘텐츠만 작성 가능</Typo.Label2>
+                  <Typo.Label2 color={FONT_COLOR.GRAY_1}>본인의 콘텐츠만 등록해 주세요.</Typo.Label2>
                 </Link>
               )}
               {selectedTab === 'MEMO' ? (
@@ -126,20 +148,64 @@ const HomeTemplates = ({
                     />
                     <button
                       type='button'
-                      css={styles.reviewLoadBtn({ isEnable: url.length > 0 && !isValidUrl })}
+                      css={styles.reviewLoadBtn({ isEnable: url.length > 0 && !isValidUrl && !isUrlLoading })}
                       onClick={onUrlCheck}
+                      disabled={isUrlLoading}
                     >
-                      불러오기
+                      {isUrlLoading ? <Spinner size='16px' /> : '불러오기'}
                     </button>
                   </div>
                   {isValidUrl && (
-                    <div>
-                      <TimeLine
-                        changable
-                        onDeleteContent={() => console.log(1)}
-                        onSaveAllContent={() => console.log(2)}
-                      />
-                      <Button size='sm'>등록</Button>
+                    <div css={styles.timelineContainer}>
+                      <div css={styles.timeline}>
+                        {/* 타임라인 */}
+                        <div css={styles.timelineLeftArea}>
+                          {/* LEFT (INPUT AREA) */}
+
+                          <DatePicker
+                            locale={ko}
+                            showPopperArrow={false}
+                            dateFormat={'yyyy.MM.dd'}
+                            selected={date === '' ? null : new Date(date)}
+                            onChange={onDateChange}
+                            customInput={
+                              <div css={styles.timelineCalendar}>
+                                <Typo.Label1 color={FONT_COLOR.GRAY_3}>
+                                  {date === '' ? '날짜를 입력해주세요' : date}
+                                </Typo.Label1>
+                                <IconCalendar />
+                              </div>
+                            }
+                          />
+
+                          <div css={styles.timelineInputContainer}>
+                            <input
+                              ref={titleRef}
+                              placeholder='불러온 글의 제목을 작성해주세요.'
+                              maxLength={30}
+                              value={title}
+                              css={styles.timelineTitleInput}
+                              onChange={onTitleChange}
+                            />
+                            <input
+                              placeholder='불러온 글을 설명해주세요.'
+                              maxLength={100}
+                              value={summary}
+                              css={styles.timelineSummaryInput}
+                              onChange={onSummaryChange}
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          {/* RIGHT (ICON AREA) */}
+                          <BlogIcon url={url} />
+                        </div>
+                      </div>
+                      <div css={styles.timelineSubmitBtnContainer}>
+                        <Button size='sm' onClick={onUrlConfirm}>
+                          등록
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -194,8 +260,8 @@ const HomeTemplates = ({
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
                           body: recommandItem.summary,
-                          img: require('@/assets/images/test.png') as string,
-                          name: recommandItem.userPath,
+                          img: recommandItem.profileImgSrc,
+                          name: recommandItem.userName,
                           date: formatDate(recommandItem.createdAt),
                         }}
                         hasBadge={true}
@@ -214,8 +280,8 @@ const HomeTemplates = ({
                               category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
                               header: post.title,
                               body: post.summary,
-                              img: require('@/assets/images/test.png') as string,
-                              name: post.userPath,
+                              img: post.profileImgSrc,
+                              name: post.userName,
                               date: formatDate(post.createdAt),
                             }}
                             url={post.url}
@@ -266,8 +332,8 @@ const HomeTemplates = ({
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
                           body: recommandItem.summary,
-                          img: require('@/assets/images/test.png') as string,
-                          name: recommandItem.userPath,
+                          img: recommandItem.profileImgSrc,
+                          name: recommandItem.userName,
                           date: formatDate(recommandItem.createdAt),
                         }}
                         hasBadge={true}
@@ -287,8 +353,8 @@ const HomeTemplates = ({
                             category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
                             header: post.title,
                             body: post.summary,
-                            img: require('@/assets/images/test.png') as string,
-                            name: post.userPath,
+                            img: post.profileImgSrc,
+                            name: post.userName,
                             date: formatDate(post.createdAt),
                           }}
                           url={post.url}

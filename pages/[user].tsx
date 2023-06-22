@@ -1,6 +1,6 @@
 // [user].tsx
 import type { NextPage, NextPageContext } from 'next';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   MypageWrapper,
   MypageContainer,
@@ -22,7 +22,7 @@ import { GrassArea } from '@/components/Molecules/GrassArea';
 import { TimeLine } from '@/components/Atom/TimeLine';
 import { IconTimeline } from '@/assets/svgs/IconTimeline';
 import BlogGroup from '@/components/Molecules/BlogGroup';
-import router from 'next/router';
+import router, { useRouter } from 'next/router';
 import { getUserProfile, getUserBlog, getUserTimeline, getUserGrass, putEditTimeline, deleteTimeline } from 'apis/user';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfileResponse, getTimelineResponse } from '@/types/user';
@@ -30,11 +30,14 @@ import { IconFloat } from '@/assets/svgs/IconFloat';
 import { formatDate } from '@/utils/utils';
 import { useMyAllTimeline } from '@/hooks/queries/timelineQuery';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { clickedGrassDate } from '@/stores/user';
 import IconRequest from '@/assets/svgs/IconRequest';
 import { GrassStackedData } from '@/components/Molecules/GrassArea/types';
 import Link from 'next/link';
+import Custom404 from './404';
+import Spinner from '@/components/Atom/Spinner';
+import styles from '@/components/Molecules/OAuthLoading/OAuthLoading.styled';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -86,14 +89,13 @@ const TimelineComponent = ({
     onSuccess: () => {
       console.log('onSuccess');
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['POST'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
   });
   const removeTimeline = useMutation(deleteTimeline, {
     onSuccess: () => {
       console.log('onSuccess');
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['POST'] }),
-    // onSettled: () => queryClient.invalidateQueries(['POST'], { refetchInactive: true }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
   });
   const updateTimeline = (content: { title: string; desc: string; createdAt: number }) => {
     editTimeline.mutate({
@@ -126,7 +128,7 @@ const TimelineComponent = ({
 const TimeLineArea = ({ path, changable }: { path: string; changable: boolean }) => {
   const bottomDiv = useRef(null);
   const [totalSize, setTotalSize] = useState(0);
-  const { data: postObject, fetchNextPage, isSuccess } = useMyAllTimeline(path);
+  const { data: postObject, fetchNextPage, isSuccess, refetch } = useMyAllTimeline(path);
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
   const [timelineData, setTimelineData] = useState([]);
 
@@ -150,6 +152,10 @@ const TimeLineArea = ({ path, changable }: { path: string; changable: boolean })
       if (optionRef) unobserve(optionRef);
     };
   }, [observe, unobserve]);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   useEffect(() => {
     const getTimeline = async () => {
@@ -244,7 +250,7 @@ const GrassContainer = ({
   // meta 로 받은 데이터를 map 돌면서 Date 처리 해서 같은 달인지 체크
   // 같은 달이면 [base+1] index에 Push
   //
-  const { data: grassObject } = useQuery(['GRASS', path, fromSeconds, toSeconds], () =>
+  const { data: grassObject, refetch } = useQuery(['GRASS', path, fromSeconds, toSeconds], () =>
     getUserGrass(path, fromSeconds, toSeconds),
   );
   const dateList = grassObject?.metas || [];
@@ -263,6 +269,10 @@ const GrassContainer = ({
   const handleClickPrev = () => {
     setBase((prev) => prev - 1);
   };
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   return (
     <GrassArea
       title={title}
@@ -274,24 +284,50 @@ const GrassContainer = ({
   );
 };
 
-const User: NextPage = ({ path }: any) => {
-  const { data: userInfo } = useQuery(['PROFILE', path], () => getUserProfile(path));
-  const { data: blogObject } = useQuery(['BLOGS', path], () => getUserBlog(path));
+const Loading = () => {
+  return (
+    <div css={styles.loadingContainer}>
+      <div css={styles.spinnerContainer}>
+        <Spinner size='46px' />
+        <Typo.Body color={FONT_COLOR.WHITE}>Loading ... </Typo.Body>
+      </div>
+    </div>
+  );
+};
+
+const User: NextPage = () => {
+  const router = useRouter();
+  const urlPath = (router.query?.user as string) || '';
+  const { isReady } = router;
+  const path = urlPath.slice(1);
+
+  const {
+    data: userInfo,
+    refetch: profileRefetch,
+    isLoading,
+    isSuccess,
+  } = useQuery(['PROFILE', path], () => getUserProfile(path), {
+    enabled: !!isReady,
+  });
+
+  const { data: blogObject, refetch: blogRefetch } = useQuery(['BLOGS', path], () => getUserBlog(path));
 
   const { blogs } = blogObject ?? [];
 
-  const [url, setUrl] = useState(require(`@/assets/images/profile/default.png`) as string);
-  const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
-  const [picid, setPicId] = useState(0);
-  useEffect(() => {
-    if (picid > 0) setUrl(require(`@/assets/images/profile/${picid}.png`) as string);
-  }, [picid]);
+  const setClickedDate = useSetRecoilState(clickedGrassDate);
 
-  return (
+  useEffect(() => {
+    blogRefetch();
+    profileRefetch();
+  }, [profileRefetch, blogRefetch]);
+
+  return isLoading ? (
+    <Loading />
+  ) : !(!isSuccess || urlPath.at(0) !== '@') ? (
     <MypageWrapper>
       <MypageContainer>
         <IntroContainer>
-          <ProfileIcon imgUrl={url} onClick={() => {}} />
+          <ProfileIcon imgUrl={userInfo?.profileImgSrc} />
           <TextContainer>
             <NameCategory isMe={userInfo?.isAuthorized} name={userInfo?.name} category={userInfo?.categoryName} />
             <Introduction blogs={blogs} introduction={userInfo?.introduction} />
@@ -310,24 +346,26 @@ const User: NextPage = ({ path }: any) => {
         <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />
       </FloatingContainer>
     </MypageWrapper>
+  ) : (
+    <Custom404 />
   );
 };
 
 export default User;
 
-export const getServerSideProps: any = async (context: NextPageContext) => {
-  const path = context.query?.user as string;
-  const apiPath = path.slice(1); // @ 떼고 api 콜
-  const data = await getUserProfile(apiPath); // getUserProfile API 를 통해 값 먼저 가져옴
+// export const getServerSideProps: any = async (context: NextPageContext) => {
+//   const path = context.query?.user as string;
+//   const apiPath = path.slice(1); // @ 떼고 api 콜
+//   const data = await getUserProfile(apiPath); // getUserProfile API 를 통해 값 먼저 가져옴
 
-  if (!data || path.at(0) !== '@') {
-    return {
-      notFound: true, // 404 page 로 이동
-    };
-  }
+//   if (!data || path.at(0) !== '@') {
+//     return {
+//       notFound: true, // 404 page 로 이동
+//     };
+//   }
 
-  return { props: { path: apiPath } };
-};
+//   return { props: { path: apiPath } };
+// };
 
 // export const getStaticPaths = async () => {
 //   return {

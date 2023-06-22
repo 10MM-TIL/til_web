@@ -26,20 +26,21 @@ import RadioGroup from '@/components/Molecules/RadioGroup';
 import Toggle from '@/components/Atom/Toggle';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import AddBlog from '@/components/Atom/AddBlog';
-import ToastMessage from '@/components/ToastMessage';
 
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
-import { myBloglist, myMailAgreement, myNotification } from '@/stores/user';
+import { myBloglist, myMailAgreement, myNotification, myOauthEmail } from '@/stores/user';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyProfile, putMyProfile, getMyNotification, putMyNotification, putMyBlog } from 'apis/setting';
 import { usePutMyProfile } from '@/hooks/queries/saveQuery';
 import { getUserBlog } from '@/apis/user';
-import useToast from '@/hooks/useToast';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import { logout } from '@/utils/utils';
 import { getCookie } from 'cookies-next';
 import LoginModal from '@/components/Molecules/LoginModal';
+import { useRouter } from 'next/router';
+import { AuthState } from '@/stores/authStateStore';
+import { LoginModalState } from '@/stores/modalStateStore';
 
 const CategoryLayout = ({
   selectedCategoryId,
@@ -145,6 +146,7 @@ const BlogLinkLayout = () => {
                       blogName={blogItem.url}
                       onDeleteBlog={handleDeleteBlog}
                       setBlogUrl={setBlog}
+                      placeholder='https://your-blog.com'
                     />
                   );
                 })
@@ -168,20 +170,22 @@ const SaveLayout = ({ onClick }: any) => {
   return (
     <SaveButtonContainer>
       <Button size={device === 'desktop' ? 'lg' : 'x-lg-m'} onClick={onClick}>
-        저장하기
+        <Typo.H2>저장하기</Typo.H2>
       </Button>
     </SaveButtonContainer>
   );
 };
 
 const FooterLayout = () => {
+  const email = useRecoilValue(myOauthEmail);
   const clickLogout = () => {
-    logout(true);
+    logout(false);
+    location.replace('/');
   };
 
   return (
     <FooterContainer>
-      <span style={{ display: 'flex', gap: '42px' }}>
+      <span style={{ display: 'flex', gap: '34px' }}>
         <a
           href='https://www.plip.kr/pcc/c791921f-5dc3-4cb0-baac-55e48ee2e585/privacy-policy'
           target='_blank'
@@ -192,11 +196,16 @@ const FooterLayout = () => {
         <a href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7' target='_blank' rel='noopener noreferrer'>
           <Typo.Body color={FONT_COLOR.GRAY_2}>서비스 이용 약관</Typo.Body>
         </a>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>회원탈퇴</Typo.Body>
+        <a href='https://tally.so/r/w5bNJd' target='_blank' rel='noopener noreferrer'>
+          <Typo.Body color={FONT_COLOR.GRAY_2}>회원탈퇴</Typo.Body>
+        </a>
       </span>
-      <a style={{ cursor: 'pointer' }} onClick={clickLogout}>
-        <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
-      </a>
+      <span style={{ display: 'flex', gap: '16px' }}>
+        <Typo.Body color={FONT_COLOR.GRAY_1}>로그인 계정 {email}</Typo.Body>
+        <a style={{ cursor: 'pointer' }} onClick={clickLogout}>
+          <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
+        </a>
+      </span>
     </FooterContainer>
   );
 };
@@ -206,23 +215,25 @@ const Setting: NextPage = () => {
   // const [noti, setNoti] = useRecoilState(myNotification);
   const [mailAgreement, setMyMailAgreement] = useRecoilState(myMailAgreement);
   const [blogList, setBlogList] = useRecoilState(myBloglist);
-  // const [imgUrl, setImgUrl] = useState('');
-  const [url, setUrl] = useState(require('@/assets/images/profile/default.png') as string);
+  const setOauthEmail = useSetRecoilState(myOauthEmail);
+  const [imgUrl, setImgUrl] = useState('');
 
   const websiteUrl = process.env.NEXT_PUBLIC_MODE === 'dev' ? 'https://dev.bricklog.io' : 'https://bricklog.io';
 
   const [id, setId] = useState(0);
   const [isChangeInput, setIsChangeInput] = useState(false);
-  const { isOpen, showToast, text } = useToast();
   const accessToken = getCookie('accToken');
-  const { data: userProfile } = useQuery(['myProfile'], getMyProfile, {
+  const router = useRouter();
+
+  const { data: userProfile, refetch } = useQuery(['myProfile'], getMyProfile, {
     onSuccess: (data) => {
       setMyMailAgreement(data.mailAgreement);
       setMyInfo(data);
-      // setImgUrl(data?.profileImgSrc);
+      setImgUrl(data?.profileImgSrc);
+      setOauthEmail(data?.email);
     },
   });
-  useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
+  const { refetch: blogRefetch } = useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
     enabled: !!userProfile,
     onSuccess: (data) => {
       setBlogList(data.blogs);
@@ -239,30 +250,9 @@ const Setting: NextPage = () => {
     onSuccess: () => {
       // 요청이 성공한 경우
       console.log('onSuccess');
-      queryClient.invalidateQueries(['putProfile']); // queryKey 유효성 제거
+      queryClient.invalidateQueries(['MY_USER']); // queryKey 유효성 제거
     },
-    // onError: () => {
-    //   alert('저장에 실패했습니다. 다시 시도해주세요');
-    // },
   });
-  // const saveNoti = useMutation(putMyNotification, {
-  //   onSuccess: () => {
-  //     console.log('onSuccess');
-  //     queryClient.invalidateQueries(['putNoti']);
-  //   },
-  //   // onError: () => {
-  //   //   alert('저장에 실패했습니다. 다시 시도해주세요');
-  //   // },
-  // });
-  // const saveBlog = useMutation(putMyBlog, {
-  //   onSuccess: () => {
-  //     console.log('onSuccess');
-  //     queryClient.invalidateQueries(['putBlog']);
-  //   },
-  //   // onError: () => {
-  //   //   alert('저장에 실패했습니다. 다시 시도해주세요');
-  //   // },
-  // });
 
   const handleSave = async () => {
     const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
@@ -287,39 +277,39 @@ const Setting: NextPage = () => {
     }
 
     const promises = [
-      saveProfile.mutateAsync(
-        {
-          categoryIdentifier: myInfo.categoryIdentifier,
-          introduction: myInfo.introduction,
-          name: myInfo.name,
-          path: myInfo.path,
-          profileImgSrc: 'https://raw.githubusercontent.com/Brick-log/til-server/main/default.png',
-          mailAgreement: mailAgreement,
-          blogs: blogList.map((blog) => {
+      saveProfile.mutateAsync({
+        categoryIdentifier: myInfo.categoryIdentifier,
+        introduction: myInfo.introduction,
+        name: myInfo.name,
+        path: myInfo.path,
+        profileImgSrc: imgUrl,
+        mailAgreement: mailAgreement,
+        blogs: blogList
+          .filter((item) => item?.url !== '')
+          .map((blog) => {
             const { url } = blog;
             if (url.includes('https://') || url.includes('http://')) {
               return { url };
             } else return { url: `https://${url}` };
           }),
-        },
-        {
-          onError: () => {
-            alert('중복된 URL 주소가 있습니다. 다른 URL 주소를 설정해주세요.');
-          },
-        },
-      ),
+      }),
     ];
     try {
       await Promise.all(promises).then((res) => {
-        showToast(
-          <>
-            <IconCheckBig />
-            <Typo.H1 color={FONT_COLOR.WHITE}>저장 완료!</Typo.H1>
-          </>,
-        );
+        router.push(`/@${myInfo.path}`);
       });
     } catch (error) {
-      alert('저장에 실패했습니다. 다시 시도해주세요.');
+      const customError = error as { description: string; errorCode: string };
+      switch (customError?.errorCode) {
+        case 'INVALID_ARGUMENT':
+          alert('유효한 URL이 아닙니다. 입력한 링크 URL을 확인하세요.');
+          break;
+        case 'USER_MODIFY_FAIL':
+          alert('중복된 URL 주소가 있습니다. 다른 URL 주소를 설정해주세요.');
+          break;
+        default:
+          alert('저장에 실패했습니다. 다시 시도해주세요.');
+      }
     }
   };
 
@@ -354,9 +344,13 @@ const Setting: NextPage = () => {
     });
   }, []);
   useEffect(() => {
-    // if (id > 0) setImgUrl(`${websiteUrl}/images/profile/${id}`);
-    if (id > 0) setUrl(require(`@/assets/images/profile/${id}.png`) as string);
-  }, [id]);
+    if (id > 0) setImgUrl(`${websiteUrl}/images/profile/${id}.png`);
+  }, [id, websiteUrl]);
+
+  useEffect(() => {
+    refetch();
+    blogRefetch();
+  }, [refetch, blogRefetch]);
 
   return (
     <>
@@ -366,7 +360,7 @@ const Setting: NextPage = () => {
             <PhotoContainer>
               <ProfileIcon
                 editable={true}
-                imgUrl={url}
+                imgUrl={imgUrl}
                 onClick={(id) => {
                   handleChangeProfile(id);
                 }}
@@ -379,9 +373,16 @@ const Setting: NextPage = () => {
                 useFixedString={true}
                 inputValue={myInfo.path}
                 useCopy={true}
+                maxLength={20}
                 onChange={handleChangePath}
               />
-              <TextField title='이름' isInput={true} inputValue={myInfo.name} onChange={handleChangeName} />
+              <TextField
+                title='이름'
+                isInput={true}
+                inputValue={myInfo.name}
+                maxLength={20}
+                onChange={handleChangeName}
+              />
               <TextField
                 title='소개'
                 isInput={false}
@@ -399,7 +400,6 @@ const Setting: NextPage = () => {
           <SaveLayout onClick={handleSave} />
           <FooterLayout />
         </EditpageContainer>
-        {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
       </EditpageWrapper>
       {!accessToken && <LoginModal />}
     </>

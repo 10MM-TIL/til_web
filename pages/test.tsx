@@ -450,7 +450,7 @@ const CardComponent = () => {
     category: '#개발',
     header: 'hackerrank - Nested Lists',
     body: 'Given the names and grades for each 123123123123123',
-    img: require('@/assets/images/test.png') as string,
+    img: require('@/assets/profile/default.png') as string,
     name: '김선철',
     date: '2023.01.07',
   });
