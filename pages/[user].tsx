@@ -38,6 +38,9 @@ import Link from 'next/link';
 import Custom404 from './404';
 import Spinner from '@/components/Atom/Spinner';
 import styles from '@/components/Molecules/OAuthLoading/OAuthLoading.styled';
+import useToast from '@/hooks/useToast';
+import ToastMessage from '@/components/ToastMessage';
+import IconCheckBig from '@/assets/svgs/IconCheckBig';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -83,6 +86,7 @@ const TimelineComponent = ({
   postIdentifier: string;
   changable: boolean;
 }) => {
+  const { showToast } = useToast();
   const { title: originalTitle, desc: originalSummary, date: originalDate } = content;
   const queryClient = useQueryClient();
   const editTimeline = useMutation(putEditTimeline, {
@@ -94,6 +98,12 @@ const TimelineComponent = ({
   const removeTimeline = useMutation(deleteTimeline, {
     onSuccess: () => {
       console.log('onSuccess');
+      showToast(
+        <>
+          <IconCheckBig />
+          <Typo.H1 color={FONT_COLOR.WHITE}>삭제 완료!</Typo.H1>
+        </>,
+      );
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
   });
@@ -300,6 +310,7 @@ const User: NextPage = () => {
   const urlPath = (router.query?.user as string) || '';
   const { isReady } = router;
   const path = urlPath.slice(1);
+  const { isOpen, text } = useToast();
 
   const {
     data: userInfo,
@@ -345,6 +356,7 @@ const User: NextPage = () => {
       <FloatingContainer>
         <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />
       </FloatingContainer>
+      {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
     </MypageWrapper>
   ) : (
     <Custom404 />
