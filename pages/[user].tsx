@@ -104,6 +104,7 @@ const TimelineComponent = ({
           <Typo.H1 color={FONT_COLOR.WHITE}>삭제 완료!</Typo.H1>
         </>,
       );
+      queryClient.invalidateQueries({ queryKey: ['GRASS'] });
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
   });
@@ -260,7 +261,7 @@ const GrassContainer = ({
   // meta 로 받은 데이터를 map 돌면서 Date 처리 해서 같은 달인지 체크
   // 같은 달이면 [base+1] index에 Push
   //
-  const { data: grassObject, refetch } = useQuery(['GRASS', path, fromSeconds, toSeconds], () =>
+  const { data: grassObject, refetch } = useQuery(['timelineInfinite', 'GRASS', path, fromSeconds, toSeconds], () =>
     getUserGrass(path, fromSeconds, toSeconds),
   );
   const dateList = grassObject?.metas || [];
