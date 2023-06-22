@@ -41,6 +41,7 @@ import LoginModal from '@/components/Molecules/LoginModal';
 import { useRouter } from 'next/router';
 import { AuthState } from '@/stores/authStateStore';
 import { LoginModalState } from '@/stores/modalStateStore';
+import useAuth from '@/hooks/useAuth';
 
 const CategoryLayout = ({
   selectedCategoryId,
@@ -217,6 +218,10 @@ const Setting: NextPage = () => {
   const [blogList, setBlogList] = useRecoilState(myBloglist);
   const setOauthEmail = useSetRecoilState(myOauthEmail);
   const [imgUrl, setImgUrl] = useState('');
+  useAuth();
+
+  const { isLogin } = useRecoilValue(AuthState);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useRecoilState(LoginModalState);
 
   const websiteUrl = process.env.NEXT_PUBLIC_MODE === 'dev' ? 'https://dev.bricklog.io' : 'https://bricklog.io';
 
@@ -224,6 +229,13 @@ const Setting: NextPage = () => {
   const [isChangeInput, setIsChangeInput] = useState(false);
   const accessToken = getCookie('accToken');
   const router = useRouter();
+
+  useEffect(() => {
+    if (!accessToken)
+      setIsLoginModalOpen({
+        isLoginModalOpen: true,
+      });
+  }, [accessToken, setIsLoginModalOpen]);
 
   const { data: userProfile, refetch } = useQuery(['myProfile'], getMyProfile, {
     onSuccess: (data) => {
@@ -401,7 +413,7 @@ const Setting: NextPage = () => {
           <FooterLayout />
         </EditpageContainer>
       </EditpageWrapper>
-      {!accessToken && <LoginModal />}
+      {!isLogin && isLoginModalOpen && <LoginModal />}
     </>
   );
 };
