@@ -260,8 +260,8 @@ const HomeTemplates = ({
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
                           body: recommandItem.summary,
-                          img: require('@/assets/images/test.png') as string,
-                          name: recommandItem.userPath,
+                          img: recommandItem.profileImgSrc,
+                          name: recommandItem.userName,
                           date: formatDate(recommandItem.createdAt),
                         }}
                         hasBadge={true}
@@ -280,8 +280,8 @@ const HomeTemplates = ({
                               category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
                               header: post.title,
                               body: post.summary,
-                              img: require('@/assets/images/test.png') as string,
-                              name: post.userPath,
+                              img: post.profileImgSrc,
+                              name: post.userName,
                               date: formatDate(post.createdAt),
                             }}
                             url={post.url}
@@ -332,8 +332,8 @@ const HomeTemplates = ({
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
                           body: recommandItem.summary,
-                          img: require('@/assets/images/test.png') as string,
-                          name: recommandItem.userPath,
+                          img: recommandItem.profileImgSrc,
+                          name: recommandItem.userName,
                           date: formatDate(recommandItem.createdAt),
                         }}
                         hasBadge={true}
@@ -353,8 +353,8 @@ const HomeTemplates = ({
                             category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
                             header: post.title,
                             body: post.summary,
-                            img: require('@/assets/images/test.png') as string,
-                            name: post.userPath,
+                            img: post.profileImgSrc,
+                            name: post.userName,
                             date: formatDate(post.createdAt),
                           }}
                           url={post.url}

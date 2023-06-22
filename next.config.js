@@ -6,14 +6,14 @@ const nextConfig = {
     emotion: true,
   },
   images: {
-    // remotePatterns: [
-    //   {
-    //     protocol: 'https',
-    //     hostname: 'api.surfit.io',
-    //     port: '',
-    //     pathname: '/**',
-    //   },
-    // ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'dev.bricklog.io',
+        port: '',
+        pathname: '/**',
+      },
+    ],
     domains: ['search.pstatic.net', 'raw.githubusercontent.com', 'dev.bricklog.io', 'bricklog.io'],
   },
   webpack: (config) => {
