@@ -42,6 +42,8 @@ import { useRouter } from 'next/router';
 import { AuthState } from '@/stores/authStateStore';
 import { LoginModalState } from '@/stores/modalStateStore';
 import useAuth from '@/hooks/useAuth';
+import ToastMessage from '@/components/ToastMessage';
+import useToast from '@/hooks/useToast';
 
 const CategoryLayout = ({
   selectedCategoryId,
@@ -230,6 +232,8 @@ const Setting: NextPage = () => {
   const accessToken = getCookie('accToken');
   const router = useRouter();
 
+  const { isOpen, showToast, text } = useToast();
+
   useEffect(() => {
     if (!accessToken)
       setIsLoginModalOpen({
@@ -309,6 +313,12 @@ const Setting: NextPage = () => {
     try {
       await Promise.all(promises).then((res) => {
         router.push(`/@${myInfo.path}`);
+        showToast(
+          <>
+            <IconCheckBig />
+            <Typo.H1 color={FONT_COLOR.WHITE}>저장 완료!</Typo.H1>
+          </>,
+        );
       });
     } catch (error) {
       const customError = error as { description: string; errorCode: string };
@@ -414,6 +424,7 @@ const Setting: NextPage = () => {
         </EditpageContainer>
       </EditpageWrapper>
       {!isLogin && isLoginModalOpen && <LoginModal />}
+      {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
     </>
   );
 };

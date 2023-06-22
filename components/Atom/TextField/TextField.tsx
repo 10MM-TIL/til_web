@@ -6,7 +6,6 @@ import { TextFieldProps } from './types';
 import { FONT_COLOR } from '@/constants/color';
 import { IconCopy } from '@/assets/svgs/IconCopy';
 import useCopyClipBoard from '@/hooks/useCopyClipBoard';
-import ToastMessage from '@/components/ToastMessage';
 import useToast from '@/hooks/useToast';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 
@@ -137,7 +136,6 @@ const TextField = ({
         </Typo.Label2>
       </Style.TextFieldLength>
       {useCopy ? <TextFieldCopyIcon></TextFieldCopyIcon> : null}
-      {isOpen && <ToastMessage isOpen={isCopy}>{text}</ToastMessage>}
     </Style.TextFieldContainer>
   );
 };
