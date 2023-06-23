@@ -10,7 +10,7 @@ const HomePage = () => {
   const router = useRouter();
 
   const titleRef = useRef<HTMLInputElement>(null);
-  const [selectedTab, setSelectedTab] = useState<'MEMO' | 'REVIEW'>('MEMO'); // * MEMO & REVIEW
+  const [selectedTab, setSelectedTab] = useState<'MEMO' | 'REVIEW'>('REVIEW'); // * MEMO & REVIEW
   const [typingState, setTypingState] = useState<'' | 'checked' | 'saving' | 'error'>('checked');
 
   const [isUrlLoading, setIsUrlLoading] = useState(false);
