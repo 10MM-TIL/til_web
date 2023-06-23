@@ -154,7 +154,7 @@ const HomePage = () => {
               </H1>
             </>,
           );
-          // setUrl('');
+          setUrl('');
         },
         onError: () => {
           // TODO ALERT
