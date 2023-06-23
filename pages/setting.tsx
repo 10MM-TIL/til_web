@@ -423,7 +423,7 @@ const Setting: NextPage = () => {
           <FooterLayout />
         </EditpageContainer>
       </EditpageWrapper>
-      {!isLogin && isLoginModalOpen && <LoginModal />}
+      {!isLogin && isLoginModalOpen && <LoginModal closable={false} />}
       {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
     </>
   );
