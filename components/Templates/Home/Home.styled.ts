@@ -179,6 +179,12 @@ const reviewLoadBtn = ({ isEnable }: { isEnable: boolean }) => css`
   border-radius: 8px;
 `;
 
+const invalidContainer = css`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+
 const timelineContainer = css`
   padding: 10px 0;
   ${mq('desktop')} {
@@ -348,6 +354,7 @@ const styles = {
   reviewInputContainer,
   reviewInput,
   reviewLoadBtn,
+  invalidContainer,
   timelineContainer,
   timeline,
   timelineLeftArea,

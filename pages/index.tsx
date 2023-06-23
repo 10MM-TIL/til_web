@@ -5,9 +5,14 @@ import { useRouter } from 'next/router';
 import { useMyDraft, useMyDraftSync } from '@/hooks/queries/draftQuery';
 import { usePostUploadConfirm, usePostUploadRequest } from '@/hooks/queries/postQuery';
 import { format } from 'date-fns';
+import useToast from '@/hooks/useToast';
+import IconCheckBig from '@/assets/svgs/IconCheckBig';
+import { FONT_COLOR } from '@/constants/color';
+import { H1 } from '@/components/Atom/Typography';
 
 const HomePage = () => {
   const router = useRouter();
+  const { isOpen, text, showToast } = useToast();
 
   const titleRef = useRef<HTMLInputElement>(null);
   const [selectedTab, setSelectedTab] = useState<'MEMO' | 'REVIEW'>('REVIEW'); // * MEMO & REVIEW
@@ -17,7 +22,7 @@ const HomePage = () => {
   const [memoValue, setMemoValue] = useState('');
   const [url, setUrl] = useState('');
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
-  const [isValidUrl, setIsValidUrl] = useState(false);
+  const [validUrlStatus, setValidUrlStatus] = useState<'BEFORE' | 'INVALID' | 'VALID'>('BEFORE');
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [date, setDate] = useState<string>('');
@@ -54,10 +59,15 @@ const HomePage = () => {
 
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUrl(e.currentTarget.value);
-    setIsValidUrl(false);
+    setValidUrlStatus('BEFORE');
   };
 
   const handleUrlCheck = () => {
+    if (!url.includes('https://') && !url.includes('http://')) {
+      alert('https://bricklog.io/your-post 형식으로 입력해주세요.');
+      return;
+    }
+
     setIsUrlLoading(true);
     uploadRequestMutate(
       { url },
@@ -66,12 +76,11 @@ const HomePage = () => {
           setIsUrlLoading(false);
         },
         onSuccess: (res) => {
-          console.log(res);
           // TODO 미리보기 박스 제공 & 등록 버튼 활성화
           if (res?.data.createdAt) {
             setDate(format(new Date(res.data.createdAt), 'yyyy.MM.dd'));
           }
-          setIsValidUrl(true);
+          setValidUrlStatus('VALID');
           setTitle(res?.data?.title?.substring(0, 30));
           setSummary(res?.data?.summary?.substring(0, 100));
           setTimeout(() => {
@@ -79,7 +88,8 @@ const HomePage = () => {
           }, 200);
         },
         onError: (err) => {
-          console.log(err);
+          console.error(err);
+          setValidUrlStatus('INVALID');
         },
       },
     );
@@ -100,7 +110,7 @@ const HomePage = () => {
 
   const handleUrlConfirm = async () => {
     // TODO 입력 필드 검증
-    if (!isValidUrl || url === '') {
+    if (validUrlStatus !== 'VALID' || url === '') {
       alert('유효한 url을 입력해주세요.');
       return;
     }
@@ -116,7 +126,7 @@ const HomePage = () => {
     }
 
     if (date === '') {
-      alert('날짜를 입력해주세요.');
+      alert('회고 날짜를 입력해주세요.');
       return;
     }
 
@@ -124,14 +134,31 @@ const HomePage = () => {
       alert('미래 날짜는 입력이 불가능합니다.');
       return;
     }
+
+    if (new Date(date).getTime() > new Date('2000-01-01').getTime()) {
+      alert('2000년 1월 1일 이전에 작성된 포스트는 등록할 수 없습니다.');
+      return;
+    }
+
     await uploadConfirmMutate(
       { url, title, summary, createdAt: date.replace(/\./gi, '-') },
       {
-        onSuccess: () => {
-          // TODO TOAST
+        onSuccess: (res) => {
+          const currentDate = new Date();
+          const currentMonth = currentDate.getMonth() + 1;
+          showToast(
+            <>
+              <IconCheckBig />
+              <H1 color={FONT_COLOR.WHITE}>
+                {currentMonth}월 {res?.data?.monthlyPublishCount + 1}번째 브릭을 쌓았어요!
+              </H1>
+            </>,
+          );
+          // setUrl('');
         },
         onError: () => {
           // TODO ALERT
+          alert('등록에 실패했습니다. 새로고침 후 다시 시도해주세요');
         },
       },
     );
@@ -156,11 +183,13 @@ const HomePage = () => {
       isUrlLoading={isUrlLoading}
       memoValue={memoValue}
       url={url}
-      isValidUrl={isValidUrl}
+      validUrlStatus={validUrlStatus}
       date={date}
       title={title}
       summary={summary}
       titleRef={titleRef}
+      isToastOpen={isOpen}
+      toastText={text}
       onMemoChange={handleMemoChange}
       onUrlChange={handleUrlChange}
       onUrlCheck={handleUrlCheck}
