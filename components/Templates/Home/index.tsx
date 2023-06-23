@@ -102,11 +102,11 @@ const HomeTemplates = ({
         <div css={styles.container}>
           <div>
             <div css={styles.textareaContainer}>
-              <div css={styles.memoTab({ selectedTab })} onClick={() => onTabChange('MEMO')}>
-                <Typo.H1 color={selectedTab === 'MEMO' ? FONT_COLOR.WHITE : '#636C78'}>메모</Typo.H1>
-              </div>
               <div css={styles.reviewTab({ selectedTab })} onClick={() => onTabChange('REVIEW')}>
                 <Typo.H1 color={selectedTab === 'MEMO' ? '#636C78' : FONT_COLOR.WHITE}>회고</Typo.H1>
+              </div>
+              <div css={styles.memoTab({ selectedTab })} onClick={() => onTabChange('MEMO')}>
+                <Typo.H1 color={selectedTab === 'MEMO' ? FONT_COLOR.WHITE : '#636C78'}>메모</Typo.H1>
               </div>
 
               {selectedTab === 'REVIEW' && (

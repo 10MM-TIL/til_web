@@ -59,7 +59,7 @@ const Header = () => {
                 <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
               </Link>
             )}
-            <IconApps />
+            {/* <IconApps /> */}
             {/* {userData && (
               <Image
                 src={userData?.profileImgSrc}

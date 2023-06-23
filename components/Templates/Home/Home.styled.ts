@@ -64,6 +64,28 @@ const memoTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   cursor: pointer;
   position: absolute;
   top: -40px;
+  left: ${selectedTab === 'MEMO' ? '78px' : '72px'};
+  background-color: ${selectedTab === 'MEMO' ? BACKGROUND_COLOR.NAVY_2 : BACKGROUND_COLOR.NAVY_3};
+
+  border-radius: 12px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 0;
+
+  width: ${selectedTab === 'MEMO' ? '90px' : '100px'};
+  height: ${selectedTab === 'MEMO' ? '41px' : '40px'};
+  z-index: ${selectedTab === 'MEMO' ? Z_INDEX_LEVEL['TAB'] : Z_INDEX_LEVEL['TAB_HIDDEN']};
+  display: flex;
+  justify-content: center;
+  padding: ${selectedTab === 'MEMO' ? '11px 30px' : '11px 30px 0 40px'};
+`;
+
+const reviewTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
+  cursor: pointer;
+  position: absolute;
+  top: -40px;
   left: 0;
 
   background-color: ${selectedTab === 'MEMO' ? BACKGROUND_COLOR.NAVY_3 : BACKGROUND_COLOR.NAVY_2};
@@ -75,32 +97,10 @@ const memoTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
 
   width: 90px;
   height: 41px;
-  z-index: ${selectedTab === 'MEMO' ? Z_INDEX_LEVEL['TAB'] : Z_INDEX_LEVEL['TAB_HIDDEN']};
-  display: flex;
-  justify-content: center;
-  padding: 11px 30px;
-`;
-
-const reviewTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
-  cursor: pointer;
-  position: absolute;
-  top: -40px;
-  left: ${selectedTab === 'MEMO' ? '72px' : '78px'};
-  background-color: ${selectedTab === 'MEMO' ? BACKGROUND_COLOR.NAVY_2 : BACKGROUND_COLOR.NAVY_3};
-
-  border-radius: 12px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 0;
-
-  width: ${selectedTab === 'MEMO' ? '100px' : '90px'};
-  height: ${selectedTab === 'MEMO' ? '40px' : '41px'};
   z-index: ${selectedTab === 'MEMO' ? Z_INDEX_LEVEL['TAB_HIDDEN'] : Z_INDEX_LEVEL['TAB']};
   display: flex;
   justify-content: center;
-  padding: ${selectedTab === 'MEMO' ? '11px 30px 0 40px' : '11px 30px'};
+  padding: 11px 30px;
 `;
 
 const reviewGuide = css`
