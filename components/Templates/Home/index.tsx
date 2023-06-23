@@ -4,8 +4,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import * as Typo from '@/components/Atom/Typography';
 import { Button } from '@/components/Atom/Button';
 import { useResize } from '@/hooks/useResize';
-import { FONT_COLOR } from '@/constants/color';
-import { ChangeEventHandler, RefObject, SyntheticEvent, useState } from 'react';
+import { FONT_COLOR, POINT_COLOR } from '@/constants/color';
+import { ChangeEventHandler, ReactNode, RefObject, SyntheticEvent, useState } from 'react';
 import State from '@/components/Atom/State';
 import styles from './Home.styled';
 import IconArrow from '@/assets/svgs/IconArrow';
@@ -17,11 +17,13 @@ import { Card } from '@/components/Atom/Card';
 import { formatDate } from '@/utils/utils';
 import { useCategories } from '@/hooks/queries/categoryQuery';
 import { LoginModalState } from '@/stores/modalStateStore';
-import { TimeLine } from '@/components/Atom/TimeLine';
 import Spinner from '@/components/Atom/Spinner';
 import BlogIcon from '@/components/Atom/BlogIcon';
 import { IconCalendar } from '@/assets/svgs/IconCalendar';
+import IconError from '@/assets/svgs/IconError';
 import { ko } from 'date-fns/locale';
+
+import ToastMessage from '@/components/ToastMessage';
 
 interface HomeTemplatesProps {
   selectedTab: 'MEMO' | 'REVIEW';
@@ -29,11 +31,13 @@ interface HomeTemplatesProps {
   isUrlLoading: boolean;
   memoValue: string;
   url: string;
-  isValidUrl: boolean;
+  validUrlStatus: 'BEFORE' | 'INVALID' | 'VALID';
   date: string;
   title: string;
   summary: string;
   titleRef: RefObject<HTMLInputElement>;
+  isToastOpen: boolean;
+  toastText: ReactNode;
 
   onTabChange: (type: 'MEMO' | 'REVIEW') => void;
   onMemoChange: ChangeEventHandler<HTMLTextAreaElement>;
@@ -53,11 +57,13 @@ const HomeTemplates = ({
   isUrlLoading,
   memoValue,
   url,
-  isValidUrl,
+  validUrlStatus,
   date,
   title,
   summary,
   titleRef,
+  isToastOpen,
+  toastText,
   onMemoChange,
   onUrlChange,
   onUrlCheck,
@@ -102,11 +108,11 @@ const HomeTemplates = ({
         <div css={styles.container}>
           <div>
             <div css={styles.textareaContainer}>
-              <div css={styles.memoTab({ selectedTab })} onClick={() => onTabChange('MEMO')}>
-                <Typo.H1 color={selectedTab === 'MEMO' ? FONT_COLOR.WHITE : '#636C78'}>메모</Typo.H1>
-              </div>
               <div css={styles.reviewTab({ selectedTab })} onClick={() => onTabChange('REVIEW')}>
                 <Typo.H1 color={selectedTab === 'MEMO' ? '#636C78' : FONT_COLOR.WHITE}>회고</Typo.H1>
+              </div>
+              <div css={styles.memoTab({ selectedTab })} onClick={() => onTabChange('MEMO')}>
+                <Typo.H1 color={selectedTab === 'MEMO' ? FONT_COLOR.WHITE : '#636C78'}>메모</Typo.H1>
               </div>
 
               {selectedTab === 'REVIEW' && (
@@ -148,14 +154,22 @@ const HomeTemplates = ({
                     />
                     <button
                       type='button'
-                      css={styles.reviewLoadBtn({ isEnable: url.length > 0 && !isValidUrl && !isUrlLoading })}
+                      css={styles.reviewLoadBtn({
+                        isEnable: url.length > 0 && validUrlStatus === 'BEFORE' && !isUrlLoading,
+                      })}
                       onClick={onUrlCheck}
                       disabled={isUrlLoading}
                     >
                       {isUrlLoading ? <Spinner size='16px' /> : '불러오기'}
                     </button>
                   </div>
-                  {isValidUrl && (
+                  {validUrlStatus === 'INVALID' && (
+                    <div css={styles.invalidContainer}>
+                      <IconError />
+                      <Typo.Body color={POINT_COLOR.ERROR}>유효하지 않은 URL입니다.</Typo.Body>
+                    </div>
+                  )}
+                  {validUrlStatus === 'VALID' && (
                     <div css={styles.timelineContainer}>
                       <div css={styles.timeline}>
                         {/* 타임라인 */}
@@ -260,8 +274,8 @@ const HomeTemplates = ({
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
                           body: recommandItem.summary,
-                          img: require('@/assets/images/test.png') as string,
-                          name: recommandItem.userPath,
+                          img: recommandItem.profileImgSrc,
+                          name: recommandItem.userName,
                           date: formatDate(recommandItem.createdAt),
                         }}
                         hasBadge={true}
@@ -280,8 +294,8 @@ const HomeTemplates = ({
                               category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
                               header: post.title,
                               body: post.summary,
-                              img: require('@/assets/images/test.png') as string,
-                              name: post.userPath,
+                              img: post.profileImgSrc,
+                              name: post.userName,
                               date: formatDate(post.createdAt),
                             }}
                             url={post.url}
@@ -332,8 +346,8 @@ const HomeTemplates = ({
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
                           body: recommandItem.summary,
-                          img: require('@/assets/images/test.png') as string,
-                          name: recommandItem.userPath,
+                          img: recommandItem.profileImgSrc,
+                          name: recommandItem.userName,
                           date: formatDate(recommandItem.createdAt),
                         }}
                         hasBadge={true}
@@ -353,8 +367,8 @@ const HomeTemplates = ({
                             category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
                             header: post.title,
                             body: post.summary,
-                            img: require('@/assets/images/test.png') as string,
-                            name: post.userPath,
+                            img: post.profileImgSrc,
+                            name: post.userName,
                             date: formatDate(post.createdAt),
                           }}
                           url={post.url}
@@ -370,6 +384,7 @@ const HomeTemplates = ({
           </div>
         )}
       </div>
+      {isToastOpen && <ToastMessage isOpen={isToastOpen}>{toastText}</ToastMessage>}
     </div>
   );
 };
