@@ -390,19 +390,19 @@ const Setting: NextPage = () => {
             </PhotoContainer>
             <InputContainer>
               <TextField
-                title='URL 주소 설정'
+                title='URL 주소'
                 isInput={true}
                 useFixedString={true}
                 inputValue={myInfo.path}
                 useCopy={true}
-                maxLength={20}
+                maxLength={10}
                 onChange={handleChangePath}
               />
               <TextField
                 title='이름'
                 isInput={true}
                 inputValue={myInfo.name}
-                maxLength={20}
+                maxLength={10}
                 onChange={handleChangeName}
               />
               <TextField
