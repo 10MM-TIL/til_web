@@ -70,18 +70,6 @@ export const IntroductionContainer = styled.div`
   }
 `;
 
-export const TimelineContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 60px;
-`;
-
-export const TimelineTitleArea = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 36px 12px 0px 12px;
-`;
-
 export const FloatingContainer = styled.div`
   position: fixed;
   bottom: 12px;

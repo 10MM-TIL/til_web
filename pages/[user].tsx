@@ -1,6 +1,6 @@
 // [user].tsx
 import type { NextPage, NextPageContext } from 'next';
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useEffect } from 'react';
 import {
   MypageWrapper,
   MypageContainer,
@@ -10,37 +10,27 @@ import {
   InfoLeftArea,
   InfoRightArea,
   IntroductionContainer,
-  TimelineContainer,
-  TimelineTitleArea,
   FloatingContainer,
 } from '@/styles/mypage.module';
 import ProfileIcon from '@/components/Molecules/ProfileIcon';
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 import * as Typo from '@/components/Atom/Typography';
 import { Button } from '@/components/Atom/Button';
-import { GrassArea } from '@/components/Molecules/GrassArea';
-import { TimeLine } from '@/components/Atom/TimeLine';
-import { IconTimeline } from '@/assets/svgs/IconTimeline';
 import BlogGroup from '@/components/Molecules/BlogGroup';
-import router, { useRouter } from 'next/router';
-import { getUserProfile, getUserBlog, getUserTimeline, getUserGrass, putEditTimeline, deleteTimeline } from 'apis/user';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getMyProfileResponse, getTimelineResponse } from '@/types/user';
-import { IconFloat } from '@/assets/svgs/IconFloat';
-import { formatDate } from '@/utils/utils';
-import { useMyAllTimeline } from '@/hooks/queries/timelineQuery';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRouter } from 'next/router';
+import { getUserProfile, getUserBlog } from 'apis/user';
+import { useQuery } from '@tanstack/react-query';
+import { useSetRecoilState } from 'recoil';
 import { clickedGrassDate } from '@/stores/user';
 import IconRequest from '@/assets/svgs/IconRequest';
-import { GrassStackedData } from '@/components/Molecules/GrassArea/types';
 import Link from 'next/link';
 import Custom404 from './404';
 import Spinner from '@/components/Atom/Spinner';
 import styles from '@/components/Molecules/OAuthLoading/OAuthLoading.styled';
 import useToast from '@/hooks/useToast';
 import ToastMessage from '@/components/ToastMessage';
-import IconCheckBig from '@/assets/svgs/IconCheckBig';
+import GrassTemplate from '@/components/Templates/GrassTemplate';
+import TimelineTemplate from '@/components/Templates/TimelineTemplate';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -74,224 +64,6 @@ const Introduction = ({ introduction, blogs }: { introduction: string; blogs: an
       <Typo.Body color={FONT_COLOR.WHITE}>{introduction}</Typo.Body>
       <BlogGroup data={blogs} />
     </IntroductionContainer>
-  );
-};
-
-const TimelineComponent = ({
-  content,
-  postIdentifier,
-  changable,
-}: {
-  content: { date: string; title: string; desc: string; url: string };
-  postIdentifier: string;
-  changable: boolean;
-}) => {
-  const { showToast } = useToast();
-  const { title: originalTitle, desc: originalSummary, date: originalDate } = content;
-  const queryClient = useQueryClient();
-  const editTimeline = useMutation(putEditTimeline, {
-    onSuccess: () => {
-      console.log('onSuccess');
-    },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
-  });
-  const removeTimeline = useMutation(deleteTimeline, {
-    onSuccess: () => {
-      console.log('onSuccess');
-      showToast(
-        <>
-          <IconCheckBig />
-          <Typo.H1 color={FONT_COLOR.WHITE}>삭제 완료!</Typo.H1>
-        </>,
-      );
-      queryClient.invalidateQueries({ queryKey: ['GRASS'] });
-    },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
-  });
-  const updateTimeline = (content: { title: string; desc: string; createdAt: number }) => {
-    editTimeline.mutate({
-      postIdentifier: postIdentifier,
-      editedContent: {
-        title: content.title,
-        summary: content.desc,
-        createdAt: Date.parse(originalDate) / 1000,
-      },
-    });
-  };
-  const handleDeleteContent = () => {
-    removeTimeline.mutate({ postIdentifier: postIdentifier });
-  };
-  return (
-    <div style={{ display: 'flex', gap: '15px', marginBottom: '-10px' }}>
-      <IconTimeline />
-      <div style={{ width: '100%', marginTop: '5px' }}>
-        <TimeLine
-          content={{ ...content, date: formatDate(originalDate) }}
-          onSaveAllContent={(newValue) => updateTimeline(newValue as any)}
-          onDeleteContent={handleDeleteContent}
-          changable={changable}
-        />
-      </div>
-    </div>
-  );
-};
-
-const TimeLineArea = ({ path, changable }: { path: string; changable: boolean }) => {
-  const bottomDiv = useRef(null);
-  const [totalSize, setTotalSize] = useState(0);
-  const { data: postObject, fetchNextPage, isSuccess, refetch } = useMyAllTimeline(path);
-  const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
-  const [timelineData, setTimelineData] = useState([]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      setTotalSize(postObject.pages[0]?.size);
-    }
-  }, [isSuccess, postObject]);
-
-  const [observe, unobserve] = useIntersectionObserver((entry: IntersectionObserverEntry) => {
-    if (entry.isIntersecting) {
-      if (postObject && postObject.pages[postObject.pages.length - 1]?.nextPageToken === 'null') return;
-      fetchNextPage();
-    }
-  });
-
-  useEffect(() => {
-    const optionRef = bottomDiv.current;
-    if (optionRef) observe(optionRef);
-    return () => {
-      if (optionRef) unobserve(optionRef);
-    };
-  }, [observe, unobserve]);
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
-
-  useEffect(() => {
-    const getTimeline = async () => {
-      const res = await getUserTimeline(path, '', fromSeconds, toSeconds);
-      setTimelineData(res?.posts);
-    };
-    const clickDay = new Date(clickedDate);
-    const fromSeconds = Math.round(clickDay.valueOf() / 1000);
-    const toSeconds = Math.round(clickDay.valueOf() / 1000) + 86400;
-    // console.log('clickDay', Math.round(clickDay.valueOf() / 1000));
-    console.log(clickDay);
-    if (clickedDate !== '') getTimeline();
-  }, [clickedDate, path]);
-
-  return (
-    <TimelineContainer>
-      <TimelineTitleArea>
-        <Typo.H1 color={FONT_COLOR.WHITE} style={{ paddingBottom: '16px' }}>
-          타임라인
-        </Typo.H1>
-        <Typo.Body
-          color={FONT_COLOR.GRAY_2}
-          onClick={() => {
-            if (clickedDate !== '') {
-              setClickedDate('');
-            }
-          }}
-          style={clickedDate !== '' ? { cursor: 'pointer' } : {}}
-        >
-          {clickedDate !== '' ? `전체보기` : `${totalSize}개`}
-        </Typo.Body>
-      </TimelineTitleArea>
-      {clickedDate === ''
-        ? postObject?.pages?.map((pages) =>
-            pages?.posts?.map((item: any) => {
-              const content = {
-                title: item.title,
-                date: item.createdAt,
-                url: item.url,
-                desc: item.summary,
-              };
-              return (
-                <TimelineComponent
-                  key={item.identifier}
-                  content={content}
-                  postIdentifier={item.identifier}
-                  changable={changable}
-                />
-              );
-            }),
-          )
-        : timelineData.map((item: any) => {
-            const content = {
-              title: item.title,
-              date: item.createdAt,
-              url: item.url,
-              desc: item.summary,
-            };
-            return (
-              <TimelineComponent
-                key={item.identifier}
-                content={content}
-                postIdentifier={item.identifier}
-                changable={changable}
-              />
-            );
-          })}
-      <div ref={bottomDiv} />
-    </TimelineContainer>
-  );
-};
-
-const GrassContainer = ({
-  path,
-  title,
-  onClick,
-}: {
-  path: string;
-  title: string;
-  onClick: (value: string) => void;
-}) => {
-  const [base, setBase] = useState(0);
-  const now = new Date();
-  const firstDay = new Date(now.getFullYear(), now.getMonth() + base, 1); // FROM 현재 날짜 기준 1일 (5월 1일)
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 5 + base, 1); // TO 현재 날짜 기준 +5달 (10월 1일)
-  const fromSeconds = Math.round(firstDay.valueOf() / 1000);
-  const toSeconds = Math.round(lastDay.valueOf() / 1000);
-
-  const firstMonth = firstDay.getMonth() + 1;
-  // console.log('firstDay.getMonth', firstMonth);
-  // firstDay 달을 잡고
-  // meta 로 받은 데이터를 map 돌면서 Date 처리 해서 같은 달인지 체크
-  // 같은 달이면 [base+1] index에 Push
-  //
-  const { data: grassObject, refetch } = useQuery(['timelineInfinite', 'GRASS', path, fromSeconds, toSeconds], () =>
-    getUserGrass(path, fromSeconds, toSeconds),
-  );
-  const dateList = grassObject?.metas || [];
-  const stack: GrassStackedData = { '1': [], '2': [], '3': [], '4': [], '5': [] };
-  dateList?.forEach((item: any) => {
-    const temp = new Date(item);
-    temp.setHours(0, 0, 0);
-    // console.log(`firstMonth :${firstMonth} // temp.getMonth :${temp.getMonth() + 1}`);
-    const index = String((temp.getMonth() + 1 - firstMonth + 1 + 12) % 12) as '1' | '2' | '3' | '4' | '5';
-
-    stack[index].push(temp.toString());
-  });
-  const handleClickNext = () => {
-    setBase((prev) => prev + 1);
-  };
-  const handleClickPrev = () => {
-    setBase((prev) => prev - 1);
-  };
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
-  return (
-    <GrassArea
-      title={title}
-      onClick={onClick}
-      onClickNext={handleClickNext}
-      onClickPrev={handleClickPrev}
-      data={stack}
-    />
   );
 };
 
@@ -345,14 +117,15 @@ const User: NextPage = () => {
             <Introduction blogs={blogs} introduction={userInfo?.introduction} />
           </TextContainer>
         </IntroContainer>
-        <GrassContainer
+        <GrassTemplate
           path={path}
           title={`${userInfo?.name}의 기록`}
           onClick={(value) => {
             setClickedDate(value);
           }}
         />
-        <TimeLineArea path={path} changable={userInfo?.isAuthorized} />
+
+        <TimelineTemplate path={path} changable={userInfo?.isAuthorized} />
       </MypageContainer>
       <FloatingContainer>
         <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />
