@@ -32,35 +32,36 @@ const Header = () => {
 
   return (
     <header css={styles.container}>
-      <div css={styles.inner({ isMobile: device === 'mobile' })}>
-        <div css={styles.logoContainer}>
-          <Link href={'/'}>
-            <IconLogo />
-          </Link>
-          {device === 'desktop' && isLogin && (
-            <Link href='/[user]' as={`/@${path}`}>
-              <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
+      <div css={styles.headerBlurContainer}>
+        <div css={styles.inner({ isMobile: device === 'mobile' })}>
+          <div css={styles.logoContainer}>
+            <Link href={'/'}>
+              <IconLogo />
             </Link>
-          )}
-        </div>
-        {isLogin ? (
-          <div
-            css={css`
-              display: flex;
-              align-items: center;
-              gap: 12px;
-              ${mq('desktop')} {
-                gap: 24px;
-              }
-            `}
-          >
-            {device === 'mobile' && (
+            {device === 'desktop' && isLogin && (
               <Link href='/[user]' as={`/@${path}`}>
                 <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
               </Link>
             )}
-            {/* <IconApps /> */}
-            {/* {userData && (
+          </div>
+          {isLogin ? (
+            <div
+              css={css`
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                ${mq('desktop')} {
+                  gap: 24px;
+                }
+              `}
+            >
+              {device === 'mobile' && (
+                <Link href='/[user]' as={`/@${path}`}>
+                  <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
+                </Link>
+              )}
+              {/* <IconApps /> */}
+              {/* {userData && (
               <Image
                 src={userData?.profileImgSrc}
                 width={36}
@@ -71,12 +72,13 @@ const Header = () => {
                 `}
               />
             )} */}
-          </div>
-        ) : (
-          <button css={styles.btn} onClick={handleModalOpen}>
-            로그인
-          </button>
-        )}
+            </div>
+          ) : (
+            <button css={styles.btn} onClick={handleModalOpen}>
+              로그인
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );

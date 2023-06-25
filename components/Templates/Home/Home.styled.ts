@@ -330,6 +330,10 @@ const footer = css`
   display: flex;
   align-items: center;
   gap: 16px;
+
+  ${mq('desktop')} {
+    justify-content: center;
+  }
 `;
 
 const divider = css`
