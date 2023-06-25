@@ -66,7 +66,7 @@ const TimelineComponent = ({
   return (
     <div style={{ display: 'flex', gap: '15px', marginBottom: '-10px' }}>
       <IconTimeline />
-      <div style={{ width: '100%', marginTop: '5px' }}>
+      <div style={{ width: '90%', marginTop: '5px' }}>
         <TimeLine
           content={{ ...content, date: formatDate(originalDate) }}
           onSaveAllContent={(newValue) => updateTimeline(newValue as any)}
