@@ -14,7 +14,7 @@ const GrassTemplate = ({ path, title, onClick }: GrassTemplateProps) => {
   const [base, setBase] = useState(0);
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth() + base, 1); // FROM 현재 날짜 기준 1일 (5월 1일)
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 5 + base, 1); // TO 현재 날짜 기준 +5달 (10월 1일)
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 4 + base, 1); // TO 현재 날짜 기준 +4달 (10월 1일)
   const fromSeconds = Math.round(firstDay.valueOf() / 1000);
   const toSeconds = Math.round(lastDay.valueOf() / 1000);
 
@@ -27,12 +27,12 @@ const GrassTemplate = ({ path, title, onClick }: GrassTemplateProps) => {
     getUserGrass(path, fromSeconds, toSeconds),
   );
   const dateList = grassObject?.metas || [];
-  const stack: GrassStackedData = { '1': [], '2': [], '3': [], '4': [], '5': [] };
+  const stack: GrassStackedData = { '1': [], '2': [], '3': [], '4': [] };
   dateList?.forEach((item: any) => {
     const temp = new Date(item);
     temp.setHours(0, 0, 0);
     // console.log(`firstMonth :${firstMonth} // temp.getMonth :${temp.getMonth() + 1}`);
-    const index = String((temp.getMonth() + 1 - firstMonth + 1 + 12) % 12) as '1' | '2' | '3' | '4' | '5';
+    const index = String((temp.getMonth() + 1 - firstMonth + 1 + 12) % 12) as '1' | '2' | '3' | '4';
 
     stack[index].push(temp.toString());
   });

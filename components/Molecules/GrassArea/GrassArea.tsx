@@ -103,18 +103,43 @@ export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: Gr
   // 다음 슬라이드 클릭
   const clickNextSlide = () => {
     onClickNext();
-    if (swiper?.isEnd) {
-      appendGrassSlide();
-      // !! setTimeout으로 했는데 이거 해결방법이 필요함.. 방법 I Don't No
-      setTimeout(() => {
-        swiper?.slideNext();
-      }, 100);
-      setTimeout(() => {
-        setYearMonthArr((prev) => prev.slice(1));
-      }, 300);
-    } else {
-      swiper?.slideNext();
-    }
+    setYearMonthArr((prevArr) => {
+      const slicedArr = prevArr.slice(1);
+      if (prevArr[prevArr.length - 1].month + 1 <= 12) {
+        return [
+          ...slicedArr,
+          {
+            year: prevArr[prevArr.length - 1].year,
+            month: 1 + prevArr[prevArr.length - 1].month,
+            monthEng: format(
+              new Date(prevArr[prevArr.length - 1].year, prevArr[prevArr.length - 1].month),
+              'MMM',
+            ) as monthYearData['monthEng'],
+          },
+        ];
+      } else {
+        return [
+          ...slicedArr,
+          {
+            year: prevArr[prevArr.length - 1].year + 1,
+            month: 1,
+            monthEng: format(new Date(prevArr[prevArr.length - 1].year + 1, 0), 'MMM') as monthYearData['monthEng'],
+          },
+        ];
+      }
+    });
+    // if (swiper?.isEnd) {
+    //   appendGrassSlide();
+    //   // !! setTimeout으로 했는데 이거 해결방법이 필요함.. 방법 I Don't No
+    //   setTimeout(() => {
+    //     swiper?.slideNext();
+    //   }, 100);
+    //   setTimeout(() => {
+    //     setYearMonthArr((prev) => prev.slice(1));
+    //   }, 300);
+    // } else {
+    //   swiper?.slideNext();
+    // }
   };
 
   // 슬라이드 마지막에 이어붙이기
@@ -148,15 +173,37 @@ export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: Gr
   // 이전 슬라이드 클릭
   const clickPrevSlide = () => {
     onClickPrev();
-    if (swiper?.isBeginning) {
-      prependGrassSlide();
-      setTimeout(() => {
-        swiper?.slidePrev();
-        setYearMonthArr((prev) => prev.slice(0, prev.length - 1));
-      }, 100);
-    } else {
-      swiper?.slidePrev();
-    }
+    setYearMonthArr((prevArr) => {
+      const slicedArr = prevArr.slice(0, prevArr.length - 1);
+      if (prevArr[0].month - 1 < 1) {
+        return [
+          {
+            year: prevArr[0].year - 1,
+            month: 12,
+            monthEng: format(new Date(prevArr[0].year, 11), 'MMM') as monthYearData['monthEng'],
+          },
+          ...slicedArr,
+        ];
+      } else {
+        return [
+          {
+            year: prevArr[0].year,
+            month: prevArr[0].month - 1,
+            monthEng: format(new Date(prevArr[0].year, prevArr[0].month - 2), 'MMM') as monthYearData['monthEng'],
+          },
+          ...slicedArr,
+        ];
+      }
+    });
+    // if (swiper?.isBeginning) {
+    //   prependGrassSlide();
+    //   setTimeout(() => {
+    //     swiper?.slidePrev();
+    //     setYearMonthArr((prev) => prev.slice(0, prev.length - 1));
+    //   }, 100);
+    // } else {
+    //   swiper?.slidePrev();
+    // }
   };
 
   // 슬라이드 이전에 이어붙이기
