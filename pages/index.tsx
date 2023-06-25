@@ -9,8 +9,10 @@ import useToast from '@/hooks/useToast';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import { FONT_COLOR } from '@/constants/color';
 import { H1 } from '@/components/Atom/Typography';
+import { useQueryClient } from '@tanstack/react-query';
 
 const HomePage = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { isOpen, text, showToast } = useToast();
 
@@ -50,7 +52,13 @@ const HomePage = () => {
     const newTypingTimer = setTimeout(() => {
       memoMutate(
         { data: e.target.value },
-        { onSuccess: () => setTypingState('checked'), onError: () => setTypingState('error') },
+        {
+          onSuccess: () => {
+            setTypingState('checked');
+            queryClient.invalidateQueries(['MY_DRAFT']);
+          },
+          onError: () => setTypingState('error'),
+        },
       );
     }, 5000);
 
