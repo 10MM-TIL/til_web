@@ -271,7 +271,7 @@ const Setting: NextPage = () => {
   });
 
   const handleSave = async () => {
-    const nameReg = /[^ㄱ-힣a-zA-Z0-9]/gi;
+    const nameReg = /[^ㄱ-힣a-zA-Z0-9\s]/gi;
     const pathReg = /[^a-zA-Z0-9-]/gi;
     const nameValue = myInfo.name;
     const pathValue = myInfo.path;
@@ -347,7 +347,7 @@ const Setting: NextPage = () => {
     const pathValue = e.target.value;
     setIsChangeInput(true);
     setMyInfo((prev: any) => {
-      return { ...prev, path: pathValue };
+      return { ...prev, path: pathValue.replace(' ', '') };
     });
   }, []);
   const handleChangeIntroduction = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -395,7 +395,7 @@ const Setting: NextPage = () => {
                 useFixedString={true}
                 inputValue={myInfo.path}
                 useCopy={true}
-                maxLength={10}
+                maxLength={20}
                 onChange={handleChangePath}
               />
               <TextField

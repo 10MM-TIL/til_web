@@ -16,7 +16,6 @@ import { formatDate } from '@/utils/utils';
 import { AuthState } from '@/stores/authStateStore';
 import { css } from '@emotion/react';
 import { LoginModalState } from '@/stores/modalStateStore';
-import { useRouter } from 'next/router';
 
 interface TimelineTemplateProps {
   path: string;
@@ -32,8 +31,6 @@ const TimelineComponent = ({
   postIdentifier: string;
   changable: boolean;
 }) => {
-  const router = useRouter();
-
   const { isLogin } = useRecoilValue(AuthState);
 
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
@@ -99,7 +96,7 @@ const TimelineComponent = ({
         />
       )}
       <IconTimeline />
-      <div style={{ width: router.pathname === '/' ? '100%' : '90%', marginTop: '5px' }}>
+      <div style={{ width: '100%', marginTop: '5px' }}>
         <TimeLine
           content={{ ...content, date: formatDate(originalDate) }}
           onSaveAllContent={(newValue) => updateTimeline(newValue as any)}
