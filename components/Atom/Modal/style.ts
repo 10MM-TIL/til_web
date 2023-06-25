@@ -27,7 +27,7 @@ const ModalContainer = styled.div`
 
   background: ${BACKGROUND_COLOR.NAVY_3};
   // padding 의 경우 figma상의 최소치 설정
-  padding: 86px 78px 40px 78px;
+  padding: 86px 13px 40px 13px;
   text-align: center;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
