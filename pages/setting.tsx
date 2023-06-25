@@ -402,7 +402,7 @@ const Setting: NextPage = () => {
                 title='이름'
                 isInput={true}
                 inputValue={myInfo.name}
-                maxLength={20}
+                maxLength={10}
                 onChange={handleChangeName}
               />
               <TextField
