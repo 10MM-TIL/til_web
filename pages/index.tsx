@@ -135,7 +135,7 @@ const HomePage = () => {
       return;
     }
 
-    if (new Date(date).getTime() > new Date('2000-01-01').getTime()) {
+    if (new Date(date).getTime() < new Date('2000-01-01').getTime()) {
       alert('2000년 1월 1일 이전에 작성된 포스트는 등록할 수 없습니다.');
       return;
     }
