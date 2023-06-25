@@ -24,6 +24,14 @@ import IconError from '@/assets/svgs/IconError';
 import { ko } from 'date-fns/locale';
 
 import ToastMessage from '@/components/ToastMessage';
+import { clickedGrassDate } from '@/stores/user';
+import GrassTemplate from '../GrassTemplate';
+import { useQuery } from '@tanstack/react-query';
+import { getUserProfile } from '@/apis/user';
+import path from 'path';
+import { useRouter } from 'next/router';
+import { useMyUser } from '@/hooks/queries/profileQuery';
+import TimelineTemplate from '../TimelineTemplate';
 
 interface HomeTemplatesProps {
   selectedTab: 'MEMO' | 'REVIEW';
@@ -79,7 +87,13 @@ const HomeTemplates = ({
 
   const { isLogin } = useRecoilValue(AuthState);
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
+  const setClickedDate = useSetRecoilState(clickedGrassDate);
 
+  const { data: userData } = useMyUser({ isLogin });
+  const user = userData?.data;
+  const { data: userInfo } = useQuery(['PROFILE', user?.path], () => getUserProfile(user?.path ?? ''), {
+    enabled: isLogin,
+  });
   const { data: postsData } = useAllPosts();
 
   const { data: cardData } = useRecommandPosts('', true);
@@ -231,26 +245,16 @@ const HomeTemplates = ({
               )}
             </div>
           </div>
-          <div css={styles.elementContainer}>
-            <div css={styles.elementTitle}>
-              <Typo.H1 color='#D2D2D2'>내가 모은 기록</Typo.H1>
-              <div css={styles.titleRight}>
-                <div css={styles.iconContainer}>
-                  <IconArrow width={6} height={10} fill={FONT_COLOR.GRAY_2} transform='rotate(360)' />
-                </div>
-                <div css={styles.iconContainer}>
-                  <IconArrow width={6} height={10} fill={FONT_COLOR.GRAY_2} transform='rotate(180)' />
-                </div>
-              </div>
-            </div>
-            <div>{/* 잔디 컴포넌트! */}</div>
-          </div>
-          {isLogin && (
-            <div css={styles.elementContainer}>
-              <Typo.H1 color='#D2D2D2'>타임라인</Typo.H1>
-              <div>{/* 타임라인 컴포넌트! */}</div>
-            </div>
-          )}
+
+          <GrassTemplate
+            path={user?.path ?? ''}
+            title={isLogin ? `${user?.path}의 기록` : '내가 모은 기록'}
+            onClick={(value) => {
+              setClickedDate(value);
+            }}
+          />
+
+          <TimelineTemplate path={user?.path ?? ''} changable={userInfo?.isAuthorized} />
 
           {device === 'mobile' && (
             <>
@@ -381,6 +385,15 @@ const HomeTemplates = ({
                 </>
               )}
             </div>
+            <footer css={styles.footer}>
+              <Link href='https://www.plip.kr/pcc/c791921f-5dc3-4cb0-baac-55e48ee2e585/privacy-policy' target='_blank'>
+                <Typo.Body color={FONT_COLOR.GRAY_2}>개인정보처리방침</Typo.Body>
+              </Link>
+              <div css={styles.divider} />
+              <Link href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7' target='_blank'>
+                <Typo.Body color={FONT_COLOR.GRAY_2}>서비스 이용 약관</Typo.Body>
+              </Link>
+            </footer>
           </div>
         )}
       </div>

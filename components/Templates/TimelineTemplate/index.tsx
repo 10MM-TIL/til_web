@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clickedGrassDate } from '@/stores/user';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { getUserTimeline, putEditTimeline, deleteTimeline } from 'apis/user';
@@ -13,6 +13,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import { IconTimeline } from '@/assets/svgs/IconTimeline';
 import { formatDate } from '@/utils/utils';
+import { AuthState } from '@/stores/authStateStore';
+import { css } from '@emotion/react';
+import { LoginModalState } from '@/stores/modalStateStore';
+import { useRouter } from 'next/router';
 
 interface TimelineTemplateProps {
   path: string;
@@ -28,6 +32,12 @@ const TimelineComponent = ({
   postIdentifier: string;
   changable: boolean;
 }) => {
+  const router = useRouter();
+
+  const { isLogin } = useRecoilValue(AuthState);
+
+  const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
+
   const { showToast } = useToast();
   const { title: originalTitle, desc: originalSummary, date: originalDate } = content;
   const queryClient = useQueryClient();
@@ -64,9 +74,32 @@ const TimelineComponent = ({
     removeTimeline.mutate({ postIdentifier: postIdentifier });
   };
   return (
-    <div style={{ display: 'flex', gap: '15px', marginBottom: '-10px' }}>
+    <div style={{ position: 'relative', display: 'flex', gap: '15px', marginBottom: '-10px' }}>
+      {!isLogin && (
+        <div
+          css={css`
+            z-index: 100;
+
+            position: absolute;
+            top: 5px;
+            right: 0;
+            bottom: 12px;
+            left: 34px;
+
+            background-color: rgba(27, 34, 44, 0.6);
+
+            border-radius: 6px;
+          `}
+          onClick={(e) => {
+            if (!isLogin) {
+              e.currentTarget.blur();
+              setIsLoginModalOpen({ isLoginModalOpen: true });
+            }
+          }}
+        />
+      )}
       <IconTimeline />
-      <div style={{ width: '90%', marginTop: '5px' }}>
+      <div style={{ width: router.pathname === '/' ? '100%' : '90%', marginTop: '5px' }}>
         <TimeLine
           content={{ ...content, date: formatDate(originalDate) }}
           onSaveAllContent={(newValue) => updateTimeline(newValue as any)}
@@ -79,6 +112,7 @@ const TimelineComponent = ({
 };
 
 const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
+  const { isLogin } = useRecoilValue(AuthState);
   const bottomDiv = useRef(null);
   const [totalSize, setTotalSize] = useState(0);
   const { data: postObject, fetchNextPage, isSuccess, refetch } = useMyAllTimeline(path);
@@ -141,9 +175,28 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
           {clickedDate !== '' ? `전체보기` : `${totalSize}개`}
         </Typo.Body>
       </TimelineTitleArea>
-      {clickedDate === ''
-        ? postObject?.pages?.map((pages) =>
-            pages?.posts?.map((item: any) => {
+
+      {isLogin
+        ? clickedDate === ''
+          ? postObject?.pages?.map((pages) =>
+              pages?.posts?.map((item: any) => {
+                const content = {
+                  title: item.title,
+                  date: item.createdAt,
+                  url: item.url,
+                  desc: item.summary,
+                };
+                return (
+                  <TimelineComponent
+                    key={item.identifier}
+                    content={content}
+                    postIdentifier={item.identifier}
+                    changable={changable}
+                  />
+                );
+              }),
+            )
+          : timelineData.map((item: any) => {
               const content = {
                 title: item.title,
                 date: item.createdAt,
@@ -158,20 +211,20 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
                   changable={changable}
                 />
               );
-            }),
-          )
-        : timelineData.map((item: any) => {
+            })
+        : Array.from({ length: 3 }, (_, index) => index).map((value, idx) => {
             const content = {
-              title: item.title,
-              date: item.createdAt,
-              url: item.url,
-              desc: item.summary,
+              title: '나만의 회고 로그를 쌓아보세요',
+              date: '2023.01.01',
+              url: 'https://asdf.com',
+              desc: '상단 회고 탭에서 회고 게시글의 링크를 입력해보세요',
             };
+
             return (
               <TimelineComponent
-                key={item.identifier}
+                key={idx + value + content.title.length * idx}
                 content={content}
-                postIdentifier={item.identifier}
+                postIdentifier={'' + content.title.length * idx}
                 changable={changable}
               />
             );

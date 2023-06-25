@@ -46,6 +46,7 @@ const GrassTemplate = ({ path, title, onClick }: GrassTemplateProps) => {
   useEffect(() => {
     refetch();
   }, [refetch]);
+
   return (
     <GrassArea
       title={title}

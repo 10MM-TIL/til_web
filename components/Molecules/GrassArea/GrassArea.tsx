@@ -13,6 +13,10 @@ import { GrassAreaProps, GrassStackedData } from './types';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { AuthState } from '@/stores/authStateStore';
+import { FONT_COLOR } from '@/constants/color';
+import { LoginModalState } from '@/stores/modalStateStore';
 
 // !! 추후에 없어질 함수 (임시)
 // 잔디가 쌓인 데이터(랜덤)
@@ -54,6 +58,8 @@ const MonthGrass = ({
 };
 
 export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: GrassAreaProps) => {
+  const { isLogin } = useRecoilValue(AuthState);
+  const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
   // 추후 잔디의 데이터를 받아오면 수정이 필요함
   const [stackBrick, setStackBrick] = useState<GrassStackedData>(data);
   // console.log('stackBrick', stackBrick);
@@ -249,6 +255,18 @@ export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: Gr
       </div>
 
       <Styled.GrassSwiper>
+        {!isLogin && (
+          <Styled.GrassDimmedArea
+            onClick={(e) => {
+              if (!isLogin) {
+                e.currentTarget.blur();
+                setIsLoginModalOpen({ isLoginModalOpen: true });
+              }
+            }}
+          >
+            <Typo.H1 color={FONT_COLOR.WHITE}>나만의 회고 로그를 쌓아보세요</Typo.H1>
+          </Styled.GrassDimmedArea>
+        )}
         <Swiper
           direction={'horizontal'}
           modules={[Navigation, Virtual]}

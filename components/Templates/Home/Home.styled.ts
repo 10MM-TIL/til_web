@@ -46,7 +46,7 @@ const desktopContainer = css`
 `;
 
 const container = css`
-  padding: 84px 24px;
+  margin: 84px 24px;
   display: flex;
   flex-direction: column;
   gap: 36px;
@@ -330,6 +330,10 @@ const footer = css`
   display: flex;
   align-items: center;
   gap: 16px;
+
+  ${mq('desktop')} {
+    justify-content: center;
+  }
 `;
 
 const divider = css`
