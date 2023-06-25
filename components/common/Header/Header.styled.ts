@@ -7,6 +7,10 @@ const container = css`
   z-index: ${Z_INDEX_LEVEL['HEADER']}; // TODO Z-Index
   width: 100%;
   height: 80px;
+`;
+
+const headerBlurContainer = css`
+  width: calc(100% - 18px);
   backdrop-filter: blur(9.5px);
 `;
 
@@ -34,6 +38,6 @@ const btn = css`
   border-radius: 8px;
 `;
 
-const styles = { container, inner, logoContainer, btn };
+const styles = { container, headerBlurContainer, inner, logoContainer, btn };
 
 export default styles;
