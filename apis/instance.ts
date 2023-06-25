@@ -69,23 +69,25 @@ instance.interceptors.response.use(
       }
 
       try {
-        const { config, response } = err;
+        const { config } = err;
 
         const res = await postAuthRefreshAPI();
 
-        if (!res?.data?.accessToken || !res?.data?.refreshToken) {
+        if (!res?.data?.accessToken) {
           logout(true);
           return;
         }
+
         const token = res.data.accessToken;
         setCookie('accToken', token);
-        setCookie('refToken', res.data.refreshToken);
+
         instance.defaults.headers['Authorization'] = `Bearer ${token}`;
 
         config.headers['Authorization'] = `Bearer ${token}`;
         const { data } = await axios(config);
         return data;
       } catch (err) {
+        console.error(err);
         logout(true);
       }
     }

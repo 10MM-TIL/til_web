@@ -165,6 +165,7 @@ const HomeTemplates = ({
                           setIsLoginModalOpen({ isLoginModalOpen: true });
                         }
                       }}
+                      placeholder='https://bricklog.io/your-post'
                     />
                     <button
                       type='button'

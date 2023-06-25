@@ -18,6 +18,7 @@ const useAuth = () => {
       logout(true);
       return;
     }
+
     const token = res.data.accessToken;
     setCookie('accToken', token);
     setCookie('refToken', res.data.refreshToken);
@@ -29,6 +30,7 @@ const useAuth = () => {
       setAuthState({ isLogin: isSignIn });
     } else {
       const refToken = getCookie('refToken');
+
       if (refToken) {
         handleRenewToken();
       }
