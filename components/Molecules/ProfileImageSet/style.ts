@@ -7,9 +7,9 @@ const SetContainer = styled.div`
   row-gap: 40px;
   justify-items: center;
   width: 100%;
-  padding: 50px 0 62px 0;
+  padding: 50px 10px 62px 10px;
   ${mq('desktop')} {
-    padding: 36px 0 24px 0;
+    padding: 36px 80px 24px 80px;
     row-gap: 28px;
   }
 `;
