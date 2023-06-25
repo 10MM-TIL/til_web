@@ -46,7 +46,7 @@ const desktopContainer = css`
 `;
 
 const container = css`
-  padding: 84px 24px;
+  margin: 84px 24px;
   display: flex;
   flex-direction: column;
   gap: 36px;

@@ -36,7 +36,7 @@ export const postPostUploadConfirmAPI = async ({
 }) => {
   try {
     const res = await instance.post(`/post/upload/confirm`, { url, title, summary, createdAt });
-    console.log(res);
+
     return res;
   } catch (e) {
     devError('postPostUploadConfirmAPI error ', e);
