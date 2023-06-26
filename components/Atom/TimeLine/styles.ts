@@ -14,7 +14,7 @@ export const TimeLineContainer = styled.div`
   height: 110px;
   background: ${BACKGROUND_COLOR.NAVY_4};
   border-radius: 6px;
-  padding: 20px 16px 12px 24px;
+  padding: 20px 16px 20px 24px;
 `;
 
 export const TimeLineContent = styled.div<{ isEdit: boolean }>`

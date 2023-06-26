@@ -238,7 +238,7 @@ const TimeLine = ({
             </>
           )}
         </div>
-        <BlogIcon url={timeLineContent?.url} />
+        <BlogIcon url={timeLineContent?.url} size={37} />
       </Styled.TimeLineContent>
     </Styled.TimeLineContainer>
   );
