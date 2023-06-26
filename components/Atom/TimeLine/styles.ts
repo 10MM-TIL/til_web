@@ -14,7 +14,7 @@ export const TimeLineContainer = styled.div`
   height: 110px;
   background: ${BACKGROUND_COLOR.NAVY_4};
   border-radius: 6px;
-  padding: 20px 16px 12px 24px;
+  padding: 20px 16px 20px 24px;
 `;
 
 export const TimeLineContent = styled.div<{ isEdit: boolean }>`
@@ -63,18 +63,19 @@ const timeLineBodyCss = ({ width }: { width: CSSProperties['width'] }) => css`
   span {
     display: block;
   }
+  width: 180px;
   ${mq('desktop')} {
     width: ${width}px;
   }
 `;
 
 export const TimeLineTitle = styled.div`
-  ${() => timeLineBodyCss({ width: 273 })}
+  ${() => timeLineBodyCss({ width: 340 })}
   margin-bottom: 6px;
 `;
 
 export const TimeLineDesc = styled.div`
-  ${() => timeLineBodyCss({ width: 400 })}
+  ${() => timeLineBodyCss({ width: 480 })}
 `;
 
 export const TimeLineImage = styled.div`
