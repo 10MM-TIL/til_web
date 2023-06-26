@@ -14,13 +14,14 @@ const useAuth = () => {
 
   const handleRenewToken = useCallback(async () => {
     const res = await postAuthRefreshAPI();
-    if (!res?.data?.accessToken || !res?.data?.refreshToken) {
+    if (!res?.data?.accessToken) {
       logout(true);
       return;
     }
+
     const token = res.data.accessToken;
     setCookie('accToken', token);
-    setCookie('refToken', res.data.refreshToken);
+
     instance.defaults.headers['Authorization'] = `Bearer ${token}`;
   }, []);
 
@@ -29,6 +30,7 @@ const useAuth = () => {
       setAuthState({ isLogin: isSignIn });
     } else {
       const refToken = getCookie('refToken');
+
       if (refToken) {
         handleRenewToken();
       }
