@@ -63,18 +63,19 @@ const timeLineBodyCss = ({ width }: { width: CSSProperties['width'] }) => css`
   span {
     display: block;
   }
+  width: 180px;
   ${mq('desktop')} {
     width: ${width}px;
   }
 `;
 
 export const TimeLineTitle = styled.div`
-  ${() => timeLineBodyCss({ width: 273 })}
+  ${() => timeLineBodyCss({ width: 340 })}
   margin-bottom: 6px;
 `;
 
 export const TimeLineDesc = styled.div`
-  ${() => timeLineBodyCss({ width: 400 })}
+  ${() => timeLineBodyCss({ width: 480 })}
 `;
 
 export const TimeLineImage = styled.div`

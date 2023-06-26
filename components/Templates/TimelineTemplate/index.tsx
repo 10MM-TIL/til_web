@@ -95,7 +95,9 @@ const TimelineComponent = ({
           }}
         />
       )}
-      <IconTimeline />
+      <div style={{ minWidth: '21px' }}>
+        <IconTimeline />
+      </div>
       <div style={{ width: '100%', marginTop: '5px' }}>
         <TimeLine
           content={{ ...content, date: formatDate(originalDate) }}
