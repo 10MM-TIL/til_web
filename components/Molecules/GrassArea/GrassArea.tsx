@@ -17,6 +17,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { FONT_COLOR } from '@/constants/color';
 import { LoginModalState } from '@/stores/modalStateStore';
+import { useRouter } from 'next/router';
 
 // !! 추후에 없어질 함수 (임시)
 // 잔디가 쌓인 데이터(랜덤)
@@ -58,6 +59,8 @@ const MonthGrass = ({
 };
 
 export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: GrassAreaProps) => {
+  const router = useRouter();
+  const { pathname } = router;
   const { isLogin } = useRecoilValue(AuthState);
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
   // 추후 잔디의 데이터를 받아오면 수정이 필요함
@@ -255,7 +258,7 @@ export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: Gr
       </div>
 
       <Styled.GrassSwiper>
-        {!isLogin && (
+        {!isLogin && pathname === '/' && (
           <Styled.GrassDimmedArea
             onClick={(e) => {
               if (!isLogin) {

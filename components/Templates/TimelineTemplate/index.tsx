@@ -16,6 +16,7 @@ import { formatDate } from '@/utils/utils';
 import { AuthState } from '@/stores/authStateStore';
 import { css } from '@emotion/react';
 import { LoginModalState } from '@/stores/modalStateStore';
+import { useRouter } from 'next/router';
 
 interface TimelineTemplateProps {
   path: string;
@@ -31,6 +32,8 @@ const TimelineComponent = ({
   postIdentifier: string;
   changable: boolean;
 }) => {
+  const router = useRouter();
+  const { pathname } = router;
   const { isLogin } = useRecoilValue(AuthState);
 
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
@@ -71,34 +74,34 @@ const TimelineComponent = ({
     removeTimeline.mutate({ postIdentifier: postIdentifier });
   };
   return (
-    <div style={{ position: 'relative', display: 'flex', gap: '15px', marginBottom: '-10px' }}>
-      {!isLogin && (
-        <div
-          css={css`
-            z-index: 100;
-
-            position: absolute;
-            top: 5px;
-            right: 0;
-            bottom: 12px;
-            left: 34px;
-
-            background-color: rgba(27, 34, 44, 0.6);
-
-            border-radius: 6px;
-          `}
-          onClick={(e) => {
-            if (!isLogin) {
-              e.currentTarget.blur();
-              setIsLoginModalOpen({ isLoginModalOpen: true });
-            }
-          }}
-        />
-      )}
+    <div style={{ display: 'flex', gap: '15px', marginBottom: '-10px' }}>
       <div style={{ minWidth: '21px' }}>
         <IconTimeline />
       </div>
-      <div style={{ width: '100%', marginTop: '5px' }}>
+      <div style={{ position: 'relative', width: '100%', marginTop: '5px' }}>
+        {pathname === '/' && !isLogin && (
+          <div
+            css={css`
+              z-index: 100;
+
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 16px;
+              left: 0;
+
+              background-color: rgba(27, 34, 44, 0.6);
+
+              border-radius: 6px;
+            `}
+            onClick={(e) => {
+              if (!isLogin) {
+                e.currentTarget.blur();
+                setIsLoginModalOpen({ isLoginModalOpen: true });
+              }
+            }}
+          />
+        )}
         <TimeLine
           content={{ ...content, date: formatDate(originalDate) }}
           onSaveAllContent={(newValue) => updateTimeline(newValue as any)}
@@ -111,6 +114,8 @@ const TimelineComponent = ({
 };
 
 const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
+  const router = useRouter();
+  const { pathname } = router;
   const { isLogin } = useRecoilValue(AuthState);
   const bottomDiv = useRef(null);
   const [totalSize, setTotalSize] = useState(0);
@@ -175,7 +180,7 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
         </Typo.Body>
       </TimelineTitleArea>
 
-      {isLogin
+      {pathname !== '/'
         ? clickedDate === ''
           ? postObject?.pages?.map((pages) =>
               pages?.posts?.map((item: any) => {
@@ -211,7 +216,8 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
                 />
               );
             })
-        : Array.from({ length: 3 }, (_, index) => index).map((value, idx) => {
+        : !isLogin
+        ? Array.from({ length: 3 }, (_, index) => index).map((value, idx) => {
             const content = {
               title: '나만의 회고 로그를 쌓아보세요',
               date: '2023.01.01',
@@ -227,7 +233,8 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
                 changable={changable}
               />
             );
-          })}
+          })
+        : null}
       <div ref={bottomDiv} />
     </TimelineContainer>
   );
