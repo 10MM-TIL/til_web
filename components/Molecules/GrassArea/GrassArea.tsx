@@ -13,6 +13,11 @@ import { GrassAreaProps, GrassStackedData } from './types';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { AuthState } from '@/stores/authStateStore';
+import { FONT_COLOR } from '@/constants/color';
+import { LoginModalState } from '@/stores/modalStateStore';
+import { useRouter } from 'next/router';
 
 // !! 추후에 없어질 함수 (임시)
 // 잔디가 쌓인 데이터(랜덤)
@@ -53,16 +58,22 @@ const MonthGrass = ({
   return <Grass date={date} GrassData={GrassData} onClickCell={onClickCell} />;
 };
 
-export const GrassArea = ({ title }: GrassAreaProps) => {
+export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: GrassAreaProps) => {
+  const router = useRouter();
+  const { pathname } = router;
+  const { isLogin } = useRecoilValue(AuthState);
+  const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
   // 추후 잔디의 데이터를 받아오면 수정이 필요함
-
-  const [stackBrick, setStackBrick] = useState<GrassStackedData>({
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-  });
+  const [stackBrick, setStackBrick] = useState<GrassStackedData>(data);
+  // console.log('stackBrick', stackBrick);
+  // console.log('data', data);
+  // const [stackBrick, setStackBrick] = useState<GrassStackedData>({
+  //   1: ['Sun May 14 2023 00:00:00 GMT+0900 (한국 표준시)'],
+  //   2: [],
+  //   3: [],
+  //   4: ['Sat Aug 26 2023 00:00:00 GMT+0900 (한국 표준시)'],
+  //   5: [],
+  // });
 
   const [nowYear, setNowYear] = useState(getYear(new Date()));
   const [nowMonth, setNowMonth] = useState(getMonth(new Date()) + 1);
@@ -73,39 +84,71 @@ export const GrassArea = ({ title }: GrassAreaProps) => {
   );
   const [swiper, setSwiper] = useState<SwiperCore | null>(null);
   const prependNumber = useRef(1); // virtual Index
-
-  // TODO 수정 필요! 현재는 매번 랜덤한 값이 들어와 이동할때마다 바뀜
   useEffect(() => {
-    // 추가 후 삭제 해서 두번 실행됌
-    yearMonthArr.forEach((i, index) => {
-      setStackBrick((prev) => ({
-        ...prev,
-        [index + 1]: addRandomDateToKey(i.year, i.month),
-      }));
-    });
-  }, [yearMonthArr]);
+    setStackBrick(data);
+  }, [data]);
+  // TODO 수정 필요! 현재는 매번 랜덤한 값이 들어와 이동할때마다 바뀜
+  // useEffect(() => {
+  //   // 추가 후 삭제 해서 두번 실행됌
+  //   yearMonthArr.forEach((i, index) => {
+  //     setStackBrick((prev) => ({
+  //       ...prev,
+  //       [index + 1]: addRandomDateToKey(i.year, i.month),
+  //     }));
+  //   });
+  // }, [yearMonthArr]);
 
   // 현재월 + 5 (4니까 다음이동할때 애니메이션이 동작안함 > 이유 몰?루?)
-  const clickCellTest = useCallback((date: string) => {
-    // 데이터 조정은 여기서 수행
-    // setGrassData();
-    console.log(`클릭한 날짜 정보: ${date}`);
-  }, []);
+  const clickCellTest = useCallback(
+    (date: string) => {
+      // 데이터 조정은 여기서 수행
+      // setGrassData();
+      onClick(date);
+      console.log(`클릭한 날짜 정보: ${date}`);
+    },
+    [onClick],
+  );
 
   // 다음 슬라이드 클릭
   const clickNextSlide = () => {
-    if (swiper?.isEnd) {
-      appendGrassSlide();
-      // !! setTimeout으로 했는데 이거 해결방법이 필요함.. 방법 I Don't No
-      setTimeout(() => {
-        swiper?.slideNext();
-      }, 100);
-      setTimeout(() => {
-        setYearMonthArr((prev) => prev.slice(1));
-      }, 300);
-    } else {
-      swiper?.slideNext();
-    }
+    onClickNext();
+    setYearMonthArr((prevArr) => {
+      const slicedArr = prevArr.slice(1);
+      if (prevArr[prevArr.length - 1].month + 1 <= 12) {
+        return [
+          ...slicedArr,
+          {
+            year: prevArr[prevArr.length - 1].year,
+            month: 1 + prevArr[prevArr.length - 1].month,
+            monthEng: format(
+              new Date(prevArr[prevArr.length - 1].year, prevArr[prevArr.length - 1].month),
+              'MMM',
+            ) as monthYearData['monthEng'],
+          },
+        ];
+      } else {
+        return [
+          ...slicedArr,
+          {
+            year: prevArr[prevArr.length - 1].year + 1,
+            month: 1,
+            monthEng: format(new Date(prevArr[prevArr.length - 1].year + 1, 0), 'MMM') as monthYearData['monthEng'],
+          },
+        ];
+      }
+    });
+    // if (swiper?.isEnd) {
+    //   appendGrassSlide();
+    //   // !! setTimeout으로 했는데 이거 해결방법이 필요함.. 방법 I Don't No
+    //   setTimeout(() => {
+    //     swiper?.slideNext();
+    //   }, 100);
+    //   setTimeout(() => {
+    //     setYearMonthArr((prev) => prev.slice(1));
+    //   }, 300);
+    // } else {
+    //   swiper?.slideNext();
+    // }
   };
 
   // 슬라이드 마지막에 이어붙이기
@@ -138,15 +181,38 @@ export const GrassArea = ({ title }: GrassAreaProps) => {
 
   // 이전 슬라이드 클릭
   const clickPrevSlide = () => {
-    if (swiper?.isBeginning) {
-      prependGrassSlide();
-      setTimeout(() => {
-        swiper?.slidePrev();
-        setYearMonthArr((prev) => prev.slice(0, prev.length - 1));
-      }, 100);
-    } else {
-      swiper?.slidePrev();
-    }
+    onClickPrev();
+    setYearMonthArr((prevArr) => {
+      const slicedArr = prevArr.slice(0, prevArr.length - 1);
+      if (prevArr[0].month - 1 < 1) {
+        return [
+          {
+            year: prevArr[0].year - 1,
+            month: 12,
+            monthEng: format(new Date(prevArr[0].year, 11), 'MMM') as monthYearData['monthEng'],
+          },
+          ...slicedArr,
+        ];
+      } else {
+        return [
+          {
+            year: prevArr[0].year,
+            month: prevArr[0].month - 1,
+            monthEng: format(new Date(prevArr[0].year, prevArr[0].month - 2), 'MMM') as monthYearData['monthEng'],
+          },
+          ...slicedArr,
+        ];
+      }
+    });
+    // if (swiper?.isBeginning) {
+    //   prependGrassSlide();
+    //   setTimeout(() => {
+    //     swiper?.slidePrev();
+    //     setYearMonthArr((prev) => prev.slice(0, prev.length - 1));
+    //   }, 100);
+    // } else {
+    //   swiper?.slidePrev();
+    // }
   };
 
   // 슬라이드 이전에 이어붙이기
@@ -192,6 +258,18 @@ export const GrassArea = ({ title }: GrassAreaProps) => {
       </div>
 
       <Styled.GrassSwiper>
+        {!isLogin && pathname === '/' && (
+          <Styled.GrassDimmedArea
+            onClick={(e) => {
+              if (!isLogin) {
+                e.currentTarget.blur();
+                setIsLoginModalOpen({ isLoginModalOpen: true });
+              }
+            }}
+          >
+            <Typo.H1 color={FONT_COLOR.WHITE}>나만의 회고 로그를 쌓아보세요</Typo.H1>
+          </Styled.GrassDimmedArea>
+        )}
         <Swiper
           direction={'horizontal'}
           modules={[Navigation, Virtual]}

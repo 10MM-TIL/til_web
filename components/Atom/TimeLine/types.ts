@@ -6,6 +6,7 @@ export type TimeLineProps = {
   editListPositionCss?: EditDropdownProps['editListPositionCss'];
   onSaveAllContent: (timeLineContent: TimeLineContentProps) => void;
   onDeleteContent: () => void;
+  changable: boolean;
 };
 export type TimeLineContentProps = {
   date: string;

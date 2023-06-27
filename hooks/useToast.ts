@@ -1,8 +1,11 @@
 import { useState, useRef, ReactNode } from 'react';
+import { useRecoilState } from 'recoil';
+import { ToastIsOpenState, ToastTextState } from '@/stores/toastStateStore';
 
 const useToast = () => {
-  const [text, setText] = useState<ReactNode>('');
-  const [isOpen, setIsOpen] = useState(false);
+  const [text, setText] = useRecoilState(ToastTextState);
+  const [isOpen, setIsOpen] = useRecoilState(ToastIsOpenState);
+
   const toastTimer = useRef<NodeJS.Timeout>();
 
   const showToast = (text: ReactNode) => {

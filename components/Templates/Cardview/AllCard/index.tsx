@@ -10,7 +10,7 @@ import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
 import { Card, CardProps } from '@/components/Atom/Card';
 import { useRecoilState } from 'recoil';
-import { categoryState } from '@/states/cardview';
+import { categoryState } from '@/stores/cardviewStateStore';
 import { formatDate } from '@/utils/utils';
 import { findSelectedCategory } from '@/utils/cardview';
 import { useAllPosts } from '@/hooks/queries/cardviewQuery';
@@ -72,9 +72,9 @@ const AllCard = ({
                     content={{
                       category: categories.find((i) => i.identifier === allCard.categoryIdentifier)?.name!,
                       header: allCard.title,
-                      body: allCard.description,
-                      img: require('@/assets/images/test.png'),
-                      name: allCard.userPath,
+                      body: allCard.summary,
+                      img: allCard.profileImgSrc,
+                      name: allCard.userName,
                       date: formatDate(allCard.createdAt),
                     }}
                     url={allCard.url}

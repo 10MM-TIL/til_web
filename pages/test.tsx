@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { BACKGROUND_COLOR } from '@/constants/color';
 
 import * as Typo from '@/components/Atom/Typography';
-import Toggle from '@/components/Toggle';
+import Toggle from '@/components/Atom/Toggle';
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
 import { GrassArea } from '@/components/Molecules/GrassArea';
 import { TextField } from '@/components/Atom/TextField';
@@ -71,7 +71,6 @@ const BLOG_DATA = [
     url: 'https://www.medium.com',
   },
 ];
-
 const Test: NextPage = () => {
   return (
     <>
@@ -81,7 +80,7 @@ const Test: NextPage = () => {
         `}
       >
         <h1>컴포넌트를 위한 테스트 페이지입니다.</h1>
-        <ProfilComponent />
+        {/* <ProfilComponent /> */}
         <TypoComponent></TypoComponent>
         <ToggleComponent></ToggleComponent>
         <CertifiedBlogComponent></CertifiedBlogComponent>
@@ -107,10 +106,10 @@ const ProfilComponent = () => {
    * 저장 버튼 누를 때 url 던져줘야하는데 image 주소 필요 HOW?
    */
   const [id, setId] = useState(0);
-  const [url, setUrl] = useState(require('@/assets/images/default.png') as string);
+  // const [url, setUrl] = useState(require('@/assets/images/profile/default.png') as string);
 
   useEffect(() => {
-    if (id > 0) setUrl(require(`@/assets/images/${id}.png`) as string);
+    if (id > 0) setUrl(require(`@/assets/images/profile/${id}.png`) as string);
   }, [id]);
   return (
     <div
@@ -451,7 +450,7 @@ const CardComponent = () => {
     category: '#개발',
     header: 'hackerrank - Nested Lists',
     body: 'Given the names and grades for each 123123123123123',
-    img: require('@/assets/images/test.png') as string,
+    img: require('@/assets/images/profile/default.png') as string,
     name: '김선철',
     date: '2023.01.07',
   });

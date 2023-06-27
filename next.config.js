@@ -6,15 +6,15 @@ const nextConfig = {
     emotion: true,
   },
   images: {
-    // remotePatterns: [
-    //   {
-    //     protocol: 'https',
-    //     hostname: 'api.surfit.io',
-    //     port: '',
-    //     pathname: '/**',
-    //   },
-    // ],
-    domains: ['search.pstatic.net'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'dev.bricklog.io',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+    domains: ['search.pstatic.net', 'raw.githubusercontent.com', 'dev.bricklog.io', 'bricklog.io'],
   },
   webpack: (config) => {
     // 아래를 추가합니다.
@@ -25,7 +25,7 @@ const nextConfig = {
     });
     return config;
   },
-  trailingSlash: true,
+  trailingSlash: false,
   rewrites: () => [
     {
       source: '/oauth2/v1/:path*', // url이 source에 해당될 경우

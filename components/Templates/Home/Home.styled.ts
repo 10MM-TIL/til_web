@@ -1,7 +1,11 @@
-import { BACKGROUND_COLOR, FONT_COLOR } from '@/constants/color';
+import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 import { mq } from '@/styles/mediaQuery';
 import { css } from '@emotion/react';
+
+const wrapper = css`
+  padding-bottom: 32px;
+`;
 
 const topContainer = css`
   display: flex;
@@ -42,7 +46,7 @@ const desktopContainer = css`
 `;
 
 const container = css`
-  padding: 84px 24px;
+  margin: 84px 24px;
   display: flex;
   flex-direction: column;
   gap: 36px;
@@ -57,6 +61,29 @@ const textareaContainer = css`
 `;
 
 const memoTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
+  cursor: pointer;
+  position: absolute;
+  top: -40px;
+  left: ${selectedTab === 'MEMO' ? '78px' : '72px'};
+  background-color: ${selectedTab === 'MEMO' ? BACKGROUND_COLOR.NAVY_2 : BACKGROUND_COLOR.NAVY_3};
+
+  border-radius: 12px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 0;
+
+  width: ${selectedTab === 'MEMO' ? '90px' : '100px'};
+  height: ${selectedTab === 'MEMO' ? '41px' : '40px'};
+  z-index: ${selectedTab === 'MEMO' ? Z_INDEX_LEVEL['TAB'] : Z_INDEX_LEVEL['TAB_HIDDEN']};
+  display: flex;
+  justify-content: center;
+  padding: ${selectedTab === 'MEMO' ? '11px 30px' : '11px 30px 0 40px'};
+`;
+
+const reviewTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
+  cursor: pointer;
   position: absolute;
   top: -40px;
   left: 0;
@@ -70,34 +97,19 @@ const memoTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
 
   width: 90px;
   height: 41px;
-  z-index: ${selectedTab === 'MEMO' ? Z_INDEX_LEVEL['TAB'] : Z_INDEX_LEVEL['TAB_HIDDEN']};
+  z-index: ${selectedTab === 'MEMO' ? Z_INDEX_LEVEL['TAB_HIDDEN'] : Z_INDEX_LEVEL['TAB']};
   display: flex;
   justify-content: center;
   padding: 11px 30px;
 `;
 
-const reviewTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
+const reviewGuide = css`
   position: absolute;
-  top: -40px;
-  left: ${selectedTab === 'MEMO' ? '72px' : '78px'};
-  background-color: ${selectedTab === 'MEMO' ? BACKGROUND_COLOR.NAVY_2 : BACKGROUND_COLOR.NAVY_3};
-
-  border-radius: 12px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 0;
-
-  width: ${selectedTab === 'MEMO' ? '100px' : '90px'};
-  height: ${selectedTab === 'MEMO' ? '40px' : '41px'};
-  z-index: ${selectedTab === 'MEMO' ? Z_INDEX_LEVEL['TAB_HIDDEN'] : Z_INDEX_LEVEL['TAB']};
-  display: flex;
-  justify-content: center;
-  padding: ${selectedTab === 'MEMO' ? '11px 30px 0 40px' : '11px 30px'};
+  top: -36px;
+  right: 0;
 `;
 
-const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
+const textarea = css`
   width: 100%;
   min-height: 216px;
   resize: none;
@@ -108,7 +120,7 @@ const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
   border-top-left-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.06);
 
-  padding: ${selectedTab === 'MEMO' ? '28px 24px 40px' : '28px 28px 20px'};
+  padding: 28px 24px 40px;
 
   white-space: pre-wrap;
 
@@ -124,6 +136,142 @@ const textarea = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => css`
 
   &:focus {
     border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+`;
+
+const reviewContainer = css`
+  width: 100%;
+  min-height: 216px;
+  background-color: ${BACKGROUND_COLOR.NAVY_3};
+  color: ${FONT_COLOR.WHITE};
+
+  border-radius: 12px;
+  border-top-left-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 28px 20px 20px;
+`;
+
+const reviewInputContainer = css`
+  padding-bottom: 12px;
+  border-bottom: 1px solid ${BACKGROUND_COLOR.NAVY_4};
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const reviewInput = css`
+  background-color: ${BACKGROUND_COLOR.NAVY_4};
+  border-radius: 6px;
+  height: 28px;
+  flex: 1;
+  color: ${FONT_COLOR.WHITE};
+  padding: 6px 12px;
+`;
+
+const reviewLoadBtn = ({ isEnable }: { isEnable: boolean }) => css`
+  background-color: ${isEnable ? POINT_COLOR.MAIN : BACKGROUND_COLOR.FIELD_10};
+  width: 76px;
+  height: 36px;
+  color: ${isEnable ? FONT_COLOR.GRAY_1 : FONT_COLOR.GRAY_2};
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 15px;
+  border-radius: 8px;
+`;
+
+const invalidContainer = css`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+
+const timelineContainer = css`
+  padding: 10px 0;
+  ${mq('desktop')} {
+    gap: 12px;
+    display: flex;
+  }
+`;
+
+const timeline = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 44px;
+  min-width: 312px;
+  padding: 12px 24px;
+  background-color: ${BACKGROUND_COLOR.NAVY_4};
+  border-radius: 6px;
+
+  ${mq('desktop')} {
+    flex: 1;
+  }
+`;
+
+const timelineLeftArea = css`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+`;
+
+const timelineCalendar = css`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+`;
+
+const timelineInputContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const timelineTitleInput = css`
+  width: 100%;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 2px solid ${BACKGROUND_COLOR.FIELD_10};
+  background-color: transparent;
+  color: ${FONT_COLOR.WHITE};
+  padding-bottom: 4px;
+  outline: none;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 22px;
+
+  &:focus {
+    border-bottom: 2px solid ${FONT_COLOR.WHITE};
+  }
+`;
+
+const timelineSummaryInput = css`
+  width: 100%;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 2px solid ${BACKGROUND_COLOR.FIELD_10};
+  background-color: transparent;
+  color: ${FONT_COLOR.WHITE};
+  padding: 2px 0;
+  outline: none;
+
+  &:focus {
+    border-bottom: 2px solid ${FONT_COLOR.WHITE};
+  }
+`;
+
+const timelineSubmitBtnContainer = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 6px;
+
+  ${mq('desktop')} {
+    margin-top: 0;
+    align-items: flex-end;
   }
 `;
 
@@ -164,7 +312,11 @@ const iconContainer = css`
   cursor: pointer;
 `;
 
-const tempBox = css``;
+const otherCardContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
 
 const desktopOtherCard = css`
   width: 284px;
@@ -178,6 +330,10 @@ const footer = css`
   display: flex;
   align-items: center;
   gap: 16px;
+
+  ${mq('desktop')} {
+    justify-content: center;
+  }
 `;
 
 const divider = css`
@@ -187,6 +343,7 @@ const divider = css`
 `;
 
 const styles = {
+  wrapper,
   topContainer,
   topImageContainer,
   topTextContainer,
@@ -195,13 +352,27 @@ const styles = {
   textareaContainer,
   memoTab,
   reviewTab,
+  reviewGuide,
   textarea,
+  reviewContainer,
+  reviewInputContainer,
+  reviewInput,
+  reviewLoadBtn,
+  invalidContainer,
+  timelineContainer,
+  timeline,
+  timelineLeftArea,
+  timelineCalendar,
+  timelineInputContainer,
+  timelineTitleInput,
+  timelineSummaryInput,
+  timelineSubmitBtnContainer,
   textareaBottomContainer,
   elementContainer,
   elementTitle,
   titleRight,
   iconContainer,
-  tempBox,
+  otherCardContainer,
   desktopOtherCard,
   footer,
   divider,

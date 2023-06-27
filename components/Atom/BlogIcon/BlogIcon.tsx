@@ -1,10 +1,10 @@
 import { ReactElement, useEffect, useState } from 'react';
-import IconBrunch from '@/assets/svgs/IconBrunch.svg';
-import IconNaver from '@/assets/svgs/IconNaver.svg';
-import IconTistory from '@/assets/svgs/IconTistory.svg';
-import IconVelog from '@/assets/svgs/IconVelog.svg';
-import IconMedium from '@/assets/svgs/IconMedium.svg';
-import IconCustom from '@/assets/svgs/IconCustom.svg';
+import IconBrunch from '@/assets/svgs/IconBrunch';
+import IconNaver from '@/assets/svgs/IconNaver';
+import IconTistory from '@/assets/svgs/IconTistory';
+import IconVelog from '@/assets/svgs/IconVelog';
+import IconMedium from '@/assets/svgs/IconMedium';
+import IconCustom from '@/assets/svgs/IconCustom';
 
 type blogName = 'naver' | 'tistory' | 'brunch' | 'velog' | 'medium' | 'custom';
 type BlogTypeObject = {
@@ -14,7 +14,7 @@ type BlogImageObject = {
   src: string | ReactElement;
 };
 
-const BlogIcon = ({ url }: { url: string }) => {
+const BlogIcon = ({ url, size = 20 }: { url: string; size?: number }) => {
   const [blogType, setBlogType] = useState<blogName>('custom');
   useEffect(() => {
     if (url.indexOf('naver') !== -1) {
@@ -34,17 +34,17 @@ const BlogIcon = ({ url }: { url: string }) => {
 
   switch (blogType) {
     case 'naver':
-      return <IconNaver />;
+      return <IconNaver size={size} />;
     case 'tistory':
-      return <IconTistory />;
+      return <IconTistory size={size} />;
     case 'brunch':
-      return <IconBrunch />;
+      return <IconBrunch size={size} />;
     case 'velog':
-      return <IconVelog />;
+      return <IconVelog size={size} />;
     case 'medium':
-      return <IconMedium />;
+      return <IconMedium size={size} />;
     default:
-      return <IconCustom />;
+      return <IconCustom size={size} />;
   }
 };
 

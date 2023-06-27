@@ -4,7 +4,6 @@ import { Layout } from '@/components/common';
 import { RecoilEnv, RecoilRoot } from 'recoil';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
 // react-query
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,8 +20,6 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // TODO Recoil install 후 RecoilRoot로 감싸주기
-
   // ! Next.js + Recoil.js ISSUE 대응
   RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 

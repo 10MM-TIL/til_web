@@ -46,6 +46,7 @@ const style = css`
     height: 100%;
     font-family: Pretendard, sans-serif;
     scroll-behavior: smooth;
+    overflow-y: overlay;
   }
   html,
   body,
@@ -116,6 +117,7 @@ const style = css`
     overflow: visible;
     cursor: pointer;
     outline: none;
+    color: #000;
   }
 
   html {
@@ -155,6 +157,10 @@ const style = css`
     background: black;
   } */
   /* } */
+
+  .react-datepicker-popper {
+    z-index: 100;
+  }
 `;
 
 const GlobalStyles = () => {

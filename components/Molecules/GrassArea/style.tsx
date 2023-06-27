@@ -43,3 +43,21 @@ export const GrassSwiper = styled.div`
     }
   }
 `;
+
+export const GrassDimmedArea = styled.div`
+  z-index: 100;
+
+  position: absolute;
+  top: 20px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(30, 37, 47, 0.5);
+
+  border-radius: 12px;
+`;

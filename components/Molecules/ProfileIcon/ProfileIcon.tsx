@@ -9,10 +9,12 @@ import { Button } from '@/components/Atom/Button';
 import { FONT_COLOR, POINT_COLOR } from '@/constants/color';
 import { Body, H1, Title } from '@/components/Atom/Typography';
 import ProfileImageSet from '@/components/Molecules/ProfileImageSet';
+import { useResize } from '@/hooks/useResize';
 
 const ProfileIcon = ({ imgUrl, editable = false, onClick }: ProfileIconProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectdId, setSelectedId] = useState(1);
+  const device = useResize();
   /**
    * 사진 변경 로직 추가 및 디자인 픽스 시 modal 컴포넌트의 children 추가 예정
    */
@@ -25,7 +27,7 @@ const ProfileIcon = ({ imgUrl, editable = false, onClick }: ProfileIconProps) =>
   }, []);
 
   const handleClickOk = useCallback(() => {
-    onClick(selectdId);
+    if (onClick) onClick(selectdId);
     setIsModalOpen(false);
   }, [onClick, selectdId]);
 
@@ -52,7 +54,11 @@ const ProfileIcon = ({ imgUrl, editable = false, onClick }: ProfileIconProps) =>
             }}
           />
           <div>
-            <Button backgroundColor={POINT_COLOR.MAIN} size='lg' onClick={handleClickOk}>
+            <Button
+              backgroundColor={POINT_COLOR.MAIN}
+              size={device === 'desktop' ? 'lg' : 'x-lg-m'}
+              onClick={handleClickOk}
+            >
               <H1>설정 완료</H1>
             </Button>
           </div>

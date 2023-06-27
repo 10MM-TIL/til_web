@@ -8,56 +8,60 @@ import styles from './Header.styled';
 
 import * as Typo from '@/components/Atom/Typography';
 import { FONT_COLOR } from '@/constants/color';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { useMyUser } from '@/hooks/queries/profileQuery';
 import { mq } from '@/styles/mediaQuery';
 import IconApps from '@/assets/svgs/IconApps';
 import Image from 'next/image';
+import { LoginModalState } from '@/stores/modalStateStore';
 
-interface HeaderProps {
-  onModalOn: (flag: boolean) => void;
-}
-
-const Header = ({ onModalOn }: HeaderProps) => {
+const Header = () => {
   const device = useResize();
 
   const { isLogin } = useRecoilValue(AuthState);
+  const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
 
   const { data } = useMyUser({ isLogin });
   const userData = data?.data;
+  const path = userData?.path;
+
+  const handleModalOpen = () => {
+    setIsLoginModalOpen({ isLoginModalOpen: true });
+  };
 
   return (
     <header css={styles.container}>
-      <div css={styles.inner({ isMobile: device === 'mobile' })}>
-        <div css={styles.logoContainer}>
-          <Link href={'/'}>
-            <IconLogo />
-          </Link>
-          {device === 'desktop' && isLogin && (
-            <Link href='/mypage'>
-              <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
+      <div css={styles.headerBlurContainer}>
+        <div css={styles.inner({ isMobile: device === 'mobile' })}>
+          <div css={styles.logoContainer}>
+            <Link href={'/'}>
+              <IconLogo />
             </Link>
-          )}
-        </div>
-        {isLogin ? (
-          <div
-            css={css`
-              display: flex;
-              align-items: center;
-              gap: 12px;
-              ${mq('desktop')} {
-                gap: 24px;
-              }
-            `}
-          >
-            {device === 'mobile' && (
-              <Link href='/mypage'>
+            {device === 'desktop' && isLogin && (
+              <Link href='/[user]' as={`/@${path}`}>
                 <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
               </Link>
             )}
-            <IconApps />
-            {/* {userData && (
+          </div>
+          {isLogin ? (
+            <div
+              css={css`
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                ${mq('desktop')} {
+                  gap: 24px;
+                }
+              `}
+            >
+              {device === 'mobile' && (
+                <Link href='/[user]' as={`/@${path}`}>
+                  <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
+                </Link>
+              )}
+              {/* <IconApps /> */}
+              {/* {userData && (
               <Image
                 src={userData?.profileImgSrc}
                 width={36}
@@ -68,12 +72,13 @@ const Header = ({ onModalOn }: HeaderProps) => {
                 `}
               />
             )} */}
-          </div>
-        ) : (
-          <button css={styles.btn} onClick={() => onModalOn(true)}>
-            로그인
-          </button>
-        )}
+            </div>
+          ) : (
+            <button css={styles.btn} onClick={handleModalOpen}>
+              로그인
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );

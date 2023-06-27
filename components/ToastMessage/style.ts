@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { keyframes, css } from '@emotion/react';
 import { POINT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
 import { mq } from '@/styles/mediaQuery';
+import { Z_INDEX_LEVEL } from '@/constants/zIndex';
 
 const fadeIn = keyframes({
   '0%': {
@@ -66,6 +67,8 @@ const ToastMessageContainer = styled.div<{ isOpen: boolean }>`
       : ''};
   /* 텍스트 선택 되는 부분 block */
   user-select: none;
+  z-index: ${Z_INDEX_LEVEL['MODAL']};
+
   ${mq('desktop')} {
     top: 90px;
     width: 300px;

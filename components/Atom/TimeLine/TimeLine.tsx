@@ -9,7 +9,7 @@ import BlogIcon from '@/components/Atom/BlogIcon';
 
 // [TODO] 최대 글자수 지정 필요
 const TITLE_MAX_LENGTH = 30;
-const DESC_MAX_LENGTH = 50;
+const DESC_MAX_LENGTH = 100;
 
 // 수정 클릭시 뜨는 '저장' | '취소' 버튼
 const EditStatusButton = memo(function EditStatusButton({
@@ -124,6 +124,7 @@ const TimeLine = ({
   onSaveAllContent,
   moreButtonPositionCss,
   editListPositionCss,
+  changable,
 }: TimeLineProps): ReactElement => {
   const moreButtonRef = useRef<HTMLUListElement>(null);
   const [timeLineContent, setTimeLineContent] = useState(content);
@@ -192,14 +193,16 @@ const TimeLine = ({
       {isEdit ? (
         <EditStatusButton onSaveTimeLine={onSaveTimeLine} onCancelTimeLine={onCancelTimeLine} />
       ) : (
-        <EditDropdown
-          editList={editList}
-          isOpen={isDropdownOpen}
-          moreButtonRef={moreButtonRef}
-          onCloseDropdown={toggleOpen}
-          moreButtonPositionCss={moreButtonPositionCss}
-          editListPositionCss={editListPositionCss}
-        ></EditDropdown>
+        changable && (
+          <EditDropdown
+            editList={editList}
+            isOpen={isDropdownOpen}
+            moreButtonRef={moreButtonRef}
+            onCloseDropdown={toggleOpen}
+            moreButtonPositionCss={moreButtonPositionCss}
+            editListPositionCss={editListPositionCss}
+          ></EditDropdown>
+        )
       )}
       <TimeLineDate date={timeLineContent?.date}></TimeLineDate>
       <Styled.TimeLineContent
@@ -235,7 +238,7 @@ const TimeLine = ({
             </>
           )}
         </div>
-        <BlogIcon url={timeLineContent?.url} />
+        <BlogIcon url={timeLineContent?.url} size={37} />
       </Styled.TimeLineContent>
     </Styled.TimeLineContainer>
   );

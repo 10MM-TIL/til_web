@@ -5,5 +5,5 @@
 export interface ProfileIconProps {
   imgUrl: string;
   editable?: boolean;
-  onClick: (id: number) => void;
+  onClick?: (id: number) => void;
 }
