@@ -180,43 +180,7 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
         </Typo.Body>
       </TimelineTitleArea>
 
-      {pathname !== '/'
-        ? clickedDate === ''
-          ? postObject?.pages?.map((pages) =>
-              pages?.posts?.map((item: any) => {
-                const content = {
-                  title: item.title,
-                  date: item.createdAt,
-                  url: item.url,
-                  desc: item.summary,
-                };
-                return (
-                  <TimelineComponent
-                    key={item.identifier}
-                    content={content}
-                    postIdentifier={item.identifier}
-                    changable={changable}
-                  />
-                );
-              }),
-            )
-          : timelineData.map((item: any) => {
-              const content = {
-                title: item.title,
-                date: item.createdAt,
-                url: item.url,
-                desc: item.summary,
-              };
-              return (
-                <TimelineComponent
-                  key={item.identifier}
-                  content={content}
-                  postIdentifier={item.identifier}
-                  changable={changable}
-                />
-              );
-            })
-        : !isLogin
+      {pathname === '/' && !isLogin
         ? Array.from({ length: 3 }, (_, index) => index).map((value, idx) => {
             const content = {
               title: '나만의 회고 로그를 쌓아보세요',
@@ -234,7 +198,41 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
               />
             );
           })
-        : null}
+        : clickedDate === ''
+        ? postObject?.pages?.map((pages) =>
+            pages?.posts?.map((item: any) => {
+              const content = {
+                title: item.title,
+                date: item.createdAt,
+                url: item.url,
+                desc: item.summary,
+              };
+              return (
+                <TimelineComponent
+                  key={item.identifier}
+                  content={content}
+                  postIdentifier={item.identifier}
+                  changable={changable}
+                />
+              );
+            }),
+          )
+        : timelineData.map((item: any) => {
+            const content = {
+              title: item.title,
+              date: item.createdAt,
+              url: item.url,
+              desc: item.summary,
+            };
+            return (
+              <TimelineComponent
+                key={item.identifier}
+                content={content}
+                postIdentifier={item.identifier}
+                changable={changable}
+              />
+            );
+          })}
       <div ref={bottomDiv} />
     </TimelineContainer>
   );
