@@ -157,6 +157,10 @@ const style = css`
     background: black;
   } */
   /* } */
+
+  .react-datepicker-popper {
+    z-index: 100;
+  }
 `;
 
 const GlobalStyles = () => {
