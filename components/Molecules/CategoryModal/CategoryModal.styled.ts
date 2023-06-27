@@ -15,7 +15,7 @@ const titleContainer = css`
 `;
 
 const categoryContainer = css`
-  margin-top: 24px;
+  margin-top: 75px;
   background-color: ${BACKGROUND_COLOR.NAVY_2};
   display: flex;
   flex-direction: column;
@@ -27,6 +27,7 @@ const categoryContainer = css`
 
   ${mq('desktop')} {
     width: 500px;
+    margin-top: 44px;
   }
 `;
 
@@ -72,11 +73,15 @@ const alertRadioRow = css`
 `;
 
 const agreeContainer = css`
-  padding: 16px 0 20px;
+  padding: 75px 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
+
+  ${mq('desktop')} {
+    padding: 67px 0 32px;
+  }
 `;
 
 const styles = {
