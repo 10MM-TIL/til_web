@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Script from 'next/script';
 import React, { ReactElement } from 'react';
 
 export type MetaContents = {
@@ -20,6 +21,8 @@ const defaultMetaContents: MetaContents = {
   keyword: '브릭로그, 회고, 커리어 성장, TIL, IT, 스타트업, 개발자, 디자이너, 기획자, 마케터',
 };
 const MetaHead = ({ metaContents }: { metaContents: MetaContents }) => {
+  const GTM_ID = process.env.NEXT_PUBLIC_MODE === 'dev' ? 'GTM-N7L3R9R' : 'GTM-MT882MC';
+  const GA_ID = process.env.NEXT_PUBLIC_MODE === 'dev' ? 'G-6999GQFZ90' : 'G-F0D85SJYQX';
   const { image, desc, title, keyword } = { ...defaultMetaContents, ...metaContents };
 
   const websiteUrl = process.env.NEXT_PUBLIC_MODE === 'dev' ? 'https://dev.bricklog.io' : 'https://bricklog.io';
@@ -51,6 +54,30 @@ const MetaHead = ({ metaContents }: { metaContents: MetaContents }) => {
         <meta name='twitter:description' content={desc}></meta>
         <link rel='shortcut icon' type='image/x-icon' href='/bricklog.ico' sizes='16' />
       </Head>
+      <Script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></Script>
+      <Script
+        id='ga-id'
+        dangerouslySetInnerHTML={{
+          __html: `window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${GA_ID}');`,
+        }}
+      ></Script>
+
+      <Script
+        id='gtm-id'
+        dangerouslySetInnerHTML={{
+          __html: `        
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','${GTM_ID}');
+            `,
+        }}
+      />
     </>
   );
 };
