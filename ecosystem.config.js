@@ -28,7 +28,7 @@ module.exports = {
       listen_timeout: 50000,
       kill_timeout: 5000, // SIGINT ↔ SIGKILL 대기시간을 5초로 설정
       env: {
-        Server_PORT: 1234,
+        Server_PORT: 3000,
         NODE_ENV: 'production',
       },
     },

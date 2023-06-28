@@ -14,7 +14,7 @@
     "pm2:reload:dev": "env-cmd -f .env.development pm2 reload ecosystem.config.js --only til-dev",
     "pm2:reload:prod": "env-cmd -f .env.production pm2 reload ecosystem.config.js --only til-product",
     "pm2:start:dev": "env-cmd -f .env.development pm2 start ecosystem.config.js --only til-dev",
-    "pm2:start:prod": "env-cmd -f .env.production pm2 start ecosystem.config.js --only til-product && pm2 monit",
+    "pm2:start:prod": "env-cmd -f .env.production pm2 start ecosystem.config.js --only til-product",
     "lint": "next lint"
   },
   "dependencies": {
@@ -42,7 +42,7 @@
     "@types/react": "18.0.26",
     "@types/react-datepicker": "^4.8.0",
     "@types/react-dom": "18.0.10",
-    "eslint": "8.31.0",
+    "eslint": "^8.31.0",
     "eslint-config-next": "13.1.1",
     "prettier": "^2.8.2",
     "typescript": "4.9.4"
