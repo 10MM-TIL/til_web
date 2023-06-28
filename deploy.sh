@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPOSITORY=/home/ubuntu/deploy
-REPOSITORY_PROD=/home/ubuntu/prod
+REPOSITORY_PROD=/home/ubuntu/deploy
 
 echo "DEPLOYMENT_GROUP_NAME: ${DEPLOYMENT_GROUP_NAME}"
 
@@ -10,7 +10,6 @@ if [ "${DEPLOYMENT_GROUP_NAME}" == "til_fe_prod" ]; then
   cd "${REPOSITORY_PROD}"
   # production 환경인 경우에 대한 처리
   sudo npm install
-
   pm2 describe til-product > /dev/null
   if [ $? -eq 0 ]; then
 	  # 실행 중인 경우
@@ -25,7 +24,6 @@ elif [ "${DEPLOYMENT_GROUP_NAME}" == "til_fe_dev" ]; then
   echo "개발 서버 배포"
   cd "${REPOSITORY}"
   sudo npm install
-
   pm2 describe til-dev > /dev/null
   if [ $? -eq 0 ]; then
 	  # 실행 중인 경우
