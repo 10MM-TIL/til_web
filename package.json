@@ -14,7 +14,7 @@
     "pm2:reload:dev": "env-cmd -f .env.development pm2 reload ecosystem.config.js --only til-dev",
     "pm2:reload:prod": "env-cmd -f .env.production pm2 reload ecosystem.config.js --only til-product",
     "pm2:start:dev": "env-cmd -f .env.development pm2 start ecosystem.config.js --only til-dev",
-    "pm2:start:prod": "env-cmd -f .env.production pm2 start ecosystem.config.js --only til-product && pm2 monit",
+    "pm2:start:prod": "env-cmd -f .env.production pm2 start ecosystem.config.js --only til-product",
     "lint": "next lint"
   },
   "dependencies": {
