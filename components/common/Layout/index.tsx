@@ -12,6 +12,7 @@ import CategoryModal from '@/components/Molecules/CategoryModal';
 import { LoginModalState } from '@/stores/modalStateStore';
 import MetaHead, { MetaContents } from '@/components/Atom/MetaHead';
 import { currentCategoryState } from '@/stores/cardviewStateStore';
+import GTMScript from '../GTMScript';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -39,6 +40,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <MetaHead metaContents={{ image: setMetaImage() }}></MetaHead>
+      <GTMScript />
       <div css={styles.container}>
         {!isLogin && isLoginModalOpen && <LoginModal />}
         {userData && <CategoryModal isOpen={userData.categoryIdentifier === null} />}
