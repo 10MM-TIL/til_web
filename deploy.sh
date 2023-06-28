@@ -8,6 +8,7 @@ echo "DEPLOYMENT_GROUP_NAME: ${DEPLOYMENT_GROUP_NAME}"
 if [ "${DEPLOYMENT_GROUP_NAME}" == "til_fe_prod" ]; then
   echo "운영 서버 배포"
   cd "${REPOSITORY_PROD}"
+  
   # production 환경인 경우에 대한 처리
   sudo npm install
   pm2 describe til-product > /dev/null
