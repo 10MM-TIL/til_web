@@ -265,7 +265,6 @@ const Setting: NextPage = () => {
   const saveProfile = useMutation(putMyProfile, {
     onSuccess: () => {
       // 요청이 성공한 경우
-      console.log('onSuccess');
       queryClient.invalidateQueries(['MY_USER']); // queryKey 유효성 제거
     },
   });

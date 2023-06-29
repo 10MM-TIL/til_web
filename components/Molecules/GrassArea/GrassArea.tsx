@@ -65,8 +65,7 @@ export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: Gr
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
   // 추후 잔디의 데이터를 받아오면 수정이 필요함
   const [stackBrick, setStackBrick] = useState<GrassStackedData>(data);
-  // console.log('stackBrick', stackBrick);
-  // console.log('data', data);
+
   // const [stackBrick, setStackBrick] = useState<GrassStackedData>({
   //   1: ['Sun May 14 2023 00:00:00 GMT+0900 (한국 표준시)'],
   //   2: [],

@@ -11,7 +11,6 @@ const useLocalStorage = <S>(key: string, initialState?: S | (() => S)): [S, Disp
 
   useEffect(() => {
     if (state !== initialState) {
-      console.log('local 저장');
       localStorage.setItem(key, JSON.stringify(state));
     }
   }, [state]);
