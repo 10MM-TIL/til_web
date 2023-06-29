@@ -50,7 +50,7 @@ jobs:
 
       - name: Build
         run: |
-          npm run build
+          npm run build:prod
 
       - name: zip create
         run: |
