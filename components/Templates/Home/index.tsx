@@ -248,8 +248,8 @@ const HomeTemplates = ({
           </div>
 
           <GrassTemplate
-            path={user?.name ?? ''}
-            title={isLogin ? `${user?.path}의 기록` : '내가 모은 기록'}
+            path={user?.path ?? ''}
+            title={isLogin ? `${user?.name}의 기록` : '내가 모은 기록'}
             onClick={(value) => {
               setClickedDate(value);
             }}
