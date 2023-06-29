@@ -18,7 +18,7 @@ const GrassTemplate = ({ path, title, onClick }: GrassTemplateProps) => {
   const fromSeconds = Math.round(firstDay.valueOf() / 1000);
   const toSeconds = Math.round(lastDay.valueOf() / 1000);
 
-  const firstMonth = firstDay.getMonth() + 1; // console.log('firstDay.getMonth', firstMonth);
+  const firstMonth = firstDay.getMonth() + 1;
   // firstDay 달을 잡고
   // meta 로 받은 데이터를 map 돌면서 Date 처리 해서 같은 달인지 체크
   // 같은 달이면 [base+1] index에 Push
