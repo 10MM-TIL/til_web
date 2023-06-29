@@ -42,14 +42,11 @@ const TimelineComponent = ({
   const { title: originalTitle, desc: originalSummary, date: originalDate } = content;
   const queryClient = useQueryClient();
   const editTimeline = useMutation(putEditTimeline, {
-    onSuccess: () => {
-      console.log('onSuccess');
-    },
+    onSuccess: () => {},
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
   });
   const removeTimeline = useMutation(deleteTimeline, {
     onSuccess: () => {
-      console.log('onSuccess');
       showToast(
         <>
           <IconCheckBig />
@@ -156,8 +153,7 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
     const clickDay = new Date(clickedDate);
     const fromSeconds = Math.round(clickDay.valueOf() / 1000);
     const toSeconds = Math.round(clickDay.valueOf() / 1000) + 86400;
-    // console.log('clickDay', Math.round(clickDay.valueOf() / 1000));
-    console.log(clickDay);
+
     if (clickedDate !== '') getTimeline();
   }, [clickedDate, path]);
 

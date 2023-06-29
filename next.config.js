@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   compiler: {
     emotion: true,
-    removeConsole: process.env.NEXT_PUBLIC_MODE === 'production',
+    removeConsole: process.env.NODE_WNV === 'production',
   },
   images: {
     remotePatterns: [
