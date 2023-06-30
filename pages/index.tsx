@@ -163,6 +163,8 @@ const HomePage = () => {
             </>,
           );
           setUrl('');
+
+          queryClient.resetQueries();
         },
         onError: () => {
           // TODO ALERT
