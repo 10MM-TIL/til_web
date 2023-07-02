@@ -267,29 +267,30 @@ const HomeTemplates = ({
                   </Link>
                 </div>
 
-                {cardData?.posts.length === 0 ? (
+                {postsData?.pages && postsData?.pages[0]?.posts?.length === 0 ? (
                   <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
                 ) : (
                   <>
-                    {cardData?.posts.map((recommandItem, index) => (
-                      <Card
-                        key={recommandItem.createdAt + index + 'mobile'}
-                        size={'mobile'}
-                        content={{
-                          category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
-                          header: recommandItem.title,
-                          body: recommandItem.summary,
-                          img: recommandItem.profileImgSrc,
-                          name: recommandItem.userName,
-                          date: formatDate(recommandItem.createdAt),
-                        }}
-                        hasBadge={true}
-                        url={recommandItem.url}
-                        userpath={recommandItem.userPath}
-                        onClickContent={() => onClickContent(recommandItem.url)}
-                        onClickUser={() => onClickUser(recommandItem.userPath)}
-                      />
-                    ))}
+                    {cardData?.posts &&
+                      cardData?.posts.map((recommandItem, index) => (
+                        <Card
+                          key={recommandItem.createdAt + index + 'mobile'}
+                          size={'mobile'}
+                          content={{
+                            category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
+                            header: recommandItem.title,
+                            body: recommandItem.summary,
+                            img: recommandItem.profileImgSrc,
+                            name: recommandItem.userName,
+                            date: formatDate(recommandItem.createdAt),
+                          }}
+                          hasBadge={true}
+                          url={recommandItem.url}
+                          userpath={recommandItem.userPath}
+                          onClickContent={() => onClickContent(recommandItem.url)}
+                          onClickUser={() => onClickUser(recommandItem.userPath)}
+                        />
+                      ))}
                     {postsData?.pages &&
                       postsData?.pages[0]?.posts?.slice(0, 3)?.map((post, idx) => (
                         <div key={post?.createdAt + idx + 'desktop'}>
@@ -339,14 +340,15 @@ const HomeTemplates = ({
             </div>
             <div css={styles.otherCardContainer}>
               {/* 다른 사람들의 카드 컴포넌트! */}
-              {cardData?.posts?.length === 0 ? (
+              {postsData?.pages && postsData?.pages[0]?.posts?.length === 0 ? (
                 <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
               ) : (
                 <>
-                  {cardData?.posts.map((recommandItem, index) => (
-                    <div key={recommandItem.createdAt + index + 'desktop'}>
+                  {cardData?.posts &&
+                    cardData?.posts.map((recommandItem, index) => (
                       <Card
-                        size={'sm'}
+                        key={recommandItem.createdAt + index + 'mobile'}
+                        size={'mobile'}
                         content={{
                           category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                           header: recommandItem.title,
@@ -361,8 +363,7 @@ const HomeTemplates = ({
                         onClickContent={() => onClickContent(recommandItem.url)}
                         onClickUser={() => onClickUser(recommandItem.userPath)}
                       />
-                    </div>
-                  ))}
+                    ))}
                   {postsData?.pages &&
                     postsData?.pages[0]?.posts?.slice(0, 3)?.map((post, idx) => (
                       <div key={post?.createdAt + idx + 'desktop'}>
