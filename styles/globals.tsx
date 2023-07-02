@@ -61,7 +61,6 @@ const style = css`
   figure,
   fieldset,
   legend,
-  textarea,
   pre,
   iframe,
   hr,
@@ -148,6 +147,10 @@ const style = css`
     text-decoration: none;
   }
 
+  textarea {
+    font-family: inherit;
+    font-size: inherit;
+  }
   /* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
