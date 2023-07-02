@@ -346,23 +346,24 @@ const HomeTemplates = ({
                 <>
                   {cardData?.posts &&
                     cardData?.posts.map((recommandItem, index) => (
-                      <Card
-                        key={recommandItem.createdAt + index + 'mobile'}
-                        size={'mobile'}
-                        content={{
-                          category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
-                          header: recommandItem.title,
-                          body: recommandItem.summary,
-                          img: recommandItem.profileImgSrc,
-                          name: recommandItem.userName,
-                          date: formatDate(recommandItem.createdAt),
-                        }}
-                        hasBadge={true}
-                        url={recommandItem.url}
-                        userpath={recommandItem.userPath}
-                        onClickContent={() => onClickContent(recommandItem.url)}
-                        onClickUser={() => onClickUser(recommandItem.userPath)}
-                      />
+                      <div key={recommandItem.createdAt + index + 'desktop'}>
+                        <Card
+                          size={'sm'}
+                          content={{
+                            category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
+                            header: recommandItem.title,
+                            body: recommandItem.summary,
+                            img: recommandItem.profileImgSrc,
+                            name: recommandItem.userName,
+                            date: formatDate(recommandItem.createdAt),
+                          }}
+                          hasBadge={true}
+                          url={recommandItem.url}
+                          userpath={recommandItem.userPath}
+                          onClickContent={() => onClickContent(recommandItem.url)}
+                          onClickUser={() => onClickUser(recommandItem.userPath)}
+                        />
+                      </div>
                     ))}
                   {postsData?.pages &&
                     postsData?.pages[0]?.posts?.slice(0, 3)?.map((post, idx) => (
