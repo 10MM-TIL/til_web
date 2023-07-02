@@ -163,7 +163,7 @@ const HomePage = () => {
             </>,
           );
           setUrl('');
-
+          setValidUrlStatus('BEFORE');
           queryClient.resetQueries();
         },
         onError: () => {
