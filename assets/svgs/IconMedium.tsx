@@ -8,7 +8,7 @@ const IconMedium = ({ size }: { size: number }) => {
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
     >
-      <rect x='2' y='2' width={size} height={size} rx='10' fill='url(#pattern0)' />
+      <rect x='2' y='2' width='20' height='20' rx='10' fill='url(#pattern0)' />
       <defs>
         <pattern id='pattern0' patternContentUnits='objectBoundingBox' width='1' height='1'>
           <use xlinkHref='#image0_1303_14785' transform='matrix(0.00403226 0 0 0.00423729 -0.322581 -0.254237)' />

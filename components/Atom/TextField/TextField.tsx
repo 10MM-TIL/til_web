@@ -9,7 +9,7 @@ import useCopyClipBoard from '@/hooks/useCopyClipBoard';
 import useToast from '@/hooks/useToast';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 
-const DOMAIN = 'bricklog.kr/@';
+const DOMAIN = 'bricklog.io/@';
 const TextField = ({
   title,
   isInput,
