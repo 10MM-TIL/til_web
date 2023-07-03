@@ -52,6 +52,12 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
     // }
 
     await categoryMutate({ categoryIdentifier: selectedCategoryId, mailAgreement: isReceiveAgree });
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'onboarding_complete',
+      category: selectedCategoryId,
+      marketing_permission: isReceiveAgree,
+    });
     // await notificationMutate({ enable: isAlertAgree, iteration: frequency === '' ? 'NONE' : frequency });
   };
 
