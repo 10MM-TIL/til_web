@@ -4,6 +4,9 @@ import { Layout } from '@/components/common';
 import { RecoilEnv, RecoilRoot } from 'recoil';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import TagManager from 'react-gtm-module';
+import { useEffect } from 'react';
+
 // react-query
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,11 +21,16 @@ const queryClient = new QueryClient({
     },
   },
 });
+const tagManagerArgs = {
+  gtmId: process.env.NEXT_PUBLIC_MODE === 'dev' ? 'GTM-N7L3R9R' : 'GTM-MT882MC',
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
   // ! Next.js + Recoil.js ISSUE 대응
   RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
-
+  useEffect(() => {
+    TagManager.initialize(tagManagerArgs);
+  }, []);
   return (
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>

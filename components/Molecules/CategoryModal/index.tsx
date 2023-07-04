@@ -12,6 +12,7 @@ import styles from './CategoryModal.styled';
 import { useCategories } from '@/hooks/queries/categoryQuery';
 import { useMyProfileOnboarding } from '@/hooks/queries/profileQuery';
 import { useUpdateMyNotification } from '@/hooks/queries/alarmQuery';
+import Script from 'next/script';
 
 interface CategoryModalProps {
   isOpen: boolean;
@@ -52,6 +53,12 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
     // }
 
     await categoryMutate({ categoryIdentifier: selectedCategoryId, mailAgreement: isReceiveAgree });
+    window.dataLayer.push({
+      event: 'onboarding_complete',
+      category: selectedCategoryId,
+      marketing_permission: isReceiveAgree,
+    });
+
     // await notificationMutate({ enable: isAlertAgree, iteration: frequency === '' ? 'NONE' : frequency });
   };
 

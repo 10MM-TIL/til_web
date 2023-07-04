@@ -99,8 +99,17 @@ const HomeTemplates = ({
   const { data: cardData } = useRecommandPosts('', true);
 
   const { data: categoryData } = useCategories();
-
   const categories = categoryData?.data?.categories;
+
+  const handleUrlConfirm = () => {
+    onUrlConfirm();
+    window.dataLayer.push({
+      event: 'post',
+      category: userInfo?.categoryName,
+      post_url: url,
+      post_date: date,
+    });
+  };
 
   return (
     <div css={styles.wrapper}>
@@ -231,7 +240,7 @@ const HomeTemplates = ({
                         </div>
                       </div>
                       <div css={styles.timelineSubmitBtnContainer}>
-                        <Button size='sm' onClick={onUrlConfirm}>
+                        <Button size='sm' onClick={handleUrlConfirm}>
                           등록
                         </Button>
                       </div>
