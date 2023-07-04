@@ -77,6 +77,9 @@ const HomePage = () => {
     }
 
     setIsUrlLoading(true);
+    setTitle('');
+    setDate('');
+    setSummary('');
     uploadRequestMutate(
       { url },
       {
@@ -152,16 +155,20 @@ const HomePage = () => {
       { url, title, summary, createdAt: date.replace(/\./gi, '-') },
       {
         onSuccess: (res) => {
-          const currentDate = new Date();
-          const currentMonth = currentDate.getMonth() + 1;
+          const currentMonth = date.substring(5, 7);
+
           showToast(
             <>
               <IconCheckBig />
               <H1 color={FONT_COLOR.WHITE}>
-                {currentMonth}월 {res?.data?.monthlyPublishCount + 1}번째 브릭을 쌓았어요!
+                {Number(currentMonth) < 10 ? currentMonth[1] : currentMonth}월 {res?.data?.monthlyPublishCount}번째
+                브릭을 쌓았어요!
               </H1>
             </>,
           );
+          setTitle('');
+          setSummary('');
+          setDate('');
           setUrl('');
           setValidUrlStatus('BEFORE');
           queryClient.resetQueries();
