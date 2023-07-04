@@ -103,6 +103,12 @@ const HomeTemplates = ({
 
   const handleUrlConfirm = () => {
     onUrlConfirm();
+    window.dataLayer.push({
+      event: 'post',
+      category: userInfo?.categoryName,
+      post_url: url,
+      post_date: date,
+    });
   };
 
   return (
