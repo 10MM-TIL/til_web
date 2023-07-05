@@ -204,7 +204,7 @@ const HomeTemplates = ({
                             locale={ko}
                             showPopperArrow={false}
                             dateFormat={'yyyy.MM.dd'}
-                            selected={date === '' ? null : new Date(date)}
+                            selected={date === '' ? null : new Date(date.replace(/\./gi, '-'))}
                             onChange={onDateChange}
                             customInput={
                               <div css={styles.timelineCalendar}>
@@ -264,7 +264,7 @@ const HomeTemplates = ({
             }}
           />
 
-          <TimelineTemplate path={user?.path ?? ''} changable={userInfo?.isAuthorized} />
+          {/* <TimelineTemplate path={user?.path ?? ''} changable={userInfo?.isAuthorized} /> */}
 
           {device === 'mobile' && (
             <>
