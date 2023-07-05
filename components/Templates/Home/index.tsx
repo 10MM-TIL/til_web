@@ -264,7 +264,7 @@ const HomeTemplates = ({
             }}
           />
 
-          {/* <TimelineTemplate path={user?.path ?? ''} changable={userInfo?.isAuthorized} /> */}
+          <TimelineTemplate path={user?.path ?? ''} changable={userInfo?.isAuthorized} />
 
           {device === 'mobile' && (
             <>
