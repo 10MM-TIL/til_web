@@ -53,9 +53,14 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
     // }
 
     await categoryMutate({ categoryIdentifier: selectedCategoryId, mailAgreement: isReceiveAgree });
+    const { categories } = categoryData ?? { categories: [] };
+    const selected = categories.find(
+      (item: { identifier: string; name: string }) => item.identifier === '0ec30e71-38ba-4837-8804-f0e1180c5bf2',
+    );
+    const { name: categoryName } = selected ?? { name: '', identifier: '' };
     window.dataLayer.push({
       event: 'onboarding_complete',
-      category: selectedCategoryId,
+      category: categoryName,
       marketing_permission: isReceiveAgree,
     });
 
