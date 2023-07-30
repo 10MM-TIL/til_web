@@ -14,8 +14,8 @@ const IconBrunch = ({ size }: { size: number }) => {
         maskUnits='userSpaceOnUse'
         x='0'
         y='0'
-        width={size}
-        height={size}
+        width='24'
+        height='24'
       >
         <circle cx='12' cy='12' r='12' fill='#636C78' />
       </mask>

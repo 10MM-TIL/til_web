@@ -17,15 +17,15 @@ type BlogImageObject = {
 const BlogIcon = ({ url, size = 20 }: { url: string; size?: number }) => {
   const [blogType, setBlogType] = useState<blogName>('custom');
   useEffect(() => {
-    if (url.indexOf('naver') !== -1) {
+    if (url.indexOf('naver.com') !== -1) {
       setBlogType('naver');
-    } else if (url.indexOf('tistory') !== -1) {
+    } else if (url.indexOf('tistory.com') !== -1) {
       setBlogType('tistory');
-    } else if (url.indexOf('brunch') !== -1) {
+    } else if (url.indexOf('brunch.co.kr') !== -1) {
       setBlogType('brunch');
-    } else if (url.indexOf('velog') !== -1) {
+    } else if (url.indexOf('velog.io') !== -1) {
       setBlogType('velog');
-    } else if (url.indexOf('medium') !== -1) {
+    } else if (url.indexOf('medium.com') !== -1) {
       setBlogType('medium');
     } else {
       setBlogType('custom');
