@@ -301,7 +301,7 @@ const HomeTemplates = ({
                         />
                       ))}
                     {postsData?.pages &&
-                      postsData?.pages[0]?.posts?.slice(0, 3)?.map((post, idx) => (
+                      postsData?.pages[0]?.posts?.slice(0, 6)?.map((post, idx) => (
                         <div key={post?.createdAt + idx + 'desktop'}>
                           <Card
                             size={'sm'}
@@ -375,7 +375,7 @@ const HomeTemplates = ({
                       </div>
                     ))}
                   {postsData?.pages &&
-                    postsData?.pages[0]?.posts?.slice(0, 3)?.map((post, idx) => (
+                    postsData?.pages[0]?.posts?.slice(0, 6)?.map((post, idx) => (
                       <div key={post?.createdAt + idx + 'desktop'}>
                         <Card
                           size={'sm'}
