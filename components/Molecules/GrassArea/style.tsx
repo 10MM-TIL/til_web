@@ -5,7 +5,6 @@ export const GrassAreaContainer = styled.div`
   padding-top: 10px;
   margin: 0 auto;
   max-width: 337px;
-  height: 100%;
   background-color: ${BACKGROUND_COLOR.NAVY_1};
 
   @media screen and (min-width: 1194px) {
