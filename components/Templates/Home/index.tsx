@@ -144,7 +144,7 @@ const HomeTemplates = ({
                   target='_blank'
                   css={styles.reviewGuide}
                 >
-                  <Typo.Label2 color={FONT_COLOR.GRAY_1}>본인의 콘텐츠만 등록해 주세요.</Typo.Label2>
+                  <Typo.Label2 color={FONT_COLOR.GRAY_2}>본인의 콘텐츠만 등록해 주세요.</Typo.Label2>
                 </Link>
               )}
               {selectedTab === 'MEMO' ? (
