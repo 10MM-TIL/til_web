@@ -48,6 +48,9 @@ const style = css`
     scroll-behavior: smooth;
     overflow-y: overlay;
   }
+  body * {
+    font-family: Pretendard, sans-serif;
+  }
   html,
   body,
   p,

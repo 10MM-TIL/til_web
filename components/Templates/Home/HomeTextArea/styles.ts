@@ -13,11 +13,12 @@ export const reviewTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) =
   top: -40px;
   left: 0;
 
-  background-color: ${selectedTab === 'MEMO' ? BACKGROUND_COLOR.NAVY_3 : BACKGROUND_COLOR.NAVY_2};
+  background-color: ${selectedTab === 'MEMO' ? BACKGROUND_COLOR.NAVY_2 : BACKGROUND_COLOR.NAVY_3};
   border-radius: 12px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: unset;
   ${selectedTab === 'MEMO' && 'border-bottom: 0'};
 
   width: 90px;
@@ -33,7 +34,7 @@ export const memoTab = ({ selectedTab }: { selectedTab: 'MEMO' | 'REVIEW' }) => 
   position: absolute;
   top: -40px;
   left: ${selectedTab === 'MEMO' ? '78px' : '72px'};
-  background-color: ${selectedTab === 'MEMO' ? BACKGROUND_COLOR.NAVY_2 : BACKGROUND_COLOR.NAVY_3};
+  background-color: ${selectedTab === 'MEMO' ? BACKGROUND_COLOR.NAVY_3 : BACKGROUND_COLOR.NAVY_2};
 
   border-radius: 12px;
   border-bottom-right-radius: 0;

@@ -44,7 +44,7 @@ const HomeCard = () => {
               cardData?.posts.map((recommandItem, index) => (
                 <Card
                   key={recommandItem.createdAt + index + 'mobile'}
-                  size={'mobile'}
+                  size={'sm'}
                   content={{
                     category: categories?.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name!,
                     header: recommandItem.title,
@@ -64,7 +64,7 @@ const HomeCard = () => {
               postsData?.pages[0]?.posts?.slice(0, 6)?.map((post, idx) => (
                 <div key={post?.createdAt + idx + 'desktop'}>
                   <Card
-                    size={'mobile'}
+                    size={'sm'}
                     content={{
                       category: categories?.find((i) => i.identifier === post.categoryIdentifier)?.name!,
                       header: post.title,

@@ -37,7 +37,7 @@ const topTextContainer = css`
 `;
 
 const desktopContainer = css`
-  width: 100%;
+  max-width: 1117px;
   margin: 0 auto;
   display: flex;
   justify-content: center;

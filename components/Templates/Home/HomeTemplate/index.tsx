@@ -6,16 +6,17 @@ import { AuthState } from '@/stores/authStateStore';
 import { clickedGrassDate } from '@/stores/user';
 
 import ToastMessage from '@/components/ToastMessage';
+import GrassTemplate from '@/components/Templates/GrassTemplate';
+import TimelineTemplate from '@/components/Templates/TimelineTemplate';
 
 import { useMyUser } from '@/hooks/queries/profileQuery';
 import useToast from '@/hooks/useToast';
 
-import GrassTemplate from '../../GrassTemplate';
-import TimelineTemplate from '../../TimelineTemplate';
 import HomeTextArea from '../HomeTextArea';
+import HomeCard from '../HomeCard';
+import HomeBanner from '../HomeBanner';
 
 import styles from './styles';
-import HomeCard from '../HomeCard';
 
 const HomeTemplates = () => {
   const { isOpen: isToastOpen, text: toastText, showToast } = useToast();
@@ -30,6 +31,8 @@ const HomeTemplates = () => {
 
   return (
     <div css={styles.wrapper}>
+      <HomeBanner></HomeBanner>
+
       <div css={styles.desktopContainer}>
         <div css={styles.container}>
           <HomeTextArea showToast={showToast} userInfo={userInfo}></HomeTextArea>

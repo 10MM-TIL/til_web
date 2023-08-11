@@ -75,7 +75,7 @@ const Header = () => {
             </div>
           ) : (
             <button css={styles.btn} onClick={handleModalOpen}>
-              로그인
+              <Typo.Label1>로그인</Typo.Label1>
             </button>
           )}
         </div>
