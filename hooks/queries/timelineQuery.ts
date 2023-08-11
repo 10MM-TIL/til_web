@@ -1,11 +1,22 @@
 import { getUserTimeline } from '@/apis/user';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-export const useMyAllTimeline = (path: string, from?: number, to?: number) => {
+export const useMyAllTimeline = ({
+  path,
+  from,
+  to,
+  isLogin = false,
+}: {
+  path: string;
+  from?: number;
+  to?: number;
+  isLogin: boolean;
+}) => {
   return useInfiniteQuery(
     ['timelineInfinite', path],
     ({ pageParam = '' }) => getUserTimeline(path, pageParam, from, to),
     {
+      enabled: isLogin,
       getNextPageParam: (lastPage) => {
         if (lastPage) {
           const { nextPageToken } = lastPage;

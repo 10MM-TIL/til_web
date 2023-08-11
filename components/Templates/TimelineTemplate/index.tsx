@@ -116,7 +116,8 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
   const { isLogin } = useRecoilValue(AuthState);
   const bottomDiv = useRef(null);
   const [totalSize, setTotalSize] = useState(0);
-  const { data: postObject, fetchNextPage, isSuccess, refetch } = useMyAllTimeline(path);
+
+  const { data: postObject, fetchNextPage, isSuccess, refetch } = useMyAllTimeline({ path, isLogin });
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
   const [timelineData, setTimelineData] = useState([]);
 
@@ -127,7 +128,7 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
   }, [isSuccess, postObject]);
 
   const [observe, unobserve] = useIntersectionObserver((entry: IntersectionObserverEntry) => {
-    if (entry.isIntersecting) {
+    if (entry.isIntersecting && isLogin) {
       if (postObject && postObject.pages[postObject.pages.length - 1]?.nextPageToken === 'null') return;
       fetchNextPage();
     }
@@ -141,9 +142,9 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
     };
   }, [observe, unobserve]);
 
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [refetch]);
 
   useEffect(() => {
     const getTimeline = async () => {
