@@ -1,96 +1,137 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import * as Typo from '@/components/Atom/Typography';
-import * as Styled from './styles';
-import * as CardView from '@/styles/cardview.module';
+import { useEffect, useRef } from 'react';
+import { useRecoilState } from 'recoil';
+
+import { formatDate } from '@/utils/utils';
+import { findSelectedCategory } from '@/utils/cardview';
 
 import { FONT_COLOR } from '@/constants/color';
 
+import { useAllPosts } from '@/hooks/queries/cardviewQuery';
 import { device } from '@/hooks/useResize';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
+import * as Typo from '@/components/Atom/Typography';
 import { Card, CardProps } from '@/components/Atom/Card';
-import { useRecoilState } from 'recoil';
-import { categoryState } from '@/stores/cardviewStateStore';
-import { formatDate } from '@/utils/utils';
-import { findSelectedCategory } from '@/utils/cardview';
-import { useAllPosts } from '@/hooks/queries/cardviewQuery';
+import { CategoryQueryKeys } from '@/components/Atom/Card/types';
+import InfiniteScrollLayout from '@/components/Layout/InfiniteScroll';
 
-// 전체 회고
-const AllCard = ({
-  device,
+import { categoryState } from '@/stores/cardviewStateStore';
+
+import { allPostItem, categories } from '@/types/cardview';
+
+import * as Styled from './styles';
+import * as CardView from '@/styles/cardview.module';
+
+const AllCardItem = ({
+  categories,
+  allCardItem,
+  cardSize,
   onClickContent,
   onClickUser,
 }: {
+  categories: categories[];
+  allCardItem: allPostItem;
+  cardSize: CardProps['size'];
+  onClickContent: CardProps['onClickContent'];
+  onClickUser: CardProps['onClickUser'];
+}) => {
+  return (
+    <Styled.AllCardItem>
+      <Card
+        size={cardSize}
+        content={{
+          category: categories.find((i) => i.identifier === allCardItem.categoryIdentifier)?.name || '#개발',
+          header: allCardItem.title,
+          body: allCardItem.summary,
+          img: allCardItem.profileImgSrc,
+          name: allCardItem.userName,
+          date: formatDate(allCardItem.createdAt),
+        }}
+        url={allCardItem.url}
+        userpath={allCardItem.userPath}
+        onClickContent={() => onClickContent(allCardItem.url)}
+        onClickUser={() => onClickUser(allCardItem.userPath)}
+      ></Card>
+    </Styled.AllCardItem>
+  );
+};
+
+const AllCardList = ({
+  allCardList,
+  categories,
+  device,
+  ...rest
+}: {
+  allCardList: allPostItem[];
+  categories: categories[];
   device: device;
   onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
-  const bottom = useRef(null);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [categories, setCategories] = useRecoilState(categoryState);
-  const { data: allPosts, fetchNextPage, isSuccess } = useAllPosts(findSelectedCategory(categories));
-
-  useEffect(() => {
-    if (isSuccess) {
-      setIsEmpty(allPosts.pages[0]?.posts.length === 0);
-    }
-  }, [isSuccess, allPosts]);
-
-  const [observe, unobserve] = useIntersectionObserver((entry: IntersectionObserverEntry) => {
-    if (entry.isIntersecting) {
-      if (allPosts && allPosts.pages[allPosts.pages.length - 1]?.nextPageToken === 'null') return;
-      fetchNextPage();
-    }
-  });
-
-  useEffect(() => {
-    const optionref = bottom.current;
-    if (optionref) observe(optionref);
-    return () => {
-      if (optionref) unobserve(optionref);
-    };
-  }, [observe, unobserve]);
-
   return (
     <>
-      <Styled.AllCardViewContainer>
-        <Styled.AllCardHeader>
-          <Typo.H1 color={FONT_COLOR.WHITE}>전체 회고</Typo.H1>
-        </Styled.AllCardHeader>
-        <Styled.AllCardContent isEmpty={isEmpty}>
-          {isEmpty ? (
-            <CardView.EmptyCard>
-              <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
-            </CardView.EmptyCard>
-          ) : (
-            isSuccess &&
-            allPosts?.pages.map((allPost, index) =>
-              allPost?.posts.map((allCard) => (
-                <Styled.AllCardItem key={`card-${allCard.identifier}-${index}`}>
-                  <Card
-                    size={device === 'desktop' ? 'lg' : 'mobile'}
-                    content={{
-                      category: categories.find((i) => i.identifier === allCard.categoryIdentifier)?.name!,
-                      header: allCard.title,
-                      body: allCard.summary,
-                      img: allCard.profileImgSrc,
-                      name: allCard.userName,
-                      date: formatDate(allCard.createdAt),
-                    }}
-                    url={allCard.url}
-                    userpath={allCard.userPath}
-                    onClickContent={() => onClickContent(allCard.url)}
-                    onClickUser={() => onClickUser(allCard.userPath)}
-                  ></Card>
-                </Styled.AllCardItem>
-              )),
-            )
-          )}
-        </Styled.AllCardContent>
-      </Styled.AllCardViewContainer>
-      <div ref={bottom} />
+      {allCardList.map((allCard, index) => (
+        <AllCardItem
+          key={`card-${allCard.identifier}-${index}`}
+          cardSize={device === 'desktop' ? 'lg' : 'mobile'}
+          categories={categories}
+          allCardItem={allCard}
+          {...rest}
+        ></AllCardItem>
+      ))}
     </>
   );
 };
+const EmptyCard = () => {
+  return (
+    <CardView.EmptyCard>
+      <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
+    </CardView.EmptyCard>
+  );
+};
+// 전체 회고
+const AllCard = (props: {
+  categoryQuery: CategoryQueryKeys;
+  device: device;
+  onClickContent: CardProps['onClickContent'];
+  onClickUser: CardProps['onClickUser'];
+}) => {
+  const [categories, setCategories] = useRecoilState(categoryState);
+  const { data: allPosts, fetchNextPage, isSuccess } = useAllPosts(props.categoryQuery);
 
-export { AllCard };
+  const intersectCallback = (entry: IntersectionObserverEntry) => {
+    if (entry.isIntersecting) {
+      if (allPosts && allPosts.pages[allPosts.pages.length - 1]?.nextPageToken === 'null') {
+        console.log(allPosts.pages);
+        return;
+      }
+
+      fetchNextPage();
+    }
+  };
+
+  return (
+    <Styled.AllCardViewContainer>
+      <Styled.AllCardHeader>
+        <Typo.H1 color={FONT_COLOR.WHITE}>전체 회고</Typo.H1>
+      </Styled.AllCardHeader>
+      <InfiniteScrollLayout intersectCallback={intersectCallback}>
+        {isSuccess && (
+          <Styled.AllCardContent isEmpty={allPosts.pages[0].posts.length === 0}>
+            {allPosts.pages[0].posts.length === 0 ? (
+              <EmptyCard></EmptyCard>
+            ) : (
+              allPosts.pages.map((allPost, index) => {
+                return (
+                  <AllCardList key={index} allCardList={allPost.posts} categories={categories} {...props}></AllCardList>
+                );
+              })
+            )}
+          </Styled.AllCardContent>
+        )}
+      </InfiniteScrollLayout>
+    </Styled.AllCardViewContainer>
+  );
+};
+
+export default AllCard;

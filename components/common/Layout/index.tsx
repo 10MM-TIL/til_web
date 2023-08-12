@@ -33,7 +33,7 @@ const Layout = ({ children }: LayoutProps) => {
     else if (curCategory === 'design') return '/design_meta.png';
     else if (curCategory === 'planning') return '/plan_meta.png';
     else if (curCategory === 'marketing') return '/market_meta.png';
-    else if (curCategory === 'startup') return '/startup_meta.png';
+    else if (curCategory === 'company') return '/startup_meta.png';
     else return '/default_meta.png';
   };
 

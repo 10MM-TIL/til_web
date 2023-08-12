@@ -1,7 +1,7 @@
-import { CardContentProps } from '@/components/Atom/Card/types';
+import { CardContentProps, CategoryKeys } from '@/components/Atom/Card/types';
 
 export type categories = {
-  identifier: string;
+  identifier: CategoryKeys;
   name: CardContentProps['category'];
   selected?: boolean;
 };
