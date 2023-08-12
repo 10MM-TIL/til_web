@@ -7,7 +7,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import * as Styled from './styles';
 import { homeSwiperCustom } from './styles';
-import { TransformStreamDefaultController } from 'stream/web';
 
 const HomeBanner = () => {
   return (
@@ -15,7 +14,7 @@ const HomeBanner = () => {
       <Styled.SwiperContainer>
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
-          pagination={{ enabled: false }}
+          pagination={{ enabled: true, clickable: true }}
           navigation={{ enabled: false }}
           slidesPerView={1}
           //   autoplay={{

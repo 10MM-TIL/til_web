@@ -4,6 +4,11 @@ import { css } from '@emotion/react';
 import { mq } from '@/styles/mediaQuery';
 
 export const homeSwiperCustom = css`
+  .swiper-pagination-bullet {
+    width: 4px;
+    height: 4px;
+    margin: 0 2px !important;
+  }
   .swiper-button-prev {
     left: -8px;
     color: ${FONT_COLOR.WHITE};
@@ -15,6 +20,7 @@ export const homeSwiperCustom = css`
   .swiper-button-next {
     right: -8px;
     color: ${FONT_COLOR.WHITE};
+
     &:after {
       font-size: 17px;
     }
@@ -34,10 +40,7 @@ export const swiperWrapper = css`
 `;
 export const HomeBanner = styled.section`
   width: 100%;
-  background-color: transparent;
-  ${mq('desktop')} {
-    background-color: #222f41;
-  }
+  background-color: #222f41;
 `;
 export const SwiperContainer = styled.div`
   max-width: calc(1117px + 24px + 24px);
@@ -52,8 +55,8 @@ export const SwiperSlideContainer = styled.div`
 export const SwiperSlideContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  padding: 86px 5px 78px 5px;
+  gap: 17px;
+  padding: 46px 5px 52px 5px;
   flex-basis: 659px;
   ${mq('desktop')} {
     gap: 30px;
@@ -77,13 +80,15 @@ export const SlideTitle = styled.div`
 export const SwiperSlide1DescContent = styled.div`
   display: flex;
   color: ${FONT_COLOR.WHITE};
-  font-size: 11px;
-  line-height: 20px; /* 137.5% */
-  letter-spacing: -0.038px;
+  font-size: 9px;
+  line-height: 12.484px; /* 138.716% */
+  letter-spacing: -0.022px;
+
   ${mq('desktop')} {
     gap: 36px;
     font-size: 16px;
-    line-height: 22px; /* 137.5% */
+    line-height: 20px; /* 137.5% */
+    letter-spacing: -0.038px;
   }
 `;
 
@@ -92,14 +97,15 @@ export const SwiperSlide1Img = styled.div`
   z-index: -1;
   right: 0;
   bottom: 0;
-  width: 500px;
-  height: 150px;
-  background-image: url('/images/home/slide1.png');
+  width: 375px;
+  height: 174px;
+  background-image: url('/images/home/slide1_m.png');
   background-repeat: no-repeat;
   background-size: cover;
   ${mq('desktop')} {
     width: 659px;
     height: 303px;
+    background-image: url('/images/home/slide1.png');
   }
 `;
 
@@ -120,22 +126,23 @@ export const SwiperSlide2Img = styled.div`
   z-index: -1;
   right: 0;
   bottom: 0;
-  width: 500px;
-  height: 150px;
-  background-image: url('/images/home/slide2.png');
+  width: 375px;
+  height: 174px;
+  background-image: url('/images/home/slide2_m.png');
   background-repeat: no-repeat;
   background-size: cover;
   ${mq('desktop')} {
     width: 659px;
     height: 303px;
+    background-image: url('/images/home/slide2.png');
   }
 `;
 
 export const SwiperSlide2Ul = styled.ul`
   color: ${FONT_COLOR.WHITE};
-  font-size: 13px;
-  line-height: 20px; /* 150% */
-  letter-spacing: 0.061px;
+  font-size: 9px;
+  line-height: 12px; /* 133.333% */
+  letter-spacing: -0.022px;
   padding-left: 20px;
 
   li {
@@ -147,5 +154,6 @@ export const SwiperSlide2Ul = styled.ul`
     padding-left: 0px;
     font-size: 16px;
     line-height: 24px; /* 150% */
+    letter-spacing: 0.061px;
   }
 `;
