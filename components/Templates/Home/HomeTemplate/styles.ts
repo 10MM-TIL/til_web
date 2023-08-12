@@ -52,13 +52,14 @@ const desktopContainer = css`
 const container = css`
   /* margin: 84px 24px; */
   margin-top: 84px;
-  margin-bottom: 84px;
+  margin-bottom: 0px;
   display: flex;
   flex-direction: column;
   gap: 36px;
 
   ${mq('desktop')} {
     width: 780px;
+    margin-bottom: 84px;
   }
 `;
 

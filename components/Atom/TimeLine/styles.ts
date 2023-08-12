@@ -7,10 +7,10 @@ import { mq } from '@/styles/mediaQuery';
 export const TimeLineContainer = styled.div`
   position: relative;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  justify-content: center;
   flex-direction: column;
   width: 100%;
+  min-width: 284px;
   height: 110px;
   background: ${BACKGROUND_COLOR.NAVY_4};
   border-radius: 6px;
@@ -21,18 +21,20 @@ export const TimeLineContent = styled.div<{ isEdit: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 44px;
-  width: 100%;
+
   cursor: ${(props) => (props.isEdit ? `default` : `pointer`)};
   // input max-width, min-width 적용
   > div:first-of-type {
-    min-width: 180px;
-    max-width: calc(100% - 80px);
 
-    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     ${mq('desktop')} {
       max-width: 100%;
     }
+  }
+  > svg {
+    min-width: 37px;
   }
 `;
 export const TimeLineDate = styled.div`
@@ -58,12 +60,10 @@ const timeLineBodyCss = ({ width }: { width: CSSProperties['width'] }) => css`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    word-break: break-all;
   }
   span {
     display: block;
   }
-  width: 180px;
   ${mq('desktop')} {
     width: ${width}px;
   }

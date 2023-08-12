@@ -1,7 +1,8 @@
 import { fetchAllPosts, fetchRecommandPosts } from '@/apis/cardview';
+import { CategoryQueryKeys } from '@/components/Atom/Card/types';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-export const useAllPosts = (categories?: string) => {
+export const useAllPosts = (categories: CategoryQueryKeys) => {
   return useInfiniteQuery(
     ['all_category_card_infinite', categories],
     ({ pageParam = '' }) => fetchAllPosts(categories, pageParam),

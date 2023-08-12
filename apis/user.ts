@@ -1,6 +1,7 @@
 import { devError } from '@/utils/system';
 import { getMyProfileResponse, getBlogResponse } from '@/types/user';
 import instance from './instance';
+import { CategoryQueryKeys, CategoryValues } from '@/components/Atom/Card/types';
 
 export const getUserProfile = async (path: string) => {
   try {
@@ -24,11 +25,30 @@ export const getUserBlog = async (path: string) => {
   }
 };
 
+type TimeLinePost = {
+  categoryIdentifier: CategoryQueryKeys;
+  categoryName: CategoryValues;
+  createdAt: string;
+  hitCount: number;
+  identifier: string;
+  profileImgSrc: string;
+  summary: string;
+  title: string;
+  url: string;
+  userName: string;
+  userPath: string;
+};
+type TimeLineResponse = {
+  nextPageToken: string;
+  posts: TimeLinePost[];
+  size: number;
+};
+
 export const getUserTimeline = async (path: string, pageToken: string = '', from?: number, to?: number) => {
   try {
     const params = pageToken ? { size: 5, pageToken, from, to } : { size: 5, from, to };
-    const res = await instance.get(`/post/user/${path}`, { params });
-    return res.data;
+    const { data } = await instance.get<TimeLineResponse>(`/post/user/${path}`, { params });
+    return data;
   } catch (e) {
     devError('getUserTimelineAPI error', e);
     throw e;

@@ -29,7 +29,7 @@ const GrassTemplate = ({ path, title, onClick }: GrassTemplateProps) => {
   const { data: grassObject, refetch } = useQuery(
     ['timelineInfinite', 'GRASS', path, fromSeconds, toSeconds],
     () => getUserGrass(path, fromSeconds, toSeconds),
-    { enabled: isLogin },
+    { enabled: isLogin && path.length > 0 },
   );
   const dateList = grassObject?.metas || [];
   const stack: GrassStackedData = { '1': [], '2': [], '3': [], '4': [] };

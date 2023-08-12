@@ -249,7 +249,7 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
         </div>
         {selectedTab === 'REVIEW' && (
           <Link href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7' target='_blank' css={reviewGuide}>
-            <Typo.Label2 color={FONT_COLOR.GRAY_1}>본인의 콘텐츠만 등록해 주세요.</Typo.Label2>
+            <Typo.Label2 color={FONT_COLOR.GRAY_2}>본인의 콘텐츠만 등록해 주세요.</Typo.Label2>
           </Link>
         )}
         {selectedTab === 'MEMO' ? (
