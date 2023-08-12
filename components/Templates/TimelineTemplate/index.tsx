@@ -68,7 +68,9 @@ const TimelineComponent = ({
     });
   };
   const handleDeleteContent = () => {
-    removeTimeline.mutate({ postIdentifier: postIdentifier });
+    if (window.confirm('선택한 회고글을 삭제하시겠습니까?')) {
+      removeTimeline.mutate({ postIdentifier: postIdentifier });
+    }
   };
   return (
     <div style={{ display: 'flex', gap: '15px', marginBottom: '-10px' }}>
