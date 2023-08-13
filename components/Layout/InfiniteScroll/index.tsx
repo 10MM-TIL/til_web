@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
-import { type } from 'os';
 
 const InfiniteScrollLayout = ({
   children,
@@ -16,23 +15,17 @@ const InfiniteScrollLayout = ({
 
   useEffect(() => {
     const optionref = bottom.current;
-    if (optionref) {
-      console.log('observe');
-      observe(optionref);
-    }
-    return () => {
-      if (optionref) unobserve(optionref);
-    };
-  }, [observe, unobserve]);
+    if (!optionref) return;
+    observe(optionref);
 
-  useEffect(() => {
-    if (typeof isObserve !== 'boolean') return;
-    const optionref = bottom.current;
-    if (!isObserve && optionref) {
-      console.log('unobserve');
+    if (typeof isObserve === 'boolean' && !isObserve) {
       unobserve(optionref);
     }
-  }, [isObserve, unobserve]);
+
+    return () => {
+      unobserve(optionref);
+    };
+  }, [isObserve, observe, unobserve]);
 
   return (
     <>

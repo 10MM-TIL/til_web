@@ -11,7 +11,7 @@ export const TimelineContainer = styled.div`
 export const TimelineTitleArea = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 36px 12px 0px 12px;
+  padding: 36px 0px 0px 0px;
 `;
 
 export const TimelineMobileMoreButton = styled.button`
@@ -51,4 +51,16 @@ export const TimeLineCardNotLogin = styled.div`
   left: 0;
   background-color: rgba(27, 34, 44, 0.6);
   border-radius: 6px;
+`;
+
+export const EmptyTimeLine = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 130px;
+  text-align: center;
+  ${mq('desktop')} {
+    height: 170px;
+  }
 `;

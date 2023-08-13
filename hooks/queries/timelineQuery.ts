@@ -13,14 +13,15 @@ export const useMyAllTimeline = ({
   isLogin: boolean;
 }) => {
   return useInfiniteQuery(
-    ['TIMELINE_INFINITE', path],
+    ['TIMELINE_INFINITE', path, from, to, isLogin],
     ({ pageParam = '' }) => getUserTimeline(path, pageParam, from, to),
     {
       enabled: isLogin && path.length > 0,
+      keepPreviousData: true,
       getNextPageParam: (lastPage) => {
         if (lastPage) {
           const { nextPageToken } = lastPage;
-          return nextPageToken === 'null' ? undefined : nextPageToken;
+          return nextPageToken === '' ? undefined : nextPageToken;
         }
         return undefined;
       },
