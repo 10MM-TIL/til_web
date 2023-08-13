@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { MouseEventHandler } from 'react';
-import { css } from '@emotion/react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { formatDate } from '@/utils/utils';
@@ -29,6 +28,7 @@ import {
   TimeLineLayout,
   TimeLineCardContent,
   TimeLineCardNotLogin,
+  EmptyTimeLine,
 } from './style';
 
 interface TimelineTemplateProps {
@@ -160,6 +160,13 @@ const IsNotLoginTimeLine = () => {
     </>
   );
 };
+const IsEmptyTimeLine = () => {
+  return (
+    <EmptyTimeLine>
+      <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
+    </EmptyTimeLine>
+  );
+};
 
 const TimeLineList = ({ path }: { path: string }) => {
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
@@ -183,6 +190,7 @@ const TimeLineList = ({ path }: { path: string }) => {
           postObject.pages[postObject.pages.length - 1].nextPageToken === '')
       )
         return;
+      if (postObject) console.log(postObject.pages);
       fetchNextPage();
     }
   };
@@ -205,24 +213,28 @@ const TimeLineList = ({ path }: { path: string }) => {
             timeLineSizeText={clickedDate !== '' ? `전체보기` : `${postObject ? postObject.pages[0].size : '0'}개`}
           ></TimeLineHeader>
           <InfiniteScrollLayout intersectCallback={intersectCallback} isObserve={device === 'desktop'}>
-            {postObject.pages.map((postList) =>
-              postList.posts.map((postItem) => {
-                const content = {
-                  title: postItem.title,
-                  date: postItem.createdAt,
-                  url: postItem.url,
-                  desc: postItem.summary,
-                };
-                return (
-                  <TimelineComponent
-                    key={postItem.identifier}
-                    content={content}
-                    postIdentifier={postItem.identifier}
-                    changable={true}
-                  />
-                );
-              }),
-            )}
+            {postObject.pages.map((postList) => {
+              return postList.posts.length === 0 ? (
+                <IsEmptyTimeLine></IsEmptyTimeLine>
+              ) : (
+                postList.posts.map((postItem) => {
+                  const content = {
+                    title: postItem.title,
+                    date: postItem.createdAt,
+                    url: postItem.url,
+                    desc: postItem.summary,
+                  };
+                  return (
+                    <TimelineComponent
+                      key={postItem.identifier}
+                      content={content}
+                      postIdentifier={postItem.identifier}
+                      changable={true}
+                    />
+                  );
+                })
+              );
+            })}
           </InfiniteScrollLayout>
           {postObject.pages[postObject.pages.length - 1].size >= 5 &&
             postObject.pages[postObject.pages.length - 1].nextPageToken.length > 0 && (
