@@ -44,7 +44,7 @@ type TimeLineResponse = {
   size: number;
 };
 
-export const getUserTimeline = async (path: string, pageToken: string = '', from?: number, to?: number) => {
+export const fetchUserTimeline = async (path: string, pageToken: string = '', from?: number, to?: number) => {
   try {
     const params = pageToken ? { size: 5, pageToken, from, to } : { size: 5, from, to };
     const { data } = await instance.get<TimeLineResponse>(`/post/user/${path}`, { params });
@@ -55,13 +55,25 @@ export const getUserTimeline = async (path: string, pageToken: string = '', from
   }
 };
 
-export const getUserGrass = async (path: string, from: number, to: number) => {
+type FetchUserGrassParams = {
+  path: string;
+  from: number;
+  to: number;
+};
+type FetchUserGrassResponse = {
+  metas: string[];
+};
+export const fetchUserGrass = async ({ path, from, to }: FetchUserGrassParams) => {
   try {
-    const params = { from: from, to: to };
-    const res = await instance.get(`/post/user/${path}/meta`, { params });
+    const { data } = await instance.get<FetchUserGrassResponse>(`/post/user/${path}/meta`, {
+      params: {
+        from,
+        to,
+      },
+    });
     // const response = await axios.get(`http://152.69.231.228:8080/v1`, { params });
 
-    return res.data;
+    return data;
   } catch (e) {
     devError('getUserGrassAPI error', e);
     throw e;
