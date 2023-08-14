@@ -1,18 +1,19 @@
-import LoginModal from '@/components/Molecules/LoginModal';
-import { useState } from 'react';
-
-import styles from './Layout.styled';
-
+import { useSearchParams } from 'next/navigation';
 import { useRecoilValue } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
-import Header from '../Header';
+import { LoginModalState } from '@/stores/modalStateStore';
+
 import useAuth from '@/hooks/useAuth';
 import { useMyUser } from '@/hooks/queries/profileQuery';
-import CategoryModal from '@/components/Molecules/CategoryModal';
-import { LoginModalState } from '@/stores/modalStateStore';
+
 import MetaHead, { MetaContents } from '@/components/Atom/MetaHead';
-import { currentCategoryState } from '@/stores/cardviewStateStore';
+import LoginModal from '@/components/Molecules/LoginModal';
+import CategoryModal from '@/components/Molecules/CategoryModal';
+
 import GTMScript from '../GTMScript';
+import Header from '../Header';
+import styles from './Layout.styled';
+import { CategoryQueryKeys } from '@/components/Atom/Card/types';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -23,10 +24,9 @@ const Layout = ({ children }: LayoutProps) => {
 
   const { isLogin } = useRecoilValue(AuthState);
   const { isLoginModalOpen } = useRecoilValue(LoginModalState);
-  const curCategory = useRecoilValue(currentCategoryState);
-
-  const { data } = useMyUser({ isLogin });
-  const userData = data?.data;
+  const searchParams = useSearchParams();
+  const { data: userData } = useMyUser({ isLogin });
+  const curCategory = (searchParams.get('category') as CategoryQueryKeys) || userData?.categoryIdentifier || 'develop';
 
   const setMetaImage = (): MetaContents['image'] => {
     if (curCategory === 'develop') return '/develop_meta.png';

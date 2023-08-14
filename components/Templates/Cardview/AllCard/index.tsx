@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { formatDate } from '@/utils/utils';
-import { findSelectedCategory } from '@/utils/cardview';
 
 import { FONT_COLOR } from '@/constants/color';
 
@@ -23,18 +22,18 @@ import * as Styled from './styles';
 import * as CardView from '@/styles/cardview.module';
 
 const AllCardItem = ({
-  categories,
   allCardItem,
   cardSize,
   onClickContent,
   onClickUser,
 }: {
-  categories: categories[];
   allCardItem: allPostItem;
   cardSize: CardProps['size'];
   onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
+  const categories = useRecoilValue(categoryState);
+
   return (
     <Styled.AllCardItem>
       <Card
@@ -58,12 +57,10 @@ const AllCardItem = ({
 
 const AllCardList = ({
   allCardList,
-  categories,
   device,
   ...rest
 }: {
   allCardList: allPostItem[];
-  categories: categories[];
   device: device;
   onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
@@ -74,7 +71,6 @@ const AllCardList = ({
         <AllCardItem
           key={`card-${allCard.identifier}-${index}`}
           cardSize={device === 'desktop' ? 'lg' : 'mobile'}
-          categories={categories}
           allCardItem={allCard}
           {...rest}
         ></AllCardItem>
@@ -96,7 +92,6 @@ const AllCard = (props: {
   onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
-  const [categories, setCategories] = useRecoilState(categoryState);
   const { data: allPosts, fetchNextPage, isSuccess } = useAllPosts(props.categoryQuery);
 
   const intersectCallback = (entry: IntersectionObserverEntry) => {
@@ -122,9 +117,7 @@ const AllCard = (props: {
               <EmptyCard></EmptyCard>
             ) : (
               allPosts.pages.map((allPost, index) => {
-                return (
-                  <AllCardList key={index} allCardList={allPost.posts} categories={categories} {...props}></AllCardList>
-                );
+                return <AllCardList key={index} allCardList={allPost.posts} {...props}></AllCardList>;
               })
             )}
           </Styled.AllCardContent>

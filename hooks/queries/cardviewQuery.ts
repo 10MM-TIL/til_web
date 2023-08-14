@@ -4,9 +4,10 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 export const useAllPosts = (categories: CategoryQueryKeys) => {
   return useInfiniteQuery(
-    ['all_category_card_infinite', categories],
+    ['ALL_CATEGORY_CARD_INFINITE', categories],
     ({ pageParam = '' }) => fetchAllPosts(categories, pageParam),
     {
+      keepPreviousData: true,
       getNextPageParam: (lastPage) => {
         if (lastPage) {
           const { nextPageToken } = lastPage;
@@ -19,5 +20,8 @@ export const useAllPosts = (categories: CategoryQueryKeys) => {
 };
 
 export const useRecommandPosts = (categories: string, enabled: boolean) => {
-  return useQuery(['recommand_card', categories], () => fetchRecommandPosts(categories), { enabled });
+  return useQuery(['RECOMMAND_CARD', categories], () => fetchRecommandPosts(categories), {
+    keepPreviousData: true,
+    enabled,
+  });
 };

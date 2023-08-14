@@ -1,6 +1,5 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { formatDate } from '@/utils/utils';
-import { findSelectedCategory } from '@/utils/cardview';
 
 import { FONT_COLOR } from '@/constants/color';
 import { categoryState } from '@/stores/cardviewStateStore';
@@ -15,20 +14,21 @@ import { categories } from '@/types/cardview';
 
 import * as Styled from './styles';
 import * as CardView from '@/styles/cardview.module';
+import { CategoryQueryKeys } from '@/components/Atom/Card/types';
 
 const PopularCardItem = ({
-  categories,
   recommandItem,
   cardSize,
   onClickContent,
   onClickUser,
 }: {
-  categories: categories[];
   recommandItem: recommandPostItem;
   cardSize: CardProps['size'];
   onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
+  const categories = useRecoilValue(categoryState);
+
   return (
     <Styled.PopularCardItem>
       <Card
@@ -53,11 +53,9 @@ const PopularCardItem = ({
 
 const PopularCardList = ({
   recommandCardList,
-  categories,
   device,
   ...rest
 }: {
-  categories: categories[];
   recommandCardList: recommandPostItem[];
   device: device;
   onClickContent: CardProps['onClickContent'];
@@ -71,7 +69,6 @@ const PopularCardList = ({
             key={`popular-${recommandItem.identifier}-${index}`}
             recommandItem={recommandItem}
             cardSize={device === 'desktop' ? 'lg' : 'mobile'}
-            categories={categories}
             {...rest}
           ></PopularCardItem>
         );
@@ -89,16 +86,12 @@ const EmptyPopularCard = () => {
 };
 // 이달의 회고
 const PopularCard = (props: {
+  categoryQuery: CategoryQueryKeys;
   device: device;
   onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
-  const [categories, setCategories] = useRecoilState(categoryState);
-
-  const { data: recommandCard, isSuccess } = useRecommandPosts(
-    findSelectedCategory(categories),
-    !!findSelectedCategory(categories),
-  );
+  const { data: recommandCard, isSuccess } = useRecommandPosts(props.categoryQuery, !!props.categoryQuery);
 
   return (
     <Styled.PopularCardViewContainer>
@@ -111,11 +104,7 @@ const PopularCard = (props: {
             {recommandCard.posts.length === 0 ? (
               <EmptyPopularCard></EmptyPopularCard>
             ) : (
-              <PopularCardList
-                recommandCardList={recommandCard.posts}
-                categories={categories}
-                {...props}
-              ></PopularCardList>
+              <PopularCardList recommandCardList={recommandCard.posts} {...props}></PopularCardList>
             )}
           </>
         </Styled.PopularCardContent>
