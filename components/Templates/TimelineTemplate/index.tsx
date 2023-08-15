@@ -17,6 +17,7 @@ import { useResize } from '@/hooks/useResize';
 
 import * as Typo from '@/components/Atom/Typography';
 import { TimeLine } from '@/components/Atom/TimeLine';
+import Spinner from '@/components/Atom/Spinner';
 import InfiniteScrollLayout from '@/components/Layout/InfiniteScroll';
 
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
@@ -29,6 +30,7 @@ import {
   TimeLineCardContent,
   TimeLineCardNotLogin,
   EmptyTimeLine,
+  SpinnerContainer,
 } from './style';
 
 interface TimelineTemplateProps {
@@ -180,17 +182,17 @@ const TimeLineList = ({ path }: { path: string }) => {
     data: postObject,
     fetchNextPage,
     isSuccess,
+    isFetchingNextPage,
   } = useMyAllTimeline({ path, from: fromSeconds || undefined, to: toSeconds || undefined, isLogin: isLogin });
 
   const intersectCallback = (entry: IntersectionObserverEntry) => {
     if (entry.isIntersecting) {
       if (
         postObject &&
-        (postObject.pages[postObject.pages.length - 1].nextPageToken === 'null' ||
+        (postObject.pages[postObject.pages.length - 1].nextPageToken === null ||
           postObject.pages[postObject.pages.length - 1].nextPageToken === '')
       )
         return;
-      if (postObject) console.log(postObject.pages);
       fetchNextPage();
     }
   };
@@ -237,12 +239,17 @@ const TimeLineList = ({ path }: { path: string }) => {
             })}
           </InfiniteScrollLayout>
           {postObject.pages[postObject.pages.length - 1].size >= 5 &&
-            postObject.pages[postObject.pages.length - 1].nextPageToken.length > 0 && (
+            postObject.pages[postObject.pages.length - 1].nextPageToken !== null && (
               <TimelineMobileMoreButton onClick={onClickMoreTimeLine}>
                 <Typo.H2 color={FONT_COLOR.GRAY_2}>타임라인 더보기</Typo.H2>
               </TimelineMobileMoreButton>
             )}
         </>
+      )}
+      {isFetchingNextPage && (
+        <SpinnerContainer>
+          <Spinner size='35px'></Spinner>
+        </SpinnerContainer>
       )}
     </>
   );

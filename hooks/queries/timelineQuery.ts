@@ -21,7 +21,7 @@ export const useMyAllTimeline = ({
       getNextPageParam: (lastPage) => {
         if (lastPage) {
           const { nextPageToken } = lastPage;
-          return nextPageToken === '' ? undefined : nextPageToken;
+          return nextPageToken === null ? undefined : nextPageToken;
         }
         return undefined;
       },

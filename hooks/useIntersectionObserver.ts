@@ -1,30 +1,46 @@
+import { devLogger } from '@/utils/system';
 import { useEffect, useRef } from 'react';
 
-const useIntersectionObserver = <T extends HTMLElement>(
+let intersectionobserver: IntersectionObserver;
+const useIntersectionObserver = (
   callback: (entry: IntersectionObserverEntry) => void,
-  option: IntersectionObserverInit | undefined = { threshold: 1 },
+  option?: IntersectionObserverInit,
+  isObserve?: boolean,
 ) => {
-  const observer = useRef<IntersectionObserver>();
+  const observerRef = useRef(null);
+
   useEffect(() => {
-    observer.current = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        (() => callback(entry))();
-        // if (entry.isIntersecting) {
-        //   callback();
-        // }
-      });
-    }, option);
-  }, [callback, option]);
+    if (intersectionobserver && typeof isObserve === 'boolean' && !isObserve) {
+      unobserve();
+    } else if (observerRef && observerRef.current) {
+      intersectionobserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            unobserve();
+            callback(entry);
+          }
+        });
+      }, option);
+      observe();
+      return () => intersectionobserver.disconnect();
+    }
+  }, [isObserve, observerRef, option, callback]);
 
-  const observe = (element: T) => {
-    observer.current?.observe(element);
+  const observe = () => {
+    if (observerRef.current) {
+      devLogger('observe');
+      intersectionobserver.observe(observerRef.current);
+    }
   };
 
-  const unobserve = (element: T) => {
-    observer.current?.unobserve(element);
+  const unobserve = () => {
+    if (observerRef.current) {
+      devLogger('unobserve');
+      intersectionobserver.unobserve(observerRef.current);
+    }
   };
 
-  return [observe, unobserve];
+  return observerRef;
 };
 
 export default useIntersectionObserver;

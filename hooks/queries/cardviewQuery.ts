@@ -11,7 +11,7 @@ export const useAllPosts = (categories: CategoryQueryKeys) => {
       getNextPageParam: (lastPage) => {
         if (lastPage) {
           const { nextPageToken } = lastPage;
-          return nextPageToken === 'null' ? undefined : nextPageToken;
+          return nextPageToken === null ? undefined : nextPageToken;
         }
         return undefined;
       },

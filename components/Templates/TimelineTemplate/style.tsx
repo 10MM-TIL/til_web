@@ -64,3 +64,8 @@ export const EmptyTimeLine = styled.div`
     height: 170px;
   }
 `;
+
+export const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;

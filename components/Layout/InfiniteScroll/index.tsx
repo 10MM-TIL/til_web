@@ -5,32 +5,20 @@ const InfiniteScrollLayout = ({
   children,
   intersectCallback,
   isObserve,
+  option,
 }: {
   children: ReactNode;
   intersectCallback: (entry: IntersectionObserverEntry) => void;
   isObserve?: boolean;
+  option?: IntersectionObserverInit;
 }) => {
-  const bottom = useRef(null);
-  const [observe, unobserve] = useIntersectionObserver(intersectCallback);
-
-  useEffect(() => {
-    const optionref = bottom.current;
-    if (!optionref) return;
-    observe(optionref);
-
-    if (typeof isObserve === 'boolean' && !isObserve) {
-      unobserve(optionref);
-    }
-
-    return () => {
-      unobserve(optionref);
-    };
-  }, [isObserve, observe, unobserve]);
+  // const bottom = useRef(null);
+  const observerRef = useIntersectionObserver(intersectCallback, option, isObserve);
 
   return (
     <>
       {children}
-      <div ref={bottom}></div>
+      <div ref={observerRef}></div>
     </>
   );
 };

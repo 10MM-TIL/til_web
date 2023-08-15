@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRef } from 'react';
+import { useRecoilValue } from 'recoil';
 
 import { formatDate } from '@/utils/utils';
 
@@ -7,7 +7,6 @@ import { FONT_COLOR } from '@/constants/color';
 
 import { useAllPosts } from '@/hooks/queries/cardviewQuery';
 import { device } from '@/hooks/useResize';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
 import * as Typo from '@/components/Atom/Typography';
 import { Card, CardProps } from '@/components/Atom/Card';
@@ -16,10 +15,11 @@ import InfiniteScrollLayout from '@/components/Layout/InfiniteScroll';
 
 import { categoryState } from '@/stores/cardviewStateStore';
 
-import { allPostItem, categories } from '@/types/cardview';
+import { allPostItem } from '@/types/cardview';
 
 import * as Styled from './styles';
 import * as CardView from '@/styles/cardview.module';
+import Spinner from '@/components/Atom/Spinner';
 
 const AllCardItem = ({
   allCardItem,
@@ -92,17 +92,15 @@ const AllCard = (props: {
   onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
-  const { data: allPosts, fetchNextPage, isSuccess } = useAllPosts(props.categoryQuery);
+  const { data: allPosts, fetchNextPage, isSuccess, isFetchingNextPage } = useAllPosts(props.categoryQuery);
 
   const intersectCallback = (entry: IntersectionObserverEntry) => {
-    if (entry.isIntersecting) {
-      if (allPosts && allPosts.pages[allPosts.pages.length - 1]?.nextPageToken === 'null') {
-        console.log(allPosts.pages);
-        return;
-      }
-
-      fetchNextPage();
+    console.log(entry.rootBounds, entry.intersectionRatio);
+    // if (allPosts && allPosts.pages[allPosts.pages.length - 1]?.nextPageToken === null) {
+    if (allPosts && allPosts.pages[allPosts.pages.length - 1]?.nextPageToken === '') {
+      return;
     }
+    fetchNextPage();
   };
 
   return (
@@ -110,17 +108,27 @@ const AllCard = (props: {
       <Styled.AllCardHeader>
         <Typo.H1 color={FONT_COLOR.WHITE}>전체 회고</Typo.H1>
       </Styled.AllCardHeader>
-      <InfiniteScrollLayout intersectCallback={intersectCallback}>
+      <InfiniteScrollLayout
+        intersectCallback={intersectCallback}
+        option={{ rootMargin: '0px 0px 150px 0px', threshold: [0, 0.3, 0.5, 1] }}
+      >
         {isSuccess && (
           <Styled.AllCardContent isEmpty={allPosts.pages[0].posts.length === 0}>
             {allPosts.pages[0].posts.length === 0 ? (
               <EmptyCard></EmptyCard>
             ) : (
-              allPosts.pages.map((allPost, index) => {
-                return <AllCardList key={index} allCardList={allPost.posts} {...props}></AllCardList>;
-              })
+              <>
+                {allPosts.pages.map((allPost, index) => {
+                  return <AllCardList key={index} allCardList={allPost.posts} {...props}></AllCardList>;
+                })}
+              </>
             )}
           </Styled.AllCardContent>
+        )}
+        {!isFetchingNextPage && (
+          <Styled.SpinnerContainer>
+            <Spinner size='35px'></Spinner>
+          </Styled.SpinnerContainer>
         )}
       </InfiniteScrollLayout>
     </Styled.AllCardViewContainer>
