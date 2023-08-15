@@ -17,9 +17,9 @@ const HomeBanner = () => {
           pagination={{ enabled: true, clickable: true }}
           navigation={{ enabled: false }}
           slidesPerView={1}
-          //   autoplay={{
-          //     delay: 3500,
-          //   }}
+          autoplay={{
+            delay: 4000,
+          }}
           loop={true}
           css={homeSwiperCustom}
           breakpoints={{
