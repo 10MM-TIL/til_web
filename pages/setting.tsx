@@ -1,5 +1,15 @@
-import { useState, useCallback, useEffect, ReactHTMLElement } from 'react';
+import { useState, useCallback, useEffect, MouseEventHandler } from 'react';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { getCookie } from 'cookies-next';
+
+import { logout } from '@/utils/utils';
+
+import { FONT_COLOR } from '@/constants/color';
+
 import {
   EditpageWrapper,
   EditpageContainer,
@@ -13,9 +23,14 @@ import {
   FooterContainer,
   SaveButtonContainer,
 } from '@/styles/setting.module';
-import { FONT_COLOR } from '@/constants/color';
+import { myBloglist, myMailAgreement, myNotification, myOauthEmail } from '@/stores/user';
+import { LoginModalState } from '@/stores/modalStateStore';
+import { AuthState } from '@/stores/authStateStore';
+
 import { useCategories } from '@/hooks/queries/categoryQuery';
 import { useResize } from '@/hooks/useResize';
+import useAuth from '@/hooks/useAuth';
+import useToast from '@/hooks/useToast';
 
 import * as Typo from '@/components/Atom/Typography';
 import { TextField } from '@/components/Atom/TextField';
@@ -26,34 +41,27 @@ import RadioGroup from '@/components/Molecules/RadioGroup';
 import Toggle from '@/components/Atom/Toggle';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import AddBlog from '@/components/Atom/AddBlog';
-
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
-import { myBloglist, myMailAgreement, myNotification, myOauthEmail } from '@/stores/user';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getMyProfile, putMyProfile, getMyNotification, putMyNotification, putMyBlog } from 'apis/setting';
-import { usePutMyProfile } from '@/hooks/queries/saveQuery';
-import { getUserBlog } from '@/apis/user';
-import IconCheckBig from '@/assets/svgs/IconCheckBig';
-import { logout } from '@/utils/utils';
-import { getCookie } from 'cookies-next';
-import LoginModal from '@/components/Molecules/LoginModal';
-import { useRouter } from 'next/router';
-import { AuthState } from '@/stores/authStateStore';
-import { LoginModalState } from '@/stores/modalStateStore';
-import useAuth from '@/hooks/useAuth';
 import ToastMessage from '@/components/ToastMessage';
-import useToast from '@/hooks/useToast';
+import LoginModal from '@/components/Molecules/LoginModal';
+
+import { MyUserModel } from '@/types/index';
+import { CategoryQueryKeys } from '@/components/Atom/Card/types';
+
+import { putMyProfile, getMyNotification, putMyNotification, putMyBlog } from '@/apis/setting';
+import { getMyUserAPI } from '@/apis/profile';
+import { getUserBlog } from '@/apis/user';
+
+import IconCheckBig from '@/assets/svgs/IconCheckBig';
 
 const CategoryLayout = ({
   selectedCategoryId,
   onClick,
 }: {
   selectedCategoryId: string;
-  onClick: (v: string) => void;
+  onClick: (v: CategoryQueryKeys) => void;
 }) => {
-  const { data: category } = useCategories();
-  const categoryData = category?.data;
+  const { data: categoryData } = useCategories();
 
   return (
     <BoxLayout title='분야'>
@@ -168,7 +176,7 @@ const DownloadLayout = () => {
   );
 };
 
-const SaveLayout = ({ onClick }: any) => {
+const SaveLayout = ({ onClick }: { onClick: MouseEventHandler<HTMLButtonElement> }) => {
   const device = useResize();
   return (
     <SaveButtonContainer>
@@ -214,7 +222,17 @@ const FooterLayout = () => {
 };
 
 const Setting: NextPage = () => {
-  const [myInfo, setMyInfo] = useState<any>({});
+  const [myInfo, setMyInfo] = useState<MyUserModel>({
+    categoryIdentifier: 'all',
+    categoryName: '',
+    email: '',
+    introduction: '',
+    mailAgreement: false,
+    name: '',
+    oauthType: '',
+    path: '',
+    profileImgSrc: '',
+  });
   // const [noti, setNoti] = useRecoilState(myNotification);
   const [mailAgreement, setMyMailAgreement] = useRecoilState(myMailAgreement);
   const [blogList, setBlogList] = useRecoilState(myBloglist);
@@ -241,7 +259,20 @@ const Setting: NextPage = () => {
       });
   }, [accessToken, setIsLoginModalOpen]);
 
-  const { data: userProfile, refetch } = useQuery(['myProfile'], getMyProfile, {
+  const {
+    data: userProfile = {
+      categoryIdentifier: 'all',
+      categoryName: '',
+      introduction: '',
+      mailAgreement: false,
+      name: '',
+      path: '',
+      profileImgSrc: '',
+      email: '',
+      oauthType: '',
+    },
+    refetch,
+  } = useQuery(['myProfile'], getMyUserAPI, {
     onSuccess: (data) => {
       setMyMailAgreement(data.mailAgreement);
       setMyInfo(data);
@@ -249,7 +280,7 @@ const Setting: NextPage = () => {
       setOauthEmail(data?.email);
     },
   });
-  const { refetch: blogRefetch } = useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
+  const { refetch: blogRefetch } = useQuery(['myBlogs'], () => getUserBlog(userProfile.path), {
     enabled: !!userProfile,
     onSuccess: (data) => {
       setBlogList(data.blogs);
@@ -337,7 +368,7 @@ const Setting: NextPage = () => {
   const handleChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const nameValue = e.target.value;
     setIsChangeInput(true);
-    setMyInfo((prev: any) => {
+    setMyInfo((prev: MyUserModel) => {
       return { ...prev, name: nameValue };
     });
   }, []);
@@ -345,13 +376,13 @@ const Setting: NextPage = () => {
   const handleChangePath = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const pathValue = e.target.value;
     setIsChangeInput(true);
-    setMyInfo((prev: any) => {
+    setMyInfo((prev: MyUserModel) => {
       return { ...prev, path: pathValue.replace(' ', '') };
     });
   }, []);
   const handleChangeIntroduction = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setIsChangeInput(true);
-    setMyInfo((prev: any) => {
+    setMyInfo((prev: MyUserModel) => {
       return { ...prev, introduction: e.target.value };
     });
   }, []);
@@ -360,8 +391,8 @@ const Setting: NextPage = () => {
   }, []);
 
   const handleChangeCategory = useCallback((value: string) => {
-    setMyInfo((prev: any) => {
-      return { ...prev, categoryIdentifier: value };
+    setMyInfo((prev: MyUserModel) => {
+      return { ...prev, categoryIdentifier: value as CategoryQueryKeys };
     });
   }, []);
   useEffect(() => {

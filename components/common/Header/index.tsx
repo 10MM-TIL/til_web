@@ -22,8 +22,7 @@ const Header = () => {
   const { isLogin } = useRecoilValue(AuthState);
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
 
-  const { data } = useMyUser({ isLogin });
-  const userData = data?.data;
+  const { data: userData } = useMyUser({ isLogin });
   const path = userData?.path;
 
   const handleModalOpen = () => {
