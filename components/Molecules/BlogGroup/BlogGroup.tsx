@@ -1,13 +1,8 @@
 import BlogIcon from '@/components/Atom/BlogIcon';
 import { BlogGroupContainter } from './style';
-interface BlogData {
-  identifier: string;
-  url: string;
-}
-interface BlogGroupProps {
-  data: BlogData[];
-}
-const BlogGroup = ({ data }: BlogGroupProps) => {
+import { BlogData } from './type';
+
+const BlogGroup = ({ data }: { data: BlogData[] }) => {
   return (
     <BlogGroupContainter>
       {data?.map((value) => (

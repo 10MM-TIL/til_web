@@ -2,12 +2,13 @@ import { devError } from '@/utils/system';
 import { getMyProfileResponse, getBlogResponse } from '@/types/user';
 import instance from './instance';
 import { CategoryQueryKeys, CategoryValues } from '@/components/Atom/Card/types';
+import { BlogGroupProps } from '@/components/Molecules/BlogGroup/type';
 
 export const getUserProfile = async (path: string) => {
   try {
-    const res = await instance.get(`/user/${path}`);
+    const { data } = await instance.get<getMyProfileResponse>(`/user/${path}`);
 
-    return res.data;
+    return data;
   } catch (e) {
     devError('getUserProfilAPI error', e);
     // throw e;
@@ -16,9 +17,9 @@ export const getUserProfile = async (path: string) => {
 
 export const getUserBlog = async (path: string) => {
   try {
-    const res = await instance.get(`/blogs/${path}`);
+    const { data } = await instance.get<BlogGroupProps>(`/blogs/${path}`);
 
-    return res.data;
+    return data;
   } catch (e) {
     devError('getUserBlogAPI error', e);
     throw e;
