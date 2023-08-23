@@ -24,24 +24,31 @@ const HomeTemplates = () => {
   const setClickedDate = useSetRecoilState(clickedGrassDate);
 
   const { data: userData, isSuccess: isSuccessMyUser } = useMyUser({ isLogin });
-  const { data: userInfo } = useUserProfile({ isLogin, userPath: userData ? userData.path : '' });
+  const { data: userInfo, isSuccess: isSuccessProfile } = useUserProfile({
+    isLogin,
+    userPath: userData ? userData.path : '',
+  });
 
   return (
     <div css={styles.wrapper}>
       <HomeBanner></HomeBanner>
       <div css={styles.desktopContainer}>
-        <div css={styles.container}>
-          <HomeTextArea showToast={showToast} userInfo={userInfo}></HomeTextArea>
-          <GrassTemplate
-            path={userData?.path ?? ''}
-            title={userData ? `${userData.name}의 기록` : '내가 모은 기록'}
-            onClick={(value) => {
-              setClickedDate(value);
-            }}
-          />
-          <TimelineTemplate path={userData ? userData.path : ''} changable={userInfo?.isAuthorized} />
-        </div>
-        <HomeCard userData={userData}></HomeCard>
+        {isSuccessProfile && isSuccessMyUser && (
+          <>
+            <div css={styles.container}>
+              <HomeTextArea showToast={showToast} userInfo={userInfo}></HomeTextArea>
+              <GrassTemplate
+                path={userData.path}
+                title={userData ? `${userData.name}의 기록` : '내가 모은 기록'}
+                onClick={(value) => {
+                  setClickedDate(value);
+                }}
+              />
+              <TimelineTemplate path={userData ? userData.path : ''} changable={userInfo.isAuthorized} />
+            </div>
+            <HomeCard userData={userData}></HomeCard>
+          </>
+        )}
       </div>
       {isToastOpen && <ToastMessage isOpen={isToastOpen}>{toastText}</ToastMessage>}
     </div>

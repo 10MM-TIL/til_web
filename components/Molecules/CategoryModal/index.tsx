@@ -31,8 +31,6 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
   const { mutateAsync: categoryMutate } = useMyProfileOnboarding();
   // const { mutateAsync: notificationMutate } = useUpdateMyNotification();
 
-  const categoryData = category?.data;
-
   // const handleIsAlertAgreeToggle = () => {
   //   isAlertAgree && setFrequency('');
   //   setIsAlertAgree((prev) => !prev);
@@ -53,7 +51,7 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
     // }
 
     await categoryMutate({ categoryIdentifier: selectedCategoryId, mailAgreement: isReceiveAgree });
-    const { categories } = categoryData ?? { categories: [] };
+    const { categories } = category ?? { categories: [] };
     const selected = categories.find(
       (item: { identifier: string; name: string }) => item.identifier === '0ec30e71-38ba-4837-8804-f0e1180c5bf2',
     );
@@ -80,7 +78,7 @@ const CategoryModal = ({ isOpen, onClose = () => {} }: CategoryModalProps) => {
           <Typo.H1 color={FONT_COLOR.WHITE}>분야</Typo.H1>
           <div css={styles.categoryRadioContainer}>
             <RadioGroup
-              data={categoryData?.categories ?? []}
+              data={category?.categories ?? []}
               selectedId={selectedCategoryId}
               onClick={setSelectedCategoryId}
             />

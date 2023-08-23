@@ -7,11 +7,10 @@ import { BlogGroupProps } from '@/components/Molecules/BlogGroup/type';
 export const getUserProfile = async (path: string) => {
   try {
     const { data } = await instance.get<getMyProfileResponse>(`/user/${path}`);
-
     return data;
   } catch (e) {
     devError('getUserProfilAPI error', e);
-    // throw e;
+    throw e;
   }
 };
 
