@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, MouseEventHandler } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { getCookie } from 'cookies-next';
 
@@ -219,6 +220,7 @@ const FooterLayout = () => {
 const Setting: NextPage = () => {
   const [myInfo, setMyInfo] = useRecoilState(myInformation);
   const blogList = useRecoilValue(myBloglist);
+  const queryClient = useQueryClient();
 
   useAuth();
 
@@ -288,6 +290,7 @@ const Setting: NextPage = () => {
     try {
       await Promise.all(promises).then((res) => {
         router.push(`/@${myInfo.path}`);
+        queryClient.invalidateQueries(['MY_BLOGS', 'MY_PROFILE', 'PROFILE']);
         showToast(
           <>
             <IconCheckBig />

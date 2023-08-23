@@ -9,7 +9,6 @@ import { putMyProfile } from '@/apis/setting';
 export const useGetMyProfile = () => {
   const setMyProfile = useSetRecoilState(myInformation);
   return useQuery(['MY_PROFILE'], getMyUserAPI, {
-    refetchOnMount: 'always',
     onSuccess: (data) => setMyProfile(data),
   });
 };
@@ -18,7 +17,6 @@ export const useGetMyBlog = (path: string, isSuccessGetMyProfile: boolean) => {
   const setMyBlogList = useSetRecoilState(myBloglist);
   return useQuery(['MY_BLOGS'], () => getUserBlog(path), {
     enabled: !!isSuccessGetMyProfile,
-    refetchOnMount: 'always',
     onSuccess: (data) => setMyBlogList(data.blogs),
   });
 };
