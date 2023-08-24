@@ -57,7 +57,7 @@ const TimelineComponent = ({
 
   const editTimeline = useMutation(putEditTimeline, {
     onSuccess: () => {},
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['TIMELINE_INFINITE'] }),
   });
 
   const removeTimeline = useMutation(deleteTimeline, {
@@ -68,9 +68,9 @@ const TimelineComponent = ({
           <Typo.H1 color={FONT_COLOR.WHITE}>삭제 완료!</Typo.H1>
         </>,
       );
-      queryClient.invalidateQueries({ queryKey: ['GRASS'] });
+      queryClient.invalidateQueries({ queryKey: ['TIMELINE_GRASS_DATA'] });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['timelineInfinite'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['TIMELINE_INFINITE'] }),
   });
 
   const updateTimeline = (content: { title: string; desc: string; createdAt: number }) => {
@@ -85,7 +85,9 @@ const TimelineComponent = ({
   };
 
   const handleDeleteContent = () => {
-    removeTimeline.mutate({ postIdentifier: postIdentifier });
+    if (window.confirm('선택한 회고글을 삭제하시겠습니까?')) {
+      removeTimeline.mutate({ postIdentifier: postIdentifier });
+    }
   };
 
   return (

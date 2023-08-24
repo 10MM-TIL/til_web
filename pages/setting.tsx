@@ -10,19 +10,7 @@ import { logout } from '@/utils/utils';
 
 import { FONT_COLOR } from '@/constants/color';
 
-import {
-  EditpageWrapper,
-  EditpageContainer,
-  ProfileContainer,
-  InputContainer,
-  PhotoContainer,
-  CheckContainer,
-  BlogLinkContainer,
-  BlogTitleContainer,
-  BlogLinkList,
-  FooterContainer,
-  SaveButtonContainer,
-} from '@/styles/setting.module';
+import * as Styled from '@/styles/setting.module';
 import { myBloglist, myInformation, myMailAgreement, myNotification, myOauthEmail } from '@/stores/user';
 import { LoginModalState } from '@/stores/modalStateStore';
 import { AuthState } from '@/stores/authStateStore';
@@ -88,14 +76,6 @@ const NoticeLayout = () => {
 
   return (
     <div>
-      {/* <BoxLayout title='알림 설정'>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <Toggle isOn={enable} onIsOnToggle={handleToggleClick} />
-          <div>
-            <RadioGroup data={DATA} selectedId={iteration} onClick={handleRadioClick} />
-          </div>
-        </div>
-      </BoxLayout> */}
       <div style={{ float: 'right', marginRight: '8px' }}>
         <div style={{ marginLeft: '68px' }}>
           <CheckboxLabel
@@ -133,13 +113,13 @@ const BlogLinkLayout = () => {
     }
   };
   return (
-    <BlogLinkContainer>
-      <BlogTitleContainer>
+    <Styled.BlogLinkContainer>
+      <Styled.BlogTitleContainer>
         <Typo.H1 color={FONT_COLOR.WHITE}>링크</Typo.H1>
         <AddBlog onClick={handleAddBlog} />
-      </BlogTitleContainer>
+      </Styled.BlogTitleContainer>
       <div>
-        <BlogLinkList>
+        <Styled.BlogLinkList>
           {blogList.length > 0
             ? blogList
                 .slice()
@@ -157,9 +137,9 @@ const BlogLinkLayout = () => {
                   );
                 })
             : null}
-        </BlogLinkList>
+        </Styled.BlogLinkList>
       </div>
-    </BlogLinkContainer>
+    </Styled.BlogLinkContainer>
   );
 };
 
@@ -174,11 +154,11 @@ const DownloadLayout = () => {
 const SaveLayout = ({ onClick }: { onClick: MouseEventHandler<HTMLButtonElement> }) => {
   const device = useResize();
   return (
-    <SaveButtonContainer>
+    <Styled.SaveButtonContainer>
       <Button size={device === 'desktop' ? 'lg' : 'x-lg-m'} onClick={onClick}>
         <Typo.H2>저장하기</Typo.H2>
       </Button>
-    </SaveButtonContainer>
+    </Styled.SaveButtonContainer>
   );
 };
 
@@ -191,7 +171,7 @@ const FooterLayout = () => {
   };
 
   return (
-    <FooterContainer>
+    <Styled.FooterContainer>
       <span style={{ display: 'flex', gap: '34px' }}>
         <a
           href='https://www.plip.kr/pcc/c791921f-5dc3-4cb0-baac-55e48ee2e585/privacy-policy'
@@ -213,7 +193,7 @@ const FooterLayout = () => {
           <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
         </a>
       </span>
-    </FooterContainer>
+    </Styled.FooterContainer>
   );
 };
 
@@ -288,9 +268,9 @@ const Setting: NextPage = () => {
       }),
     ];
     try {
-      await Promise.all(promises).then((res) => {
-        router.push(`/@${myInfo.path}`);
+      await Promise.all(promises).then(() => {
         queryClient.invalidateQueries(['MY_BLOGS', 'MY_PROFILE', 'PROFILE']);
+        router.push(`/@${myInfo.path}`);
         showToast(
           <>
             <IconCheckBig />
@@ -364,10 +344,10 @@ const Setting: NextPage = () => {
 
   return (
     <>
-      <EditpageWrapper>
-        <EditpageContainer>
-          <ProfileContainer>
-            <PhotoContainer>
+      <Styled.EditpageWrapper>
+        <Styled.EditpageContainer>
+          <Styled.ProfileContainer>
+            <Styled.PhotoContainer>
               <ProfileIcon
                 editable={true}
                 imgUrl={myInfo.profileImgSrc}
@@ -375,8 +355,8 @@ const Setting: NextPage = () => {
                   handleChangeProfile(id);
                 }}
               />
-            </PhotoContainer>
-            <InputContainer>
+            </Styled.PhotoContainer>
+            <Styled.InputContainer>
               <TextField
                 title='URL 주소'
                 isInput={true}
@@ -399,18 +379,18 @@ const Setting: NextPage = () => {
                 inputValue={myInfo.introduction}
                 onChange={handleChangeIntroduction}
               />
-            </InputContainer>
-          </ProfileContainer>
-          <CheckContainer>
+            </Styled.InputContainer>
+          </Styled.ProfileContainer>
+          <Styled.CheckContainer>
             <CategoryLayout selectedCategoryId={myInfo.categoryIdentifier} onClick={handleChangeCategory} />
             <NoticeLayout />
             <BlogLinkLayout />
             {/* <DownloadLayout /> */}
-          </CheckContainer>
+          </Styled.CheckContainer>
           <SaveLayout onClick={handleSave} />
           <FooterLayout />
-        </EditpageContainer>
-      </EditpageWrapper>
+        </Styled.EditpageContainer>
+      </Styled.EditpageWrapper>
       {!isLogin && isLoginModalOpen && <LoginModal closable={false} />}
       {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
     </>

@@ -6,17 +6,7 @@ import { useSetRecoilState } from 'recoil';
 
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
-import {
-  MypageWrapper,
-  MypageContainer,
-  IntroContainer,
-  TextContainer,
-  InfoContainer,
-  InfoLeftArea,
-  InfoRightArea,
-  IntroductionContainer,
-  FloatingContainer,
-} from '@/styles/mypage.module';
+import * as Styled from '@/styles/mypage.module';
 import { clickedGrassDate } from '@/stores/user';
 import IconRequest from '@/assets/svgs/IconRequest';
 
@@ -38,17 +28,17 @@ import Custom404 from '@/pages/404';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
-    <InfoContainer>
-      <InfoLeftArea>
+    <Styled.InfoContainer>
+      <Styled.InfoLeftArea>
         <Typo.H1 color={FONT_COLOR.WHITE}>{name}</Typo.H1>
         <Typo.Label2 color={POINT_COLOR.MAIN}>{category}</Typo.Label2>
-      </InfoLeftArea>
+      </Styled.InfoLeftArea>
       {isMe ? (
-        <InfoRightArea>
+        <Styled.InfoRightArea>
           <SettingButton />
-        </InfoRightArea>
+        </Styled.InfoRightArea>
       ) : null}
-    </InfoContainer>
+    </Styled.InfoContainer>
   );
 };
 
@@ -64,10 +54,10 @@ const SettingButton = () => {
 
 const Introduction = ({ introduction, blogs }: { introduction: string; blogs: BlogData[] }) => {
   return (
-    <IntroductionContainer>
+    <Styled.IntroductionContainer>
       <Typo.Body color={FONT_COLOR.WHITE}>{introduction}</Typo.Body>
       <BlogGroup data={blogs} />
-    </IntroductionContainer>
+    </Styled.IntroductionContainer>
   );
 };
 
@@ -98,36 +88,29 @@ const User: NextPage = () => {
   return isLoading ? (
     <Loading />
   ) : !(!isSuccess || urlPath.at(0) !== '@') ? (
-    <MypageWrapper>
-      <MypageContainer>
-        <IntroContainer>
-          <ProfileIcon imgUrl={userInfo?.profileImgSrc ?? ''} />
-          <TextContainer>
-            <NameCategory
-              isMe={userInfo?.isAuthorized ?? false}
-              name={userInfo?.name ?? ''}
-              category={userInfo?.categoryName ?? ''}
-            />
-            {blogGetSuccess ? (
-              <Introduction blogs={blogObject.blogs} introduction={userInfo?.introduction ?? ''} />
-            ) : null}
-          </TextContainer>
-        </IntroContainer>
+    <Styled.MypageWrapper>
+      <Styled.MypageContainer>
+        <Styled.IntroContainer>
+          <ProfileIcon imgUrl={userInfo.profileImgSrc} />
+          <Styled.TextContainer>
+            <NameCategory isMe={userInfo.isAuthorized} name={userInfo.name} category={userInfo.categoryName} />
+            {blogGetSuccess ? <Introduction blogs={blogObject.blogs} introduction={userInfo.introduction} /> : null}
+          </Styled.TextContainer>
+        </Styled.IntroContainer>
         <GrassTemplate
           path={path}
-          title={`${userInfo?.name}의 기록`}
+          title={`${userInfo.name}의 기록`}
           onClick={(value) => {
             setClickedDate(value);
           }}
         />
-
-        <TimelineTemplate path={path} changable={userInfo?.isAuthorized ?? false} />
-      </MypageContainer>
-      <FloatingContainer>
+        <TimelineTemplate path={path} changable={userInfo.isAuthorized} />
+      </Styled.MypageContainer>
+      <Styled.FloatingContainer>
         <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />
-      </FloatingContainer>
+      </Styled.FloatingContainer>
       {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
-    </MypageWrapper>
+    </Styled.MypageWrapper>
   ) : (
     <Custom404 />
   );
