@@ -95,9 +95,7 @@ const AllCard = (props: {
   const { data: allPosts, fetchNextPage, isSuccess, isFetchingNextPage } = useAllPosts(props.categoryQuery);
 
   const intersectCallback = (entry: IntersectionObserverEntry) => {
-    console.log(entry.rootBounds, entry.intersectionRatio);
-    // if (allPosts && allPosts.pages[allPosts.pages.length - 1]?.nextPageToken === null) {
-    if (allPosts && allPosts.pages[allPosts.pages.length - 1]?.nextPageToken === '') {
+    if (allPosts && allPosts.pages[allPosts.pages.length - 1].nextPageToken === null) {
       return;
     }
     fetchNextPage();
@@ -125,7 +123,7 @@ const AllCard = (props: {
             )}
           </Styled.AllCardContent>
         )}
-        {!isFetchingNextPage && (
+        {isFetchingNextPage && (
           <Styled.SpinnerContainer>
             <Spinner size='35px'></Spinner>
           </Styled.SpinnerContainer>

@@ -28,27 +28,7 @@ import { IconCalendar } from '@/assets/svgs/IconCalendar';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import IconError from '@/assets/svgs/IconError';
 
-import {
-  textareaContainer,
-  reviewTab,
-  memoTab,
-  textarea,
-  reviewContainer,
-  reviewInputContainer,
-  reviewInput,
-  reviewLoadBtn,
-  timelineContainer,
-  timeline,
-  timelineLeftArea,
-  timelineCalendar,
-  timelineTitleInput,
-  timelineSummaryInput,
-  timelineInputContainer,
-  textareaBottomContainer,
-  timelineSubmitBtnContainer,
-  reviewGuide,
-  invalidContainer,
-} from './styles';
+import * as Styled from './styles';
 
 type HomeTextAreaProps = {
   showToast: (text: ReactNode) => void;
@@ -240,15 +220,19 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
   }, [data?.data?.data]);
   return (
     <div>
-      <div css={textareaContainer}>
-        <div css={reviewTab({ selectedTab })} onClick={() => onTabChange('REVIEW')}>
+      <div css={Styled.textareaContainer}>
+        <div css={Styled.reviewTab({ selectedTab })} onClick={() => onTabChange('REVIEW')}>
           <Typo.H1 color={selectedTab === 'MEMO' ? '#636C78' : FONT_COLOR.WHITE}>회고</Typo.H1>
         </div>
-        <div css={memoTab({ selectedTab })} onClick={() => onTabChange('MEMO')}>
+        <div css={Styled.memoTab({ selectedTab })} onClick={() => onTabChange('MEMO')}>
           <Typo.H1 color={selectedTab === 'MEMO' ? FONT_COLOR.WHITE : '#636C78'}>메모</Typo.H1>
         </div>
         {selectedTab === 'REVIEW' && (
-          <Link href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7' target='_blank' css={reviewGuide}>
+          <Link
+            href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7'
+            target='_blank'
+            css={Styled.reviewGuide}
+          >
             <Typo.Label2 color={FONT_COLOR.GRAY_2}>본인의 콘텐츠만 등록해 주세요.</Typo.Label2>
           </Link>
         )}
@@ -256,7 +240,7 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
           <textarea
             placeholder={'잊지 말아야 할 것들을 메모해보세요.'}
             value={memoValue}
-            css={textarea}
+            css={Styled.textarea}
             onChange={handleMemoChange}
             onClick={(e) => {
               if (!isLogin) {
@@ -266,13 +250,13 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
             }}
           />
         ) : (
-          <div css={reviewContainer}>
-            <div css={reviewInputContainer}>
+          <div css={Styled.reviewContainer}>
+            <div css={Styled.reviewInputContainer}>
               <input
                 type='text'
                 value={url}
                 onChange={handleUrlChange}
-                css={reviewInput}
+                css={Styled.reviewInput}
                 onClick={(e) => {
                   if (!isLogin) {
                     e.currentTarget.blur();
@@ -283,7 +267,7 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
               />
               <button
                 type='button'
-                css={reviewLoadBtn({
+                css={Styled.reviewLoadBtn({
                   isEnable: url.length > 0 && validUrlStatus === 'BEFORE' && !isUrlLoading,
                 })}
                 onClick={handleUrlCheck}
@@ -293,16 +277,16 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
               </button>
             </div>
             {validUrlStatus === 'INVALID' && (
-              <div css={invalidContainer}>
+              <div css={Styled.invalidContainer}>
                 <IconError />
                 <Typo.Body color={POINT_COLOR.ERROR}>유효하지 않은 URL입니다.</Typo.Body>
               </div>
             )}
             {validUrlStatus === 'VALID' && (
-              <div css={timelineContainer}>
-                <div css={timeline}>
+              <div css={Styled.timelineContainer}>
+                <div css={Styled.timeline}>
                   {/* 타임라인 */}
-                  <div css={timelineLeftArea}>
+                  <div css={Styled.timelineLeftArea}>
                     {/* LEFT (INPUT AREA) */}
 
                     <DatePicker
@@ -312,7 +296,7 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
                       selected={date === '' ? null : new Date(date.replace(/\./gi, '-'))}
                       onChange={handleDateChange}
                       customInput={
-                        <div css={timelineCalendar}>
+                        <div css={Styled.timelineCalendar}>
                           <Typo.Label1 color={FONT_COLOR.GRAY_3}>
                             {date === '' ? '날짜를 입력해주세요' : date}
                           </Typo.Label1>
@@ -321,20 +305,20 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
                       }
                     />
 
-                    <div css={timelineInputContainer}>
+                    <div css={Styled.timelineInputContainer}>
                       <input
                         ref={titleRef}
                         placeholder='불러온 글의 제목을 작성해주세요.'
                         maxLength={30}
                         value={title}
-                        css={timelineTitleInput}
+                        css={Styled.timelineTitleInput}
                         onChange={handleTitleChange}
                       />
                       <input
                         placeholder='불러온 글을 설명해주세요.'
                         maxLength={100}
                         value={summary}
-                        css={timelineSummaryInput}
+                        css={Styled.timelineSummaryInput}
                         onChange={handleSummaryChange}
                       />
                     </div>
@@ -344,7 +328,7 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
                     <BlogIcon url={url} />
                   </div>
                 </div>
-                <div css={timelineSubmitBtnContainer}>
+                <div css={Styled.timelineSubmitBtnContainer}>
                   <Button size='sm' onClick={handleUrlConfirm}>
                     등록
                   </Button>
@@ -354,7 +338,7 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
           </div>
         )}
         {selectedTab === 'MEMO' && memoValue.length > 0 && (
-          <div css={textareaBottomContainer({ selectedTab })}>
+          <div css={Styled.textareaBottomContainer({ selectedTab })}>
             {typingState !== '' && <State state={typingState} />}
           </div>
         )}

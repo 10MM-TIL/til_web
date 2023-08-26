@@ -22,16 +22,7 @@ import InfiniteScrollLayout from '@/components/Layout/InfiniteScroll';
 
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import { IconTimeline } from '@/assets/svgs/IconTimeline';
-import {
-  TimelineContainer,
-  TimelineTitleArea,
-  TimelineMobileMoreButton,
-  TimeLineLayout,
-  TimeLineCardContent,
-  TimeLineCardNotLogin,
-  EmptyTimeLine,
-  SpinnerContainer,
-} from './style';
+import * as Styled from './style';
 
 interface TimelineTemplateProps {
   path: string;
@@ -91,13 +82,13 @@ const TimelineComponent = ({
   };
 
   return (
-    <TimeLineLayout>
+    <Styled.TimeLineLayout>
       <div style={{ minWidth: '21px' }}>
         <IconTimeline />
       </div>
-      <TimeLineCardContent>
+      <Styled.TimeLineCardContent>
         {pathname === '/' && !isLogin && (
-          <TimeLineCardNotLogin
+          <Styled.TimeLineCardNotLogin
             onClick={(e) => {
               if (!isLogin) {
                 e.currentTarget.blur();
@@ -112,8 +103,8 @@ const TimelineComponent = ({
           onDeleteContent={handleDeleteContent}
           changable={changable}
         />
-      </TimeLineCardContent>
-    </TimeLineLayout>
+      </Styled.TimeLineCardContent>
+    </Styled.TimeLineLayout>
   );
 };
 
@@ -126,7 +117,7 @@ const TimeLineHeader = ({
 }) => {
   const clickedDate = useRecoilValue(clickedGrassDate);
   return (
-    <TimelineTitleArea>
+    <Styled.TimelineTitleArea>
       <Typo.H1 color={FONT_COLOR.WHITE} style={{ paddingBottom: '16px' }}>
         타임라인
       </Typo.H1>
@@ -137,7 +128,7 @@ const TimeLineHeader = ({
       >
         {timeLineSizeText}
       </Typo.Body>
-    </TimelineTitleArea>
+    </Styled.TimelineTitleArea>
   );
 };
 
@@ -166,9 +157,9 @@ const IsNotLoginTimeLine = () => {
 };
 const IsEmptyTimeLine = () => {
   return (
-    <EmptyTimeLine>
+    <Styled.EmptyTimeLine>
       <Typo.H2 color={FONT_COLOR.GRAY_2}>작성된 회고 글이 없습니다.</Typo.H2>
-    </EmptyTimeLine>
+    </Styled.EmptyTimeLine>
   );
 };
 
@@ -189,12 +180,7 @@ const TimeLineList = ({ path }: { path: string }) => {
 
   const intersectCallback = (entry: IntersectionObserverEntry) => {
     if (entry.isIntersecting) {
-      if (
-        postObject &&
-        (postObject.pages[postObject.pages.length - 1].nextPageToken === null ||
-          postObject.pages[postObject.pages.length - 1].nextPageToken === '')
-      )
-        return;
+      if (postObject && postObject.pages[postObject.pages.length - 1].nextPageToken === null) return;
       fetchNextPage();
     }
   };
@@ -242,16 +228,16 @@ const TimeLineList = ({ path }: { path: string }) => {
           </InfiniteScrollLayout>
           {postObject.pages[postObject.pages.length - 1].size >= 5 &&
             postObject.pages[postObject.pages.length - 1].nextPageToken !== null && (
-              <TimelineMobileMoreButton onClick={onClickMoreTimeLine}>
+              <Styled.TimelineMobileMoreButton onClick={onClickMoreTimeLine}>
                 <Typo.H2 color={FONT_COLOR.GRAY_2}>타임라인 더보기</Typo.H2>
-              </TimelineMobileMoreButton>
+              </Styled.TimelineMobileMoreButton>
             )}
         </>
       )}
       {isFetchingNextPage && (
-        <SpinnerContainer>
+        <Styled.SpinnerContainer>
           <Spinner size='35px'></Spinner>
-        </SpinnerContainer>
+        </Styled.SpinnerContainer>
       )}
     </>
   );
@@ -263,13 +249,13 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
   const { isLogin } = useRecoilValue(AuthState);
 
   return (
-    <TimelineContainer>
+    <Styled.TimelineContainer>
       {pathname === '/' && !isLogin ? (
         <IsNotLoginTimeLine></IsNotLoginTimeLine>
       ) : (
         <TimeLineList path={path}></TimeLineList>
       )}
-    </TimelineContainer>
+    </Styled.TimelineContainer>
   );
 };
 
