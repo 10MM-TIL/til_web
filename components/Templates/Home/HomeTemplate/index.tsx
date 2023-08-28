@@ -23,9 +23,9 @@ const HomeTemplates = () => {
   const { isLogin } = useRecoilValue(AuthState);
   const setClickedDate = useSetRecoilState(clickedGrassDate);
 
-  const { data: userData, isSuccess: isSuccessMyUser } = useMyUser({ isLogin });
-  const { data: userInfo, isSuccess: isSuccessProfile } = useUserProfile({
-    isLogin,
+  const { data: userData } = useMyUser({ isLogin });
+  const { data: userInfo } = useUserProfile({
+    enabled: isLogin && (userData ? userData.path?.length > 0 : false),
     userPath: userData ? userData.path : '',
   });
 

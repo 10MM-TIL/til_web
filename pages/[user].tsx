@@ -2,7 +2,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
@@ -22,9 +22,11 @@ import TimelineTemplate from '@/components/Templates/TimelineTemplate';
 import { BlogData } from '@/components/Molecules/BlogGroup/type';
 
 import useToast from '@/hooks/useToast';
-import { useGetBlogs, useGetUser } from '@/hooks/queries/userQuery';
+import { useGetBlogs } from '@/hooks/queries/userQuery';
+import { useMyUser, useUserProfile } from '@/hooks/queries/profileQuery';
 
 import Custom404 from '@/pages/404';
+import { AuthState } from '@/stores/authStateStore';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -73,21 +75,26 @@ const Loading = () => {
 };
 
 const User: NextPage = () => {
-  const router = useRouter();
-  const urlPath = (router.query?.user as string) || '';
-  const { isReady } = router;
-  const path = urlPath.slice(1);
+  // query로 가져와도 되는데 이렇게 꺼내도 될듯 합니다.
+  // const router = useRouter();
+  // const urlPath = (router.query?.user as string) || '';
+  // const { isReady } = router;
   const { isOpen, text } = useToast();
-
-  const { data: userInfo, isLoading, isSuccess } = useGetUser(path, isReady);
-
+  const { isLogin } = useRecoilValue(AuthState);
+  const { data: userData, isSuccess: isSuccessUser } = useMyUser({ isLogin });
+  const path = userData ? userData.path : '';
+  const {
+    data: userInfo,
+    isLoading,
+    isSuccess,
+  } = useUserProfile({ userPath: path, enabled: isLogin && path.length > 0 });
   const { data: blogObject, isSuccess: blogGetSuccess } = useGetBlogs(path);
 
   const setClickedDate = useSetRecoilState(clickedGrassDate);
 
   return isLoading ? (
     <Loading />
-  ) : !(!isSuccess || urlPath.at(0) !== '@') ? (
+  ) : isSuccessUser && isSuccess ? (
     <Styled.MypageWrapper>
       <Styled.MypageContainer>
         <Styled.IntroContainer>

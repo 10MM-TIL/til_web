@@ -17,8 +17,8 @@ export const useMyProfileOnboarding = () => {
   });
 };
 
-export const useUserProfile = ({ isLogin, userPath }: { isLogin?: boolean; userPath: string }) => {
+export const useUserProfile = ({ enabled, userPath }: { enabled?: boolean; userPath: string }) => {
   return useQuery(['PROFILE', userPath], () => getUserProfile(userPath), {
-    enabled: isLogin && userPath.length > 0,
+    enabled,
   });
 };

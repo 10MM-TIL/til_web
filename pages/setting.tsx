@@ -268,8 +268,10 @@ const Setting: NextPage = () => {
       }),
     ];
     try {
-      await Promise.all(promises).then(() => {
-        queryClient.invalidateQueries(['MY_BLOGS', 'MY_PROFILE', 'PROFILE']);
+      await Promise.all(promises).then(async () => {
+        queryClient.invalidateQueries({ queryKey: ['MY_BLOGS'], refetchType: 'inactive' });
+        queryClient.invalidateQueries({ queryKey: ['MY_PROFILE'], refetchType: 'inactive' });
+        queryClient.invalidateQueries({ queryKey: ['PROFILE'], refetchType: 'inactive' });
         router.push(`/@${myInfo.path}`);
         showToast(
           <>
