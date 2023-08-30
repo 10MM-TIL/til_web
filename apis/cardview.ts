@@ -1,9 +1,6 @@
 import instance from './instance';
 import { ServerResponse, SignInModel } from '../types';
-import { categories, recommandPostItem, allPostItem } from '@/types/cardview';
-type fetchCategoriesResponse = {
-  categories: categories[];
-};
+import { recommandPostItem, allPostItem } from '@/types/cardview';
 
 type fetchRecommandPostsRequest = {
   identifier: string;
@@ -30,10 +27,10 @@ export const fetchAllPosts = async (category?: string, pageToken: string = '') =
     ? { identifier: category, size: 3 * 5, pageToken }
     : { identifier: category, size: 3 * 5 };
   try {
-    const response: ServerResponse<fetchAllPostsResponse> = await instance.get('/post/category', {
+    const { data } = await instance.get<fetchAllPostsResponse>('/post/category', {
       params,
     });
-    return response.data;
+    return data;
   } catch (e: unknown) {
     throw e;
   }
@@ -43,10 +40,10 @@ export const fetchAllPosts = async (category?: string, pageToken: string = '') =
 export const fetchRecommandPosts = async (category: string) => {
   const params: fetchRecommandPostsRequest | null = category ? { identifier: category } : null;
   try {
-    const response: ServerResponse<fetchRecommandPostsResponse> = await instance.get('/post/category/recommend', {
+    const { data } = await instance.get<fetchRecommandPostsResponse>('/post/category/recommend', {
       params,
     });
-    return response.data;
+    return data;
   } catch (e: unknown) {
     throw e;
   }

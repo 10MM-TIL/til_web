@@ -1,21 +1,24 @@
-import { useState, useCallback, useEffect, ReactHTMLElement } from 'react';
+import { useState, useCallback, useEffect, MouseEventHandler } from 'react';
 import type { NextPage } from 'next';
-import {
-  EditpageWrapper,
-  EditpageContainer,
-  ProfileContainer,
-  InputContainer,
-  PhotoContainer,
-  CheckContainer,
-  BlogLinkContainer,
-  BlogTitleContainer,
-  BlogLinkList,
-  FooterContainer,
-  SaveButtonContainer,
-} from '@/styles/setting.module';
+import { useRouter } from 'next/router';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { getCookie } from 'cookies-next';
+
+import { logout } from '@/utils/utils';
+
 import { FONT_COLOR } from '@/constants/color';
+
+import * as Styled from '@/styles/setting.module';
+import { myBloglist, myInformation, myMailAgreement, myNotification, myOauthEmail } from '@/stores/user';
+import { LoginModalState } from '@/stores/modalStateStore';
+import { AuthState } from '@/stores/authStateStore';
+
 import { useCategories } from '@/hooks/queries/categoryQuery';
 import { useResize } from '@/hooks/useResize';
+import useAuth from '@/hooks/useAuth';
+import useToast from '@/hooks/useToast';
 
 import * as Typo from '@/components/Atom/Typography';
 import { TextField } from '@/components/Atom/TextField';
@@ -23,27 +26,16 @@ import ProfileIcon from '@/components/Molecules/ProfileIcon';
 import { BoxLayout } from '@/components/Atom/BoxLayout';
 import { Button } from '@/components/Atom/Button';
 import RadioGroup from '@/components/Molecules/RadioGroup';
-import Toggle from '@/components/Atom/Toggle';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import AddBlog from '@/components/Atom/AddBlog';
-
 import { CertifiedBlog } from '@/components/Atom/CertifiedBlog';
-import { myBloglist, myMailAgreement, myNotification, myOauthEmail } from '@/stores/user';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getMyProfile, putMyProfile, getMyNotification, putMyNotification, putMyBlog } from 'apis/setting';
-import { usePutMyProfile } from '@/hooks/queries/saveQuery';
-import { getUserBlog } from '@/apis/user';
-import IconCheckBig from '@/assets/svgs/IconCheckBig';
-import { logout } from '@/utils/utils';
-import { getCookie } from 'cookies-next';
-import LoginModal from '@/components/Molecules/LoginModal';
-import { useRouter } from 'next/router';
-import { AuthState } from '@/stores/authStateStore';
-import { LoginModalState } from '@/stores/modalStateStore';
-import useAuth from '@/hooks/useAuth';
 import ToastMessage from '@/components/ToastMessage';
-import useToast from '@/hooks/useToast';
+import LoginModal from '@/components/Molecules/LoginModal';
+
+import { CategoryQueryKeys } from '@/components/Atom/Card/types';
+
+import IconCheckBig from '@/assets/svgs/IconCheckBig';
+import { useGetMyBlog, useGetMyProfile, useSaveMyProfile } from '@/hooks/queries/settingQuery';
 
 const CategoryLayout = ({
   selectedCategoryId,
@@ -52,8 +44,7 @@ const CategoryLayout = ({
   selectedCategoryId: string;
   onClick: (v: string) => void;
 }) => {
-  const { data: category } = useCategories();
-  const categoryData = category?.data;
+  const { data: categoryData } = useCategories();
 
   return (
     <BoxLayout title='분야'>
@@ -85,14 +76,6 @@ const NoticeLayout = () => {
 
   return (
     <div>
-      {/* <BoxLayout title='알림 설정'>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <Toggle isOn={enable} onIsOnToggle={handleToggleClick} />
-          <div>
-            <RadioGroup data={DATA} selectedId={iteration} onClick={handleRadioClick} />
-          </div>
-        </div>
-      </BoxLayout> */}
       <div style={{ float: 'right', marginRight: '8px' }}>
         <div style={{ marginLeft: '68px' }}>
           <CheckboxLabel
@@ -130,13 +113,13 @@ const BlogLinkLayout = () => {
     }
   };
   return (
-    <BlogLinkContainer>
-      <BlogTitleContainer>
+    <Styled.BlogLinkContainer>
+      <Styled.BlogTitleContainer>
         <Typo.H1 color={FONT_COLOR.WHITE}>링크</Typo.H1>
         <AddBlog onClick={handleAddBlog} />
-      </BlogTitleContainer>
+      </Styled.BlogTitleContainer>
       <div>
-        <BlogLinkList>
+        <Styled.BlogLinkList>
           {blogList.length > 0
             ? blogList
                 .slice()
@@ -154,9 +137,9 @@ const BlogLinkLayout = () => {
                   );
                 })
             : null}
-        </BlogLinkList>
+        </Styled.BlogLinkList>
       </div>
-    </BlogLinkContainer>
+    </Styled.BlogLinkContainer>
   );
 };
 
@@ -168,26 +151,27 @@ const DownloadLayout = () => {
   );
 };
 
-const SaveLayout = ({ onClick }: any) => {
+const SaveLayout = ({ onClick }: { onClick: MouseEventHandler<HTMLButtonElement> }) => {
   const device = useResize();
   return (
-    <SaveButtonContainer>
+    <Styled.SaveButtonContainer>
       <Button size={device === 'desktop' ? 'lg' : 'x-lg-m'} onClick={onClick}>
         <Typo.H2>저장하기</Typo.H2>
       </Button>
-    </SaveButtonContainer>
+    </Styled.SaveButtonContainer>
   );
 };
 
 const FooterLayout = () => {
-  const email = useRecoilValue(myOauthEmail);
+  const myInfo = useRecoilValue(myInformation);
+  const { email } = myInfo;
   const clickLogout = () => {
     logout(false);
     location.replace('/');
   };
 
   return (
-    <FooterContainer>
+    <Styled.FooterContainer>
       <span style={{ display: 'flex', gap: '34px' }}>
         <a
           href='https://www.plip.kr/pcc/c791921f-5dc3-4cb0-baac-55e48ee2e585/privacy-policy'
@@ -209,17 +193,15 @@ const FooterLayout = () => {
           <Typo.Body color={FONT_COLOR.GRAY_2}>로그아웃</Typo.Body>
         </a>
       </span>
-    </FooterContainer>
+    </Styled.FooterContainer>
   );
 };
 
 const Setting: NextPage = () => {
-  const [myInfo, setMyInfo] = useState<any>({});
-  // const [noti, setNoti] = useRecoilState(myNotification);
-  const [mailAgreement, setMyMailAgreement] = useRecoilState(myMailAgreement);
-  const [blogList, setBlogList] = useRecoilState(myBloglist);
-  const setOauthEmail = useSetRecoilState(myOauthEmail);
-  const [imgUrl, setImgUrl] = useState('');
+  const [myInfo, setMyInfo] = useRecoilState(myInformation);
+  const blogList = useRecoilValue(myBloglist);
+  const queryClient = useQueryClient();
+
   useAuth();
 
   const { isLogin } = useRecoilValue(AuthState);
@@ -240,34 +222,10 @@ const Setting: NextPage = () => {
         isLoginModalOpen: true,
       });
   }, [accessToken, setIsLoginModalOpen]);
+  const { isSuccess: succGetMyProfile } = useGetMyProfile();
+  useGetMyBlog(myInfo.path, succGetMyProfile);
 
-  const { data: userProfile, refetch } = useQuery(['myProfile'], getMyProfile, {
-    onSuccess: (data) => {
-      setMyMailAgreement(data.mailAgreement);
-      setMyInfo(data);
-      setImgUrl(data?.profileImgSrc);
-      setOauthEmail(data?.email);
-    },
-  });
-  const { refetch: blogRefetch } = useQuery(['myBlogs'], () => getUserBlog(userProfile?.path), {
-    enabled: !!userProfile,
-    onSuccess: (data) => {
-      setBlogList(data.blogs);
-    },
-  });
-  // useQuery(['myNoti'], getMyNotification, {
-  //   onSuccess: (data) => {
-  //     setNoti(data);
-  //   },
-  // });
-
-  const queryClient = useQueryClient();
-  const saveProfile = useMutation(putMyProfile, {
-    onSuccess: () => {
-      // 요청이 성공한 경우
-      queryClient.invalidateQueries(['MY_USER']); // queryKey 유효성 제거
-    },
-  });
+  const saveProfile = useSaveMyProfile();
 
   const handleSave = async () => {
     const nameReg = /[^ㄱ-힣a-zA-Z0-9\s]/gi;
@@ -297,8 +255,8 @@ const Setting: NextPage = () => {
         introduction: myInfo.introduction,
         name: myInfo.name,
         path: myInfo.path,
-        profileImgSrc: imgUrl,
-        mailAgreement: mailAgreement,
+        profileImgSrc: myInfo.profileImgSrc,
+        mailAgreement: myInfo.mailAgreement,
         blogs: blogList
           .filter((item) => item?.url !== '')
           .map((blog) => {
@@ -310,7 +268,10 @@ const Setting: NextPage = () => {
       }),
     ];
     try {
-      await Promise.all(promises).then((res) => {
+      await Promise.all(promises).then(async () => {
+        queryClient.invalidateQueries({ queryKey: ['MY_BLOGS'], refetchType: 'inactive' });
+        queryClient.invalidateQueries({ queryKey: ['MY_PROFILE'], refetchType: 'inactive' });
+        queryClient.invalidateQueries({ queryKey: ['PROFILE'], refetchType: 'inactive' });
         router.push(`/@${myInfo.path}`);
         showToast(
           <>
@@ -334,60 +295,70 @@ const Setting: NextPage = () => {
     }
   };
 
-  const handleChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const nameValue = e.target.value;
-    setIsChangeInput(true);
-    setMyInfo((prev: any) => {
-      return { ...prev, name: nameValue };
-    });
-  }, []);
+  const handleChangeName = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const nameValue = e.target.value;
+      setIsChangeInput(true);
+      setMyInfo((prev) => {
+        return { ...prev, name: nameValue };
+      });
+    },
+    [setMyInfo],
+  );
 
-  const handleChangePath = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const pathValue = e.target.value;
-    setIsChangeInput(true);
-    setMyInfo((prev: any) => {
-      return { ...prev, path: pathValue.replace(' ', '') };
-    });
-  }, []);
-  const handleChangeIntroduction = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setIsChangeInput(true);
-    setMyInfo((prev: any) => {
-      return { ...prev, introduction: e.target.value };
-    });
-  }, []);
+  const handleChangePath = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const pathValue = e.target.value;
+      setIsChangeInput(true);
+      setMyInfo((prev) => {
+        return { ...prev, path: pathValue.replace(' ', '') };
+      });
+    },
+    [setMyInfo],
+  );
+  const handleChangeIntroduction = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setIsChangeInput(true);
+      setMyInfo((prev) => {
+        return { ...prev, introduction: e.target.value };
+      });
+    },
+    [setMyInfo],
+  );
   const handleChangeProfile = useCallback((newId: number) => {
     setId(newId);
   }, []);
 
-  const handleChangeCategory = useCallback((value: string) => {
-    setMyInfo((prev: any) => {
-      return { ...prev, categoryIdentifier: value };
-    });
-  }, []);
+  const handleChangeCategory = useCallback(
+    (value: string) => {
+      setMyInfo((prev) => {
+        return { ...prev, categoryIdentifier: value as CategoryQueryKeys };
+      });
+    },
+    [setMyInfo],
+  );
   useEffect(() => {
-    if (id > 0) setImgUrl(`${websiteUrl}/images/profile/${id}.png`);
-  }, [id, websiteUrl]);
-
-  useEffect(() => {
-    refetch();
-    blogRefetch();
-  }, [refetch, blogRefetch]);
+    if (id > 0)
+      setMyInfo((prev) => {
+        return { ...prev, profileImgSrc: `${websiteUrl}/images/profile/${id}.png` };
+      });
+  }, [id, setMyInfo, websiteUrl]);
 
   return (
     <>
-      <EditpageWrapper>
-        <EditpageContainer>
-          <ProfileContainer>
-            <PhotoContainer>
+      <Styled.EditpageWrapper>
+        <Styled.EditpageContainer>
+          <Styled.ProfileContainer>
+            <Styled.PhotoContainer>
               <ProfileIcon
                 editable={true}
-                imgUrl={imgUrl}
+                imgUrl={myInfo.profileImgSrc}
                 onClick={(id) => {
                   handleChangeProfile(id);
                 }}
               />
-            </PhotoContainer>
-            <InputContainer>
+            </Styled.PhotoContainer>
+            <Styled.InputContainer>
               <TextField
                 title='URL 주소'
                 isInput={true}
@@ -410,18 +381,18 @@ const Setting: NextPage = () => {
                 inputValue={myInfo.introduction}
                 onChange={handleChangeIntroduction}
               />
-            </InputContainer>
-          </ProfileContainer>
-          <CheckContainer>
+            </Styled.InputContainer>
+          </Styled.ProfileContainer>
+          <Styled.CheckContainer>
             <CategoryLayout selectedCategoryId={myInfo.categoryIdentifier} onClick={handleChangeCategory} />
             <NoticeLayout />
             <BlogLinkLayout />
             {/* <DownloadLayout /> */}
-          </CheckContainer>
+          </Styled.CheckContainer>
           <SaveLayout onClick={handleSave} />
           <FooterLayout />
-        </EditpageContainer>
-      </EditpageWrapper>
+        </Styled.EditpageContainer>
+      </Styled.EditpageWrapper>
       {!isLogin && isLoginModalOpen && <LoginModal closable={false} />}
       {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
     </>

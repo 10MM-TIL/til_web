@@ -6,6 +6,9 @@ export interface getMyProfileResponse {
   categoryIdentifier: string;
   categoryName: string;
   isAuthorized: boolean;
+  email: string;
+  mailAgreement: boolean;
+  oauthType: string;
 }
 
 export interface getBlogResponse {

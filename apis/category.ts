@@ -4,9 +4,9 @@ import instance from './instance';
 
 export const getCategoriesAPI = async () => {
   try {
-    const res: ServerResponse<CategoryModel> = await instance.get('/categories');
+    const { data } = await instance.get<CategoryModel>('/categories');
 
-    return res;
+    return data;
   } catch (e) {
     devError('getCategoriesAPI error ', e);
     throw e;

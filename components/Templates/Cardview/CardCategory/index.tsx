@@ -1,60 +1,65 @@
 import { useEffect } from 'react';
-import * as Typo from '@/components/Atom/Typography';
-import * as Styled from './styles';
-import { FONT_COLOR } from '@/constants/color';
-import { useQueryClient } from '@tanstack/react-query';
-import { category as CATEGORY, CategoryKeys } from '@/components/Atom/Card/types';
+import { useRouter } from 'next/router';
+import { SetterOrUpdater, useRecoilState } from 'recoil';
 
-import RadioGroup from '@/components/Molecules/RadioGroup';
-import { useRecoilState } from 'recoil';
 import { categoryState } from '@/stores/cardviewStateStore';
 import { useCategories } from '@/hooks/queries/categoryQuery';
-import { useRouter } from 'next/router';
-import { findKeyByValue, findSelectedCategory } from '@/utils/cardview';
 
-export type CardViewPageProps = { category: CategoryKeys | undefined };
-// 카테고리 버튼
-const CardCategory = ({ category }: CardViewPageProps) => {
-  const queryClient = useQueryClient();
-  const [categories, setCategories] = useRecoilState(categoryState);
+import { FONT_COLOR } from '@/constants/color';
+import { category as CATEGORY, CategoryKeys } from '@/components/Atom/Card/types';
+import * as Typo from '@/components/Atom/Typography';
+import RadioGroup from '@/components/Molecules/RadioGroup';
+import { categories } from '@/types/cardview';
 
-  const { data: categoryData } = useCategories();
+import * as Styled from './styles';
+import { CardViewPageProps } from '@/pages/cardview';
+
+export type RadioComponentProps = {
+  setCategories: SetterOrUpdater<categories[]>;
+  categories: categories[];
+};
+
+const RadioComponent = ({ setCategories, categories }: RadioComponentProps) => {
   const router = useRouter();
+  const handleRadioClick = (value: string) => {
+    setCategories(
+      categories.map((category) => {
+        if (category.identifier === value) return { ...category, selected: true };
+        else return { ...category, selected: false };
+      }),
+    );
 
-  // category 저장
+    router.push({
+      query: { category: categories.find((c) => c.identifier === value)?.identifier || 'all' },
+    });
+  };
+
+  return (
+    <RadioGroup
+      data={categories}
+      selectedId={categories.find((c) => c.selected)?.identifier!}
+      onClick={handleRadioClick}
+    />
+  );
+};
+
+// 카테고리 버튼
+const CardCategory = ({ categoryQuery }: CardViewPageProps) => {
+  const [categories, setCategories] = useRecoilState(categoryState);
+  const { data: categoryData, isSuccess } = useCategories();
+
+  // category 받아온 배열 저장
   useEffect(() => {
-    if (categoryData?.data) {
-      setCategories(
-        categoryData.data.categories.map((cat, index) => {
-          if (category ? cat.name === CATEGORY[category] : index === 0) return { ...cat, selected: true };
-          else return { ...cat, selected: false };
-        }),
-      );
-    }
-  }, [categoryData, setCategories, category]);
-
-  const RadioComponent = () => {
-    const handleRadioClick = (value: string) => {
-      setCategories(
-        categories.map((category, index) => {
-          if (category.identifier === value) return { ...category, selected: true };
+    if (isSuccess) {
+      setCategories([
+        { identifier: 'all', name: '#전체', selected: categoryQuery === 'all' || categoryQuery === '' },
+        ...categoryData.categories.map((category, index) => {
+          if (category.identifier === categoryQuery) return { ...category, selected: true };
           else return { ...category, selected: false };
         }),
-      );
-
-      router.push({
-        query: { category: findKeyByValue(categories.filter((c) => c.identifier === value)[0].name) },
-      });
-    };
-
-    return (
-      <RadioGroup
-        data={categories}
-        selectedId={categories.find((c) => c.selected)?.identifier!}
-        onClick={handleRadioClick}
-      />
-    );
-  };
+      ]);
+    }
+  }, [categoryData, setCategories, categoryQuery, isSuccess]);
 
   return (
     <>
@@ -63,11 +68,11 @@ const CardCategory = ({ category }: CardViewPageProps) => {
           <Typo.H1 color={FONT_COLOR.WHITE}>다른 사람들의 카드</Typo.H1>
         </Styled.CategoryHeader>
         <Styled.CategoryContent>
-          <RadioComponent></RadioComponent>
+          {isSuccess && <RadioComponent categories={categories} setCategories={setCategories}></RadioComponent>}
         </Styled.CategoryContent>
       </Styled.CategoryContainer>
     </>
   );
 };
 
-export { CardCategory };
+export default CardCategory;

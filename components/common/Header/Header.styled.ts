@@ -12,13 +12,14 @@ const container = css`
 const headerBlurContainer = css`
   width: calc(100% - 18px);
   backdrop-filter: blur(9.5px);
+  height: inherit;
 `;
 
 const inner = ({ isMobile }: { isMobile: boolean }) => css`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 28px 20px 20px 24px;
+  padding: 29px 20px 19px 24px;
   max-width: 1920px;
   margin: 0 ${isMobile ? 0 : '58px'};
 `;

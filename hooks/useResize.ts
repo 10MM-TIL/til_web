@@ -1,20 +1,11 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export type device = 'desktop' | 'mobile';
-type windowWidth = {
-  width: number;
-};
 
 export const useResize = () => {
-  const [windowSize, setWindowSize] = useState<windowWidth>({
-    width: 0,
-  });
   const [device, setDevice] = useState<device>('desktop');
 
   useEffect(() => {
-    setWindowSize({
-      width: window.innerWidth,
-    });
     if (window.innerWidth < 1194) {
       setDevice('mobile');
     } else setDevice('desktop');
@@ -22,18 +13,14 @@ export const useResize = () => {
 
   useEffect(() => {
     function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-      });
+      if (window.innerWidth < 1194) {
+        setDevice('mobile');
+      } else setDevice('desktop');
     }
     window.addEventListener('resize', handleResize);
 
-    if (windowSize.width < 1194) {
-      setDevice('mobile');
-    } else setDevice('desktop');
-
     return () => window.removeEventListener('resize', handleResize);
-  }, [windowSize]);
+  }, []);
 
   return device;
 };
