@@ -2,7 +2,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
@@ -23,10 +23,9 @@ import { BlogData } from '@/components/Molecules/BlogGroup/type';
 
 import useToast from '@/hooks/useToast';
 import { useGetBlogs } from '@/hooks/queries/userQuery';
-import { useMyUser, useUserProfile } from '@/hooks/queries/profileQuery';
+import { useUserProfile } from '@/hooks/queries/profileQuery';
 
 import Custom404 from '@/pages/404';
-import { AuthState } from '@/stores/authStateStore';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -80,8 +79,7 @@ const User: NextPage = () => {
   const urlPath = (router.query?.user as string) || '';
   const { isReady } = router;
   const { isOpen, text } = useToast();
-  // const { isLogin } = useRecoilValue(AuthState);
-  // const { data: userData, isSuccess: isSuccessUser } = useMyUser({ isLogin });
+
   const path = urlPath.slice(1);
   const {
     data: userInfo,
