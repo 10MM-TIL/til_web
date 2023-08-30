@@ -250,11 +250,7 @@ const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
 
   return (
     <Styled.TimelineContainer>
-      {pathname === '/' && !isLogin ? (
-        <IsNotLoginTimeLine></IsNotLoginTimeLine>
-      ) : (
-        <TimeLineList path={path}></TimeLineList>
-      )}
+      {pathname === '/' ? <IsNotLoginTimeLine /> : <TimeLineList path={path} />}
     </Styled.TimelineContainer>
   );
 };

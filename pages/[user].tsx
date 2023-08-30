@@ -2,7 +2,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import { BACKGROUND_COLOR, FONT_COLOR, POINT_COLOR } from '@/constants/color';
 
@@ -23,10 +23,9 @@ import { BlogData } from '@/components/Molecules/BlogGroup/type';
 
 import useToast from '@/hooks/useToast';
 import { useGetBlogs } from '@/hooks/queries/userQuery';
-import { useMyUser, useUserProfile } from '@/hooks/queries/profileQuery';
+import { useUserProfile } from '@/hooks/queries/profileQuery';
 
 import Custom404 from '@/pages/404';
-import { AuthState } from '@/stores/authStateStore';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
   return (
@@ -76,25 +75,24 @@ const Loading = () => {
 
 const User: NextPage = () => {
   // query로 가져와도 되는데 이렇게 꺼내도 될듯 합니다.
-  // const router = useRouter();
-  // const urlPath = (router.query?.user as string) || '';
-  // const { isReady } = router;
+  const router = useRouter();
+  const urlPath = (router.query?.user as string) || '';
+  const { isReady } = router;
   const { isOpen, text } = useToast();
-  const { isLogin } = useRecoilValue(AuthState);
-  const { data: userData, isSuccess: isSuccessUser } = useMyUser({ isLogin });
-  const path = userData ? userData.path : '';
+
+  const path = urlPath.slice(1);
   const {
     data: userInfo,
     isLoading,
     isSuccess,
-  } = useUserProfile({ userPath: path, enabled: isLogin && path.length > 0 });
-  const { data: blogObject, isSuccess: blogGetSuccess } = useGetBlogs(path);
+  } = useUserProfile({ userPath: path, enabled: isReady && path.length > 0 });
+  const { data: blogObject, isSuccess: blogGetSuccess } = useGetBlogs({ path, enabled: isSuccess });
 
   const setClickedDate = useSetRecoilState(clickedGrassDate);
 
   return isLoading ? (
     <Loading />
-  ) : isSuccessUser && isSuccess ? (
+  ) : isSuccess && urlPath.at(0) === '@' ? (
     <Styled.MypageWrapper>
       <Styled.MypageContainer>
         <Styled.IntroContainer>
@@ -105,13 +103,13 @@ const User: NextPage = () => {
           </Styled.TextContainer>
         </Styled.IntroContainer>
         <GrassTemplate
-          path={path}
+          path={userInfo.path}
           title={`${userInfo.name}의 기록`}
           onClick={(value) => {
             setClickedDate(value);
           }}
         />
-        <TimelineTemplate path={path} changable={userInfo.isAuthorized} />
+        <TimelineTemplate path={userInfo.path} changable={userInfo.isAuthorized} />
       </Styled.MypageContainer>
       <Styled.FloatingContainer>
         <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />

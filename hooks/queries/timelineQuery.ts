@@ -13,10 +13,10 @@ export const useMyAllTimeline = ({
   isLogin: boolean;
 }) => {
   return useInfiniteQuery(
-    ['TIMELINE_INFINITE', from, to, isLogin],
+    ['TIMELINE_INFINITE', path, from, to, isLogin],
     ({ pageParam = '' }) => fetchUserTimeline(path, pageParam, from, to),
     {
-      enabled: isLogin && path.length > 0,
+      enabled: path.length > 0,
       keepPreviousData: true,
       getNextPageParam: (lastPage) => {
         if (lastPage) {
@@ -40,8 +40,8 @@ export const useFetchMyGrassData = ({
   to: number;
   isLogin: boolean;
 }) => {
-  return useQuery(['TIMELINE_GRASS_DATA', { from, to }], () => fetchUserGrass({ path, from, to }), {
-    enabled: isLogin && path.length > 0,
+  return useQuery(['TIMELINE_GRASS_DATA', { path, from, to }], () => fetchUserGrass({ path, from, to }), {
+    enabled: path.length > 0,
     keepPreviousData: true,
   });
 };

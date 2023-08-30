@@ -35,10 +35,6 @@ const GrassTemplate = ({ path, title, onClick }: GrassTemplateProps) => {
     setBase((prev) => prev - 1);
   };
 
-  // useEffect(() => {
-  //   refetch();
-  // }, [refetch]);
-
   return (
     <>
       {isSuccess && (
