@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { FONT_COLOR } from '@/constants/color';
+import { mq } from '@/styles/mediaQuery';
 
 export const CertifiedBlogContainer = styled.div`
   position: relative;
@@ -16,7 +17,10 @@ export const CertifiedBlogContainer = styled.div`
 // 블로그 이름이 길다면 어떻게 할것 인가??
 export const CertifiedBlogName = styled.div`
   margin-left: 8px;
-  width: 200px;
+  width: 186px;
+  ${mq('desktop')} {
+    width: 234px;
+  }
 `;
 
 export const DeleteButton = styled.button`
@@ -35,4 +39,6 @@ export const InputField = styled.input`
   font-size: 14px;
   line-height: 22px;
   color: ${FONT_COLOR.WHITE};
+  width: 100%;
+  text-overflow: ellipsis;
 `;
