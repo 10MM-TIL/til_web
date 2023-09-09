@@ -1,7 +1,7 @@
 import { MouseEventHandler, MouseEvent } from 'react';
 
 export const category = {
-  all: '#전체',
+  all: '전체',
   develop: '#개발',
   design: '#디자인',
   planning: '#기획',

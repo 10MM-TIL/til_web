@@ -52,7 +52,7 @@ const CardCategory = ({ categoryQuery }: CardViewPageProps) => {
   useEffect(() => {
     if (isSuccess) {
       setCategories([
-        { identifier: 'all', name: '#전체', selected: categoryQuery === 'all' || categoryQuery === '' },
+        { identifier: 'all', name: '전체', selected: categoryQuery === 'all' || categoryQuery === '' },
         ...categoryData.categories.map((category, index) => {
           if (category.identifier === categoryQuery) return { ...category, selected: true };
           else return { ...category, selected: false };

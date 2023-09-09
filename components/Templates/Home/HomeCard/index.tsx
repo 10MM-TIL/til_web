@@ -17,7 +17,8 @@ import { MyUserModel } from '@/types/index';
 const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
   const router = useRouter();
   const { data: categoryData, isSuccess: isSuccessCategory } = useCategories();
-  const { data: postsData, isSuccess: isSUccessAllpost } = useAllPosts(userData ? userData.categoryIdentifier : 'all');
+  const { data: postsData, isSuccess: isSUccessAllpost } = useAllPosts('all');
+  // 'all'로 필요할시 변경해주시면 됩니다.
   const { data: cardData, isSuccess: isSuccessRecommand } = useRecommandPosts(
     userData ? userData.categoryIdentifier : 'all',
     true,
