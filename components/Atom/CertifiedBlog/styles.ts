@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FONT_COLOR } from '@/constants/color';
+import { FONT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
 import { mq } from '@/styles/mediaQuery';
 
 export const CertifiedBlogContainer = styled.div`
@@ -9,7 +9,7 @@ export const CertifiedBlogContainer = styled.div`
   max-width: 345px;
   min-width: 300px;
   height: 45px;
-  background: #252e38;
+  background: ${BACKGROUND_COLOR.NAVY_4};
   border-radius: 12px;
   padding: 10px 10px 10px 24px;
 `;
