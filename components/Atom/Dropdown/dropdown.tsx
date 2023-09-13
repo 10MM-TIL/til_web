@@ -19,12 +19,11 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
   const [cursor, setCurser] = useState(0); // 키보드로 움직이는 cursor
   const [defaultSelect, setDefaultSelect] = useState(optionList[defaultSelectIndex].name);
   const outsideRef = useOutSideRef<HTMLDivElement>(() => setIsOpen(false));
-  const optionRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLButtonElement>(null);
 
   const [isIntersectInTop, setIsIntersectInTop] = useState(true);
 
-  const [observe, unobserve] = useIntersectionObserver(
+  const observerRef = useIntersectionObserver(
     (entry: IntersectionObserverEntry) => {
       if (entry.intersectionRatio <= 0) return;
       checkInnerView();
@@ -36,14 +35,6 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
     if (!isOpen) return;
     checkInnerView();
   }, [isOpen]);
-
-  useEffect(() => {
-    const optionref = optionRef.current;
-    if (optionref) observe(optionref);
-    return () => {
-      if (optionref) unobserve(optionref);
-    };
-  }, [observe, unobserve, dropdownRef]);
 
   const toggleOptionList = () => setIsOpen((prevIsOpen) => !prevIsOpen);
   const toggleFocus = () => setOnFocus((prevOnFocus) => !prevOnFocus);
@@ -118,7 +109,7 @@ export const Dropdown = ({ optionList, defaultSelectIndex = 0 }: DropDownProps):
         {defaultSelect}
       </DropdownText>
       {isOpen ? (
-        <OptionList ref={optionRef} isIntersectInTop={isIntersectInTop}>
+        <OptionList ref={observerRef} isIntersectInTop={isIntersectInTop}>
           <ul>
             {optionList.map((option, index) => {
               return (

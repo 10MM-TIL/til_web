@@ -1,6 +1,7 @@
+import { CategoryQueryKeys } from '@/components/Atom/Card/types';
 import { categories } from '@/types/cardview';
 export interface ServerResponse<T> {
-  data?: T;
+  data: T;
   status?: number;
 }
 
@@ -15,7 +16,7 @@ export interface SignInModel {
 }
 
 export interface MyUserModel {
-  categoryIdentifier?: string;
+  categoryIdentifier: CategoryQueryKeys;
   categoryName?: string;
   introduction: string;
   mailAgreement: boolean;
@@ -24,6 +25,7 @@ export interface MyUserModel {
   profileImgSrc: string;
   email: string;
   oauthType: string;
+  isAuthorized: boolean;
 }
 
 export interface CategoryModel {

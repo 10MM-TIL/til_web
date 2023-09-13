@@ -1,17 +1,6 @@
 import { devError } from '@/utils/system';
 import instance from './instance';
 
-export const getMyProfile = async () => {
-  try {
-    const res = await instance.get(`/my/user`);
-
-    return res.data;
-  } catch (e) {
-    devError('getMyProfilAPI error', e);
-    throw e;
-  }
-};
-
 export const putMyProfile = async ({
   name,
   path,

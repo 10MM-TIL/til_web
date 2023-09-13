@@ -7,9 +7,4 @@ const categoryState = atom<categories[]>({
   default: [],
 });
 
-const currentCategoryState = atom<keyof typeof category | ''>({
-  key: 'currentCategoryState',
-  default: '',
-});
-
-export { categoryState, currentCategoryState };
+export { categoryState };

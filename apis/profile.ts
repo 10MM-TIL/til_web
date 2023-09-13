@@ -4,9 +4,9 @@ import instance from './instance';
 
 export const getMyUserAPI = async () => {
   try {
-    const res: ServerResponse<MyUserModel> = await instance.get('/my/user');
+    const { data } = await instance.get<MyUserModel>('/my/user');
 
-    return res;
+    return data;
   } catch (e) {
     devError('getMyUserAPI error ', e);
     throw e;

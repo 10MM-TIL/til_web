@@ -1,14 +1,17 @@
 import { MouseEventHandler, MouseEvent } from 'react';
 
 export const category = {
+  all: '전체',
   develop: '#개발',
   design: '#디자인',
   planning: '#기획',
   marketing: '#마케팅',
-  startup: '#기업/스타트업',
-  recomand: '#추천 회고',
+  company: '#기업/스타트업',
+  recommand: '#추천 회고',
 } as const;
 export type CategoryKeys = keyof typeof category;
+export type CategoryQueryKeys = Exclude<CategoryKeys, 'recommand'> | '';
+
 export type CategoryValues = (typeof category)[CategoryKeys];
 
 export type CardProps = {

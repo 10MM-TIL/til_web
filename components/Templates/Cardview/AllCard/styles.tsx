@@ -51,3 +51,17 @@ export const AllCardItem = styled.div`
     grid-column: span 2 / auto; // 2칸 차지
   }
 `;
+
+export const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  grid-column: span 1 / auto;
+
+  @media screen and (min-width: 780px) {
+    grid-column: span 4 / auto;
+  }
+
+  ${mq('desktop')} {
+    grid-column: span 6 / auto;
+  }
+`;
