@@ -34,7 +34,7 @@ const logoContainer = css`
   gap: 24px;
 `;
 
-const btn = css`
+const loginBtn = css`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,10 +48,17 @@ const headerContentList = css`
   justify-content: center;
   align-items: center;
   gap: 24px;
+`;
+
+const otherBtns = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
   ${mq('desktop')} {
     gap: 44px;
   }
 `;
-const styles = { container, headerBlurContainer, inner, logoContainer, btn, headerContentList };
+const styles = { container, headerBlurContainer, inner, logoContainer, loginBtn, headerContentList, otherBtns };
 
 export default styles;

@@ -54,19 +54,22 @@ const Header = () => {
               </div>
             )}
           </div>
-          {!isLogin && (
-            <button css={styles.btn} onClick={handleModalOpen}>
-              <Typo.Label1>로그인</Typo.Label1>
-            </button>
-          )}
+
           {/* 링크 변경 필요 */}
           <div css={styles.headerContentList}>
-            <a href='/[user]' target='_blank'>
-              <Typo.H1 color={FONT_COLOR.GRAY_2}>오픈채팅방</Typo.H1>
-            </a>
-            <a href='/[user]' target='_blank'>
-              <Typo.H1 color={FONT_COLOR.GRAY_2}>업데이트 노트</Typo.H1>
-            </a>
+            <div css={styles.otherBtns}>
+              <a href='/[user]' target='_blank'>
+                <Typo.H1 color={FONT_COLOR.GRAY_2}>오픈채팅방</Typo.H1>
+              </a>
+              <a href='/[user]' target='_blank'>
+                <Typo.H1 color={FONT_COLOR.GRAY_2}>업데이트 노트</Typo.H1>
+              </a>
+            </div>
+            {!isLogin && (
+              <button css={styles.loginBtn} onClick={handleModalOpen}>
+                <Typo.Label1>로그인</Typo.Label1>
+              </button>
+            )}
           </div>
         </div>
       </div>
