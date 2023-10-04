@@ -32,51 +32,42 @@ const Header = () => {
   return (
     <header css={styles.container}>
       <div css={styles.headerBlurContainer}>
-        <div css={styles.inner({ isMobile: device === 'mobile' })}>
+        <div css={styles.inner}>
           <div css={styles.logoContainer}>
             <Link href={'/'}>
               <IconLogo />
             </Link>
-            {device === 'desktop' && isLogin && (
-              <Link href='/[user]' as={`/@${path}`}>
-                <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
-              </Link>
-            )}
-          </div>
-          {isLogin ? (
-            <div
-              css={css`
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                ${mq('desktop')} {
-                  gap: 24px;
-                }
-              `}
-            >
-              {device === 'mobile' && (
+            {isLogin && (
+              <div
+                css={css`
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  ${mq('desktop')} {
+                    gap: 24px;
+                  }
+                `}
+              >
                 <Link href='/[user]' as={`/@${path}`}>
                   <Typo.H1 color={FONT_COLOR.GRAY_2}>마이페이지</Typo.H1>
                 </Link>
-              )}
-              {/* <IconApps /> */}
-              {/* {userData && (
-              <Image
-                src={userData?.profileImgSrc}
-                width={36}
-                height={36}
-                alt={'profile'}
-                css={css`
-                  border-radius: 100%;
-                `}
-              />
-            )} */}
-            </div>
-          ) : (
+              </div>
+            )}
+          </div>
+          {!isLogin && (
             <button css={styles.btn} onClick={handleModalOpen}>
               <Typo.Label1>로그인</Typo.Label1>
             </button>
           )}
+          {/* 링크 변경 필요 */}
+          <div css={styles.headerContentList}>
+            <a href='/[user]' target='_blank'>
+              <Typo.H1 color={FONT_COLOR.GRAY_2}>오픈채팅방</Typo.H1>
+            </a>
+            <a href='/[user]' target='_blank'>
+              <Typo.H1 color={FONT_COLOR.GRAY_2}>업데이트 노트</Typo.H1>
+            </a>
+          </div>
         </div>
       </div>
     </header>
