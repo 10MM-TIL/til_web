@@ -16,7 +16,6 @@ const OutLayer = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  /* position: relative; */
   position: fixed;
   width: 100%;
   height: 95%;
@@ -27,14 +26,14 @@ const ModalContainer = styled.div`
 
   background: ${BACKGROUND_COLOR.NAVY_3};
   // padding 의 경우 figma상의 최소치 설정
-  padding: 86px 13px 40px 13px;
+  padding: 32px 40px;
   text-align: center;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   // outLayer보다 높은 z-index 값 부여
   z-index: ${Z_INDEX_LEVEL['MODAL']};
   ${mq('desktop')} {
-    height: 580px;
+    height: auto;
     width: 656px;
     border-radius: 12px;
     transform: translate(-50%, -50%);
