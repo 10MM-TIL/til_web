@@ -30,6 +30,9 @@ export const CardBodyContent = styled.div`
   cursor: pointer;
 `;
 export const CardTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3px;
   > h2 {
     overflow: hidden;
     text-overflow: ellipsis;

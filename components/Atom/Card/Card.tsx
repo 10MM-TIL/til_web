@@ -6,6 +6,7 @@ import { IconCrown } from '@/assets/svgs/IconCrown';
 import { CardProps, category } from './types';
 import { css } from '@emotion/react';
 import ContentsModal from '@/components/Molecules/ContentsModal/ContentsModal';
+import IconLock from '@/assets/svgs/IconLock';
 
 const Card = ({
   size,
@@ -15,6 +16,7 @@ const Card = ({
   onClickUser,
   userpath,
   url,
+  isPrivate,
 }: CardProps): ReactElement => {
   const [tagList, setTagList] = useState([content.category]);
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +63,7 @@ const Card = ({
         </Styled.CardHeader>
         <Styled.CardBodyContent>
           <Styled.CardTitle>
-            <Typo.H2 color='#DADFE6'>{content?.header}</Typo.H2>
+            <Typo.H2 color='#DADFE6'>{content?.header}</Typo.H2> {isPrivate && <IconLock />}
           </Styled.CardTitle>
           <Styled.CardBodyDesc>
             <Typo.Body color='#636C78'>{content?.body}</Typo.Body>

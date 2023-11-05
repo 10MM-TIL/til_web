@@ -22,6 +22,7 @@ export type CardProps = {
   onClickUser: (userpath?: string) => void;
   url: string;
   userpath: string;
+  isPrivate: boolean;
 };
 
 export type CardContentProps = {
