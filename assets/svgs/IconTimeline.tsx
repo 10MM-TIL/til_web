@@ -5,8 +5,8 @@ export const IconTimeline = () => {
         <circle cx='10.2381' cy='31.2381' r='5.2381' fill='#22FFA2' />
       </g>
       <path
-        fill-rule='evenodd'
-        clip-rule='evenodd'
+        fillRule='evenodd'
+        clipRule='evenodd'
         d='M8.98827 280L8.98828 33.4766L11.4883 33.4766L11.4883 280L8.98827 280Z'
         fill='url(#paint0_linear_3404_44258)'
       />
