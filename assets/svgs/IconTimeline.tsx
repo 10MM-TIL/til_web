@@ -18,9 +18,9 @@ export const IconTimeline = () => {
           width='20.4761'
           height='20.4766'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
-          <feFlood flood-opacity='0' result='BackgroundImageFix' />
+          <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feColorMatrix
             in='SourceAlpha'
             type='matrix'
@@ -42,8 +42,8 @@ export const IconTimeline = () => {
           y2='39.2771'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stop-color='#191F28' />
-          <stop offset='1' stop-color='#22FFA2' />
+          <stop stopColor='#191F28' />
+          <stop offset='1' stopColor='#22FFA2' />
         </linearGradient>
       </defs>
     </svg>

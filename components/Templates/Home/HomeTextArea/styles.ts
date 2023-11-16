@@ -26,6 +26,10 @@ export const reviewContainer = css`
   border-radius: 12px;
   padding: 20px 24px;
 `;
+
+export const reviewDate = css`
+  min-width: 300px;
+`;
 export const reviewTabContainer = css`
   display: flex;
   flex-direction: column;
@@ -33,8 +37,8 @@ export const reviewTabContainer = css`
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 12px;
-
   padding-left: 8px;
+  overflow: hidden;
 
   ${mq('desktop')} {
     flex-direction: row;
@@ -44,6 +48,21 @@ export const reviewTabContainer = css`
   }
 `;
 
+export const categoryWrapper = css`
+  width: 100%;
+  > div {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+`;
+export const scroller = css`
+  display: flex;
+  > button {
+    width: 100%;
+    word-wrap: normal;
+    white-space: nowrap;
+  }
+`;
 export const questionContainer = css`
   padding-left: 8px;
   margin-bottom: 8px;

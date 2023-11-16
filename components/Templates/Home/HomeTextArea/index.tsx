@@ -1,4 +1,4 @@
-import { useState, ChangeEventHandler, useRef, useEffect, SyntheticEvent, ReactNode } from 'react';
+import { useState, ChangeEventHandler, useRef, useEffect, SyntheticEvent, ReactNode, FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -13,6 +13,7 @@ import { AuthState } from '@/stores/authStateStore';
 
 import { useMyDraft, useMyDraftSync } from '@/hooks/queries/draftQuery';
 import { usePostUploadConfirm, usePostUploadRequest } from '@/hooks/queries/postQuery';
+import { useMyQuestion, useQuestionType } from '@/hooks/queries/questionQuery';
 import useToast from '@/hooks/useToast';
 
 import { FONT_COLOR, POINT_COLOR } from '@/constants/color';
@@ -32,81 +33,146 @@ import * as Styled from './styles';
 import RadioGroup from '@/components/Molecules/RadioGroup';
 import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import Checkbox from '@/components/Atom/Checkbox';
+import { useMyRetrospect, usePostMyRetrospect } from '@/hooks/queries/retrospectQuery';
+import { Retrospect } from '@/apis/retrospect';
+import ScrollContainer from 'react-indiana-drag-scroll';
 
 type HomeTextAreaProps = {
   showToast: (text: ReactNode) => void;
   userInfo: any;
 };
 
-const REVIEW_CATEGORY = [
-  { name: '랜덤 질문', identifier: '1' },
-  { name: '하루 회고', identifier: '2' },
-  { name: '공부 일지', identifier: '3' },
-  { name: '감정 일기', identifier: '4' },
-  { name: '아이더이 기록', identifier: '5' },
-  { name: '스크랩', identifier: '6' },
-];
-
-const questionList = ['아쉬웠던 점', '어떤 하루를 보냈나요?', '어떤 하루를 보냈나요?'];
 const HomeReviewTextArea = () => {
-  const [selectedReviewCategory, setSelectedReviewCategory] = useState('1');
+  const querClient = useQueryClient();
+  const [selectedReviewCategory, setSelectedReviewCategory] = useState('');
+  const { mutateAsync: postMyRetrospect } = usePostMyRetrospect();
+  const { data: myRetrospect, isSuccess: isMyRetrospectFetchSuccess } = useMyRetrospect();
+  const { data: questionList, isSuccess: isMyQuestionFetchSuccess } = useMyQuestion();
+  const { data: selectedQuestionList, isSuccess: isQuestionTypeFetchSuccess } = useQuestionType({
+    questionType: selectedReviewCategory,
+  });
   const { isLogin } = useRecoilValue(AuthState);
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
   const [checked, setChecked] = useState(false);
+  const [retrospect, setRetrospect] = useState<Retrospect>([]);
+
+  // 등록 버튼 클릭
   const onClickReviewCategory = (identifier: string) => {
     setSelectedReviewCategory(identifier);
   };
-  const onClickReview = () => {};
+  const onClickReview = async () => {
+    await postMyRetrospect(
+      { isSecret: checked, type: selectedReviewCategory, retrospect: retrospect },
+      { onSuccess: () => querClient.invalidateQueries(['MY_RETROSPECT']) },
+    );
+  };
   const handleCheckboxClick = () => {
     setChecked(!checked);
   };
+
+  useEffect(() => {
+    if (isMyQuestionFetchSuccess) setSelectedReviewCategory(questionList?.types[0].type);
+  }, [isMyQuestionFetchSuccess, questionList?.types]);
+
+  useEffect(() => {
+    if (isQuestionTypeFetchSuccess && isMyRetrospectFetchSuccess) {
+      const registeredRetrospect = myRetrospect.find(
+        (retrospect) => retrospect.type === selectedReviewCategory,
+      )?.retrospect;
+      if (!registeredRetrospect) {
+        setRetrospect(
+          selectedQuestionList.question.map((questionItem) => ({ question: questionItem.name, answer: '' })),
+        );
+      } else setRetrospect(registeredRetrospect);
+    }
+  }, [
+    isQuestionTypeFetchSuccess,
+    isMyRetrospectFetchSuccess,
+    myRetrospect,
+    selectedReviewCategory,
+    selectedQuestionList?.question,
+  ]);
+
+  const onInputRetrospect = (event: FormEvent<HTMLTextAreaElement>, question: string) => {
+    const value = event.currentTarget.value;
+    setRetrospect((prevRetrospect) => {
+      // 이전 상태를 기반으로 새로운 배열을 생성
+      return prevRetrospect.map((item) => {
+        // 질문이 일치하면 해당 아이템을 업데이트
+        if (item.question === question) {
+          return { ...item, answer: value };
+        }
+        return item;
+      });
+    });
+  };
+  useEffect(() => {
+    console.log(retrospect);
+  }, [retrospect]);
+
   return (
     <>
-      <section css={Styled.reviewContainer}>
-        <div css={Styled.reviewTabContainer}>
-          <Typo.Body color={FONT_COLOR.GRAY_2}>{format(new Date(), 'yyyy년 M월 d일 EEEE', { locale: ko })}</Typo.Body>
-          <div>
-            <RadioGroup data={REVIEW_CATEGORY} selectedId={selectedReviewCategory} onClick={onClickReviewCategory} />
-          </div>
-        </div>
-        <div css={Styled.questionContainer}>
-          <Typo.H2 color={FONT_COLOR.WHITE}>
-            {REVIEW_CATEGORY.find((category) => category.identifier === selectedReviewCategory)?.name ||
-              REVIEW_CATEGORY[0].name}
-          </Typo.H2>
-        </div>
-        <div css={Styled.questionListContainer}>
-          {questionList.map((question, index) => {
-            return (
-              <div key={question + index} css={Styled.questionItemContainer}>
-                <div css={Styled.questionTitle}>
-                  <Typo.Body color={FONT_COLOR.GRAY_3}>
-                    Q{index + 1}. {question}
-                  </Typo.Body>
-                </div>
-                <textarea
-                  onClick={(e) => {
-                    if (!isLogin) {
-                      e.currentTarget.blur();
-                      setIsLoginModalOpen({ isLoginModalOpen: true });
-                    }
-                  }}
-                ></textarea>
+      {isMyQuestionFetchSuccess && (
+        <section css={Styled.reviewContainer}>
+          <div css={Styled.reviewTabContainer}>
+            <Typo.Body css={Styled.reviewDate} color={FONT_COLOR.GRAY_2}>
+              {format(new Date(), 'yyyy년 M월 d일 EEEE', { locale: ko })}
+            </Typo.Body>
+            <div css={Styled.categoryWrapper}>
+              <div>
+                <ScrollContainer css={Styled.scroller} style={{ display: 'flex' }}>
+                  <RadioGroup
+                    data={questionList?.types.map((question) => ({ name: question.name, identifier: question.type }))}
+                    selectedId={selectedReviewCategory}
+                    onClick={onClickReviewCategory}
+                  />
+                </ScrollContainer>
               </div>
-            );
-          })}
-        </div>
-
-        <div css={Styled.reviewButtonContainer}>
-          <div css={Styled.checkboxContainer} onClick={handleCheckboxClick}>
-            <Checkbox checked={checked} />
-            <Typo.Label2 color={checked ? FONT_COLOR.GRAY_3 : FONT_COLOR.GRAY_2}>비공개</Typo.Label2>
+            </div>
           </div>
-          <Button size='sm' onClick={onClickReview}>
-            <Typo.Label1>등록</Typo.Label1>
-          </Button>
-        </div>
-      </section>
+          <div css={Styled.questionContainer}>
+            <Typo.H2 color={FONT_COLOR.WHITE}>
+              {
+                questionList?.types
+                  .map((question) => ({ name: question.name, identifier: question.type }))
+                  .find((category) => category.identifier === selectedReviewCategory)?.name
+              }
+            </Typo.H2>
+          </div>
+          <div css={Styled.questionListContainer}>
+            {selectedQuestionList?.question?.map((question, index) => {
+              return (
+                <div key={question.name} css={Styled.questionItemContainer}>
+                  <div css={Styled.questionTitle}>
+                    <Typo.Body color={FONT_COLOR.GRAY_3}>
+                      Q{index + 1}. {question.name}
+                    </Typo.Body>
+                  </div>
+                  <textarea
+                    onClick={(e) => {
+                      if (!isLogin) {
+                        e.currentTarget.blur();
+                        setIsLoginModalOpen({ isLoginModalOpen: true });
+                      }
+                    }}
+                    onInput={(e) => onInputRetrospect(e, question.name)}
+                  ></textarea>
+                </div>
+              );
+            })}
+          </div>
+
+          <div css={Styled.reviewButtonContainer}>
+            <div css={Styled.checkboxContainer} onClick={handleCheckboxClick}>
+              <Checkbox checked={checked} />
+              <Typo.Label2 color={checked ? FONT_COLOR.GRAY_3 : FONT_COLOR.GRAY_2}>비공개</Typo.Label2>
+            </div>
+            <Button size='sm' onClick={onClickReview}>
+              <Typo.Label1>등록</Typo.Label1>
+            </Button>
+          </div>
+        </section>
+      )}
     </>
   );
 };
@@ -205,7 +271,7 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
             <Typo.H1 color={selectedTab === 'MEMO' ? FONT_COLOR.WHITE : '#636C78'}>메모</Typo.H1>
           </button>
         </div>
-        {selectedTab === 'MEMO' ? <HomeMemoTextArea></HomeMemoTextArea> : <HomeReviewTextArea></HomeReviewTextArea>}
+        {selectedTab === 'REVIEW' ? <HomeReviewTextArea></HomeReviewTextArea> : <HomeMemoTextArea></HomeMemoTextArea>}
       </div>
     </div>
   );
