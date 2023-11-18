@@ -74,11 +74,11 @@ const HomeReviewTextArea = () => {
 
   const checkReviewisSelected = () => {
     if (
-      retrospect.findIndex((restrospectItem) => {
+      retrospect.filter((restrospectItem) => {
         if (restrospectItem.answer.trim().length <= 0) return true;
-      }) !== -1
+      }).length <= 0
     ) {
-      setErrorText('회고를 빈칸없이 모두 입력해주세요.');
+      setErrorText('최소 1개의 질문에 답해주세요.');
       return true;
     }
   };
@@ -175,6 +175,7 @@ const HomeReviewTextArea = () => {
                     </Typo.Body>
                   </div>
                   <textarea
+                    maxLength={200}
                     onClick={(e) => {
                       if (!isLogin) {
                         e.currentTarget.blur();
