@@ -111,11 +111,17 @@ export const questionTitle = css`
 
 export const reviewButtonContainer = css`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 18px;
   gap: 16px;
 `;
 
+export const rightButtonList = css`
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+`;
 export const checkboxContainer = css`
   display: flex;
   align-items: center;
@@ -162,4 +168,14 @@ export const memoTextareaBottomContainer = () => css`
   position: absolute;
   bottom: 20px;
   right: 26px;
+`;
+
+export const ConfirmModalTitle = () => css`
+  margin-bottom: 16px;
+`;
+export const ConfrimModalButtonContainer = () => css`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
 `;
