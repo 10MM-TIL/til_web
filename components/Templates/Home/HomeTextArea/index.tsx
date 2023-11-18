@@ -85,7 +85,7 @@ const HomeReviewTextArea = () => {
   // 등록 버튼 클릭
   const onClickReview = () => {
     if (checkReviewisSelected()) return;
-    setIsModalOpen(true);
+    // setIsModalOpen(true);
   };
 
   const registerReview = async () => {
@@ -102,7 +102,7 @@ const HomeReviewTextArea = () => {
         },
       },
     );
-    setIsModalOpen(false);
+    // setIsModalOpen(false);
     setRetrospect((prevRetrospect) => {
       return prevRetrospect.map((prev) => ({ question: prev.question, answer: '' }));
     });
