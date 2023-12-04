@@ -65,6 +65,7 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
                     userpath={recommandItem.userPath}
                     onClickContent={() => onClickContent(recommandItem.url)}
                     onClickUser={() => onClickUser(recommandItem.userPath)}
+                    isPrivate={false}
                   />
                 ))}
               {isSUccessAllpost &&
@@ -84,13 +85,14 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
                       userpath={post.userPath}
                       onClickContent={() => onClickContent(post.url)}
                       onClickUser={() => onClickUser(post.userPath)}
+                      isPrivate={false}
                     />
                   </div>
                 ))}
             </>
           )
         )}
-        <Footer></Footer>
+        <Footer />
       </div>
     </>
   );

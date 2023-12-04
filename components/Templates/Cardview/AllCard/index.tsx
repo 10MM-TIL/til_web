@@ -50,7 +50,8 @@ const AllCardItem = ({
         userpath={allCardItem.userPath}
         onClickContent={() => onClickContent(allCardItem.url)}
         onClickUser={() => onClickUser(allCardItem.userPath)}
-      ></Card>
+        isPrivate={true}
+      />
     </Styled.AllCardItem>
   );
 };

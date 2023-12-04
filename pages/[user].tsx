@@ -24,7 +24,6 @@ import { BlogData } from '@/components/Molecules/BlogGroup/type';
 import useToast from '@/hooks/useToast';
 import { useGetBlogs } from '@/hooks/queries/userQuery';
 import { useUserProfile } from '@/hooks/queries/profileQuery';
-
 import Custom404 from '@/pages/404';
 
 const NameCategory = ({ isMe, name, category }: { isMe: boolean; name: string; category: string }) => {
@@ -87,7 +86,6 @@ const User: NextPage = () => {
     isSuccess,
   } = useUserProfile({ userPath: path, enabled: isReady && path.length > 0 });
   const { data: blogObject, isSuccess: blogGetSuccess } = useGetBlogs({ path, enabled: isSuccess });
-
   const setClickedDate = useSetRecoilState(clickedGrassDate);
 
   return isLoading ? (

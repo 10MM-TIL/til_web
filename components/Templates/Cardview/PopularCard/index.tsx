@@ -46,7 +46,8 @@ const PopularCardItem = ({
         userpath={recommandItem.userPath}
         onClickContent={() => onClickContent(recommandItem.url)}
         onClickUser={() => onClickUser(recommandItem.userPath)}
-      ></Card>
+        isPrivate={false}
+      />
     </Styled.PopularCardItem>
   );
 };
@@ -102,7 +103,7 @@ const PopularCard = (props: {
         <Styled.PopularCardContent isEmpty={recommandCard.posts.length === 0}>
           <>
             {recommandCard.posts.length === 0 ? (
-              <EmptyPopularCard></EmptyPopularCard>
+              <EmptyPopularCard />
             ) : (
               <PopularCardList recommandCardList={recommandCard.posts} {...props}></PopularCardList>
             )}

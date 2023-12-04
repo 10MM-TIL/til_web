@@ -3,7 +3,7 @@ import Modal from '@/components/Atom/Modal';
 import * as Typo from '@/components/Atom/Typography';
 import { ContentsWrapper, CategoryWrapper, QnAWrapper, AnswerWrapper } from './style';
 
-const ContentsModal = ({ isOpen }: { isOpen: boolean }) => {
+export const ContentsModal = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <Modal closable={true} onClose={() => {}} isOpen={isOpen}>
       <ContentsWrapper>
@@ -31,5 +31,3 @@ const ContentsModal = ({ isOpen }: { isOpen: boolean }) => {
     </Modal>
   );
 };
-
-export default ContentsModal;

@@ -5,7 +5,7 @@ import * as Typo from '@/components/Atom/Typography';
 import { IconCrown } from '@/assets/svgs/IconCrown';
 import { CardProps, category } from './types';
 import { css } from '@emotion/react';
-import ContentsModal from '@/components/Molecules/ContentsModal/ContentsModal';
+import ContentsModal from '@/components/Molecules/ContentsModal';
 import IconLock from '@/assets/svgs/IconLock';
 
 const Card = ({
@@ -31,7 +31,7 @@ const Card = ({
       <>
         <Styled.BadgeTop size={size}>
           <Styled.CrownIcon size={size}>
-            <IconCrown></IconCrown>
+            <IconCrown />
           </Styled.CrownIcon>
         </Styled.BadgeTop>
         <Styled.BadgeBottom size={size}></Styled.BadgeBottom>

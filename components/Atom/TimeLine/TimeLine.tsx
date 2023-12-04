@@ -3,8 +3,7 @@ import Image from 'next/image';
 import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './styles';
 import { TimeLineProps } from './types';
-import { EditDropdownProps } from '@/components/Atom/EditDropdown';
-import { POINT_COLOR, FONT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
+import { POINT_COLOR, FONT_COLOR } from '@/constants/color';
 import IconTrash from '@/assets/svgs/IconTrash';
 import { TrashContainer } from '@/components/Templates/TimelineTemplate/style';
 
@@ -118,16 +117,14 @@ const TimeLine = ({
   content = {
     date: '',
     title: '',
-    desc: '',
-    url: '',
+    qna: [],
   },
   onDeleteContent,
-  onSaveAllContent,
-  moreButtonPositionCss,
-  editListPositionCss,
+
   changable,
 }: TimeLineProps): ReactElement => {
   const [timeLineContent, setTimeLineContent] = useState(content);
+  const { qna } = content;
   const [error, setError] = useState<string | null>(null);
   const [isEdit, setIsEdit] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -138,97 +135,30 @@ const TimeLine = ({
     if (isEdit) titleRef.current?.focus();
   }, [isEdit]);
 
-  // 저장
-  const onSaveTimeLine = async () => {
-    // 추후 API 요청 추가 필요
-    try {
-      onSaveAllContent(timeLineContent);
-    } catch (err) {
-      setError('오류가 발생했습니다.');
-    } finally {
-      setIsEdit(false);
-    }
-  };
-
-  // 취소
-  const onCancelTimeLine = () => {
-    // 취소시 처음 값으로 덮어씌우기, edit모드 종로, 에러 초기화
-    setTimeLineContent(content);
-    setIsEdit(false);
-    setError(null);
-  };
-
-  // 타이틀 변경
-  const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTimeLineContent((prevTimeLineContent) => ({ ...prevTimeLineContent, title: e.target.value }));
-  };
-
-  // 내용 변경
-  const onChangeDesc = (e: ChangeEvent<HTMLInputElement>) => {
-    setTimeLineContent((prevTimeLineContent) => ({ ...prevTimeLineContent, desc: e.target.value }));
-  };
-
   return (
     <Styled.TimeLineContainer>
-      {isEdit ? (
-        <EditStatusButton onSaveTimeLine={onSaveTimeLine} onCancelTimeLine={onCancelTimeLine} />
-      ) : (
-        changable && (
-          <TrashContainer>
-            <IconTrash />
-          </TrashContainer>
-        )
-      )}
       <TimeLineDate date={timeLineContent?.date}></TimeLineDate>
-      <Styled.TimeLineContent
-        isEdit={isEdit}
-        onClick={() => {
-          if (!isEdit) window.open(content.url);
-        }}
-      >
-        {isEdit ? (
-          <Styled.TimeLineInputWrapper>
-            <TimeLineTitleInput
-              titleRef={titleRef}
-              error={error}
-              title={timeLineContent?.title}
-              onChangeTitle={onChangeTitle}
-            ></TimeLineTitleInput>
-            <TimeLineDescInput
-              descRef={descRef}
-              error={error}
-              desc={timeLineContent?.desc}
-              onChangeDesc={onChangeDesc}
-            ></TimeLineDescInput>
-          </Styled.TimeLineInputWrapper>
-        ) : (
-          <>
-            <Styled.QuestionCategory>
-              <Typo.H2 color={FONT_COLOR.WHITE}>TEST</Typo.H2>
-            </Styled.QuestionCategory>
-            <Styled.AnswerListContainer>
-              {/* list */}
-              <Styled.AnswerItemContainer>
+      {changable && (
+        <TrashContainer onClick={() => onDeleteContent()}>
+          <IconTrash />
+        </TrashContainer>
+      )}
+      <Styled.TimeLineContent isEdit={isEdit}>
+        <>
+          <Styled.QuestionCategory>
+            <Typo.H2 color={FONT_COLOR.WHITE}>TEST</Typo.H2>
+          </Styled.QuestionCategory>
+          <Styled.AnswerListContainer>
+            {qna.map((item) => (
+              <Styled.AnswerItemContainer key={`${item.question}`}>
                 <Styled.QuestionTitle>
-                  <Typo.Body color={FONT_COLOR.GRAY_3}>Q1. test1</Typo.Body>
+                  <Typo.Body color={FONT_COLOR.GRAY_3}>{item.question}</Typo.Body>
                 </Styled.QuestionTitle>
-                <Styled.AnswerContents>test</Styled.AnswerContents>
+                <Styled.AnswerContents>{item.answer}</Styled.AnswerContents>
               </Styled.AnswerItemContainer>
-              <Styled.AnswerItemContainer>
-                <Styled.QuestionTitle>
-                  <Typo.Body color={FONT_COLOR.GRAY_3}>Q1. test1</Typo.Body>
-                </Styled.QuestionTitle>
-                <Styled.AnswerContents>test</Styled.AnswerContents>
-              </Styled.AnswerItemContainer>
-              <Styled.AnswerItemContainer>
-                <Styled.QuestionTitle>
-                  <Typo.Body color={FONT_COLOR.GRAY_3}>Q1. test1</Typo.Body>
-                </Styled.QuestionTitle>
-                <Styled.AnswerContents>testasdfasdfasasdfasdfsfsdfasdfsad</Styled.AnswerContents>
-              </Styled.AnswerItemContainer>
-            </Styled.AnswerListContainer>
-          </>
-        )}
+            ))}
+          </Styled.AnswerListContainer>
+        </>
       </Styled.TimeLineContent>
     </Styled.TimeLineContainer>
   );
