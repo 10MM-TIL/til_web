@@ -26,17 +26,17 @@ import { Retrospect, deleteRetrospect } from '@/apis/retrospect';
 
 interface TimelineTemplateProps {
   path: string;
-  changable: boolean;
+  deletable: boolean;
 }
 
 const TimelineComponent = ({
   content,
   retrospectIdentifier,
-  changable,
+  deletable,
 }: {
   content: { date: string; title: string; qna: Retrospect };
   retrospectIdentifier: string;
-  changable: boolean;
+  deletable: boolean;
 }) => {
   const router = useRouter();
   const { pathname } = router;
@@ -84,7 +84,7 @@ const TimelineComponent = ({
         <TimeLine
           content={{ ...content, date: formatDate(originalDate) }}
           onDeleteContent={handleDeleteContent}
-          changable={changable}
+          deletable={deletable}
         />
       </Styled.TimeLineCardContent>
     </Styled.TimeLineLayout>
@@ -124,15 +124,15 @@ const IsNotLoginTimeLine = () => {
           date: '2023.01.01',
           qna: [
             {
-              question: '질문1',
+              questionName: '질문1',
               answer: '대답1',
             },
             {
-              question: '질문2',
+              questionName: '질문2',
               answer: '대답2',
             },
             {
-              question: '질문3',
+              questionName: '질문3',
               answer: '대답3',
             },
           ],
@@ -143,7 +143,7 @@ const IsNotLoginTimeLine = () => {
             key={idx + value + content.title.length * idx}
             content={content}
             retrospectIdentifier={'' + content.title.length * idx}
-            changable={false}
+            deletable={false}
           />
         );
       })}
@@ -206,13 +206,20 @@ const TimeLineList = ({ path }: { path: string }) => {
                 <IsEmptyTimeLine />
               ) : (
                 retro.retrospects.map((retroItem) => {
-                  const { qna, createdAt, id } = retroItem;
+                  const { qna, createdAt, categoryIdentifier, retrospectIdentifier, questionTypeName } = retroItem;
                   const content = {
-                    title: 'test',
+                    title: questionTypeName,
                     date: createdAt,
                     qna,
                   };
-                  return <TimelineComponent key={id} content={content} retrospectIdentifier={id} changable={true} />;
+                  return (
+                    <TimelineComponent
+                      key={retrospectIdentifier}
+                      content={content}
+                      retrospectIdentifier={retrospectIdentifier}
+                      deletable={true}
+                    />
+                  );
                 })
               );
             })}
@@ -234,7 +241,7 @@ const TimeLineList = ({ path }: { path: string }) => {
   );
 };
 
-const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
+const TimelineTemplate = ({ path, deletable }: TimelineTemplateProps) => {
   const router = useRouter();
   const { pathname } = router;
   const { isLogin } = useRecoilValue(AuthState);

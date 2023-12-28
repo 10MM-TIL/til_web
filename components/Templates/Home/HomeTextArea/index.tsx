@@ -64,7 +64,7 @@ const HomeReviewTextArea = () => {
   useEffect(() => {
     if (isQuestionTypeFetchSuccess) {
       setRetrospect(
-        selectedQuestionList.question.map((questionItem) => ({ question: questionItem.questionName, answer: '' })),
+        selectedQuestionList.question.map((questionItem) => ({ questionName: questionItem.questionName, answer: '' })),
       );
     }
   }, [isQuestionTypeFetchSuccess, selectedQuestionList?.question]);
@@ -102,7 +102,7 @@ const HomeReviewTextArea = () => {
     );
     setIsModalOpen(false);
     setRetrospect((prevRetrospect) => {
-      return prevRetrospect.map((prev) => ({ question: prev.question, answer: '' }));
+      return prevRetrospect.map((prev) => ({ questionName: prev.questionName, answer: '' }));
     });
   };
 
@@ -126,7 +126,7 @@ const HomeReviewTextArea = () => {
       // 이전 상태를 기반으로 새로운 배열을 생성
       return prevRetrospect.map((item) => {
         // 질문이 일치하면 해당 아이템을 업데이트
-        if (item.question === question) {
+        if (item.questionName === question) {
           return { ...item, answer: value };
         }
         return item;

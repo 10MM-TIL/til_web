@@ -120,8 +120,7 @@ const TimeLine = ({
     qna: [],
   },
   onDeleteContent,
-
-  changable,
+  deletable,
 }: TimeLineProps): ReactElement => {
   const [timeLineContent, setTimeLineContent] = useState(content);
   const { qna } = content;
@@ -138,7 +137,7 @@ const TimeLine = ({
   return (
     <Styled.TimeLineContainer>
       <TimeLineDate date={timeLineContent?.date}></TimeLineDate>
-      {changable && (
+      {deletable && (
         <TrashContainer onClick={() => onDeleteContent()}>
           <IconTrash />
         </TrashContainer>
@@ -150,9 +149,9 @@ const TimeLine = ({
           </Styled.QuestionCategory>
           <Styled.AnswerListContainer>
             {qna.map((item) => (
-              <Styled.AnswerItemContainer key={`${item.question}`}>
+              <Styled.AnswerItemContainer key={`${item.questionName}`}>
                 <Styled.QuestionTitle>
-                  <Typo.Body color={FONT_COLOR.GRAY_3}>{item.question}</Typo.Body>
+                  <Typo.Body color={FONT_COLOR.GRAY_3}>{item.questionName}</Typo.Body>
                 </Styled.QuestionTitle>
                 <Styled.AnswerContents>{item.answer}</Styled.AnswerContents>
               </Styled.AnswerItemContainer>

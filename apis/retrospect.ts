@@ -18,7 +18,7 @@ export const getMyRetrospect = async () => {
   }
 };
 
-export type Retrospect = Array<{ question: string; answer: string }>;
+export type Retrospect = Array<{ questionName: string; answer: string }>;
 
 type PostMyRetrospectRequest = {
   isSecret: boolean;

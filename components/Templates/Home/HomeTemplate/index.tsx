@@ -44,7 +44,7 @@ const HomeTemplates = () => {
                   setClickedDate(value);
                 }}
               />
-              <TimelineTemplate path={userData ? userData.path : ''} changable={userInfo?.isAuthorized || false} />
+              <TimelineTemplate path={userData ? userData.path : ''} deletable={userInfo?.isAuthorized || false} />
             </div>
             <HomeCard userData={userData}></HomeCard>
           </>
