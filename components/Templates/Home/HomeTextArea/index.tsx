@@ -146,10 +146,13 @@ const HomeReviewTextArea = () => {
               <div>
                 <ScrollContainer css={Styled.scroller} style={{ display: 'flex' }}>
                   <RadioGroup
-                    data={questionList?.types.map((question) => ({
-                      name: question.questionTypeName,
-                      identifier: question.questionType,
-                    }))}
+                    data={questionList?.types.map((question) => {
+                      const { questionTypeName, questionType, isRandom } = question;
+                      return {
+                        name: isRandom ? '랜덤 질문' : questionTypeName,
+                        identifier: questionType,
+                      };
+                    })}
                     selectedId={selectedReviewCategory}
                     onClick={onClickReviewCategory}
                   />
