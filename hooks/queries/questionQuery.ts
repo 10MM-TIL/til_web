@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMyQuestion, getQuestionType } from '@/apis/question';
+import { getMyQuestion, getQuestionType, getRandomQuestionType } from '@/apis/question';
 
 export const useMyQuestion = () => {
   return useQuery(['MY_QUESTION'], getMyQuestion);
@@ -10,4 +10,8 @@ export const useQuestionType = ({ questionType }: { questionType: string }) => {
     enabled: questionType?.length > 0,
     keepPreviousData: true,
   });
+};
+
+export const useRandomQuestion = () => {
+  return useQuery(['RANDOM_QUESTION'], getRandomQuestionType);
 };

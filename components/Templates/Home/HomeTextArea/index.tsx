@@ -13,7 +13,7 @@ import { AuthState } from '@/stores/authStateStore';
 
 import { useMyDraft, useMyDraftSync } from '@/hooks/queries/draftQuery';
 import { usePostUploadConfirm, usePostUploadRequest } from '@/hooks/queries/postQuery';
-import { useMyQuestion, useQuestionType } from '@/hooks/queries/questionQuery';
+import { useMyQuestion, useQuestionType, useRandomQuestion } from '@/hooks/queries/questionQuery';
 import useToast from '@/hooks/useToast';
 
 import { FONT_COLOR, POINT_COLOR } from '@/constants/color';
@@ -52,7 +52,7 @@ const HomeReviewTextArea = () => {
   const [selectedReviewCategory, setSelectedReviewCategory] = useState('');
   const { mutateAsync: postMyRetrospect } = usePostMyRetrospect();
   // const { data: myRetrospect, isSuccess: isMyRetrospectFetchSuccess } = useMyRetrospect();
-  const { data: questionList, isSuccess: isMyQuestionFetchSuccess } = useMyQuestion();
+  const { data: questionList, isSuccess: isMyQuestionFetchSuccess } = useRandomQuestion();
   const { data: selectedQuestionList, isSuccess: isQuestionTypeFetchSuccess } = useQuestionType({
     questionType: selectedReviewCategory,
   });
@@ -63,7 +63,9 @@ const HomeReviewTextArea = () => {
 
   useEffect(() => {
     if (isQuestionTypeFetchSuccess) {
-      setRetrospect(selectedQuestionList.question.map((questionItem) => ({ question: questionItem.name, answer: '' })));
+      setRetrospect(
+        selectedQuestionList.question.map((questionItem) => ({ question: questionItem.questionName, answer: '' })),
+      );
     }
   }, [isQuestionTypeFetchSuccess, selectedQuestionList?.question]);
 
@@ -86,7 +88,7 @@ const HomeReviewTextArea = () => {
 
   const registerReview = async () => {
     await postMyRetrospect(
-      { isSecret: checked, type: selectedReviewCategory, retrospect: retrospect },
+      { isSecret: checked, questionType: selectedReviewCategory, retrospect: retrospect },
       {
         onSuccess: () => {
           querClient.invalidateQueries(['MY_RETROSPECT']);
@@ -109,7 +111,7 @@ const HomeReviewTextArea = () => {
   };
 
   useEffect(() => {
-    if (isMyQuestionFetchSuccess) setSelectedReviewCategory(questionList?.types[0].type);
+    if (isMyQuestionFetchSuccess) setSelectedReviewCategory(questionList?.types[0].questionType);
   }, [isMyQuestionFetchSuccess, questionList?.types]);
 
   const handleClickClose = () => {
@@ -144,7 +146,10 @@ const HomeReviewTextArea = () => {
               <div>
                 <ScrollContainer css={Styled.scroller} style={{ display: 'flex' }}>
                   <RadioGroup
-                    data={questionList?.types.map((question) => ({ name: question.name, identifier: question.type }))}
+                    data={questionList?.types.map((question) => ({
+                      name: question.questionTypeName,
+                      identifier: question.questionType,
+                    }))}
                     selectedId={selectedReviewCategory}
                     onClick={onClickReviewCategory}
                   />
@@ -156,7 +161,7 @@ const HomeReviewTextArea = () => {
             <Typo.H2 color={FONT_COLOR.WHITE}>
               {
                 questionList?.types
-                  .map((question) => ({ name: question.name, identifier: question.type }))
+                  .map((question) => ({ name: question.questionTypeName, identifier: question.questionType }))
                   .find((category) => category.identifier === selectedReviewCategory)?.name
               }
             </Typo.H2>
@@ -164,10 +169,10 @@ const HomeReviewTextArea = () => {
           <div css={Styled.questionListContainer}>
             {selectedQuestionList?.question?.map((question, index) => {
               return (
-                <div key={question.name} css={Styled.questionItemContainer}>
+                <div key={question.questionName} css={Styled.questionItemContainer}>
                   <div css={Styled.questionTitle}>
                     <Typo.Body color={FONT_COLOR.GRAY_3}>
-                      Q{index + 1}. {question.name}
+                      Q{index + 1}. {question.questionName}
                     </Typo.Body>
                   </div>
                   <textarea
@@ -179,7 +184,7 @@ const HomeReviewTextArea = () => {
                       }
                     }}
                     value={retrospect[index]?.answer}
-                    onInput={(e) => onInputRetrospect(e, question.name)}
+                    onInput={(e) => onInputRetrospect(e, question.questionName)}
                   ></textarea>
                 </div>
               );
@@ -318,7 +323,7 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
             <Typo.H1 color={selectedTab === 'MEMO' ? FONT_COLOR.WHITE : '#636C78'}>메모</Typo.H1>
           </button>
         </div>
-        {selectedTab === 'REVIEW' ? <HomeReviewTextArea></HomeReviewTextArea> : <HomeMemoTextArea></HomeMemoTextArea>}
+        {selectedTab === 'REVIEW' ? <HomeReviewTextArea /> : <HomeMemoTextArea />}
       </div>
     </div>
   );

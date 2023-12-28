@@ -2,7 +2,8 @@ import { devError } from '@/utils/system';
 import instance from './instance';
 
 type MyRetrospect = {
-  type: string;
+  questionType: string;
+  questionTypeName: string;
   retrospectIdentifier: string;
   retrospect: Retrospect;
 };
@@ -21,7 +22,7 @@ export type Retrospect = Array<{ question: string; answer: string }>;
 
 type PostMyRetrospectRequest = {
   isSecret: boolean;
-  type: string;
+  questionType: string;
   retrospect: Retrospect;
 };
 export const postMyRetrospect = async (payload: PostMyRetrospectRequest) => {
@@ -37,8 +38,14 @@ export const postMyRetrospect = async (payload: PostMyRetrospectRequest) => {
 
 type RetrospectContentsType = {
   isSecret: boolean;
-  id: string;
+  retrospectIdentifier: string;
+  userName: string;
+  userPath: string;
+  categoryIdentifier: string;
+  categoryName: string;
   createdAt: string;
+  questionType: string;
+  questionTypeName: string;
   qna: Retrospect;
 };
 
@@ -66,6 +73,47 @@ export const deleteRetrospect = async ({ retorspectIdentifier }: { retorspectIde
     return res;
   } catch (e) {
     devError('deleteRetrospectAPI error', e);
+    throw e;
+  }
+};
+//
+type getRetrospectByCategoryRequestType = {
+  size: number;
+  retrospectType: string;
+  pageToken?: string;
+};
+// 카테고리별 회고 리스트 요청
+export const getRetrospectByCategory = async (retrospectType: string, pageToken: string = '') => {
+  const params: getRetrospectByCategoryRequestType = pageToken
+    ? {
+        retrospectType,
+        size: 3 * 5,
+        pageToken,
+      }
+    : {
+        retrospectType,
+        size: 3 * 5,
+      };
+  try {
+    const { data } = await instance.get<RetrospectType>('/retrospect/category', {
+      params,
+    });
+
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+// 카테고리별 추천 회고 리스트 요청
+export const getRecommendRetrospectByCategory = async (retrospectType: string) => {
+  const params: { retrospectType: string } | null = retrospectType ? { retrospectType } : null;
+
+  try {
+    const { data } = await instance.get<RetrospectType>('/retrospect/category/recommend', {
+      params,
+    });
+    return data;
+  } catch (e: unknown) {
     throw e;
   }
 };

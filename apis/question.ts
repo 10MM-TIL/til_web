@@ -2,7 +2,7 @@ import { devError } from '@/utils/system';
 import instance from './instance';
 
 type MyQuestionResponse = {
-  types: Array<{ type: string; name: string }>;
+  types: Array<{ questionType: string; questionTypeName: string; isRandom: boolean }>;
 };
 export const getMyQuestion = async () => {
   try {
@@ -16,8 +16,10 @@ export const getMyQuestion = async () => {
 };
 
 type QuestionResponse = {
-  type: string;
-  question: Array<{ name: string }>;
+  questionType: string;
+  questionTypeName: string;
+  isRandom: boolean;
+  question: Array<{ questionName: string }>;
 };
 export const getQuestionType = async ({ questionType }: { questionType: string }) => {
   try {
@@ -25,6 +27,17 @@ export const getQuestionType = async ({ questionType }: { questionType: string }
     return data;
   } catch (e) {
     devError('getQuestionTypeAPI error ', e);
+    throw e;
+  }
+};
+
+export const getRandomQuestionType = async () => {
+  try {
+    const { data } = await instance.get<MyQuestionResponse>(`/question/randomQuestionType`);
+
+    return data;
+  } catch (e) {
+    devError('getRandomQuestionType', e);
     throw e;
   }
 };
