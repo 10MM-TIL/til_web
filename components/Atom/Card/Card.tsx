@@ -6,10 +6,17 @@ import { IconCrown } from '@/assets/svgs/IconCrown';
 import { CardProps, category } from './types';
 import ContentsModal from '@/components/Molecules/ContentsModal';
 import IconLock from '@/assets/svgs/IconLock';
+import useToast from '@/hooks/useToast';
+import { FONT_COLOR } from '@/constants/color';
+import ToastMessage from '@/components/ToastMessage';
+import IconCheckBig from '@/assets/svgs/IconCheckBig';
+import IconError from '@/assets/svgs/IconError';
 
 const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivate, item }: CardProps): ReactElement => {
   const [tagList, setTagList] = useState([content.category]);
   const [isOpen, setIsOpen] = useState(false);
+  const { isOpen: isOpenToast, showToast, text } = useToast();
+
   useEffect(() => {
     if (hasBadge) setTagList([...tagList, '#추천 회고']);
     else setTagList(tagList.filter((tag) => tag !== '#추천 회고'));
@@ -28,15 +35,21 @@ const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivat
       </>
     );
   };
-
+  const handleClickCard = () => {
+    if (isPrivate) {
+      showToast(
+        <>
+          <IconError />
+          <Typo.H1 color={FONT_COLOR.WHITE}>비공개 게시글 입니다</Typo.H1>
+        </>,
+      );
+      return;
+    }
+    setIsOpen(true);
+  };
   return (
     <>
-      <Styled.CardContainer
-        size={size}
-        onClick={() => {
-          setIsOpen(true);
-        }}
-      >
+      <Styled.CardContainer size={size} onClick={handleClickCard}>
         {hasBadge ? <Badge /> : null}
         <Styled.CardHeader>
           {tagList.map((tag, idx) => {
@@ -74,6 +87,11 @@ const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivat
         </Styled.CardInfoWrapper>
       </Styled.CardContainer>
       {isOpen && <ContentsModal isOpen={isOpen} item={item} onClose={() => setIsOpen(false)} />}
+      {isOpenToast && (
+        <ToastMessage isOpen={isOpenToast} isWarning>
+          {text}
+        </ToastMessage>
+      )}
     </>
   );
 };

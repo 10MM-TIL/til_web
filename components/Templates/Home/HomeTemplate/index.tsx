@@ -28,7 +28,6 @@ const HomeTemplates = () => {
     enabled: isLogin && (userData ? userData.path?.length > 0 : false),
     userPath: userData ? userData.path : '',
   });
-
   return (
     <div css={styles.wrapper}>
       <HomeBanner></HomeBanner>

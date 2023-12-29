@@ -107,7 +107,7 @@ const User: NextPage = () => {
             setClickedDate(value);
           }}
         />
-        <TimelineTemplate path={userInfo.path} changable={userInfo.isAuthorized} />
+        <TimelineTemplate path={userInfo.path} deletable={userInfo.isAuthorized} />
       </Styled.MypageContainer>
       <Styled.FloatingContainer>
         <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />

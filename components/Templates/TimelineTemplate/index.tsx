@@ -158,7 +158,7 @@ const IsEmptyTimeLine = () => {
   );
 };
 
-const TimeLineList = ({ path }: { path: string }) => {
+const TimeLineList = ({ path, deletable }: { path: string; deletable: boolean }) => {
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
   const clickDay = new Date(clickedDate);
   const fromSeconds = Math.round(clickDay.valueOf() / 1000);
@@ -217,7 +217,7 @@ const TimeLineList = ({ path }: { path: string }) => {
                       key={retrospectIdentifier}
                       content={content}
                       retrospectIdentifier={retrospectIdentifier}
-                      deletable={true}
+                      deletable={deletable}
                     />
                   );
                 })
@@ -248,7 +248,7 @@ const TimelineTemplate = ({ path, deletable }: TimelineTemplateProps) => {
 
   return (
     <Styled.TimelineContainer>
-      {pathname === '/' && !isLogin ? <IsNotLoginTimeLine /> : <TimeLineList path={path} />}
+      {pathname === '/' && !isLogin ? <IsNotLoginTimeLine /> : <TimeLineList path={path} deletable={deletable} />}
     </Styled.TimelineContainer>
   );
 };

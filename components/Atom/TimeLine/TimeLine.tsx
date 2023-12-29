@@ -123,8 +123,8 @@ const TimeLine = ({
   deletable,
 }: TimeLineProps): ReactElement => {
   const [timeLineContent, setTimeLineContent] = useState(content);
-  const { qna } = content;
-  const [error, setError] = useState<string | null>(null);
+  const { qna, title } = content;
+
   const [isEdit, setIsEdit] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
@@ -145,7 +145,7 @@ const TimeLine = ({
       <Styled.TimeLineContent isEdit={isEdit}>
         <>
           <Styled.QuestionCategory>
-            <Typo.H2 color={FONT_COLOR.WHITE}>TEST</Typo.H2>
+            <Typo.H2 color={FONT_COLOR.WHITE}>{title}</Typo.H2>
           </Styled.QuestionCategory>
           <Styled.AnswerListContainer>
             {qna.map((item) => (
@@ -153,7 +153,7 @@ const TimeLine = ({
                 <Styled.QuestionTitle>
                   <Typo.Body color={FONT_COLOR.GRAY_3}>{item.questionName}</Typo.Body>
                 </Styled.QuestionTitle>
-                <Styled.AnswerContents>{item.answer}</Styled.AnswerContents>
+                <Styled.AnswerContents>{item.answer || '-'}</Styled.AnswerContents>
               </Styled.AnswerItemContainer>
             ))}
           </Styled.AnswerListContainer>
