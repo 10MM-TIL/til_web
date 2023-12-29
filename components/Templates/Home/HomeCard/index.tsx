@@ -59,11 +59,10 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
                         date: formatDate(recommandItem.createdAt),
                       }}
                       hasBadge={true}
-                      url={''}
                       userpath={recommandItem.userPath}
-                      onClickContent={() => {}}
                       onClickUser={() => onClickUser(recommandItem.userPath)}
-                      isPrivate={false}
+                      isPrivate={recommandItem.isSecret}
+                      item={recommandItem}
                     />
                   );
                 })}
@@ -84,11 +83,10 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
                           name: retro.userName,
                           date: formatDate(retro.createdAt),
                         }}
-                        url={''}
                         userpath={retro.userPath}
-                        onClickContent={() => {}}
                         onClickUser={() => onClickUser(retro.userPath)}
-                        isPrivate={false}
+                        isPrivate={retro.isSecret}
+                        item={retro}
                       />
                     </div>
                   );

@@ -4,20 +4,10 @@ import * as Styled from './styles';
 import * as Typo from '@/components/Atom/Typography';
 import { IconCrown } from '@/assets/svgs/IconCrown';
 import { CardProps, category } from './types';
-import { css } from '@emotion/react';
 import ContentsModal from '@/components/Molecules/ContentsModal';
 import IconLock from '@/assets/svgs/IconLock';
 
-const Card = ({
-  size,
-  hasBadge = false,
-  content,
-  onClickContent,
-  onClickUser,
-  userpath,
-  url,
-  isPrivate,
-}: CardProps): ReactElement => {
+const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivate, item }: CardProps): ReactElement => {
   const [tagList, setTagList] = useState([content.category]);
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
@@ -44,7 +34,6 @@ const Card = ({
       <Styled.CardContainer
         size={size}
         onClick={() => {
-          onClickContent(url);
           setIsOpen(true);
         }}
       >
@@ -84,7 +73,7 @@ const Card = ({
           </div>
         </Styled.CardInfoWrapper>
       </Styled.CardContainer>
-      {isOpen && <ContentsModal isOpen={isOpen} />}
+      {isOpen && <ContentsModal isOpen={isOpen} item={item} onClose={() => setIsOpen(false)} />}
     </>
   );
 };

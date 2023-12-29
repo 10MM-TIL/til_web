@@ -1,6 +1,6 @@
 import instance from './instance';
 
-type RetrospectItem = {
+export type RetrospectItem = {
   isSecret: boolean;
   retrospectIdentifier: string;
   userName: string;
