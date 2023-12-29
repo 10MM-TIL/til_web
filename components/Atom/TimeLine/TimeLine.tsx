@@ -3,9 +3,9 @@ import Image from 'next/image';
 import * as Typo from '@/components/Atom/Typography';
 import * as Styled from './styles';
 import { TimeLineProps } from './types';
-import { EditDropdown, EditDropdownProps } from '@/components/Atom/EditDropdown';
-import { POINT_COLOR, FONT_COLOR, BACKGROUND_COLOR } from '@/constants/color';
-import BlogIcon from '@/components/Atom/BlogIcon';
+import { POINT_COLOR, FONT_COLOR } from '@/constants/color';
+import IconTrash from '@/assets/svgs/IconTrash';
+import { TrashContainer } from '@/components/Templates/TimelineTemplate/style';
 
 // [TODO] 최대 글자수 지정 필요
 const TITLE_MAX_LENGTH = 30;
@@ -117,128 +117,47 @@ const TimeLine = ({
   content = {
     date: '',
     title: '',
-    desc: '',
-    url: '',
+    qna: [],
   },
   onDeleteContent,
-  onSaveAllContent,
-  moreButtonPositionCss,
-  editListPositionCss,
-  changable,
+  deletable,
 }: TimeLineProps): ReactElement => {
-  const moreButtonRef = useRef<HTMLUListElement>(null);
   const [timeLineContent, setTimeLineContent] = useState(content);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { qna, title } = content;
+
   const [isEdit, setIsEdit] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
-  const [editList, setEditList] = useState<EditDropdownProps['editList']>([
-    {
-      text: '수정',
-      onClickHandler: useCallback(() => {
-        setIsEdit(true);
-        setIsDropdownOpen(false);
-      }, []),
-    },
-    {
-      text: '삭제',
-      onClickHandler: useCallback(() => {
-        setIsDropdownOpen(false);
-        onDeleteContent();
-      }, [onDeleteContent]),
-    },
-  ]);
 
   // 수정시 title에 focus
   useEffect(() => {
     if (isEdit) titleRef.current?.focus();
   }, [isEdit]);
 
-  // 드롭다운 Open/close 함수
-  const toggleOpen = () => setIsDropdownOpen((prevIsOpen) => !prevIsOpen);
-
-  // 저장
-  const onSaveTimeLine = async () => {
-    // 추후 API 요청 추가 필요
-    try {
-      onSaveAllContent(timeLineContent);
-    } catch (err) {
-      setError('오류가 발생했습니다.');
-    } finally {
-      setIsEdit(false);
-    }
-  };
-
-  // 취소
-  const onCancelTimeLine = () => {
-    // 취소시 처음 값으로 덮어씌우기, edit모드 종로, 에러 초기화
-    setTimeLineContent(content);
-    setIsEdit(false);
-    setError(null);
-  };
-
-  // 타이틀 변경
-  const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTimeLineContent((prevTimeLineContent) => ({ ...prevTimeLineContent, title: e.target.value }));
-  };
-
-  // 내용 변경
-  const onChangeDesc = (e: ChangeEvent<HTMLInputElement>) => {
-    setTimeLineContent((prevTimeLineContent) => ({ ...prevTimeLineContent, desc: e.target.value }));
-  };
-
   return (
     <Styled.TimeLineContainer>
-      {isEdit ? (
-        <EditStatusButton onSaveTimeLine={onSaveTimeLine} onCancelTimeLine={onCancelTimeLine} />
-      ) : (
-        changable && (
-          <EditDropdown
-            editList={editList}
-            isOpen={isDropdownOpen}
-            moreButtonRef={moreButtonRef}
-            onCloseDropdown={toggleOpen}
-            moreButtonPositionCss={moreButtonPositionCss}
-            editListPositionCss={editListPositionCss}
-          ></EditDropdown>
-        )
-      )}
       <TimeLineDate date={timeLineContent?.date}></TimeLineDate>
-      <Styled.TimeLineContent
-        isEdit={isEdit}
-        onClick={() => {
-          if (!isEdit) window.open(content.url);
-        }}
-      >
-        <div>
-          {isEdit ? (
-            <Styled.TimeLineInputWrapper>
-              <TimeLineTitleInput
-                titleRef={titleRef}
-                error={error}
-                title={timeLineContent?.title}
-                onChangeTitle={onChangeTitle}
-              ></TimeLineTitleInput>
-              <TimeLineDescInput
-                descRef={descRef}
-                error={error}
-                desc={timeLineContent?.desc}
-                onChangeDesc={onChangeDesc}
-              ></TimeLineDescInput>
-            </Styled.TimeLineInputWrapper>
-          ) : (
-            <>
-              <Styled.TimeLineTitle>
-                <Typo.H1 color={FONT_COLOR.WHITE}>{timeLineContent?.title}</Typo.H1>
-              </Styled.TimeLineTitle>
-              <Styled.TimeLineDesc>
-                <Typo.Label2 color={FONT_COLOR.GRAY_3}>{timeLineContent?.desc}</Typo.Label2>
-              </Styled.TimeLineDesc>
-            </>
-          )}
-        </div>
-        <BlogIcon url={timeLineContent?.url} size={37} />
+      {deletable && (
+        <TrashContainer onClick={() => onDeleteContent()}>
+          <IconTrash />
+        </TrashContainer>
+      )}
+      <Styled.TimeLineContent isEdit={isEdit}>
+        <>
+          <Styled.QuestionCategory>
+            <Typo.H2 color={FONT_COLOR.WHITE}>{title}</Typo.H2>
+          </Styled.QuestionCategory>
+          <Styled.AnswerListContainer>
+            {qna.map((item) => (
+              <Styled.AnswerItemContainer key={`${item.questionName}`}>
+                <Styled.QuestionTitle>
+                  <Typo.Body color={FONT_COLOR.GRAY_3}>{item.questionName}</Typo.Body>
+                </Styled.QuestionTitle>
+                <Styled.AnswerContents>{item.answer || '-'}</Styled.AnswerContents>
+              </Styled.AnswerItemContainer>
+            ))}
+          </Styled.AnswerListContainer>
+        </>
       </Styled.TimeLineContent>
     </Styled.TimeLineContainer>
   );

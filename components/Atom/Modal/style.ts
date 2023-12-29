@@ -15,11 +15,10 @@ const OutLayer = styled.div`
   bottom: 0;
 `;
 
-const ModalContainer = styled.div`
-  /* position: relative; */
+const ModalContainer = styled.div<{ isConfirm: boolean }>`
   position: fixed;
-  width: 100%;
-  height: 95%;
+  width: ${({ isConfirm }) => (isConfirm ? '300px' : '100%')};
+  height: ${({ isConfirm }) => (isConfirm ? 'auto' : '95%')};
   // Modal Component 항상 중앙유지
   left: 50%;
   top: 50%;
@@ -27,15 +26,20 @@ const ModalContainer = styled.div`
 
   background: ${BACKGROUND_COLOR.NAVY_3};
   // padding 의 경우 figma상의 최소치 설정
-  padding: 86px 13px 40px 13px;
+  padding: ${({ isConfirm }) => (isConfirm ? '28px 18px' : '32px 40px')};
   text-align: center;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: ${({ isConfirm }) => (isConfirm ? '12px' : '20px')};
+  border-top-right-radius: ${({ isConfirm }) => (isConfirm ? '12px' : '20px')};
+  border-bottom-left-radius: ${({ isConfirm }) => (isConfirm ? '12px' : '0px')};
+  border-bottom-right-radius: ${({ isConfirm }) => (isConfirm ? '12px' : '0px')};
+
   // outLayer보다 높은 z-index 값 부여
   z-index: ${Z_INDEX_LEVEL['MODAL']};
   ${mq('desktop')} {
-    height: 580px;
-    width: 656px;
+    height: auto;
+    width: ${({ isConfirm }) => (isConfirm ? '300px' : '656px')};
+    padding: ${({ isConfirm }) => (isConfirm ? '32px 20px' : '32px 40px')};
+
     border-radius: 12px;
     transform: translate(-50%, -50%);
   }

@@ -10,9 +10,7 @@ import { clickedGrassDate } from '@/stores/user';
 import { LoginModalState } from '@/stores/modalStateStore';
 import { AuthState } from '@/stores/authStateStore';
 
-import { putEditTimeline, deleteTimeline } from 'apis/user';
 import useToast from '@/hooks/useToast';
-import { useMyAllTimeline } from '@/hooks/queries/timelineQuery';
 import { useResize } from '@/hooks/useResize';
 
 import * as Typo from '@/components/Atom/Typography';
@@ -23,35 +21,32 @@ import InfiniteScrollLayout from '@/components/Layout/InfiniteScroll';
 import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import { IconTimeline } from '@/assets/svgs/IconTimeline';
 import * as Styled from './style';
+import { useRetrospectByPath } from '@/hooks/queries/retrospectQuery';
+import { Retrospect, deleteRetrospect } from '@/apis/retrospect';
 
 interface TimelineTemplateProps {
   path: string;
-  changable: boolean;
+  deletable: boolean;
 }
 
 const TimelineComponent = ({
   content,
-  postIdentifier,
-  changable,
+  retrospectIdentifier,
+  deletable,
 }: {
-  content: { date: string; title: string; desc: string; url: string };
-  postIdentifier: string;
-  changable: boolean;
+  content: { date: string; title: string; qna: Retrospect };
+  retrospectIdentifier: string;
+  deletable: boolean;
 }) => {
   const router = useRouter();
   const { pathname } = router;
   const { isLogin } = useRecoilValue(AuthState);
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
   const { showToast } = useToast();
-  const { title: originalTitle, desc: originalSummary, date: originalDate } = content;
+  const { title: originalTitle, date: originalDate } = content;
   const queryClient = useQueryClient();
 
-  const editTimeline = useMutation(putEditTimeline, {
-    onSuccess: () => {},
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['TIMELINE_INFINITE'] }),
-  });
-
-  const removeTimeline = useMutation(deleteTimeline, {
+  const removeRetrospect = useMutation(deleteRetrospect, {
     onSuccess: () => {
       showToast(
         <>
@@ -59,25 +54,14 @@ const TimelineComponent = ({
           <Typo.H1 color={FONT_COLOR.WHITE}>삭제 완료!</Typo.H1>
         </>,
       );
-      queryClient.invalidateQueries({ queryKey: ['TIMELINE_GRASS_DATA'] });
+      queryClient.invalidateQueries({ queryKey: ['TODO!'] });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['TIMELINE_INFINITE'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['RETROSPECT_BY_PATH'] }),
   });
-
-  const updateTimeline = (content: { title: string; desc: string; createdAt: number }) => {
-    editTimeline.mutate({
-      postIdentifier: postIdentifier,
-      editedContent: {
-        title: content.title,
-        summary: content.desc,
-        createdAt: Date.parse(originalDate) / 1000,
-      },
-    });
-  };
 
   const handleDeleteContent = () => {
     if (window.confirm('선택한 회고글을 삭제하시겠습니까?')) {
-      removeTimeline.mutate({ postIdentifier: postIdentifier });
+      removeRetrospect.mutate({ retorspectIdentifier: retrospectIdentifier });
     }
   };
 
@@ -99,9 +83,8 @@ const TimelineComponent = ({
         )}
         <TimeLine
           content={{ ...content, date: formatDate(originalDate) }}
-          onSaveAllContent={(newValue) => updateTimeline(newValue as any)}
           onDeleteContent={handleDeleteContent}
-          changable={changable}
+          deletable={deletable}
         />
       </Styled.TimeLineCardContent>
     </Styled.TimeLineLayout>
@@ -136,19 +119,31 @@ const IsNotLoginTimeLine = () => {
   return (
     <>
       {Array.from({ length: 3 }, (_, index) => index).map((value, idx) => {
-        const content = {
+        const content: { title: string; date: string; qna: Retrospect } = {
           title: '나만의 회고 로그를 쌓아보세요',
           date: '2023.01.01',
-          url: 'https://asdf.com',
-          desc: '상단 회고 탭에서 회고 게시글의 링크를 입력해보세요',
+          qna: [
+            {
+              questionName: '질문1',
+              answer: '대답1',
+            },
+            {
+              questionName: '질문2',
+              answer: '대답2',
+            },
+            {
+              questionName: '질문3',
+              answer: '대답3',
+            },
+          ],
         };
 
         return (
           <TimelineComponent
             key={idx + value + content.title.length * idx}
             content={content}
-            postIdentifier={'' + content.title.length * idx}
-            changable={false}
+            retrospectIdentifier={'' + content.title.length * idx}
+            deletable={false}
           />
         );
       })}
@@ -163,7 +158,7 @@ const IsEmptyTimeLine = () => {
   );
 };
 
-const TimeLineList = ({ path }: { path: string }) => {
+const TimeLineList = ({ path, deletable }: { path: string; deletable: boolean }) => {
   const [clickedDate, setClickedDate] = useRecoilState(clickedGrassDate);
   const clickDay = new Date(clickedDate);
   const fromSeconds = Math.round(clickDay.valueOf() / 1000);
@@ -171,16 +166,17 @@ const TimeLineList = ({ path }: { path: string }) => {
   const { isLogin } = useRecoilValue(AuthState);
 
   const device = useResize();
+
   const {
-    data: postObject,
+    data: retrospectData,
     fetchNextPage,
     isSuccess,
     isFetchingNextPage,
-  } = useMyAllTimeline({ path, from: fromSeconds || undefined, to: toSeconds || undefined, isLogin: isLogin });
+  } = useRetrospectByPath({ path, from: fromSeconds || undefined, to: toSeconds || undefined, isLogin });
 
   const intersectCallback = (entry: IntersectionObserverEntry) => {
     if (entry.isIntersecting) {
-      if (postObject && postObject.pages[postObject.pages.length - 1].nextPageToken === null) return;
+      if (retrospectData && retrospectData.pages[retrospectData.pages.length - 1].nextPageToken === null) return;
       fetchNextPage();
     }
   };
@@ -200,34 +196,36 @@ const TimeLineList = ({ path }: { path: string }) => {
         <>
           <TimeLineHeader
             onClickDate={onClickDate}
-            timeLineSizeText={clickedDate !== '' ? `전체보기` : `${postObject ? postObject.pages[0].size : '0'}개`}
+            timeLineSizeText={
+              clickedDate !== '' ? `전체보기` : `${retrospectData ? retrospectData.pages[0].size : '0'}개`
+            }
           ></TimeLineHeader>
           <InfiniteScrollLayout intersectCallback={intersectCallback} isObserve={device === 'desktop'}>
-            {postObject.pages.map((postList) => {
-              return postList.posts.length === 0 ? (
-                <IsEmptyTimeLine></IsEmptyTimeLine>
+            {retrospectData.pages.map((retro) => {
+              return retro.retrospects.length === 0 ? (
+                <IsEmptyTimeLine />
               ) : (
-                postList.posts.map((postItem) => {
+                retro.retrospects.map((retroItem) => {
+                  const { qna, createdAt, categoryIdentifier, retrospectIdentifier, questionTypeName } = retroItem;
                   const content = {
-                    title: postItem.title,
-                    date: postItem.createdAt,
-                    url: postItem.url,
-                    desc: postItem.summary,
+                    title: questionTypeName,
+                    date: createdAt,
+                    qna,
                   };
                   return (
                     <TimelineComponent
-                      key={postItem.identifier}
+                      key={retrospectIdentifier}
                       content={content}
-                      postIdentifier={postItem.identifier}
-                      changable={true}
+                      retrospectIdentifier={retrospectIdentifier}
+                      deletable={deletable}
                     />
                   );
                 })
               );
             })}
           </InfiniteScrollLayout>
-          {postObject.pages[postObject.pages.length - 1].size >= 5 &&
-            postObject.pages[postObject.pages.length - 1].nextPageToken !== null && (
+          {retrospectData.pages[retrospectData.pages.length - 1].size >= 5 &&
+            retrospectData.pages[retrospectData.pages.length - 1].nextPageToken !== null && (
               <Styled.TimelineMobileMoreButton onClick={onClickMoreTimeLine}>
                 <Typo.H2 color={FONT_COLOR.GRAY_2}>타임라인 더보기</Typo.H2>
               </Styled.TimelineMobileMoreButton>
@@ -243,14 +241,14 @@ const TimeLineList = ({ path }: { path: string }) => {
   );
 };
 
-const TimelineTemplate = ({ path, changable }: TimelineTemplateProps) => {
+const TimelineTemplate = ({ path, deletable }: TimelineTemplateProps) => {
   const router = useRouter();
   const { pathname } = router;
   const { isLogin } = useRecoilValue(AuthState);
 
   return (
     <Styled.TimelineContainer>
-      {pathname === '/' && !isLogin ? <IsNotLoginTimeLine /> : <TimeLineList path={path} />}
+      {pathname === '/' && !isLogin ? <IsNotLoginTimeLine /> : <TimeLineList path={path} deletable={deletable} />}
     </Styled.TimelineContainer>
   );
 };

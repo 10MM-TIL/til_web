@@ -1,3 +1,4 @@
+import { RetrospectItem } from '@/apis/retrospectCardview';
 import { MouseEventHandler, MouseEvent } from 'react';
 
 export const category = {
@@ -18,10 +19,10 @@ export type CardProps = {
   size: 'sm' | 'lg' | 'mobile';
   hasBadge?: boolean;
   content: CardContentProps;
-  onClickContent: (url?: string) => void;
   onClickUser: (userpath?: string) => void;
-  url: string;
   userpath: string;
+  isPrivate: boolean;
+  item: RetrospectItem;
 };
 
 export type CardContentProps = {

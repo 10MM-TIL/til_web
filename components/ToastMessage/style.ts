@@ -26,7 +26,7 @@ const fadeOut = keyframes({
   },
 });
 
-const ToastMessageContainer = styled.div<{ isOpen: boolean }>`
+const ToastMessageContainer = styled.div<{ isOpen: boolean; isWarning: boolean }>`
   box-sizing: border-box;
 
   display: flex;
@@ -42,10 +42,7 @@ const ToastMessageContainer = styled.div<{ isOpen: boolean }>`
   width: 270px;
   height: 52px;
   background: ${BACKGROUND_COLOR.FIELD_10};
-
-  border: 1px solid ${POINT_COLOR.MAIN};
-  /* Tooltip */
-
+  border: 1px solid ${(props) => (props.isWarning ? POINT_COLOR.ERROR : POINT_COLOR.MAIN)};
   box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3);
   border-radius: 59px;
 

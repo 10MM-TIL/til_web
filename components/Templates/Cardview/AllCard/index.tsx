@@ -20,19 +20,20 @@ import { allPostItem } from '@/types/cardview';
 import * as Styled from './styles';
 import * as CardView from '@/styles/cardview.module';
 import Spinner from '@/components/Atom/Spinner';
+import { useRetrospects } from '@/hooks/queries/retrospectCardviewQuery';
+import { RetrospectItem } from '@/apis/retrospectCardview';
 
 const AllCardItem = ({
   allCardItem,
   cardSize,
-  onClickContent,
   onClickUser,
 }: {
-  allCardItem: allPostItem;
+  allCardItem: RetrospectItem;
   cardSize: CardProps['size'];
-  onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
   const categories = useRecoilValue(categoryState);
+  const bodyText = allCardItem.qna[0]?.answer ?? '';
 
   return (
     <Styled.AllCardItem>
@@ -40,17 +41,17 @@ const AllCardItem = ({
         size={cardSize}
         content={{
           category: categories.find((i) => i.identifier === allCardItem.categoryIdentifier)?.name || '#개발',
-          header: allCardItem.title,
-          body: allCardItem.summary,
-          img: allCardItem.profileImgSrc,
+          header: allCardItem.questionTypeName,
+          body: allCardItem.isSecret ? '비공개 게시글입니다.' : bodyText,
+          img: '',
           name: allCardItem.userName,
           date: formatDate(allCardItem.createdAt),
         }}
-        url={allCardItem.url}
         userpath={allCardItem.userPath}
-        onClickContent={() => onClickContent(allCardItem.url)}
         onClickUser={() => onClickUser(allCardItem.userPath)}
-      ></Card>
+        isPrivate={allCardItem.isSecret}
+        item={allCardItem}
+      />
     </Styled.AllCardItem>
   );
 };
@@ -60,16 +61,15 @@ const AllCardList = ({
   device,
   ...rest
 }: {
-  allCardList: allPostItem[];
+  allCardList: RetrospectItem[];
   device: device;
-  onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
   return (
     <>
       {allCardList.map((allCard, index) => (
         <AllCardItem
-          key={`card-${allCard.identifier}-${index}`}
+          key={`card-${allCard.retrospectIdentifier}-${index}`}
           cardSize={device === 'desktop' ? 'lg' : 'mobile'}
           allCardItem={allCard}
           {...rest}
@@ -89,13 +89,11 @@ const EmptyCard = () => {
 const AllCard = (props: {
   categoryQuery: CategoryQueryKeys;
   device: device;
-  onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
-  const { data: allPosts, fetchNextPage, isSuccess, isFetchingNextPage } = useAllPosts(props.categoryQuery);
-
+  const { data: allRetrospects, fetchNextPage, isSuccess, isFetchingNextPage } = useRetrospects(props.categoryQuery);
   const intersectCallback = (entry: IntersectionObserverEntry) => {
-    if (allPosts && allPosts.pages[allPosts.pages.length - 1].nextPageToken === null) {
+    if (allRetrospects && allRetrospects.pages[allRetrospects.pages.length - 1].nextPageToken === null) {
       return;
     }
     fetchNextPage();
@@ -111,13 +109,13 @@ const AllCard = (props: {
         option={{ rootMargin: '0px 0px 150px 0px', threshold: [0, 0.3, 0.5, 1] }}
       >
         {isSuccess && (
-          <Styled.AllCardContent isEmpty={allPosts.pages[0].posts.length === 0}>
-            {allPosts.pages[0].posts.length === 0 ? (
+          <Styled.AllCardContent isEmpty={allRetrospects.pages[0].retrospects.length === 0}>
+            {allRetrospects.pages[0].retrospects.length === 0 ? (
               <EmptyCard></EmptyCard>
             ) : (
               <>
-                {allPosts.pages.map((allPost, index) => {
-                  return <AllCardList key={index} allCardList={allPost.posts} {...props}></AllCardList>;
+                {allRetrospects.pages.map((allRetro, index) => {
+                  return <AllCardList key={index} allCardList={allRetro.retrospects} {...props}></AllCardList>;
                 })}
               </>
             )}

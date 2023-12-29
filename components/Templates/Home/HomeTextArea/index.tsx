@@ -1,4 +1,4 @@
-import { useState, ChangeEventHandler, useRef, useEffect, SyntheticEvent, ReactNode } from 'react';
+import { useState, ChangeEventHandler, useRef, useEffect, SyntheticEvent, ReactNode, FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -13,6 +13,7 @@ import { AuthState } from '@/stores/authStateStore';
 
 import { useMyDraft, useMyDraftSync } from '@/hooks/queries/draftQuery';
 import { usePostUploadConfirm, usePostUploadRequest } from '@/hooks/queries/postQuery';
+import { useMyQuestion, useQuestionType, useRandomQuestion } from '@/hooks/queries/questionQuery';
 import useToast from '@/hooks/useToast';
 
 import { FONT_COLOR, POINT_COLOR } from '@/constants/color';
@@ -29,52 +30,229 @@ import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import IconError from '@/assets/svgs/IconError';
 
 import * as Styled from './styles';
+import RadioGroup from '@/components/Molecules/RadioGroup';
+import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
+import Checkbox from '@/components/Atom/Checkbox';
+import { useMyRetrospect, usePostMyRetrospect } from '@/hooks/queries/retrospectQuery';
+import { Retrospect } from '@/apis/retrospect';
+import ScrollContainer from 'react-indiana-drag-scroll';
+import ToastMessage from '@/components/ToastMessage';
+import Modal from '@/components/Atom/Modal';
 
 type HomeTextAreaProps = {
   showToast: (text: ReactNode) => void;
   userInfo: any;
 };
 
-const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
-  const queryClient = useQueryClient();
+const HomeReviewTextArea = () => {
+  const querClient = useQueryClient();
+  const { isOpen, showToast, text } = useToast();
+  const [errorText, setErrorText] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedReviewCategory, setSelectedReviewCategory] = useState('');
+  const { mutateAsync: postMyRetrospect } = usePostMyRetrospect();
+  // const { data: myRetrospect, isSuccess: isMyRetrospectFetchSuccess } = useMyRetrospect();
+  const { data: questionList, isSuccess: isMyQuestionFetchSuccess } = useRandomQuestion();
+  const { data: selectedQuestionList, isSuccess: isQuestionTypeFetchSuccess } = useQuestionType({
+    questionType: selectedReviewCategory,
+  });
+  const { isLogin } = useRecoilValue(AuthState);
+  const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
+  const [checked, setChecked] = useState(false);
+  const [retrospect, setRetrospect] = useState<Retrospect>([]);
 
+  useEffect(() => {
+    if (isQuestionTypeFetchSuccess) {
+      setRetrospect(
+        selectedQuestionList.question.map((questionItem) => ({ questionName: questionItem.questionName, answer: '' })),
+      );
+    }
+  }, [isQuestionTypeFetchSuccess, selectedQuestionList?.question]);
+
+  // 질문 리스트 클릭
+  const onClickReviewCategory = (identifier: string) => {
+    setSelectedReviewCategory(identifier);
+  };
+
+  const checkReviewisSelected = () => {
+    if (retrospect.filter((restrospectItem) => restrospectItem.answer.trim().length > 0).length <= 0) {
+      setErrorText('최소 1개의 질문에 답해주세요.');
+      return true;
+    }
+  };
+  // 등록 버튼 클릭
+  const onClickReview = () => {
+    if (checkReviewisSelected()) return;
+    setIsModalOpen(true);
+  };
+
+  const registerReview = async () => {
+    await postMyRetrospect(
+      { isSecret: checked, questionType: selectedReviewCategory, retrospect: retrospect },
+      {
+        onSuccess: () => {
+          querClient.invalidateQueries(['MY_RETROSPECT']);
+          showToast(<Typo.H1 color={FONT_COLOR.WHITE}>회고 등록이 완료되었습니다.</Typo.H1>);
+        },
+        onError: (e) => {
+          const Error = e as { errorCode: string; description: string };
+          setErrorText(Error.description);
+        },
+      },
+    );
+    setIsModalOpen(false);
+    setRetrospect((prevRetrospect) => {
+      return prevRetrospect.map((prev) => ({ questionName: prev.questionName, answer: '' }));
+    });
+  };
+
+  const handleCheckboxClick = () => {
+    setChecked(!checked);
+  };
+
+  useEffect(() => {
+    if (isMyQuestionFetchSuccess) setSelectedReviewCategory(questionList?.types[0].questionType);
+  }, [isMyQuestionFetchSuccess, questionList?.types]);
+
+  const handleClickClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const onInputRetrospect = (event: FormEvent<HTMLTextAreaElement>, question: string) => {
+    setErrorText('');
+    const value = event.currentTarget.value;
+
+    setRetrospect((prevRetrospect) => {
+      // 이전 상태를 기반으로 새로운 배열을 생성
+      return prevRetrospect.map((item) => {
+        // 질문이 일치하면 해당 아이템을 업데이트
+        if (item.questionName === question) {
+          return { ...item, answer: value };
+        }
+        return item;
+      });
+    });
+  };
+
+  return (
+    <>
+      {isMyQuestionFetchSuccess && (
+        <section css={Styled.reviewContainer}>
+          <div css={Styled.reviewTabContainer}>
+            <Typo.Body css={Styled.reviewDate} color={FONT_COLOR.GRAY_2}>
+              {format(new Date(), 'yyyy년 M월 d일 EEEE', { locale: ko })}
+            </Typo.Body>
+            <div css={Styled.categoryWrapper}>
+              <div>
+                <ScrollContainer css={Styled.scroller} style={{ display: 'flex' }}>
+                  <RadioGroup
+                    data={questionList?.types.map((question) => {
+                      const { questionTypeName, questionType, isRandom } = question;
+                      return {
+                        name: isRandom ? '랜덤 질문' : questionTypeName,
+                        identifier: questionType,
+                      };
+                    })}
+                    selectedId={selectedReviewCategory}
+                    onClick={onClickReviewCategory}
+                  />
+                </ScrollContainer>
+              </div>
+            </div>
+          </div>
+          <div css={Styled.questionContainer}>
+            <Typo.H2 color={FONT_COLOR.WHITE}>
+              {
+                questionList?.types
+                  .map((question) => ({ name: question.questionTypeName, identifier: question.questionType }))
+                  .find((category) => category.identifier === selectedReviewCategory)?.name
+              }
+            </Typo.H2>
+          </div>
+          <div css={Styled.questionListContainer}>
+            {selectedQuestionList?.question?.map((question, index) => {
+              return (
+                <div key={question.questionName} css={Styled.questionItemContainer}>
+                  <div css={Styled.questionTitle}>
+                    <Typo.Body color={FONT_COLOR.GRAY_3}>
+                      Q{index + 1}. {question.questionName}
+                    </Typo.Body>
+                  </div>
+                  <textarea
+                    maxLength={200}
+                    onClick={(e) => {
+                      if (!isLogin) {
+                        e.currentTarget.blur();
+                        setIsLoginModalOpen({ isLoginModalOpen: true });
+                      }
+                    }}
+                    value={retrospect[index]?.answer}
+                    onInput={(e) => onInputRetrospect(e, question.questionName)}
+                  ></textarea>
+                </div>
+              );
+            })}
+          </div>
+
+          <div css={Styled.reviewButtonContainer}>
+            <div>
+              <Typo.Label1 color={POINT_COLOR.ERROR}>{errorText}</Typo.Label1>
+            </div>
+            <div css={Styled.rightButtonList}>
+              <div css={Styled.checkboxContainer} onClick={handleCheckboxClick}>
+                <Checkbox checked={checked} />
+                <Typo.Label2 color={checked ? FONT_COLOR.GRAY_3 : FONT_COLOR.GRAY_2}>비공개</Typo.Label2>
+              </div>
+              <Button size='sm' onClick={onClickReview}>
+                <Typo.Label1>등록</Typo.Label1>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <Modal closable={false} isOpen={isModalOpen} onClose={handleClickClose} isConfirm={true}>
+        <div css={Styled.ConfirmModalTitle}>
+          <Typo.Body color={FONT_COLOR.WHITE} style={{ fontWeight: 300 }}>
+            회고를 등록시 변경이 <span style={{ fontWeight: 700 }}>불가능</span>
+            합니다.
+          </Typo.Body>
+        </div>
+        <div css={Styled.ConfrimModalButtonContainer}>
+          <Button size='md' onClick={registerReview}>
+            확인
+          </Button>
+          <Button size='md' backgroundColor={FONT_COLOR.GRAY_2} onClick={() => setIsModalOpen(false)}>
+            <Typo.Label1 color={FONT_COLOR.WHITE}>취소</Typo.Label1>
+          </Button>
+        </div>
+      </Modal>
+      {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
+    </>
+  );
+};
+
+const HomeMemoTextArea = () => {
+  const queryClient = useQueryClient();
+  const [memoValue, setMemoValue] = useState('');
   const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
   const { isLogin } = useRecoilValue(AuthState);
-  //   const { showToast } = useToast();
-
-  const titleRef = useRef<HTMLInputElement>(null);
-  const [isUrlLoading, setIsUrlLoading] = useState(false);
-  const [validUrlStatus, setValidUrlStatus] = useState<'BEFORE' | 'INVALID' | 'VALID'>('BEFORE');
-  const [title, setTitle] = useState('');
-  const [summary, setSummary] = useState('');
-  const [date, setDate] = useState<string>('');
-
-  const { data } = useMyDraft();
-  const { mutateAsync: uploadRequestMutate } = usePostUploadRequest();
-  const { mutateAsync: uploadConfirmMutate } = usePostUploadConfirm();
-
-  const [selectedTab, setSelectedTab] = useState<'MEMO' | 'REVIEW'>('REVIEW'); // * MEMO & REVIEW
-  const [memoValue, setMemoValue] = useState('');
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const [typingState, setTypingState] = useState<'' | 'checked' | 'saving' | 'error'>('checked');
-
-  const [url, setUrl] = useState('');
+  const { data } = useMyDraft({ isLogin });
   const { mutateAsync: memoMutate } = useMyDraftSync();
 
-  const onTabChange = (type: 'MEMO' | 'REVIEW') => {
-    setSelectedTab(type);
-  };
+  useEffect(() => {
+    if (data) setMemoValue(data.data);
+  }, [data]);
 
   const handleMemoChange: ChangeEventHandler<HTMLTextAreaElement> = async (e) => {
     setTypingState('saving');
-
     setMemoValue(e.currentTarget.value);
-
     // 이전의 타이머를 초기화합니다.
     if (typingTimer) {
       clearTimeout(typingTimer);
     }
-
     // 5초 후에 입력이 없으면 처리를 마무리합니다.
     const newTypingTimer = setTimeout(() => {
       memoMutate(
@@ -92,256 +270,63 @@ const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
     setTypingTimer(newTypingTimer);
   };
 
-  const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setUrl(e.currentTarget.value);
-    setValidUrlStatus('BEFORE');
-  };
-
-  const handleUrlCheck = () => {
-    if (!url.includes('https://') && !url.includes('http://')) {
-      alert('https://bricklog.io/your-post 형식으로 입력해주세요.');
-      return;
-    }
-    setIsUrlLoading(true);
-    setTitle('');
-    setDate('');
-    setSummary('');
-    uploadRequestMutate(
-      { url },
-      {
-        onSettled: () => {
-          setIsUrlLoading(false);
-        },
-        onSuccess: (res) => {
-          // TODO 미리보기 박스 제공 & 등록 버튼 활성화
-          if (res?.data.createdAt) {
-            setDate(format(new Date(res.data.createdAt), 'yyyy.MM.dd'));
+  return (
+    <>
+      <textarea
+        placeholder={'잊지 말아야 할 것들을 메모해보세요.'}
+        value={memoValue}
+        css={Styled.memoTextarea}
+        onChange={handleMemoChange}
+        onClick={(e) => {
+          if (!isLogin) {
+            e.currentTarget.blur();
+            setIsLoginModalOpen({ isLoginModalOpen: true });
           }
-          setValidUrlStatus('VALID');
-          setTitle(res?.data?.title?.substring(0, 30));
-          setSummary(res?.data?.summary?.substring(0, 100));
-          setTimeout(() => {
-            titleRef?.current?.focus();
-          }, 200);
-        },
-        onError: (err) => {
-          console.error(err);
-          setValidUrlStatus('INVALID');
-        },
-      },
-    );
-  };
-  const handleUrlConfirm = () => {
-    onUrlConfirm();
-    window.dataLayer.push({
-      event: 'post',
-      category: userInfo?.categoryName,
-      post_url: url,
-      post_date: date,
-    });
-  };
+        }}
+      />
+      {memoValue.length > 0 && (
+        <div css={Styled.memoTextareaBottomContainer}>{typingState !== '' && <State state={typingState} />}</div>
+      )}
+    </>
+  );
+};
 
-  const onUrlConfirm = async () => {
-    // TODO 입력 필드 검증
-    if (validUrlStatus !== 'VALID' || url === '') {
-      alert('유효한 url을 입력해주세요.');
-      return;
-    }
+const HomeTextArea = ({ showToast, userInfo }: HomeTextAreaProps) => {
+  const queryClient = useQueryClient();
+  const setIsLoginModalOpen = useSetRecoilState(LoginModalState);
+  const { isLogin } = useRecoilValue(AuthState);
+  //   const { showToast } = useToast();
 
-    if (title === '' || title.replace(/\s/, '').length === 0) {
-      alert('제목을 입력해주세요.');
-      return;
-    }
+  const titleRef = useRef<HTMLInputElement>(null);
+  const [isUrlLoading, setIsUrlLoading] = useState(false);
+  const [validUrlStatus, setValidUrlStatus] = useState<'BEFORE' | 'INVALID' | 'VALID'>('BEFORE');
+  const [title, setTitle] = useState('');
+  const [summary, setSummary] = useState('');
+  const [date, setDate] = useState<string>('');
 
-    if (summary === '' || summary.replace(/\s/, '').length === 0) {
-      alert('요약을 입력해주세요.');
-      return;
-    }
+  const { mutateAsync: uploadRequestMutate } = usePostUploadRequest();
+  const { mutateAsync: uploadConfirmMutate } = usePostUploadConfirm();
 
-    if (date === '') {
-      alert('회고 날짜를 입력해주세요.');
-      return;
-    }
+  const [selectedTab, setSelectedTab] = useState<'MEMO' | 'REVIEW'>('REVIEW'); // * MEMO & REVIEW
 
-    if (new Date(date).getTime() > new Date().getTime()) {
-      alert('미래 날짜는 입력이 불가능합니다.');
-      return;
-    }
+  const [url, setUrl] = useState('');
 
-    if (new Date(date).getTime() < new Date('2000-01-01').getTime()) {
-      alert('2000년 1월 1일 이전에 작성된 포스트는 등록할 수 없습니다.');
-      return;
-    }
-
-    await uploadConfirmMutate(
-      { url, title, summary, createdAt: date.replace(/\./gi, '-') },
-      {
-        onSuccess: (res) => {
-          const currentMonth = date.substring(5, 7);
-
-          showToast(
-            <>
-              <IconCheckBig />
-              <H1 color={FONT_COLOR.WHITE}>
-                {Number(currentMonth) < 10 ? currentMonth[1] : currentMonth}월 {res?.data?.monthlyPublishCount}번째
-                브릭을 쌓았어요!
-              </H1>
-            </>,
-          );
-          setTitle('');
-          setSummary('');
-          setDate('');
-          setUrl('');
-          setValidUrlStatus('BEFORE');
-          queryClient.resetQueries();
-        },
-        onError: () => {
-          // TODO ALERT
-          alert('등록에 실패했습니다. 새로고침 후 다시 시도해주세요');
-        },
-      },
-    );
-  };
-  const handleDateChange = (calendarDate: Date | null, event: SyntheticEvent<any, Event> | undefined) => {
-    if (!calendarDate) return;
-    setDate(format(calendarDate, 'yyyy.MM.dd'));
+  const onTabChange = (type: 'MEMO' | 'REVIEW') => {
+    setSelectedTab(type);
   };
 
-  const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setTitle(e.currentTarget.value);
-  };
-
-  const handleSummaryChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setSummary(e.currentTarget.value);
-  };
-
-  useEffect(() => {
-    setMemoValue(data?.data?.data ?? '');
-  }, [data?.data?.data]);
   return (
     <div>
       <div css={Styled.textareaContainer}>
-        <div css={Styled.reviewTab({ selectedTab })} onClick={() => onTabChange('REVIEW')}>
-          <Typo.H1 color={selectedTab === 'MEMO' ? '#636C78' : FONT_COLOR.WHITE}>회고</Typo.H1>
+        <div css={Styled.reviewedTabList({ selectedTab })}>
+          <button type='button' className='review' onClick={() => onTabChange('REVIEW')}>
+            <Typo.H1 color={selectedTab === 'MEMO' ? '#636C78' : FONT_COLOR.WHITE}>회고</Typo.H1>
+          </button>
+          <button type='button' className='memo' onClick={() => onTabChange('MEMO')}>
+            <Typo.H1 color={selectedTab === 'MEMO' ? FONT_COLOR.WHITE : '#636C78'}>메모</Typo.H1>
+          </button>
         </div>
-        <div css={Styled.memoTab({ selectedTab })} onClick={() => onTabChange('MEMO')}>
-          <Typo.H1 color={selectedTab === 'MEMO' ? FONT_COLOR.WHITE : '#636C78'}>메모</Typo.H1>
-        </div>
-        {selectedTab === 'REVIEW' && (
-          <Link
-            href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7'
-            target='_blank'
-            css={Styled.reviewGuide}
-          >
-            <Typo.Label2 color={FONT_COLOR.GRAY_2}>본인의 콘텐츠만 등록해 주세요.</Typo.Label2>
-          </Link>
-        )}
-        {selectedTab === 'MEMO' ? (
-          <textarea
-            placeholder={'잊지 말아야 할 것들을 메모해보세요.'}
-            value={memoValue}
-            css={Styled.textarea}
-            onChange={handleMemoChange}
-            onClick={(e) => {
-              if (!isLogin) {
-                e.currentTarget.blur();
-                setIsLoginModalOpen({ isLoginModalOpen: true });
-              }
-            }}
-          />
-        ) : (
-          <div css={Styled.reviewContainer}>
-            <div css={Styled.reviewInputContainer}>
-              <input
-                type='text'
-                value={url}
-                onChange={handleUrlChange}
-                css={Styled.reviewInput}
-                onClick={(e) => {
-                  if (!isLogin) {
-                    e.currentTarget.blur();
-                    setIsLoginModalOpen({ isLoginModalOpen: true });
-                  }
-                }}
-                placeholder='https://bricklog.io/your-post'
-              />
-              <button
-                type='button'
-                css={Styled.reviewLoadBtn({
-                  isEnable: url.length > 0 && validUrlStatus === 'BEFORE' && !isUrlLoading,
-                })}
-                onClick={handleUrlCheck}
-                disabled={isUrlLoading}
-              >
-                {isUrlLoading ? <Spinner size='16px' /> : '불러오기'}
-              </button>
-            </div>
-            {validUrlStatus === 'INVALID' && (
-              <div css={Styled.invalidContainer}>
-                <IconError />
-                <Typo.Body color={POINT_COLOR.ERROR}>유효하지 않은 URL입니다.</Typo.Body>
-              </div>
-            )}
-            {validUrlStatus === 'VALID' && (
-              <div css={Styled.timelineContainer}>
-                <div css={Styled.timeline}>
-                  {/* 타임라인 */}
-                  <div css={Styled.timelineLeftArea}>
-                    {/* LEFT (INPUT AREA) */}
-
-                    <DatePicker
-                      locale={ko}
-                      showPopperArrow={false}
-                      dateFormat={'yyyy.MM.dd'}
-                      selected={date === '' ? null : new Date(date.replace(/\./gi, '-'))}
-                      onChange={handleDateChange}
-                      customInput={
-                        <div css={Styled.timelineCalendar}>
-                          <Typo.Label1 color={FONT_COLOR.GRAY_3}>
-                            {date === '' ? '날짜를 입력해주세요' : date}
-                          </Typo.Label1>
-                          <IconCalendar />
-                        </div>
-                      }
-                    />
-
-                    <div css={Styled.timelineInputContainer}>
-                      <input
-                        ref={titleRef}
-                        placeholder='불러온 글의 제목을 작성해주세요.'
-                        maxLength={30}
-                        value={title}
-                        css={Styled.timelineTitleInput}
-                        onChange={handleTitleChange}
-                      />
-                      <input
-                        placeholder='불러온 글을 설명해주세요.'
-                        maxLength={100}
-                        value={summary}
-                        css={Styled.timelineSummaryInput}
-                        onChange={handleSummaryChange}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    {/* RIGHT (ICON AREA) */}
-                    <BlogIcon url={url} />
-                  </div>
-                </div>
-                <div css={Styled.timelineSubmitBtnContainer}>
-                  <Button size='sm' onClick={handleUrlConfirm}>
-                    등록
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-        {selectedTab === 'MEMO' && memoValue.length > 0 && (
-          <div css={Styled.textareaBottomContainer({ selectedTab })}>
-            {typingState !== '' && <State state={typingState} />}
-          </div>
-        )}
+        {selectedTab === 'REVIEW' ? <HomeReviewTextArea /> : <HomeMemoTextArea />}
       </div>
     </div>
   );

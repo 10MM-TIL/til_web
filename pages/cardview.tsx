@@ -37,18 +37,8 @@ const CardView = ({ categoryQuery }: CardViewPageProps) => {
         css={{ paddingTop: '34px' }}
       >
         <CardCategory categoryQuery={categoryQuery}></CardCategory>
-        <PopularCard
-          categoryQuery={categoryQuery}
-          device={device}
-          onClickContent={onClickContent}
-          onClickUser={onClickUser}
-        ></PopularCard>
-        <AllCard
-          categoryQuery={categoryQuery}
-          device={device}
-          onClickContent={onClickContent}
-          onClickUser={onClickUser}
-        ></AllCard>
+        <PopularCard categoryQuery={categoryQuery} device={device} onClickUser={onClickUser}></PopularCard>
+        <AllCard categoryQuery={categoryQuery} device={device} onClickUser={onClickUser}></AllCard>
       </Layout.GridContainer>
     </Layout.Container>
   );

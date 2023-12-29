@@ -28,7 +28,6 @@ export const TimelineMobileMoreButton = styled.button`
 export const TimeLineLayout = styled.div`
   display: flex;
   gap: 15px;
-  margin-bottom: -10px;
   width: 100%;
   ${mq('desktop')} {
     width: 100%;
@@ -68,4 +67,11 @@ export const EmptyTimeLine = styled.div`
 export const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+export const TrashContainer = styled.div`
+  position: absolute;
+
+  right: 24px;
+  top: 20px;
 `;

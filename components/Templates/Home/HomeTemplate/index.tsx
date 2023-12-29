@@ -28,7 +28,6 @@ const HomeTemplates = () => {
     enabled: isLogin && (userData ? userData.path?.length > 0 : false),
     userPath: userData ? userData.path : '',
   });
-
   return (
     <div css={styles.wrapper}>
       <HomeBanner></HomeBanner>
@@ -44,7 +43,7 @@ const HomeTemplates = () => {
                   setClickedDate(value);
                 }}
               />
-              <TimelineTemplate path={userData ? userData.path : ''} changable={userInfo?.isAuthorized || false} />
+              <TimelineTemplate path={userData ? userData.path : ''} deletable={userInfo?.isAuthorized || false} />
             </div>
             <HomeCard userData={userData}></HomeCard>
           </>
