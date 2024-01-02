@@ -1,8 +1,8 @@
 # TIL_WEB
 
-# url
-product: [https://www.bricklog.io/](https://www.bricklog.io/)
-dev: [https://dev.bricklog.io/](https://dev.bricklog.io/)
+# 🔗 url
+- product: [https://www.bricklog.io/](https://www.bricklog.io/)
+- dev: [https://dev.bricklog.io/](https://dev.bricklog.io/)
 
 Kick off your project with this boilerplate.
 
