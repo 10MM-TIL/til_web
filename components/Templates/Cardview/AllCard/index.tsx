@@ -93,7 +93,11 @@ const AllCard = (props: {
 }) => {
   const { data: allRetrospects, fetchNextPage, isSuccess, isFetchingNextPage } = useRetrospects(props.categoryQuery);
   const intersectCallback = (entry: IntersectionObserverEntry) => {
-    if (allRetrospects && allRetrospects.pages[allRetrospects.pages.length - 1].nextPageToken === null) {
+    if (
+      allRetrospects &&
+      (allRetrospects.pages[allRetrospects.pages.length - 1].nextPageToken === '' ||
+        allRetrospects.pages[allRetrospects.pages.length - 1].nextPageToken === null)
+    ) {
       return;
     }
     fetchNextPage();
