@@ -80,6 +80,22 @@ export const fetchUserGrass = async ({ path, from, to }: FetchUserGrassParams) =
   }
 };
 
+export const fetchRetrospectGrass = async ({ path, from, to }: FetchUserGrassParams) => {
+  try {
+    const { data } = await instance.get<FetchUserGrassResponse>(`/retrospect/${path}/meta`, {
+      params: {
+        from,
+        to,
+      },
+    });
+
+    return data;
+  } catch (e) {
+    devError('getRetrospectGrassAPI error', e);
+    throw e;
+  }
+};
+
 export const putEditTimeline = async ({
   postIdentifier,
   editedContent,

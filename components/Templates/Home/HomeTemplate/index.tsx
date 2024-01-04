@@ -30,12 +30,12 @@ const HomeTemplates = () => {
   });
   return (
     <div css={styles.wrapper}>
-      <HomeBanner></HomeBanner>
+      <HomeBanner />
       <div css={styles.desktopContainer}>
         {
           <>
             <div css={styles.container}>
-              <HomeTextArea showToast={showToast} userInfo={userInfo}></HomeTextArea>
+              <HomeTextArea showToast={showToast} userInfo={userInfo} />
               <GrassTemplate
                 path={userData?.path || ''}
                 title={userData ? `${userData.name}의 기록` : '내가 모은 기록'}

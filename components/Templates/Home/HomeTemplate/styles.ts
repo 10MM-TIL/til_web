@@ -50,8 +50,7 @@ const desktopContainer = css`
 `;
 
 const container = css`
-  /* margin: 84px 24px; */
-  margin-top: 84px;
+  margin-top: 18px;
   margin-bottom: 0px;
   display: flex;
   flex-direction: column;
