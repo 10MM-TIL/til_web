@@ -27,7 +27,7 @@ export const useRetrospectByPath = ({
   isLogin: boolean;
 }) => {
   return useInfiniteQuery(
-    ['RETROSPECT_BY_PATH'],
+    ['RETROSPECT_BY_PATH', { path, from, to }],
     ({ pageParam = '' }) => getRetrospectByPath(path, pageParam, from, to),
     {
       enabled: path.length > 0,
