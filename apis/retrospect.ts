@@ -68,7 +68,7 @@ export const getRetrospectByPath = async (path: string, pageToken: string = '', 
 
 export const deleteRetrospect = async ({ retorspectIdentifier }: { retorspectIdentifier: string }) => {
   try {
-    const res = await instance.delete(`/retrospect/${retorspectIdentifier}`);
+    const res = await instance.delete(`/my/retrospect/${retorspectIdentifier}`);
 
     return res;
   } catch (e) {
