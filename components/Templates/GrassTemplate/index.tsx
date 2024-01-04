@@ -31,7 +31,6 @@ const GrassTemplate = ({ path, title, onClick }: GrassTemplateProps) => {
     from: fromSeconds,
     to: toSeconds,
   });
-  console.log('grassData', grassData);
   const handleClickNext = () => {
     setBase((prev) => prev + 1);
   };

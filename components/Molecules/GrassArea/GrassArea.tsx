@@ -103,7 +103,6 @@ export const GrassArea = ({ title, onClick, onClickNext, onClickPrev, data }: Gr
       // 데이터 조정은 여기서 수행
       // setGrassData();
       onClick(date);
-      console.log(`클릭한 날짜 정보: ${date}`);
     },
     [onClick],
   );
