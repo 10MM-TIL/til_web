@@ -74,4 +74,5 @@ export const TrashContainer = styled.div`
 
   right: 24px;
   top: 20px;
+  cursor: pointer;
 `;

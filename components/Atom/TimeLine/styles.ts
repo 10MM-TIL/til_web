@@ -18,7 +18,7 @@ export const TimeLineContainer = styled.div`
 `;
 
 export const TimeLineContent = styled.div<{ isEdit: boolean }>`
-  cursor: ${(props) => (props.isEdit ? `default` : `pointer`)};
+  /* cursor: ${(props) => (props.isEdit ? `default` : `pointer`)}; */
   // input max-width, min-width 적용
   > div:first-of-type {
     overflow: hidden;
@@ -48,7 +48,7 @@ export const TimeLineCancelButton = styled.button`
 `;
 
 const timeLineBodyCss = ({ width }: { width: CSSProperties['width'] }) => css`
-  cursor: pointer;
+  /* cursor: pointer; */
   p,
   H1,
   span {
