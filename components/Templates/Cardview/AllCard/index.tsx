@@ -43,7 +43,7 @@ const AllCardItem = ({
           category: categories.find((i) => i.identifier === allCardItem.categoryIdentifier)?.name || '#개발',
           header: allCardItem.questionTypeName,
           body: allCardItem.isSecret ? '비공개 게시글입니다.' : bodyText,
-          img: '',
+          img: allCardItem.profileImgSrc,
           name: allCardItem.userName,
           date: formatDate(allCardItem.createdAt),
         }}

@@ -9,7 +9,6 @@ import IconLock from '@/assets/svgs/IconLock';
 import useToast from '@/hooks/useToast';
 import { FONT_COLOR } from '@/constants/color';
 import ToastMessage from '@/components/ToastMessage';
-import IconCheckBig from '@/assets/svgs/IconCheckBig';
 import IconError from '@/assets/svgs/IconError';
 
 const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivate, item }: CardProps): ReactElement => {

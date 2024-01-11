@@ -41,6 +41,7 @@ type RetrospectContentsType = {
   retrospectIdentifier: string;
   userName: string;
   userPath: string;
+  profileImgSrc: string;
   categoryIdentifier: string;
   categoryName: string;
   createdAt: string;

@@ -54,7 +54,7 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
                           ?.name!,
                         header: recommandItem.questionTypeName,
                         body: recommandItem.isSecret ? '비공개 게시글입니다.' : bodyText,
-                        img: '',
+                        img: recommandItem.profileImgSrc,
                         name: recommandItem.userName,
                         date: formatDate(recommandItem.createdAt),
                       }}
@@ -79,7 +79,7 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
                             ?.name!,
                           header: retro.questionTypeName,
                           body: retro.isSecret ? '비공개 게시글입니다.' : bodyText,
-                          img: '',
+                          img: retro.profileImgSrc,
                           name: retro.userName,
                           date: formatDate(retro.createdAt),
                         }}

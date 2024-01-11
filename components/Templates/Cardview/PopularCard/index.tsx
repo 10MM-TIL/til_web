@@ -38,7 +38,7 @@ const PopularCardItem = ({
           category: categories.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name || '#개발',
           header: recommandItem.questionTypeName,
           body: recommandItem.isSecret ? '비공개 게시글입니다.' : bodyText,
-          img: '',
+          img: recommandItem.profileImgSrc,
           name: recommandItem.userName,
           date: formatDate(recommandItem.createdAt),
         }}

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FONT_COLOR } from '@/constants/color';
+import { BACKGROUND_COLOR } from '@/constants/color';
 
 export const CategoryWrapper = styled.div`
   padding-left: 14px;
@@ -22,5 +22,20 @@ export const QnAWrapper = styled.div`
 
 export const AnswerWrapper = styled.div`
   padding: 24px 20px 16px 12px;
-  color: ${FONT_COLOR.GRAY_3};
+  border-radius: 6px;
+  margin-left: -8px;
+
+  background: ${BACKGROUND_COLOR.NAVY_2};
+`;
+
+export const UserInfoWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 15px;
+
+  > img {
+    border-radius: 47.5px;
+    margin-right: 6px;
+  }
 `;
