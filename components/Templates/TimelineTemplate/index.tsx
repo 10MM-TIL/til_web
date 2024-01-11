@@ -54,7 +54,7 @@ const TimelineComponent = ({
           <Typo.H1 color={FONT_COLOR.WHITE}>삭제 완료!</Typo.H1>
         </>,
       );
-      queryClient.invalidateQueries({ queryKey: ['TODO!'] });
+      queryClient.invalidateQueries({ queryKey: ['RETROSPECT_GRASS_DATA'] });
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['RETROSPECT_BY_PATH'] }),
   });

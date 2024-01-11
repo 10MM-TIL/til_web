@@ -2,10 +2,8 @@ import { useState, ChangeEventHandler, useRef, useEffect, SyntheticEvent, ReactN
 import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Link from 'next/link';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { LoginModalState } from '@/stores/modalStateStore';
@@ -22,22 +20,14 @@ import * as Typo from '@/components/Atom/Typography';
 import { H1 } from '@/components/Atom/Typography';
 import { Button } from '@/components/Atom/Button';
 import State from '@/components/Atom/State';
-import Spinner from '@/components/Atom/Spinner';
-import BlogIcon from '@/components/Atom/BlogIcon';
-
-import { IconCalendar } from '@/assets/svgs/IconCalendar';
-import IconCheckBig from '@/assets/svgs/IconCheckBig';
-import IconError from '@/assets/svgs/IconError';
 
 import * as Styled from './styles';
 import RadioGroup from '@/components/Molecules/RadioGroup';
-import CheckboxLabel from '@/components/Molecules/CheckboxLabel';
 import Checkbox from '@/components/Atom/Checkbox';
-import { useMyRetrospect, usePostMyRetrospect } from '@/hooks/queries/retrospectQuery';
+import { usePostMyRetrospect } from '@/hooks/queries/retrospectQuery';
 import { Retrospect } from '@/apis/retrospect';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import ToastMessage from '@/components/ToastMessage';
-import Modal from '@/components/Atom/Modal';
 
 type HomeTextAreaProps = {
   showToast: (text: ReactNode) => void;
@@ -48,7 +38,6 @@ const HomeReviewTextArea = () => {
   const querClient = useQueryClient();
   const { isOpen, showToast, text } = useToast();
   const [errorText, setErrorText] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReviewCategory, setSelectedReviewCategory] = useState('');
   const { mutateAsync: postMyRetrospect } = usePostMyRetrospect();
   // const { data: myRetrospect, isSuccess: isMyRetrospectFetchSuccess } = useMyRetrospect();
@@ -80,27 +69,25 @@ const HomeReviewTextArea = () => {
       return true;
     }
   };
-  // 등록 버튼 클릭
-  const onClickReview = () => {
-    if (checkReviewisSelected()) return;
-    setIsModalOpen(true);
-  };
 
   const registerReview = async () => {
+    if (checkReviewisSelected()) return;
     await postMyRetrospect(
       { isSecret: checked, questionType: selectedReviewCategory, retrospect: retrospect },
       {
         onSuccess: () => {
-          querClient.invalidateQueries(['MY_RETROSPECT']);
+          querClient.invalidateQueries(['RETROSPECT_BY_PATH']);
           showToast(<Typo.H1 color={FONT_COLOR.WHITE}>회고 등록이 완료되었습니다.</Typo.H1>);
         },
         onError: (e) => {
           const Error = e as { errorCode: string; description: string };
           setErrorText(Error.description);
         },
+        onSettled: () => {
+          querClient.invalidateQueries(['RETROSPECT_GRASS_DATA']);
+        },
       },
     );
-    setIsModalOpen(false);
     setRetrospect((prevRetrospect) => {
       return prevRetrospect.map((prev) => ({ questionName: prev.questionName, answer: '' }));
     });
@@ -113,10 +100,6 @@ const HomeReviewTextArea = () => {
   useEffect(() => {
     if (isMyQuestionFetchSuccess) setSelectedReviewCategory(questionList?.types[0].questionType);
   }, [isMyQuestionFetchSuccess, questionList?.types]);
-
-  const handleClickClose = () => {
-    setIsModalOpen(false);
-  };
 
   const onInputRetrospect = (event: FormEvent<HTMLTextAreaElement>, question: string) => {
     setErrorText('');
@@ -203,7 +186,7 @@ const HomeReviewTextArea = () => {
                 <Checkbox checked={checked} />
                 <Typo.Label2 color={checked ? FONT_COLOR.GRAY_3 : FONT_COLOR.GRAY_2}>비공개</Typo.Label2>
               </div>
-              <Button size='sm' onClick={onClickReview}>
+              <Button size='sm' onClick={registerReview}>
                 <Typo.Label1>등록</Typo.Label1>
               </Button>
             </div>
@@ -211,22 +194,6 @@ const HomeReviewTextArea = () => {
         </section>
       )}
 
-      <Modal closable={false} isOpen={isModalOpen} onClose={handleClickClose} isConfirm={true}>
-        <div css={Styled.ConfirmModalTitle}>
-          <Typo.Body color={FONT_COLOR.WHITE} style={{ fontWeight: 300 }}>
-            회고를 등록시 변경이 <span style={{ fontWeight: 700 }}>불가능</span>
-            합니다.
-          </Typo.Body>
-        </div>
-        <div css={Styled.ConfrimModalButtonContainer}>
-          <Button size='md' onClick={registerReview}>
-            확인
-          </Button>
-          <Button size='md' backgroundColor={FONT_COLOR.GRAY_2} onClick={() => setIsModalOpen(false)}>
-            <Typo.Label1 color={FONT_COLOR.WHITE}>취소</Typo.Label1>
-          </Button>
-        </div>
-      </Modal>
       {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
     </>
   );
