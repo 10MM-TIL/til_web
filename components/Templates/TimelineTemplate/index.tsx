@@ -45,6 +45,7 @@ const TimelineComponent = ({
   const { showToast } = useToast();
   const { title: originalTitle, date: originalDate } = content;
   const queryClient = useQueryClient();
+  const device = useResize();
 
   const removeRetrospect = useMutation(deleteRetrospect, {
     onSuccess: () => {
@@ -67,9 +68,11 @@ const TimelineComponent = ({
 
   return (
     <Styled.TimeLineLayout>
-      <div style={{ minWidth: '21px' }}>
-        <IconTimeline />
-      </div>
+      {device === 'desktop' && (
+        <div style={{ minWidth: '21px' }}>
+          <IconTimeline />
+        </div>
+      )}
       <Styled.TimeLineCardContent>
         {pathname === '/' && !isLogin && (
           <Styled.TimeLineCardNotLogin
