@@ -13,6 +13,10 @@ const Footer = () => {
       <Link href='https://10miri.notion.site/a96b7e92cdee4bc2836a0012b8b610b7' target='_blank'>
         <Typo.Body color={FONT_COLOR.GRAY_2}>서비스 이용 약관</Typo.Body>
       </Link>
+
+      <Link href='https://10miri.notion.site/784d36cd04e74f67838cfa5e1b62012b' target='_blank' rel='noreferrer'>
+        <Typo.Body color={FONT_COLOR.GRAY_2}>업데이트 노트</Typo.Body>
+      </Link>
     </footer>
   );
 };

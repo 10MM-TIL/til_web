@@ -6,6 +6,7 @@ export const footer = css`
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 
   ${mq('desktop')} {
     justify-content: center;
