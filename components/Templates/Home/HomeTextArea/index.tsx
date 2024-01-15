@@ -35,7 +35,7 @@ type HomeTextAreaProps = {
 };
 
 const HomeReviewTextArea = () => {
-  const querClient = useQueryClient();
+  const queryClient = useQueryClient();
   const { isOpen, showToast, text } = useToast();
   const [errorText, setErrorText] = useState('');
   const [selectedReviewCategory, setSelectedReviewCategory] = useState('');
@@ -76,7 +76,7 @@ const HomeReviewTextArea = () => {
       { isSecret: checked, questionType: selectedReviewCategory, retrospect: retrospect },
       {
         onSuccess: () => {
-          querClient.invalidateQueries(['RETROSPECT_BY_PATH']);
+          queryClient.invalidateQueries(['RETROSPECT_BY_PATH']);
           showToast(<Typo.H1 color={FONT_COLOR.WHITE}>회고 등록이 완료되었습니다.</Typo.H1>);
         },
         onError: (e) => {
@@ -84,7 +84,7 @@ const HomeReviewTextArea = () => {
           setErrorText(Error.description);
         },
         onSettled: () => {
-          querClient.invalidateQueries(['RETROSPECT_GRASS_DATA']);
+          queryClient.invalidateQueries(['RETROSPECT_GRASS_DATA']);
         },
       },
     );
@@ -186,7 +186,17 @@ const HomeReviewTextArea = () => {
                 <Checkbox checked={checked} />
                 <Typo.Label2 color={checked ? FONT_COLOR.GRAY_3 : FONT_COLOR.GRAY_2}>비공개</Typo.Label2>
               </div>
-              <Button size='sm' onClick={registerReview}>
+              <Button
+                size='sm'
+                onClick={(e) => {
+                  if (!isLogin) {
+                    e.currentTarget.blur();
+                    setIsLoginModalOpen({ isLoginModalOpen: true });
+                    return;
+                  }
+                  registerReview();
+                }}
+              >
                 <Typo.Label1>등록</Typo.Label1>
               </Button>
             </div>

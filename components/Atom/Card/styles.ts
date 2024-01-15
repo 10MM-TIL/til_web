@@ -138,4 +138,5 @@ export const CardInfoWrapper = styled.div`
     border-radius: 47.5px;
     margin-right: 6px;
   }
+  width: 135px;
 `;

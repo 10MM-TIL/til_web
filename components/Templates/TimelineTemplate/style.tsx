@@ -38,7 +38,7 @@ export const TimeLineCardContent = styled.div`
   position: relative;
   width: 100;
   margin-top: 5px;
-  width: calc(100% - (21px + 15px));
+  width: 100%;
 `;
 
 export const TimeLineCardNotLogin = styled.div`
