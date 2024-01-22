@@ -14,12 +14,10 @@ export const TimeLineContainer = styled.div`
 
   background: ${BACKGROUND_COLOR.NAVY_3};
   border-radius: 6px;
-  padding: 20px 16px 20px 24px;
+  padding: 20px 24px;
 `;
 
 export const TimeLineContent = styled.div<{ isEdit: boolean }>`
-  /* cursor: ${(props) => (props.isEdit ? `default` : `pointer`)}; */
-  // input max-width, min-width 적용
   > div:first-of-type {
     overflow: hidden;
     white-space: nowrap;
@@ -48,7 +46,6 @@ export const TimeLineCancelButton = styled.button`
 `;
 
 const timeLineBodyCss = ({ width }: { width: CSSProperties['width'] }) => css`
-  /* cursor: pointer; */
   p,
   H1,
   span {
@@ -175,7 +172,7 @@ export const AnswerListContainer = styled.div`
   }
 `;
 export const AnswerItemContainer = styled.div`
-  width: 232px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -200,6 +197,15 @@ export const QuestionTitle = styled.div`
 export const AnswerContents = styled.div`
   background-color: ${BACKGROUND_COLOR.NAVY_4};
   padding: 24px 20px 16px 20px;
-  height: 148px;
+  /* height: 184px; */
+  height: 100%;
+  min-height: 184px;
   border-radius: 6px;
+  overflow: auto;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

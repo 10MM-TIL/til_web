@@ -86,7 +86,7 @@ export const questionItemContainer = css`
   gap: 8px;
   textarea {
     resize: none;
-    min-height: 148px;
+    min-height: 184px;
     color: ${FONT_COLOR.GRAY_3};
     font-size: 12px;
     line-height: 18px;
