@@ -9,7 +9,7 @@ export const footer = css`
   flex-wrap: wrap;
 
   ${mq('desktop')} {
-    justify-content: center;
+    margin-left: 28px;
   }
 `;
 export const divider = css`
