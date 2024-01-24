@@ -143,21 +143,19 @@ const TimeLine = ({
         </TrashContainer>
       )}
       <Styled.TimeLineContent isEdit={isEdit}>
-        <>
-          <Styled.QuestionCategory>
-            <Typo.H2 color={FONT_COLOR.WHITE}>{title}</Typo.H2>
-          </Styled.QuestionCategory>
-          <Styled.AnswerListContainer>
-            {qna.map((item) => (
-              <Styled.AnswerItemContainer key={`${item.questionName}`}>
-                <Styled.QuestionTitle>
-                  <Typo.Body color={FONT_COLOR.GRAY_3}>{item.questionName}</Typo.Body>
-                </Styled.QuestionTitle>
-                <Styled.AnswerContents>{item.answer || '-'}</Styled.AnswerContents>
-              </Styled.AnswerItemContainer>
-            ))}
-          </Styled.AnswerListContainer>
-        </>
+        <Styled.QuestionCategory>
+          <Typo.H2 color={FONT_COLOR.WHITE}>{title}</Typo.H2>
+        </Styled.QuestionCategory>
+        <Styled.AnswerListContainer>
+          {qna.map((item) => (
+            <Styled.AnswerItemContainer key={`${item.questionName}`}>
+              <Styled.QuestionTitle>
+                <Typo.Body color={FONT_COLOR.GRAY_3}>{item.questionName}</Typo.Body>
+              </Styled.QuestionTitle>
+              <Styled.AnswerContents>{item.answer || '-'}</Styled.AnswerContents>
+            </Styled.AnswerItemContainer>
+          ))}
+        </Styled.AnswerListContainer>
       </Styled.TimeLineContent>
     </Styled.TimeLineContainer>
   );

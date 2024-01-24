@@ -23,6 +23,7 @@ import { IconTimeline } from '@/assets/svgs/IconTimeline';
 import * as Styled from './style';
 import { useRetrospectByPath } from '@/hooks/queries/retrospectQuery';
 import { Retrospect, deleteRetrospect } from '@/apis/retrospect';
+import TimelineIcon from '@/components/Atom/TimeLine/TimelineIcon';
 
 interface TimelineTemplateProps {
   path: string;
@@ -68,11 +69,7 @@ const TimelineComponent = ({
 
   return (
     <Styled.TimeLineLayout>
-      {device === 'desktop' && (
-        <div style={{ minWidth: '21px' }}>
-          <IconTimeline />
-        </div>
-      )}
+      {device === 'desktop' && <TimelineIcon />}
       <Styled.TimeLineCardContent>
         {pathname === '/' && !isLogin && (
           <Styled.TimeLineCardNotLogin
