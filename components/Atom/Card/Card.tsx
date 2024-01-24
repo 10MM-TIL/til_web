@@ -70,14 +70,23 @@ const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivat
             <Typo.Body color='#636C78'>{content?.body}</Typo.Body>
           </Styled.CardBodyDesc>
         </Styled.CardBodyContent>
-        <Styled.CardInfoWrapper
-          onClick={(e) => {
-            e.stopPropagation();
-            onClickUser(userpath);
-          }}
-        >
-          <Image src={content?.img || ''} alt='profileImg' width={19} height={19} />
-          <Styled.CardUserProfile>
+        <Styled.CardInfoWrapper>
+          <Image
+            src={content?.img || ''}
+            alt='profileImg'
+            width={19}
+            height={19}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickUser(userpath);
+            }}
+          />
+          <Styled.CardUserProfile
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickUser(userpath);
+            }}
+          >
             <Typo.Label1 color='#C5CAD0'>{content?.name}</Typo.Label1>
           </Styled.CardUserProfile>
           <div>
@@ -86,11 +95,10 @@ const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivat
         </Styled.CardInfoWrapper>
       </Styled.CardContainer>
       {isOpen && <ContentsModal isOpen={isOpen} item={item} onClose={() => setIsOpen(false)} />}
-      {isOpenToast && (
-        <ToastMessage isOpen={isOpenToast} isWarning>
-          {text}
-        </ToastMessage>
-      )}
+
+      <ToastMessage isOpen={isOpenToast} isWarning>
+        {text}
+      </ToastMessage>
     </>
   );
 };
