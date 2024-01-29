@@ -58,7 +58,7 @@ const Header = () => {
           {/* 링크 변경 필요 */}
           <div css={styles.headerContentList}>
             <div css={styles.otherBtns}>
-              <a href='https://open.kakao.com/o/glhOULDf' target='_blank' rel='noreferrer'>
+              <a href='https://open.kakao.com/o/glhOULDf' target='_blank' rel='noreferrer noopener'>
                 <Typo.H1 color={FONT_COLOR.GRAY_2}>오픈채팅방</Typo.H1>
               </a>
             </div>
