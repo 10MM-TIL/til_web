@@ -55,6 +55,7 @@ const TimelineComponent = ({
           <IconCheckBig />
           <Typo.H1 color={FONT_COLOR.WHITE}>삭제 완료!</Typo.H1>
         </>,
+        false,
       );
       queryClient.invalidateQueries({ queryKey: ['RETROSPECT_GRASS_DATA'] });
     },

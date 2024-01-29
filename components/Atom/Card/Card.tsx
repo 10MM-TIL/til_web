@@ -3,18 +3,17 @@ import Image from 'next/image';
 import * as Styled from './styles';
 import * as Typo from '@/components/Atom/Typography';
 import { IconCrown } from '@/assets/svgs/IconCrown';
-import { CardProps, category } from './types';
+import { CardProps } from './types';
 import ContentsModal from '@/components/Molecules/ContentsModal';
 import IconLock from '@/assets/svgs/IconLock';
 import useToast from '@/hooks/useToast';
 import { FONT_COLOR } from '@/constants/color';
-import ToastMessage from '@/components/ToastMessage';
 import IconError from '@/assets/svgs/IconError';
 
 const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivate, item }: CardProps): ReactElement => {
   const [tagList, setTagList] = useState([content.category]);
   const [isOpen, setIsOpen] = useState(false);
-  const { isOpen: isOpenToast, showToast, text } = useToast();
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (hasBadge) setTagList([...tagList, '#추천 회고']);
@@ -41,6 +40,7 @@ const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivat
           <IconError />
           <Typo.H1 color={FONT_COLOR.WHITE}>비공개 게시글 입니다</Typo.H1>
         </>,
+        true,
       );
       return;
     }
@@ -95,10 +95,6 @@ const Card = ({ size, hasBadge = false, content, onClickUser, userpath, isPrivat
         </Styled.CardInfoWrapper>
       </Styled.CardContainer>
       {isOpen && <ContentsModal isOpen={isOpen} item={item} onClose={() => setIsOpen(false)} />}
-
-      <ToastMessage isOpen={isOpenToast} isWarning>
-        {text}
-      </ToastMessage>
     </>
   );
 };

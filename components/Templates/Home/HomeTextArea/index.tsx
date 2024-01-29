@@ -30,7 +30,7 @@ import ScrollContainer from 'react-indiana-drag-scroll';
 import ToastMessage from '@/components/ToastMessage';
 
 type HomeTextAreaProps = {
-  showToast: (text: ReactNode) => void;
+  showToast: (text: ReactNode, warning: boolean) => void;
   userInfo: any;
 };
 
@@ -77,7 +77,7 @@ const HomeReviewTextArea = () => {
       {
         onSuccess: () => {
           queryClient.invalidateQueries(['RETROSPECT_BY_PATH']);
-          showToast(<Typo.H1 color={FONT_COLOR.WHITE}>회고 등록이 완료되었습니다.</Typo.H1>);
+          showToast(<Typo.H1 color={FONT_COLOR.WHITE}>회고 등록이 완료되었습니다.</Typo.H1>, false);
         },
         onError: (e) => {
           const Error = e as { errorCode: string; description: string };
@@ -203,8 +203,6 @@ const HomeReviewTextArea = () => {
           </div>
         </section>
       )}
-
-      {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
     </>
   );
 };

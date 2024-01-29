@@ -77,7 +77,7 @@ const User: NextPage = () => {
   const router = useRouter();
   const urlPath = (router.query?.user as string) || '';
   const { isReady } = router;
-  const { isOpen, text } = useToast();
+  const { isOpen, text, isWarning } = useToast();
 
   const path = urlPath.slice(1);
   const {
@@ -112,7 +112,11 @@ const User: NextPage = () => {
       <Styled.FloatingContainer>
         <Button size='float' svg={<IconRequest />} onClick={() => window.open('https://tally.so/r/w5bNJd')} />
       </Styled.FloatingContainer>
-      {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
+      {isOpen && (
+        <ToastMessage isOpen={isOpen} isWarning={isWarning}>
+          {text}
+        </ToastMessage>
+      )}
     </Styled.MypageWrapper>
   ) : (
     <Custom404 />

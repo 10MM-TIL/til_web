@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { ToastMessageContainer } from './style';
 
 interface ToastProps {
@@ -7,11 +7,11 @@ interface ToastProps {
   isWarning?: boolean;
 }
 const ToastMessage = ({ isOpen, isWarning = false, children }: ToastProps) => {
-  return (
+  return isOpen ? (
     <ToastMessageContainer isOpen={isOpen} isWarning={isWarning}>
       {children}
     </ToastMessageContainer>
-  );
+  ) : null;
 };
 
 export default ToastMessage;

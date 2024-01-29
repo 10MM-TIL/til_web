@@ -1,6 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import { getUserProfile } from '@/apis/user';
-
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { clickedGrassDate } from '@/stores/user';
@@ -19,7 +16,7 @@ import HomeBanner from '../HomeBanner';
 import styles from './styles';
 
 const HomeTemplates = () => {
-  const { isOpen: isToastOpen, text: toastText, showToast } = useToast();
+  const { isOpen: isToastOpen, text: toastText, showToast, isWarning } = useToast();
   const { isLogin } = useRecoilValue(AuthState);
   const setClickedDate = useSetRecoilState(clickedGrassDate);
 
@@ -49,7 +46,11 @@ const HomeTemplates = () => {
           </>
         }
       </div>
-      {isToastOpen && <ToastMessage isOpen={isToastOpen}>{toastText}</ToastMessage>}
+      {isToastOpen && (
+        <ToastMessage isOpen={isToastOpen} isWarning={isWarning}>
+          {toastText}
+        </ToastMessage>
+      )}
     </div>
   );
 };

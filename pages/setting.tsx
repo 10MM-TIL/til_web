@@ -214,7 +214,7 @@ const Setting: NextPage = () => {
   const accessToken = getCookie('accToken');
   const router = useRouter();
 
-  const { isOpen, showToast, text } = useToast();
+  const { isOpen, showToast, text, isWarning } = useToast();
 
   useEffect(() => {
     if (!accessToken)
@@ -278,6 +278,7 @@ const Setting: NextPage = () => {
             <IconCheckBig />
             <Typo.H1 color={FONT_COLOR.WHITE}>저장 완료!</Typo.H1>
           </>,
+          false,
         );
       });
     } catch (error) {
@@ -394,7 +395,11 @@ const Setting: NextPage = () => {
         </Styled.EditpageContainer>
       </Styled.EditpageWrapper>
       {!isLogin && isLoginModalOpen && <LoginModal closable={false} />}
-      {isOpen && <ToastMessage isOpen={isOpen}>{text}</ToastMessage>}
+      {isOpen && (
+        <ToastMessage isOpen={isOpen} isWarning={isWarning}>
+          {text}
+        </ToastMessage>
+      )}
     </>
   );
 };
