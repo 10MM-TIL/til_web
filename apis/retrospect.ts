@@ -88,12 +88,14 @@ export const getRetrospectByCategory = async (retrospectType: string, pageToken:
   const params: getRetrospectByCategoryRequestType = pageToken
     ? {
         retrospectType,
-        size: 3 * 5,
+        // size: 3 * 5,
+        size: 300,
         pageToken,
       }
     : {
         retrospectType,
-        size: 3 * 5,
+        // size: 3 * 5,
+        size: 300,
       };
   try {
     const { data } = await instance.get<RetrospectType>('/retrospect/category', {

@@ -33,12 +33,14 @@ export const fetchRetrospectCards = async (category?: string, pageToken: string 
   const params: RetrospectCardParamType = pageToken
     ? {
         categoryIdentifier: category,
-        size: 3 * 5,
+        // size: 3 * 5,
+        size: 300,
         pageToken,
       }
     : {
         categoryIdentifier: category,
-        size: 3 * 5,
+        // size: 3 * 5,
+        size: 300,
       };
 
   try {
