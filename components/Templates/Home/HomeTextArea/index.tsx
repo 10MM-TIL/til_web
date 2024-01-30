@@ -162,7 +162,7 @@ const HomeReviewTextArea = () => {
                     </Typo.Body>
                   </div>
                   <textarea
-                    maxLength={200}
+                    maxLength={300}
                     onClick={(e) => {
                       if (!isLogin) {
                         e.currentTarget.blur();

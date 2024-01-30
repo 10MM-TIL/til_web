@@ -197,11 +197,12 @@ export const QuestionTitle = styled.div`
 export const AnswerContents = styled.div`
   background-color: ${BACKGROUND_COLOR.NAVY_4};
   padding: 24px 20px 16px 20px;
-  /* height: 184px; */
+
   height: 100%;
   min-height: 184px;
   border-radius: 6px;
   overflow: auto;
+  word-break: break-all;
 
   -ms-overflow-style: none;
   scrollbar-width: none;
