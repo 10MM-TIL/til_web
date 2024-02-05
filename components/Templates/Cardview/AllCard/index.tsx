@@ -33,8 +33,15 @@ const AllCardItem = ({
   onClickUser: CardProps['onClickUser'];
 }) => {
   const categories = useRecoilValue(categoryState);
-  const bodyText = allCardItem.qna[0]?.answer ?? '';
-
+  let bodyText = '';
+  if (allCardItem.qna.length > 0) {
+    for (let i = 0; i < 3; i++) {
+      if (allCardItem.qna[i].answer !== '') {
+        bodyText = allCardItem.qna[i].answer;
+        break;
+      }
+    }
+  }
   return (
     <Styled.AllCardItem>
       <Card

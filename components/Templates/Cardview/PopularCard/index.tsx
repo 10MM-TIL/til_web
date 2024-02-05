@@ -28,8 +28,15 @@ const PopularCardItem = ({
   onClickUser: CardProps['onClickUser'];
 }) => {
   const categories = useRecoilValue(categoryState);
-  const bodyText = recommandItem.qna[0]?.answer ?? '';
-
+  let bodyText = '';
+  if (recommandItem.qna.length > 0) {
+    for (let i = 0; i < 3; i++) {
+      if (recommandItem.qna[i].answer !== '') {
+        bodyText = recommandItem.qna[i].answer;
+        break;
+      }
+    }
+  }
   return (
     <Styled.PopularCardItem>
       <Card

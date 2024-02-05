@@ -58,6 +58,7 @@ const TimelineComponent = ({
         false,
       );
       queryClient.invalidateQueries({ queryKey: ['RETROSPECT_GRASS_DATA'] });
+      queryClient.invalidateQueries(['RETROSPECT_CARD_INFINITE']);
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['RETROSPECT_BY_PATH'] }),
   });

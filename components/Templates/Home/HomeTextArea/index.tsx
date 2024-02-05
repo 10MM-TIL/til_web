@@ -77,6 +77,8 @@ const HomeReviewTextArea = () => {
       {
         onSuccess: () => {
           queryClient.invalidateQueries(['RETROSPECT_BY_PATH']);
+          queryClient.invalidateQueries(['RETROSPECT_CARD_INFINITE']);
+
           showToast(<Typo.H1 color={FONT_COLOR.WHITE}>회고 등록이 완료되었습니다.</Typo.H1>, false);
         },
         onError: (e) => {

@@ -43,7 +43,14 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
             <>
               {isSuccessRecommand &&
                 recommendData.retrospects.map((recommandItem, index) => {
-                  const bodyText = recommandItem.qna[0].answer;
+                  let bodyText = '';
+                  if (recommandItem.qna.length > 0)
+                    for (let i = 0; i < 3; i++) {
+                      if (recommandItem.qna[i].answer !== '') {
+                        bodyText = recommandItem.qna[i].answer;
+                        break;
+                      }
+                    }
 
                   return (
                     <Card
@@ -68,7 +75,14 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
                 })}
               {isSuccessRetrospects &&
                 retrospectsData?.pages[0].retrospects?.slice(0, 6)?.map((retro, idx) => {
-                  const bodyText = retro.qna[0]?.answer ?? '';
+                  let bodyText = '';
+                  if (retro.qna.length > 0)
+                    for (let i = 0; i < 3; i++) {
+                      if (retro.qna[i].answer !== '') {
+                        bodyText = retro.qna[i].answer;
+                        break;
+                      }
+                    }
 
                   return (
                     <div key={retro?.createdAt + idx + 'desktop'}>
