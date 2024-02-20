@@ -64,12 +64,21 @@ const HomeBanner = () => {
           <SwiperSlide>
             <Styled.SwiperSlideContainer>
               <Styled.SwiperSlideContent>
-                <Styled.SlideTitle>3초 안에 회고 등록하기</Styled.SlideTitle>
+                <Styled.SlideTitle>💡 5초 안에 회고 등록하기</Styled.SlideTitle>
                 <Styled.SwiperSlide2DescContent>
                   <Styled.SwiperSlide2Ul>
-                    <li>선호하는 플랫폼에 회고를 작성하세요.</li>
-                    <li>브릭로그에 회고 게시글 링크를 붙여놓으세요.</li>
-                    <li>회고 게시글에 등록되었어요! 등록된 날짜에 브릭이 채워질거에요.</li>
+                    <div>
+                      <IconChecked />
+                      원하는 회고 템플릿을 선택하세요. 매 번 다른 질문을 물어보는 랜덤 템플릿도 있어요!
+                    </div>
+                    <div>
+                      <IconChecked />
+                      3개의 질문에 답변하며 하루를 기록하세요. 1개 이상 기록하면 저장할 수 있어요.
+                    </div>
+                    <div>
+                      <IconChecked />
+                      회고 기록이 등록되었어요! 오늘 날짜의 브릭이 채워질거에요.
+                    </div>
                   </Styled.SwiperSlide2Ul>
                 </Styled.SwiperSlide2DescContent>
               </Styled.SwiperSlideContent>

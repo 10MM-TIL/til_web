@@ -128,32 +128,34 @@ export const SwiperSlide2Img = styled.div`
   bottom: 0;
   width: 375px;
   height: 174px;
-  background-image: url('/images/home/slide2_m.png');
+  background-image: url('/images/home/slide1_m.png');
   background-repeat: no-repeat;
   background-size: cover;
   ${mq('desktop')} {
     width: 659px;
     height: 303px;
-    background-image: url('/images/home/slide2.png');
+    background-image: url('/images/home/slide1.png');
   }
 `;
 
 export const SwiperSlide2Ul = styled.ul`
   color: ${FONT_COLOR.WHITE};
   font-size: 9px;
-  line-height: 12px; /* 133.333% */
+  line-height: 12px; //133.333%
   letter-spacing: -0.022px;
   padding-left: 20px;
 
-  li {
-    list-style: decimal;
+  div {
+    display: flex;
     margin-left: 20px;
+    align-items: center;
+    padding: 4px 0;
   }
 
   ${mq('desktop')} {
     padding-left: 0px;
     font-size: 16px;
-    line-height: 24px; /* 150% */
+    line-height: 24px; //150%
     letter-spacing: 0.061px;
   }
 `;
