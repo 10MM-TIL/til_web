@@ -84,6 +84,7 @@ const TextField = ({
           <IconCheckBig />
           <Typo.H1 color={FONT_COLOR.WHITE}>복사 완료!</Typo.H1>
         </>,
+        false,
       );
     };
     // mouseDown 이벤트로 처리해야 blur 이벤트보다 먼저 처리된다.

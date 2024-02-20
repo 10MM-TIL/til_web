@@ -4,13 +4,11 @@ export type TimeLineProps = {
   content?: TimeLineContentProps;
   moreButtonPositionCss?: EditDropdownProps['moreButtonPositionCss'];
   editListPositionCss?: EditDropdownProps['editListPositionCss'];
-  onSaveAllContent: (timeLineContent: TimeLineContentProps) => void;
   onDeleteContent: () => void;
-  changable: boolean;
+  deletable: boolean;
 };
 export type TimeLineContentProps = {
   date: string;
   title: string;
-  desc: string;
-  url: string;
+  qna: { questionName: string; answer: string }[];
 };

@@ -1,6 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import { getUserProfile } from '@/apis/user';
-
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 import { clickedGrassDate } from '@/stores/user';
@@ -19,7 +16,7 @@ import HomeBanner from '../HomeBanner';
 import styles from './styles';
 
 const HomeTemplates = () => {
-  const { isOpen: isToastOpen, text: toastText, showToast } = useToast();
+  const { isOpen: isToastOpen, text: toastText, showToast, isWarning } = useToast();
   const { isLogin } = useRecoilValue(AuthState);
   const setClickedDate = useSetRecoilState(clickedGrassDate);
 
@@ -28,15 +25,14 @@ const HomeTemplates = () => {
     enabled: isLogin && (userData ? userData.path?.length > 0 : false),
     userPath: userData ? userData.path : '',
   });
-
   return (
     <div css={styles.wrapper}>
-      <HomeBanner></HomeBanner>
+      <HomeBanner />
       <div css={styles.desktopContainer}>
         {
           <>
             <div css={styles.container}>
-              <HomeTextArea showToast={showToast} userInfo={userInfo}></HomeTextArea>
+              <HomeTextArea showToast={showToast} userInfo={userInfo} />
               <GrassTemplate
                 path={userData?.path || ''}
                 title={userData ? `${userData.name}의 기록` : '내가 모은 기록'}
@@ -44,13 +40,17 @@ const HomeTemplates = () => {
                   setClickedDate(value);
                 }}
               />
-              <TimelineTemplate path={userData ? userData.path : ''} changable={userInfo?.isAuthorized || false} />
+              <TimelineTemplate path={userData ? userData.path : ''} deletable={userInfo?.isAuthorized || false} />
             </div>
             <HomeCard userData={userData}></HomeCard>
           </>
         }
       </div>
-      {isToastOpen && <ToastMessage isOpen={isToastOpen}>{toastText}</ToastMessage>}
+      {isToastOpen && (
+        <ToastMessage isOpen={isToastOpen} isWarning={isWarning}>
+          {toastText}
+        </ToastMessage>
+      )}
     </div>
   );
 };

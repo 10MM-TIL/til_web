@@ -15,38 +15,46 @@ import { categories } from '@/types/cardview';
 import * as Styled from './styles';
 import * as CardView from '@/styles/cardview.module';
 import { CategoryQueryKeys } from '@/components/Atom/Card/types';
+import { useRecommendRetrospects } from '@/hooks/queries/retrospectCardviewQuery';
+import { RetrospectItem } from '@/apis/retrospectCardview';
 
 const PopularCardItem = ({
   recommandItem,
   cardSize,
-  onClickContent,
   onClickUser,
 }: {
-  recommandItem: recommandPostItem;
+  recommandItem: RetrospectItem;
   cardSize: CardProps['size'];
-  onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
   const categories = useRecoilValue(categoryState);
-
+  let bodyText = '';
+  if (recommandItem.qna.length > 0) {
+    for (let i = 0; i < 3; i++) {
+      if (recommandItem.qna[i].answer !== '') {
+        bodyText = recommandItem.qna[i].answer;
+        break;
+      }
+    }
+  }
   return (
     <Styled.PopularCardItem>
       <Card
         size={cardSize}
         content={{
           category: categories.find((i) => i.identifier === recommandItem.categoryIdentifier)?.name || '#개발',
-          header: recommandItem.title,
-          body: recommandItem.summary,
+          header: recommandItem.questionTypeName,
+          body: recommandItem.isSecret ? '비공개 게시글입니다.' : bodyText,
           img: recommandItem.profileImgSrc,
           name: recommandItem.userName,
           date: formatDate(recommandItem.createdAt),
         }}
         hasBadge={true}
-        url={recommandItem.url}
         userpath={recommandItem.userPath}
-        onClickContent={() => onClickContent(recommandItem.url)}
         onClickUser={() => onClickUser(recommandItem.userPath)}
-      ></Card>
+        isPrivate={recommandItem.isSecret}
+        item={recommandItem}
+      />
     </Styled.PopularCardItem>
   );
 };
@@ -56,9 +64,8 @@ const PopularCardList = ({
   device,
   ...rest
 }: {
-  recommandCardList: recommandPostItem[];
+  recommandCardList: RetrospectItem[];
   device: device;
-  onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
   return (
@@ -66,7 +73,7 @@ const PopularCardList = ({
       {recommandCardList.map((recommandItem, index) => {
         return (
           <PopularCardItem
-            key={`popular-${recommandItem.identifier}-${index}`}
+            key={`popular-${recommandItem.retrospectIdentifier}-${index}`}
             recommandItem={recommandItem}
             cardSize={device === 'desktop' ? 'lg' : 'mobile'}
             {...rest}
@@ -88,23 +95,22 @@ const EmptyPopularCard = () => {
 const PopularCard = (props: {
   categoryQuery: CategoryQueryKeys;
   device: device;
-  onClickContent: CardProps['onClickContent'];
   onClickUser: CardProps['onClickUser'];
 }) => {
-  const { data: recommandCard, isSuccess } = useRecommandPosts(props.categoryQuery, !!props.categoryQuery);
-
+  // const { data: recommandCard, isSuccess } = useRecommandPosts(props.categoryQuery, !!props.categoryQuery);
+  const { data: recommandCard, isSuccess } = useRecommendRetrospects(props.categoryQuery, !!props.categoryQuery);
   return (
     <Styled.PopularCardViewContainer>
       <Styled.PopularCardHeader>
         <Typo.H1 color={FONT_COLOR.WHITE}>이번주의 회고</Typo.H1>
       </Styled.PopularCardHeader>
       {isSuccess && (
-        <Styled.PopularCardContent isEmpty={recommandCard.posts.length === 0}>
+        <Styled.PopularCardContent isEmpty={recommandCard.retrospects.length === 0}>
           <>
-            {recommandCard.posts.length === 0 ? (
-              <EmptyPopularCard></EmptyPopularCard>
+            {recommandCard.retrospects.length === 0 ? (
+              <EmptyPopularCard />
             ) : (
-              <PopularCardList recommandCardList={recommandCard.posts} {...props}></PopularCardList>
+              <PopularCardList recommandCardList={recommandCard.retrospects} {...props}></PopularCardList>
             )}
           </>
         </Styled.PopularCardContent>

@@ -1,5 +1,6 @@
 import { POINT_COLOR } from '@/constants/color';
 import { Z_INDEX_LEVEL } from '@/constants/zIndex';
+import { mq } from '@/styles/mediaQuery';
 import { css } from '@emotion/react';
 
 const container = css`
@@ -15,13 +16,16 @@ const headerBlurContainer = css`
   height: inherit;
 `;
 
-const inner = ({ isMobile }: { isMobile: boolean }) => css`
+const inner = () => css`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 29px 20px 19px 24px;
   max-width: 1920px;
-  margin: 0 ${isMobile ? 0 : '58px'};
+  margin: 0 0;
+  ${mq('desktop')} {
+    margin: 0 58px;
+  }
 `;
 
 const logoContainer = css`
@@ -30,7 +34,7 @@ const logoContainer = css`
   gap: 24px;
 `;
 
-const btn = css`
+const loginBtn = css`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,6 +43,22 @@ const btn = css`
   border-radius: 8px;
 `;
 
-const styles = { container, headerBlurContainer, inner, logoContainer, btn };
+const headerContentList = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+`;
+
+const otherBtns = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  ${mq('desktop')} {
+    gap: 44px;
+  }
+`;
+const styles = { container, headerBlurContainer, inner, logoContainer, loginBtn, headerContentList, otherBtns };
 
 export default styles;

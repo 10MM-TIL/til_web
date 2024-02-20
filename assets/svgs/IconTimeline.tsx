@@ -1,17 +1,22 @@
 export const IconTimeline = () => {
   return (
-    <svg width='21' height='127' viewBox='0 0 21 127' fill='none' xmlns='http://www.w3.org/2000/svg'>
-      <g filter='url(#filter0_d_938_13557)'>
-        <circle cx='10.2381' cy='10.2381' r='5.2381' fill='#22FFA2' />
+    <svg width='21' height='334' viewBox='0 0 21 334' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <g filter='url(#filter0_d_3332_44002)'>
+        <circle cx='10.2381' cy='31.2381' r='5.2381' fill='#22FFA2' />
       </g>
-      <line x1='10.4883' y1='10' x2='10.4883' y2='127' stroke='url(#paint0_linear_938_13557)' strokeWidth='2.5' />
+      <path
+        fillRule='evenodd'
+        clipRule='evenodd'
+        d='M8.98802 334L8.98804 33.4766L11.488 33.4766L11.488 334L8.98802 334Z'
+        fill='url(#paint0_linear_3332_44002)'
+      />
       <defs>
         <filter
-          id='filter0_d_938_13557'
+          id='filter0_d_3332_44002'
           x='0'
-          y='0'
-          width='20.4766'
-          height='20.4761'
+          y='21'
+          width='20.4761'
+          height='20.4766'
           filterUnits='userSpaceOnUse'
           colorInterpolationFilters='sRGB'
         >
@@ -26,20 +31,19 @@ export const IconTimeline = () => {
           <feGaussianBlur stdDeviation='2.5' />
           <feComposite in2='hardAlpha' operator='out' />
           <feColorMatrix type='matrix' values='0 0 0 0 0.211771 0 0 0 0 0.891667 0 0 0 0 0.891667 0 0 0 0.45 0' />
-          <feBlend mode='normal' in2='BackgroundImageFix' result='effect1_dropShadow_938_13557' />
-          <feBlend mode='normal' in='SourceGraphic' in2='effect1_dropShadow_938_13557' result='shape' />
+          <feBlend mode='normal' in2='BackgroundImageFix' result='effect1_dropShadow_3332_44002' />
+          <feBlend mode='normal' in='SourceGraphic' in2='effect1_dropShadow_3332_44002' result='shape' />
         </filter>
         <linearGradient
-          id='paint0_linear_938_13557'
-          x1='8.23817'
-          y1='128.376'
-          x2='8.23817'
-          y2='12.7529'
+          id='paint0_linear_3332_44002'
+          x1='7.98813'
+          y1='334'
+          x2='7.98809'
+          y2='40.5477'
           gradientUnits='userSpaceOnUse'
         >
-          <stop stopColor='#00A8A8' stopOpacity='0.15' />
-          <stop offset='0.0001' stopColor='#00A8A8' stopOpacity='0.15' />
-          <stop offset='1' stopColor='#22FFA2' />
+          <stop stopColor='#191F28' />
+          <stop offset='1' stop-color='#22FFA2' />
         </linearGradient>
       </defs>
     </svg>
