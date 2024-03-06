@@ -49,6 +49,7 @@ const msgContainer = css`
   width: 100%;
   margin: 0 auto;
   gap: 16px;
+  padding-top: 54px;
 `;
 
 const iconContainer = css`

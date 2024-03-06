@@ -4,9 +4,8 @@ import { ServerResponse } from '../types';
 
 export const getMyDraftAPI = async () => {
   try {
-    const res: ServerResponse<{ data: string; updatedAt: string }> = await instance.get(`/my/draft`);
-
-    return res;
+    const { data } = await instance.get<{ data: string; updatedAt: string }>(`/my/draft`);
+    return data;
   } catch (e) {
     devError('getMyDraftAPI error ', e);
     throw e;

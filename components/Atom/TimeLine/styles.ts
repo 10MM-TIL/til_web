@@ -11,21 +11,14 @@ export const TimeLineContainer = styled.div`
   flex-direction: column;
   width: 100%;
   min-width: 284px;
-  height: 110px;
-  background: ${BACKGROUND_COLOR.NAVY_4};
+
+  background: ${BACKGROUND_COLOR.NAVY_3};
   border-radius: 6px;
-  padding: 20px 16px 20px 24px;
+  padding: 20px 24px;
 `;
 
 export const TimeLineContent = styled.div<{ isEdit: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  cursor: ${(props) => (props.isEdit ? `default` : `pointer`)};
-  // input max-width, min-width 적용
   > div:first-of-type {
-
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -53,7 +46,6 @@ export const TimeLineCancelButton = styled.button`
 `;
 
 const timeLineBodyCss = ({ width }: { width: CSSProperties['width'] }) => css`
-  cursor: pointer;
   p,
   H1,
   span {
@@ -163,4 +155,58 @@ export const TimeLineDescWrapper = styled.div`
   align-items: center;
   gap: 6px;
   height: 19px;
+`;
+
+export const QuestionCategory = styled.div`
+  margin-bottom: 8px;
+`;
+export const AnswerListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+
+  ${mq('desktop')} {
+    flex-direction: row;
+    gap: 6px;
+  }
+`;
+export const AnswerItemContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+
+  min-height: 148px;
+  color: ${FONT_COLOR.GRAY_3};
+  font-size: 12px;
+  line-height: 18px;
+  white-space: pre-wrap;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+export const QuestionTitle = styled.div`
+  padding-left: 8px;
+`;
+
+export const AnswerContents = styled.div`
+  background-color: ${BACKGROUND_COLOR.NAVY_4};
+  padding: 24px 20px 16px 20px;
+
+  height: 100%;
+  min-height: 184px;
+  border-radius: 6px;
+  overflow: auto;
+  word-break: break-all;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

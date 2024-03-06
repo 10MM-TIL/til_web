@@ -30,6 +30,9 @@ export const CardBodyContent = styled.div`
   cursor: pointer;
 `;
 export const CardTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3px;
   > h2 {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -135,4 +138,5 @@ export const CardInfoWrapper = styled.div`
     border-radius: 47.5px;
     margin-right: 6px;
   }
+  min-width: 135px;
 `;

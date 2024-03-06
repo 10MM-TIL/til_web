@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { AuthState } from '@/stores/authStateStore';
 
 import { GrassArea } from '@/components/Molecules/GrassArea';
-import { useFetchMyGrassData } from '@/hooks/queries/timelineQuery';
+import { useFetchRetrospectGrassData } from '@/hooks/queries/retrospectGrassQuery';
 import { settingGrassData } from '@/utils/timeline';
 
 interface GrassTemplateProps {
@@ -26,8 +26,11 @@ const GrassTemplate = ({ path, title, onClick }: GrassTemplateProps) => {
   // firstDay 달을 잡고
   // meta 로 받은 데이터를 map 돌면서 Date 처리 해서 같은 달인지 체크
   // 같은 달이면 [base+1] index에 Push
-  const { data: grassData, isSuccess } = useFetchMyGrassData({ path, from: fromSeconds, to: toSeconds, isLogin });
-
+  const { data: grassData, isSuccess } = useFetchRetrospectGrassData({
+    path,
+    from: fromSeconds,
+    to: toSeconds,
+  });
   const handleClickNext = () => {
     setBase((prev) => prev + 1);
   };
@@ -37,15 +40,15 @@ const GrassTemplate = ({ path, title, onClick }: GrassTemplateProps) => {
 
   return (
     <>
-      {isSuccess && (
+      {
         <GrassArea
           title={title}
           onClick={onClick}
           onClickNext={handleClickNext}
           onClickPrev={handleClickPrev}
-          data={settingGrassData(grassData, firstMonth)}
+          data={settingGrassData(isSuccess ? grassData : { metas: [] }, firstMonth)}
         />
-      )}
+      }
     </>
   );
 };
