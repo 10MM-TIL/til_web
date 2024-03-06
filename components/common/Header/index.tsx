@@ -55,7 +55,6 @@ const Header = () => {
             )}
           </div>
 
-          {/* 링크 변경 필요 */}
           <div css={styles.headerContentList}>
             <div css={styles.otherBtns}>
               <a href='https://open.kakao.com/o/glhOULDf' target='_blank' rel='noreferrer noopener'>
