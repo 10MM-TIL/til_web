@@ -68,7 +68,7 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
                       hasBadge={true}
                       userpath={recommandItem.userPath}
                       onClickUser={() => onClickUser(recommandItem.userPath)}
-                      isPrivate={recommandItem.isSecret}
+                      isPrivate={recommandItem.isSecret && recommandItem.qna.length === 0}
                       item={recommandItem}
                     />
                   );
@@ -99,7 +99,7 @@ const HomeCard = ({ userData }: { userData?: MyUserModel }) => {
                         }}
                         userpath={retro.userPath}
                         onClickUser={() => onClickUser(retro.userPath)}
-                        isPrivate={retro.isSecret}
+                        isPrivate={retro.isSecret && retro.qna.length === 0}
                         item={retro}
                       />
                     </div>
