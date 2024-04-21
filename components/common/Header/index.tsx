@@ -26,6 +26,10 @@ const Header = () => {
   const path = userData?.path;
 
   const handleModalOpen = () => {
+    if (navigator.userAgent.indexOf('KAKAO') >= 0 || navigator.userAgent.indexOf('Instagram') >= 0) {
+      window.location.href = 'googlechrome://bricklog.io';
+      return;
+    }
     setIsLoginModalOpen({ isLoginModalOpen: true });
   };
 

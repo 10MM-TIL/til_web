@@ -52,7 +52,7 @@ const PopularCardItem = ({
         hasBadge={true}
         userpath={recommandItem.userPath}
         onClickUser={() => onClickUser(recommandItem.userPath)}
-        isPrivate={recommandItem.isSecret}
+        isPrivate={recommandItem.isSecret && recommandItem.qna.length === 0}
         item={recommandItem}
       />
     </Styled.PopularCardItem>

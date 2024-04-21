@@ -56,7 +56,7 @@ const AllCardItem = ({
         }}
         userpath={allCardItem.userPath}
         onClickUser={() => onClickUser(allCardItem.userPath)}
-        isPrivate={allCardItem.isSecret}
+        isPrivate={allCardItem.isSecret && allCardItem.qna.length === 0}
         item={allCardItem}
       />
     </Styled.AllCardItem>
