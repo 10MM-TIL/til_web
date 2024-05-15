@@ -8,10 +8,10 @@ import TimelineTemplate from '@/components/Templates/TimelineTemplate';
 
 import { useMyUser, useUserProfile } from '@/hooks/queries/profileQuery';
 import useToast from '@/hooks/useToast';
+import { useResize } from '@/hooks/useResize';
 
 import HomeTextArea from '../HomeTextArea';
 import HomeCard from '../HomeCard';
-import HomeBanner from '../HomeBanner';
 
 import styles from './styles';
 
@@ -19,6 +19,7 @@ const HomeTemplates = () => {
   const { isOpen: isToastOpen, text: toastText, showToast, isWarning } = useToast();
   const { isLogin } = useRecoilValue(AuthState);
   const setClickedDate = useSetRecoilState(clickedGrassDate);
+  const device = useResize();
 
   const { data: userData } = useMyUser({ isLogin });
   const { data: userInfo } = useUserProfile({
@@ -27,12 +28,14 @@ const HomeTemplates = () => {
   });
   return (
     <div css={styles.wrapper}>
-      <HomeBanner />
+      {/* <HomeBanner />
+        운영 중 Banner 제거하는 것으로 컨펌 되어 주석 처리 (추후 사용 가능)
+      */}
       <div css={styles.desktopContainer}>
         {
           <>
             <div css={styles.container}>
-              <HomeTextArea showToast={showToast} userInfo={userInfo} />
+              {device === 'desktop' && <HomeTextArea showToast={showToast} userInfo={userInfo} />}
               <GrassTemplate
                 path={userData?.path || ''}
                 title={userData ? `${userData.name}의 기록` : '내가 모은 기록'}
@@ -40,6 +43,7 @@ const HomeTemplates = () => {
                   setClickedDate(value);
                 }}
               />
+              {device !== 'desktop' && <HomeTextArea showToast={showToast} userInfo={userInfo} />}
               <TimelineTemplate path={userData ? userData.path : ''} deletable={userInfo?.isAuthorized || false} />
             </div>
             <HomeCard userData={userData}></HomeCard>
